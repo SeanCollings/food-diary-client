@@ -42,6 +42,7 @@ const SContainer = styled.div`
   display: flex;
   flex-direction: column;
   padding: 4px;
+  box-shadow: 0px 8px 20px -8px ${COLOURS.gray_dark};
   height: ${CALENDAR_HEIGHT + MONTH_SELECTOR_HEIGHT + 8}px;
 `;
 const SDateSelectorContainer = styled.div`
@@ -111,7 +112,9 @@ const SDayContainer = styled.div<ISDayContainer>`
     isSelectedDay && `background-color: ${COLOURS.turquoise}${OPACITY_30};`};
 `;
 const STitleRow = styled.div``;
-const SDayRow = styled.div``;
+const SDayRow = styled.div`
+  width: 100%;
+`;
 
 const generateMatrix = (selectedMonth: Date) => {
   const newDate = new Date(selectedMonth);
@@ -255,7 +258,10 @@ const Calendar: FC<ICalendarProps> = ({
                 isOtherMonthDay={item.otherMonthDay || isDayInTheFuture}
                 isSelectedDay={isSelectedDay}
               >
-                <SDayRow>{item.day}</SDayRow>
+                <SDayRow>
+                  {item.day}
+                  <div />
+                </SDayRow>
               </SDayContainer>
             );
           }

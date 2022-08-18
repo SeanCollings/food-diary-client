@@ -1,9 +1,10 @@
-import { EMealTypes, ICardProps } from '@utils/interfaces';
+import { EMealType, IAppTheme, ICardProps } from '@utils/interfaces';
 export const OPACITY_10 = '1a';
 export const OPACITY_30 = '4d';
 export const OPACITY_40 = '66';
 export const OPACITY_50 = '80';
 export const OPACITY_70 = 'b3';
+export const OPACITY_80 = 'cc';
 
 export const COLOURS = {
   pink: '#e42a5a',
@@ -20,39 +21,42 @@ export const COLOURS = {
 
 export const DEFAULT_MEAL_CARD_ARRAY: ICardProps[] = [
   {
-    id: EMealTypes.BREAKFAST,
-    title: EMealTypes.BREAKFAST,
-    primary: COLOURS.pink,
-    secondary: COLOURS.white_off,
+    id: EMealType.BREAKFAST,
+    title: EMealType.BREAKFAST,
   },
   {
-    id: EMealTypes.SNACK_1,
-    title: EMealTypes.SNACK_1,
-    primary: COLOURS.gray,
-    secondary: '#cc82ad',
+    id: EMealType.SNACK_1,
+    title: EMealType.SNACK_1,
   },
   {
-    id: EMealTypes.LUNCH,
-    title: EMealTypes.LUNCH,
-    primary: COLOURS.turquoise,
-    secondary: COLOURS.white_off,
+    id: EMealType.LUNCH,
+    title: EMealType.LUNCH,
   },
   {
-    id: EMealTypes.SNACK_2,
-    title: EMealTypes.SNACK_2,
-    primary: COLOURS.gray,
-    secondary: '#cc82ad',
+    id: EMealType.SNACK_2,
+    title: EMealType.SNACK_2,
   },
   {
-    id: EMealTypes.DINNER,
-    title: EMealTypes.DINNER,
-    primary: COLOURS.purple,
-    secondary: COLOURS.white_off,
+    id: EMealType.DINNER,
+    title: EMealType.DINNER,
   },
 ];
 export const MENU_ICON_COLOUR = {
   primary: COLOURS.turquoise,
   secondary: COLOURS.white_off,
+};
+
+export const APP_THEME_DEFAULT: IAppTheme = {
+  primary: '#2a8b81', // lunch, menu, buttons
+  secondary: '#e08644', // breakfast
+  tertiary: '#e0a944', // dinner
+  quaternary: '#bdb9b9', // snacks
+  backgroundPrimary: '#f4f4f4', // app background
+  backgroundSecondary: '#ffffff', // wellness background
+  textDark: '#111111',
+  textLight: '#ffffff',
+  error: '#ed0f0f',
+  success: '#66bf81',
 };
 
 export const MEDIA_MOBILE = '@media (max-width: 480px)';

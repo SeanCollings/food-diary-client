@@ -26,7 +26,7 @@ const SContentWrapper = styled.div`
   ${MEDIA_MOBILE} {
     display: flex;
     width: 100%;
-    justify-content: space-between;
+    justify-content: space-around;
     height: 60px;
   }
 `;

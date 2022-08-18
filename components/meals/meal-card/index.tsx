@@ -1,10 +1,10 @@
 import {
+  APP_THEME_DEFAULT,
   COLOURS,
   MEDIA_MOBILE,
   MEDIA_TABLET,
-  OPACITY_40,
-  OPACITY_50,
   OPACITY_70,
+  OPACITY_80,
 } from '@utils/constants';
 import { FC, useState } from 'react';
 import styled from 'styled-components';
@@ -12,6 +12,8 @@ import { MdAddCircle } from 'react-icons/md';
 import { getUniqueId } from '@utils/unique-id';
 import ModalAddFood from '@components/modals/add-food';
 import Modal from '@components/modals';
+import { TMealType } from '@utils/interfaces';
+import { getMealThemeColour } from '@utils/theme-utils';
 
 interface IScontainer {
   background: string;
@@ -22,7 +24,7 @@ interface IScroll extends IScontainer {
 
 const SContainer = styled.div<IScontainer>`
   cursor: pointer;
-  background: ${({ background }) => `${background}${OPACITY_40}`};
+  background: ${({ background }) => `${background}`};
   border-radius: 20px;
   padding: 20px;
   flex: 0 0 18%;
@@ -31,9 +33,8 @@ const SContainer = styled.div<IScontainer>`
   height: 400px;
 
   :hover {
-    background: ${({ background }) => `${background}${OPACITY_50}`};
-    // box-shadow: 1px 1px 10px #6c6a6a;
-    // box-shadow: 0px 10px 40px -10px #6c6a6a;
+    background: ${({ background }) => `${background}${OPACITY_80}`};
+    box-shadow: 1px 1px 10px #6c6a6a;
     scale: 1.01;
   }
 
@@ -61,7 +62,6 @@ const SHeader = styled.div`
 const SIcon = styled(MdAddCircle)`
   :hover {
     border-radius: 50%;
-    // box-shadow: 0px 0px 10px #6c6a6a;
     scale: 1.1;
   }
 `;
@@ -91,20 +91,18 @@ const SContentContainer = styled.div<IScroll>`
     max-height: 20px;
   }
   :hover::-webkit-scrollbar-track {
-    background-color: ${({ background }) => `${background}${OPACITY_40}`};
+    background-color: ${({ background }) => `${background}`};
     border-radius: 10px;
   }
 `;
-const SContentWrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-`;
+const SContentWrapper = styled.div``;
 const SContent = styled.span`
   font-size: 17px;
 `;
 const SContentDescription = styled.span`
   font-size: 16px;
-  color: ${COLOURS.black}${OPACITY_70};
+  padding-left: 6px;
+  color: ${COLOURS.black}${OPACITY_80};
 `;
 
 export interface IContent {
@@ -116,10 +114,8 @@ export interface IContent {
 }
 
 interface IProps {
-  id: string;
+  id: TMealType;
   title: string;
-  primary: string;
-  secondary: string;
   contents: IContent[];
 }
 
@@ -127,7 +123,7 @@ interface IBuildContent extends IContent {
   index: number;
 }
 const buildContent = (content: IContent, index: number) => {
-  const { food, description, emoji, serving, measurement } = content;
+  const { food, emoji, serving, measurement } = content;
   if (!food) {
     return '';
   }
@@ -145,16 +141,14 @@ const buildContent = (content: IContent, index: number) => {
   return `${constructedString}${postEmoji}`;
 };
 
-const Card: FC<IProps> = ({ id, title, primary, secondary, contents }) => {
+const Card: FC<IProps> = ({ id, title, contents }) => {
   const [showModal, setShowModal] = useState(false);
 
   const onClickHandler = () => {
     setShowModal(true);
-    console.log('clicked ::', id);
   };
 
   const onModalClose = () => {
-    console.log('CLOSING');
     setShowModal(false);
   };
   const onModalSubmit = (properties: any) => {
@@ -162,19 +156,24 @@ const Card: FC<IProps> = ({ id, title, primary, secondary, contents }) => {
     setShowModal(false);
   };
 
+  const background = getMealThemeColour(APP_THEME_DEFAULT, id);
+
   return (
     <>
       <SContainer
-        background={primary}
+        background={background}
         onClick={onClickHandler}
         id="meal-card"
         title="Click to add food"
       >
         <SHeaderContainer>
           <SHeader>{title}</SHeader>
-          <SIcon size={34} color={secondary} />
+          <SIcon size={34} color={APP_THEME_DEFAULT.backgroundSecondary} />
         </SHeaderContainer>
-        <SContentContainer background={primary} fontColor={secondary}>
+        <SContentContainer
+          background={background}
+          fontColor={APP_THEME_DEFAULT.backgroundSecondary}
+        >
           {contents?.map((content, index) => (
             <SContentWrapper key={getUniqueId()}>
               <SContent>{buildContent(content, index)}</SContent>
@@ -188,7 +187,7 @@ const Card: FC<IProps> = ({ id, title, primary, secondary, contents }) => {
       <Modal show={showModal} modalWidth={600}>
         <ModalAddFood
           mealId={id}
-          primaryColour={primary}
+          primaryColour={background}
           onClose={onModalClose}
           onSubmit={onModalSubmit}
         />

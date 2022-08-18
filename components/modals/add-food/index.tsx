@@ -1,11 +1,16 @@
-import { COLOURS, DEFAULT_MEAL_CARD_ARRAY } from '@utils/constants';
+import {
+  APP_THEME_DEFAULT,
+  COLOURS,
+  DEFAULT_MEAL_CARD_ARRAY,
+} from '@utils/constants';
 import { FC, useState } from 'react';
 import styled from 'styled-components';
 import { MdCheck, MdWest } from 'react-icons/md';
 import InputContainer from '@components/ui/input-container';
 import DropdownContainer from '@components/ui/dropdown-container';
 import EmojiPicker, { ISelectedEmoji } from '@components/emoji-picker';
-import { ICardProps } from '@utils/interfaces';
+import { ICardProps, TMealType } from '@utils/interfaces';
+import { getMealThemeColour } from '@utils/theme-utils';
 
 interface ISHeader {
   backgroundColour: string;
@@ -44,18 +49,13 @@ const SContentContainer = styled.div`
 `;
 
 interface IModalProps {
-  mealId: string;
+  mealId: TMealType;
   primaryColour: string;
   onClose: () => void;
   onSubmit: (properties?: any) => void;
 }
 
-const ModalAddFood: FC<IModalProps> = ({
-  primaryColour,
-  mealId,
-  onClose,
-  onSubmit,
-}) => {
+const ModalAddFood: FC<IModalProps> = ({ mealId, onClose, onSubmit }) => {
   const [selectedMeal, setSelectedMeal] = useState<ICardProps | null>(
     DEFAULT_MEAL_CARD_ARRAY.find((meal) => meal.id === mealId) || null
   );
@@ -69,7 +69,7 @@ const ModalAddFood: FC<IModalProps> = ({
     'Stir fry veg, chicken strips, rice, \nAsian sesame \n \nstir-fry sauce'
   );
 
-  const MealColour = selectedMeal?.primary || primaryColour;
+  const MealColour = getMealThemeColour(APP_THEME_DEFAULT, selectedMeal?.id);
 
   const onSubmitHandler = () => {
     onSubmit({

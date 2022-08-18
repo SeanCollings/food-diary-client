@@ -1,4 +1,4 @@
-import { MEDIA_MOBILE, MENU_ICON_COLOUR, OPACITY_70 } from '@utils/constants';
+import { APP_THEME_DEFAULT, MEDIA_MOBILE, OPACITY_70 } from '@utils/constants';
 import { FC } from 'react';
 import styled from 'styled-components';
 
@@ -6,7 +6,7 @@ import styled from 'styled-components';
 
 const SContainer = styled.div`
   cursor: pointer;
-  background: ${MENU_ICON_COLOUR.primary};
+  background: ${APP_THEME_DEFAULT.primary};
   border-radius: 50%;
   width: 55px;
   height: 55px;
@@ -17,7 +17,7 @@ const SContainer = styled.div`
   margin-top: 16px;
 
   :hover {
-    background: ${MENU_ICON_COLOUR.primary}${OPACITY_70};
+    background: ${APP_THEME_DEFAULT.primary}${OPACITY_70};
   }
 
   ${MEDIA_MOBILE} {
@@ -35,7 +35,7 @@ const SLine = styled.span`
   display: block;
   height: 4px;
   width: 100%;
-  background: ${MENU_ICON_COLOUR.secondary};
+  background: ${APP_THEME_DEFAULT.textLight};
 `;
 
 const MenuIcon: FC = () => {

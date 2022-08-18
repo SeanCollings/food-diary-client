@@ -4,9 +4,9 @@ import type { AppProps } from 'next/app';
 import Head from 'next/head';
 import Footer from '@components/footer';
 import {
+  APP_THEME_DEFAULT,
   COLOURS,
   MAX_PAGE_WIDTH,
-  MEDIA_DESKTOP,
   MEDIA_MOBILE,
 } from '@utils/constants';
 
@@ -15,9 +15,9 @@ import MenuDisplay from '@components/menu/menu-display';
 
 const theme: DefaultTheme = {
   colors: {
-    primary: COLOURS.black,
+    primary: APP_THEME_DEFAULT.textDark,
     secondary: COLOURS.turquoise,
-    background: COLOURS.gray_light,
+    background: APP_THEME_DEFAULT.backgroundPrimary,
   },
 };
 

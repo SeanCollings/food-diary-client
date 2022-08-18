@@ -1,6 +1,6 @@
 import ExcerciseCard from '@components/wellness/exercise-card';
 import WellnessCard from '@components/wellness/wellness-card';
-import { COLOURS, MEDIA_DESKTOP, MEDIA_MOBILE } from '@utils/constants';
+import { APP_THEME_DEFAULT, MEDIA_DESKTOP } from '@utils/constants';
 import { FC } from 'react';
 import styled from 'styled-components';
 
@@ -21,11 +21,13 @@ const SDrinkContainer = styled.div`
   flex-basis: 60%;
   justify-content: space-evenly;
   flex-wrap: wrap;
+  background: ${APP_THEME_DEFAULT.backgroundSecondary};
 `;
 const SExcerciseContainer = styled.div`
   border-radius: 20px;
   background: white;
   flex-basis: 40%;
+  background: ${APP_THEME_DEFAULT.backgroundSecondary};
 `;
 
 const WellnessContainer: FC = () => {
@@ -36,19 +38,19 @@ const WellnessContainer: FC = () => {
           id="water_counter"
           title="cups of water"
           imageSrc={'/static/images/water_bottle.png'}
-          color={COLOURS.blue}
+          color={APP_THEME_DEFAULT.quaternary}
         />
         <WellnessCard
           id="tea_coffee_counter"
           title="cups of tea/coffee"
           imageSrc={'/static/images/coffee.png'}
-          color={COLOURS.gray_dark}
+          color={APP_THEME_DEFAULT.quaternary}
         />
         <WellnessCard
           id="alcohol_counter"
           title="alcohol servings"
           imageSrc={'/static/images/wine.png'}
-          color={COLOURS.pink}
+          color={APP_THEME_DEFAULT.quaternary}
         />
       </SDrinkContainer>
       <SExcerciseContainer>

@@ -1,6 +1,6 @@
 import Card, { IContent } from '@components/meals/meal-card';
 import { DEFAULT_MEAL_CARD_ARRAY } from '@utils/constants';
-import { EMealTypes } from '@utils/interfaces';
+import { EMealType } from '@utils/interfaces';
 import { FC } from 'react';
 import styled from 'styled-components';
 
@@ -20,7 +20,7 @@ interface IData {
 }
 
 const TEMP_DAY_DATA: IData = {
-  [EMealTypes.BREAKFAST]: {
+  [EMealType.BREAKFAST]: {
     mealId: 1,
     contents: [
       {
@@ -45,11 +45,11 @@ const TEMP_DAY_DATA: IData = {
       { emoji: '🥕', serving: '1', food: 'carrot' },
     ],
   },
-  [EMealTypes.SNACK_1]: {
+  [EMealType.SNACK_1]: {
     mealId: 2,
     contents: [{ food: 'none' }],
   },
-  [EMealTypes.LUNCH]: {
+  [EMealType.LUNCH]: {
     mealId: 3,
     contents: [
       {
@@ -75,11 +75,11 @@ const TEMP_DAY_DATA: IData = {
       },
     ],
   },
-  [EMealTypes.SNACK_2]: {
+  [EMealType.SNACK_2]: {
     mealId: 4,
     contents: [{ emoji: '🍌', serving: '1', food: 'banana' }],
   },
-  [EMealTypes.DINNER]: {
+  [EMealType.DINNER]: {
     mealId: 5,
     contents: [
       {

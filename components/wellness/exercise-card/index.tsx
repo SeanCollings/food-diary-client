@@ -28,13 +28,15 @@ const SInputContainer = styled.div`
   display: flex;
 `;
 const SHeader = styled.div`
+  padding-bottom: 12px;
   user-select: none;
   text-align: center;
 `;
 const SImageContainer = styled.div`
-  height: 100px;
-  width: 100px;
+  height: 80px;
+  width: 80px;
   user-select: none;
+  margin-bottom: 8px;
 `;
 
 interface IProps {
