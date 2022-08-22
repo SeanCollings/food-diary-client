@@ -11,7 +11,10 @@ import {
 } from '@utils/constants';
 
 import '../styles/globals.css';
-import MenuDisplay from '@components/menu/menu-display';
+import SideMenuDisplay from '@components/menu/side-menu-display';
+import { DiaryEntriesContextProvider } from 'store/diary-entries-context';
+import { DateSelectedContextProvider } from '@store/date-selected-context';
+import { MenuContextProvider } from '@store/menu-context';
 
 const theme: DefaultTheme = {
   colors: {
@@ -36,27 +39,34 @@ const SMain = styled.main`
   min-height: 100vh;
   max-width: ${MAX_PAGE_WIDTH}px;
   margin: 0 auto;
+  width: 100%;
 `;
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
     <>
-      <ThemeProvider theme={theme}>
-        <GlobalStyle />
-        <Head>
-          <title>{'Food & Wellness Diary'}</title>
-          <meta name="description" content={'Food & Wellness Diary'} />
-          <link rel="icon" href="/diary.ico" />
-        </Head>
+      <DateSelectedContextProvider>
+        <DiaryEntriesContextProvider>
+          <MenuContextProvider>
+            <ThemeProvider theme={theme}>
+              <GlobalStyle />
+              <Head>
+                <title>{'Food & Wellness Diary'}</title>
+                <meta name="description" content={'Food & Wellness Diary'} />
+                <link rel="icon" href="/diary.ico" />
+              </Head>
 
-        <MenuDisplay />
-        <SAppContainer>
-          <SMain>
-            <Component {...pageProps} />
-          </SMain>
-          <Footer />
-        </SAppContainer>
-      </ThemeProvider>
+              <SideMenuDisplay />
+              <SAppContainer>
+                <SMain>
+                  <Component {...pageProps} />
+                </SMain>
+                <Footer />
+              </SAppContainer>
+            </ThemeProvider>
+          </MenuContextProvider>
+        </DiaryEntriesContextProvider>
+      </DateSelectedContextProvider>
     </>
   );
 }
