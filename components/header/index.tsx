@@ -1,3 +1,4 @@
+import FlatMenu from '@components/menu/flat-menu';
 import MenuIcon from '@components/menu/menu-icon';
 import { MEDIA_MOBILE } from '@utils/constants';
 import { FC } from 'react';
@@ -28,6 +29,7 @@ const Header: FC = () => {
     <SContainer>
       <SHeader>{'Food & Wellness Diary'}</SHeader>
       <MenuIcon />
+      <FlatMenu />
     </SContainer>
   );
 };
