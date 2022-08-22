@@ -1,12 +1,5 @@
 import { useOnClickOutsideElement } from '@hooks/use-onclick-outside-element';
-import {
-  COLOURS,
-  DAYS,
-  MONTHS,
-  OPACITY_30,
-  OPACITY_40,
-  WEEK_DAYS,
-} from '@utils/constants';
+import { COLOURS, DAYS, OPACITY_30, WEEK_DAYS } from '@utils/constants';
 import {
   formatMonthSmall,
   getBothDatesEqual,
@@ -154,12 +147,12 @@ const generateMatrix = (selectedMonth: Date) => {
 };
 
 interface ICalendarProps {
-  topLevelDate: Date;
+  topLevelDate: string;
   selectedMonthDate: Date;
   onDayClicked: (day: number) => void;
 }
 interface ICalendarContainerProps {
-  topLevelDate: Date;
+  topLevelDate: string;
   onClickNewDate: (newDate: Date) => void;
   onClose: () => void;
 }

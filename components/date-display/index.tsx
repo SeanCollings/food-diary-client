@@ -3,7 +3,12 @@ import { FC, useState } from 'react';
 import styled from 'styled-components';
 import { MdArrowForwardIos, MdArrowBackIos } from 'react-icons/md';
 import CalendarContainer from '@components/calendar';
-import { formatFullDate, getNewDay, getNewMonth } from '@utils/date-utils';
+import {
+  formatFullDate,
+  getIsDateSelectedToday,
+  getNewDay,
+} from '@utils/date-utils';
+import { useDateSelectedContext } from '@store/date-selected-context';
 
 interface ISButton {
   isDisabled: boolean;
@@ -99,32 +104,29 @@ const SCalendarContainer = styled.div`
 `;
 
 const DateDisplay: FC = () => {
+  const { dateSelectedISO, updateSelectedDateISO } = useDateSelectedContext();
   const [showCalendar, setShowCalendar] = useState(false);
-  const [selectedMonthDate, setSelectedMonthDate] = useState(
-    new Date(Date.now())
-  );
 
-  const isDateSelectedToday =
-    selectedMonthDate.setHours(0, 0, 0, 0) === new Date().setHours(0, 0, 0, 0);
+  const isDateSelectedToday = getIsDateSelectedToday(dateSelectedISO);
 
   const onDateClick = () => {
     setShowCalendar(!showCalendar);
   };
   const onClickLeft = () => {
-    setSelectedMonthDate(getNewDay(selectedMonthDate, false));
+    updateSelectedDateISO(getNewDay(dateSelectedISO, false));
   };
   const onClickRight = () => {
     if (isDateSelectedToday) {
       return;
     }
 
-    setSelectedMonthDate(getNewDay(selectedMonthDate, true));
+    updateSelectedDateISO(getNewDay(dateSelectedISO, true));
   };
   const closeCalendarHandler = () => {
     setShowCalendar(false);
   };
   const onClickNewDateHandler = (newDate: Date) => {
-    setSelectedMonthDate(newDate);
+    updateSelectedDateISO(newDate);
     setShowCalendar(false);
   };
 
@@ -136,13 +138,13 @@ const DateDisplay: FC = () => {
         </SButtonLeft>
         <SDate onClick={onDateClick} isCalendarShown={showCalendar}>
           <SFullDateContainer>
-            {formatFullDate(selectedMonthDate)}
+            {formatFullDate(dateSelectedISO)}
           </SFullDateContainer>
         </SDate>
         {showCalendar && (
           <SCalendarContainer>
             <CalendarContainer
-              topLevelDate={selectedMonthDate}
+              topLevelDate={dateSelectedISO}
               onClose={closeCalendarHandler}
               onClickNewDate={onClickNewDateHandler}
             />
