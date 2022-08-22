@@ -1,12 +1,23 @@
-import { APP_THEME_DEFAULT, MEDIA_MOBILE, OPACITY_70 } from '@utils/constants';
+import { useMenuContext } from '@store/menu-context';
+import {
+  APP_THEME_DEFAULT,
+  MEDIA_MAX_DESKTOP,
+  MEDIA_MOBILE,
+} from '@utils/constants';
 import { FC } from 'react';
 import styled from 'styled-components';
 
 // https://codepen.io/alvarotrigo/pen/XWejzjR
 
-const SContainer = styled.div`
+interface ISContainer {
+  isOpen: boolean;
+}
+
+const SContainer = styled.div<ISContainer>`
+  transition: 0.2s;
   cursor: pointer;
-  background: ${APP_THEME_DEFAULT.primary};
+  background: ${({ isOpen }) =>
+    isOpen ? APP_THEME_DEFAULT.backgroundPrimary : APP_THEME_DEFAULT.primary};
   border-radius: 50%;
   width: 55px;
   height: 55px;
@@ -15,11 +26,32 @@ const SContainer = styled.div`
   justify-content: center;
   flex: none;
   margin-top: 16px;
+  z-index: 2;
 
-  :hover {
-    background: ${APP_THEME_DEFAULT.primary}${OPACITY_70};
+  .line1 {
+    ${({ isOpen }) =>
+      isOpen &&
+      'transform: rotate(44deg); transform-origin: 7% 0%; width: 33px; border-radius: 2px;'};
+    // transform: ${({ isOpen }) => isOpen && 'rotate3d(0, 0, 1, 48deg) '};
   }
 
+  .line2 {
+    ${({ isOpen }) => isOpen && 'transform: scaleY(0);'};
+  }
+  .line3 {
+    ${({ isOpen }) =>
+      isOpen &&
+      'transform-origin: 9% 110%; transform: rotate(-44deg); width: 33px; border-radius: 2px;'};
+    // transform: ${({ isOpen }) => isOpen && 'rotate3d(0, 0, 1, -48deg)'};
+  }
+
+  :hover {
+    opacity: 0.7;
+  }
+
+  ${MEDIA_MAX_DESKTOP} {
+    display: none;
+  }
   ${MEDIA_MOBILE} {
     margin-top: 0;
   }
@@ -31,24 +63,29 @@ const SHamburgerLines = styled.div`
   flex-direction: column;
   justify-content: space-between;
 `;
-const SLine = styled.span`
+const SLine = styled.span<ISContainer>`
+  transition: transform 0.2s ease-in-out;
+
   display: block;
   height: 4px;
-  width: 100%;
-  background: ${APP_THEME_DEFAULT.textLight};
+  width: ${({ isOpen }) => (isOpen ? '110%' : '100%')};
+  background: ${({ isOpen }) =>
+    isOpen ? APP_THEME_DEFAULT.textDark : APP_THEME_DEFAULT.textLight};
 `;
 
 const MenuIcon: FC = () => {
+  const { isOpen, toggleMenu } = useMenuContext();
+
   const onClickHandler = () => {
-    console.log('NMENU CLICKED');
+    toggleMenu();
   };
 
   return (
-    <SContainer onClick={onClickHandler}>
+    <SContainer onClick={onClickHandler} isOpen={isOpen}>
       <SHamburgerLines>
-        <SLine />
-        <SLine />
-        <SLine />
+        <SLine isOpen={isOpen} className="line1" />
+        <SLine isOpen={isOpen} className="line2" />
+        <SLine isOpen={isOpen} className="line3" />
       </SHamburgerLines>
     </SContainer>
   );
