@@ -35,20 +35,20 @@ const WellnessContainer: FC = () => {
     <SContainer>
       <SDrinkContainer>
         <WellnessCard
-          id="water_counter"
-          title="cups of water"
+          id="water"
+          title="water"
           imageSrc={'/static/images/water_bottle.png'}
           color={APP_THEME_DEFAULT.quaternary}
         />
         <WellnessCard
-          id="tea_coffee_counter"
-          title="cups of tea/coffee"
+          id="tea_coffee"
+          title="tea/coffee"
           imageSrc={'/static/images/coffee.png'}
           color={APP_THEME_DEFAULT.quaternary}
         />
         <WellnessCard
-          id="alcohol_counter"
-          title="alcohol servings"
+          id="alcohol"
+          title="alcohol"
           imageSrc={'/static/images/wine.png'}
           color={APP_THEME_DEFAULT.quaternary}
         />

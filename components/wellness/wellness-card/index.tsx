@@ -2,6 +2,9 @@ import { FC, useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import Image from 'next/image';
 import { MdAddCircle, MdRemoveCircle } from 'react-icons/md';
+import { TWellnessTypes } from '@utils/interfaces';
+import { useDiaryEntriesContext } from '@store/diary-entries-context';
+import { useDateSelectedContext } from '@store/date-selected-context';
 
 const SContainer = styled.div`
   padding: 20px;
@@ -11,7 +14,6 @@ const SContainer = styled.div`
 `;
 const SHeader = styled.div`
   padding-bottom: 12px;
-  user-select: none;
   text-align: center;
 `;
 const SImageContainer = styled.div`
@@ -28,7 +30,7 @@ const SCounterContainer = styled.div`
 `;
 const SCount = styled.div`
   text-align: center;
-  min-width: 40px;
+  min-width: 54px;
 `;
 const SIconRemove = styled(MdRemoveCircle)`
   cursor: pointer;
@@ -46,27 +48,36 @@ const SIconAdd = styled(MdAddCircle)`
 `;
 
 interface IProps {
-  id: string;
+  id: TWellnessTypes;
   title: string;
   imageSrc: string;
   color: string;
 }
 
 const WellnessCard: FC<IProps> = ({ id, title, imageSrc, color }) => {
+  const { dateSelectedISO } = useDateSelectedContext();
+  const { diaryEntries, updateWellnessEntry } = useDiaryEntriesContext();
+
   const [counter, setCounter] = useState(0);
   const [hasUpdated, setHasUpdated] = useState(false);
 
   useEffect(() => {
+    const currentEntry = diaryEntries[dateSelectedISO];
+    setCounter(currentEntry?.[id]?.value || 0);
+  }, [dateSelectedISO, diaryEntries, id]);
+
+  useEffect(() => {
     if (hasUpdated) {
       const timer = setTimeout(async () => {
-        console.log('Sending count for', id, 'as:', counter);
+        updateWellnessEntry({ date: dateSelectedISO, id, value: counter });
+        setHasUpdated(false);
       }, 750);
 
       return () => {
         clearTimeout(timer);
       };
     }
-  }, [id, counter, hasUpdated]);
+  }, [id, counter, hasUpdated, dateSelectedISO, updateWellnessEntry]);
 
   const onClickRemove = () => {
     if (counter > 0) {
@@ -75,8 +86,10 @@ const WellnessCard: FC<IProps> = ({ id, title, imageSrc, color }) => {
     }
   };
   const onClickAdd = () => {
-    setCounter((curr) => curr + 1);
-    setHasUpdated(true);
+    if (counter < 99) {
+      setCounter((curr) => curr + 1);
+      setHasUpdated(true);
+    }
   };
 
   return (

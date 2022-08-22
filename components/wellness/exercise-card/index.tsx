@@ -1,7 +1,10 @@
+import TimeInput from '@components/ui/input/time-input';
 import TextArea from '@components/ui/text-area';
-import { MEDIA_DESKTOP, MEDIA_MOBILE } from '@utils/constants';
+import { MEDIA_DESKTOP } from '@utils/constants';
 import Image from 'next/image';
-import { FC, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
+import { useDateSelectedContext } from '@store/date-selected-context';
+import { useDiaryEntriesContext } from '@store/diary-entries-context';
 import styled from 'styled-components';
 
 const SContainer = styled.div`
@@ -22,7 +25,14 @@ const STitleContainer = styled.div`
   flex-direction: column;
   align-items: center;
 `;
-const SInputContainer = styled.div`
+const SAllDetailsContainer = styled.div`
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`;
+const STimeInputContainer = styled.div``;
+const STextAreaContainer = styled.div`
   width: 100%;
   justify-content: center;
   display: flex;
@@ -45,22 +55,66 @@ interface IProps {
   imageSrc: string;
 }
 
-const ExcerciseCard: FC<IProps> = ({ id, title, imageSrc }) => {
+const ExcerciseCard: FC<IProps> = ({ title, imageSrc }) => {
+  const { dateSelectedISO } = useDateSelectedContext();
+  const { diaryEntries, updateExerciseEntry } = useDiaryEntriesContext();
+
   const [hasUpdated, setHasUpdated] = useState(false);
-  const [excerciseDetails, setExcerciseDetails] = useState(
-    '45 minutes - gym cycling and elliptical'
-  );
+  const [hasBlurred, setHasBlurred] = useState(false);
+  const [time, setTime] = useState('00:00');
+  const [excerciseDetails, setExcerciseDetails] = useState('');
+
+  useEffect(() => {
+    const currentDayEntry = diaryEntries[dateSelectedISO];
+    setTime(currentDayEntry?.excercise.time || '00:00');
+    setExcerciseDetails(currentDayEntry?.excercise?.details || '');
+  }, [dateSelectedISO, diaryEntries]);
+
+  useEffect(() => {
+    let timer: ReturnType<typeof setTimeout>;
+
+    const listener = () => {
+      if (timer) {
+        clearTimeout(timer);
+      }
+      timer = setTimeout(async () => {
+        updateExerciseEntry({
+          date: dateSelectedISO,
+          excerciseDetails: { time, details: excerciseDetails },
+        });
+        setHasUpdated(false);
+        setHasBlurred(true);
+      }, 750);
+    };
+
+    if (hasUpdated && hasBlurred) {
+      listener();
+    }
+
+    return () => {
+      clearTimeout(timer);
+    };
+  }, [
+    time,
+    excerciseDetails,
+    hasBlurred,
+    hasUpdated,
+    dateSelectedISO,
+    updateExerciseEntry,
+  ]);
 
   const handleOnChange = (value: string) => {
     setExcerciseDetails(value);
-    setHasUpdated(true);
+    if (!hasBlurred) setHasUpdated(true);
+    if (hasBlurred) setHasBlurred(false);
   };
-
+  const handleTimeChange = (value: string) => {
+    setTime(value);
+    if (!hasBlurred) setHasUpdated(true);
+    if (hasBlurred) setHasBlurred(false);
+  };
   const handleOnBlur = () => {
-    if (hasUpdated) {
-      console.log(excerciseDetails.trim());
-      setHasUpdated(false);
-    }
+    if (!hasBlurred) setHasBlurred(true);
   };
 
   return (
@@ -77,17 +131,29 @@ const ExcerciseCard: FC<IProps> = ({ id, title, imageSrc }) => {
           />
         </SImageContainer>
       </STitleContainer>
-      <SInputContainer>
-        <TextArea
-          id="exercise"
-          minWidth={250}
-          value={excerciseDetails}
-          borderStyle={'dashed'}
-          borderWidth={1}
-          onChange={handleOnChange}
-          onBlur={handleOnBlur}
-        />
-      </SInputContainer>
+      <SAllDetailsContainer>
+        <STextAreaContainer>
+          <TextArea
+            id="exercise"
+            minWidth={250}
+            value={excerciseDetails}
+            borderStyle={'dashed'}
+            borderWidth={1}
+            totalRows={3}
+            placeholder="insert details here"
+            onChange={handleOnChange}
+            onBlur={handleOnBlur}
+          />
+        </STextAreaContainer>
+        <STimeInputContainer>
+          <TimeInput
+            id="exercise_time"
+            onChange={handleTimeChange}
+            value={time}
+            onBlur={handleOnBlur}
+          />
+        </STimeInputContainer>
+      </SAllDetailsContainer>
     </SContainer>
   );
 };
