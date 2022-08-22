@@ -1,15 +1,11 @@
-import {
-  APP_THEME_DEFAULT,
-  COLOURS,
-  DEFAULT_MEAL_CARD_ARRAY,
-} from '@utils/constants';
+import { APP_THEME_DEFAULT, COLOURS, ALL_MEAL_CARDS } from '@utils/constants';
 import { FC, useState } from 'react';
 import styled from 'styled-components';
 import { MdCheck, MdWest } from 'react-icons/md';
 import InputContainer from '@components/ui/input-container';
 import DropdownContainer from '@components/ui/dropdown-container';
 import EmojiPicker, { ISelectedEmoji } from '@components/emoji-picker';
-import { ICardProps, TMealType } from '@utils/interfaces';
+import { IMealContent, TMealType } from '@utils/interfaces';
 import { getMealThemeColour } from '@utils/theme-utils';
 
 interface ISHeader {
@@ -52,27 +48,23 @@ interface IModalProps {
   mealId: TMealType;
   primaryColour: string;
   onClose: () => void;
-  onSubmit: (properties?: any) => void;
+  onSubmit: (mealId: TMealType, values: IMealContent) => void;
 }
 
 const ModalAddFood: FC<IModalProps> = ({ mealId, onClose, onSubmit }) => {
-  const [selectedMeal, setSelectedMeal] = useState<ICardProps | null>(
-    DEFAULT_MEAL_CARD_ARRAY.find((meal) => meal.id === mealId) || null
-  );
+  const [selectedMealId, setSelectedMealId] = useState<TMealType>(mealId);
   const [selectedEmoji, setSelectedEmoji] = useState<ISelectedEmoji | null>(
     null
   );
-  const [servingSize, setServingSize] = useState('0.5');
-  const [measurement, setMeasurement] = useState('plate');
-  const [food, setFood] = useState('Asian styled salad');
-  const [description, setDescription] = useState(
-    'Stir fry veg, chicken strips, rice, \nAsian sesame \n \nstir-fry sauce'
-  );
+  const [servingSize, setServingSize] = useState('');
+  const [measurement, setMeasurement] = useState('');
+  const [food, setFood] = useState('');
+  const [description, setDescription] = useState('');
 
-  const MealColour = getMealThemeColour(APP_THEME_DEFAULT, selectedMeal?.id);
+  const MealColour = getMealThemeColour(APP_THEME_DEFAULT, selectedMealId);
 
   const onSubmitHandler = () => {
-    onSubmit({
+    onSubmit(selectedMealId, {
       emoji: selectedEmoji,
       serving: servingSize,
       measurement,
@@ -80,18 +72,14 @@ const ModalAddFood: FC<IModalProps> = ({ mealId, onClose, onSubmit }) => {
       description,
     });
   };
+  const onSelectChangeHandler = (value: TMealType) => {
+    setSelectedMealId(value);
+  };
 
   const commonInputProps = {
     backgroundColour: MealColour,
     hideInitialBorder: true,
     borderColour: MealColour,
-  };
-
-  const onSelectChangeHandler = (value: any) => {
-    console.log(value);
-    const foundMeal =
-      DEFAULT_MEAL_CARD_ARRAY.find((meal) => meal.id === value) || null;
-    setSelectedMeal(foundMeal);
   };
 
   return (
@@ -158,8 +146,8 @@ const ModalAddFood: FC<IModalProps> = ({ mealId, onClose, onSubmit }) => {
           popup="Change meal to another"
           backgroundColour={MealColour}
           inputWidth={180}
-          value={selectedMeal}
-          options={DEFAULT_MEAL_CARD_ARRAY}
+          value={selectedMealId}
+          options={ALL_MEAL_CARDS}
           onChange={onSelectChangeHandler}
         />
       </SContentContainer>

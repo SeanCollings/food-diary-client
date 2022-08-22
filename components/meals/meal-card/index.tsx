@@ -6,14 +6,16 @@ import {
   OPACITY_70,
   OPACITY_80,
 } from '@utils/constants';
-import { FC, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { MdAddCircle } from 'react-icons/md';
 import { getUniqueId } from '@utils/unique-id';
 import ModalAddFood from '@components/modals/add-food';
 import Modal from '@components/modals';
-import { TMealType } from '@utils/interfaces';
+import { IMealContent, TMealType } from '@utils/interfaces';
 import { getMealThemeColour } from '@utils/theme-utils';
+import { useDiaryEntriesContext } from '@store/diary-entries-context';
+import { useDateSelectedContext } from '@store/date-selected-context';
 
 interface IScontainer {
   background: string;
@@ -105,24 +107,12 @@ const SContentDescription = styled.span`
   color: ${COLOURS.black}${OPACITY_80};
 `;
 
-export interface IContent {
-  emoji?: string;
-  serving?: string;
-  measurement?: string;
-  food: string;
-  description?: string;
-}
-
 interface IProps {
   id: TMealType;
   title: string;
-  contents: IContent[];
 }
 
-interface IBuildContent extends IContent {
-  index: number;
-}
-const buildContent = (content: IContent, index: number) => {
+const buildContent = (content: IMealContent, index: number) => {
   const { food, emoji, serving, measurement } = content;
   if (!food) {
     return '';
@@ -130,8 +120,8 @@ const buildContent = (content: IContent, index: number) => {
 
   const thisServing = serving ? `${serving} ` : '';
   const thisMeasurement = measurement ? `${measurement} - ` : '';
-  const preEmoji = emoji ? `${emoji} ` : '';
-  const postEmoji = emoji ? ` ${emoji}` : '';
+  const preEmoji = emoji?.nativeSkin ? `${emoji.nativeSkin} ` : '';
+  const postEmoji = emoji?.nativeSkin ? ` ${emoji.nativeSkin}` : '';
   const constructedString = `${thisServing}${thisMeasurement}${food}`;
 
   if (index % 2 === 0) {
@@ -141,19 +131,30 @@ const buildContent = (content: IContent, index: number) => {
   return `${constructedString}${postEmoji}`;
 };
 
-const Card: FC<IProps> = ({ id, title, contents }) => {
+const Card: FC<IProps> = ({ id, title }) => {
+  const { dateSelectedISO } = useDateSelectedContext();
+  const { diaryEntries, updateMealEntry } = useDiaryEntriesContext();
+
+  const [contents, setContents] = useState<IMealContent[]>([]);
   const [showModal, setShowModal] = useState(false);
+
+  useEffect(() => {
+    const currentEntry = diaryEntries[dateSelectedISO];
+    setContents(currentEntry?.meals[id]?.contents || []);
+  }, [dateSelectedISO, diaryEntries, id]);
 
   const onClickHandler = () => {
     setShowModal(true);
   };
-
   const onModalClose = () => {
     setShowModal(false);
   };
-  const onModalSubmit = (properties: any) => {
-    console.log('properties', properties);
+  const onModalSubmit = (mealId: TMealType, newValues: IMealContent) => {
     setShowModal(false);
+
+    if (!!newValues.food) {
+      updateMealEntry({ date: dateSelectedISO, mealId, newValues });
+    }
   };
 
   const background = getMealThemeColour(APP_THEME_DEFAULT, id);

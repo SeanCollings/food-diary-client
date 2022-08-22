@@ -1,4 +1,4 @@
-import { COLOURS, OPACITY_10, OPACITY_30, OPACITY_70 } from '@utils/constants';
+import { COLOURS, OPACITY_30 } from '@utils/constants';
 import { ChangeEvent, FC } from 'react';
 import styled from 'styled-components';
 
@@ -38,7 +38,7 @@ const SSelect = styled.select<ISSelect>`
   }
 `;
 const SOption = styled.option<ISSelect>`
-  --background-colour: ${COLOURS.white};
+  --background-colour: ${COLOURS.white_off};
   background: var(--background-colour);
 `;
 
@@ -70,7 +70,7 @@ const Dropdown: FC<IDropdownProps> = ({
       <SSelect
         id={id}
         name={id}
-        value={value?.title}
+        value={value}
         backgroundColour={backgroundColour}
         tabIndex={tabIndex}
         onChange={onChangeHandler}
