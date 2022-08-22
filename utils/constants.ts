@@ -1,4 +1,5 @@
 import { EMealType, IAppTheme, ICardProps } from '@utils/interfaces';
+
 export const OPACITY_10 = '1a';
 export const OPACITY_30 = '4d';
 export const OPACITY_40 = '66';
@@ -19,32 +20,28 @@ export const COLOURS = {
   error: '#ed0f0f',
 };
 
-export const DEFAULT_MEAL_CARD_ARRAY: ICardProps[] = [
+export const ALL_MEAL_CARDS: ICardProps[] = [
   {
     id: EMealType.BREAKFAST,
-    title: EMealType.BREAKFAST,
+    title: 'Breakfast',
   },
   {
     id: EMealType.SNACK_1,
-    title: EMealType.SNACK_1,
+    title: 'Snack 1',
   },
   {
     id: EMealType.LUNCH,
-    title: EMealType.LUNCH,
+    title: 'Lunch',
   },
   {
     id: EMealType.SNACK_2,
-    title: EMealType.SNACK_2,
+    title: 'Snack 2',
   },
   {
     id: EMealType.DINNER,
-    title: EMealType.DINNER,
+    title: 'Dinner',
   },
 ];
-export const MENU_ICON_COLOUR = {
-  primary: COLOURS.turquoise,
-  secondary: COLOURS.white_off,
-};
 
 export const APP_THEME_DEFAULT: IAppTheme = {
   primary: '#2a8b81', // lunch, menu, buttons
@@ -62,6 +59,7 @@ export const APP_THEME_DEFAULT: IAppTheme = {
 export const MEDIA_MOBILE = '@media (max-width: 480px)';
 export const MEDIA_TABLET = '@media (min-width: 481px) and (max-width: 768px)';
 export const MEDIA_DESKTOP = '@media (min-width: 769px)';
+export const MEDIA_MAX_DESKTOP = '@media (min-width: 1420px)';
 export const MAX_PAGE_WIDTH = 1340;
 
 export const MONTHS = [

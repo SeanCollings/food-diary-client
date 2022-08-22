@@ -8,13 +8,15 @@ export const getTodaysDate = () =>
     day: 'numeric',
   });
 
-export const formatFullDate = (date: Date) =>
-  date.toLocaleDateString('en-GB', {
+export const formatFullDate = (date: string | Date) => {
+  const d = new Date(date);
+  return d.toLocaleDateString('en-GB', {
     weekday: 'long',
     year: 'numeric',
     month: 'short',
     day: 'numeric',
   });
+};
 
 export const formatMonthSmall = (date: Date) => {
   const newDate = new Date(date);
@@ -54,21 +56,19 @@ export const getCurrentDayInDate = (date: Date, day: number) =>
   new Date(new Date(date).setDate(day));
 
 export const isDayInMonthInFuture = (compareDay: number) => {
-  return (
-    new Date(new Date(Date.now()).setDate(compareDay)).setHours(0, 0, 0, 0) >
-    new Date().setHours(0, 0, 0, 0)
-  );
+  const d = new Date(Date.now()).setDate(compareDay);
+  return setDateToMidnight(d) > setDateToMidnight();
 };
 
 export const getIsDayInTheFuture = (compareDate: Date, compareDay: number) =>
   isMonthInFuture(compareDate) ||
   (isCurrentMonth(compareDate) && isDayInMonthInFuture(compareDay));
 
-export const getBothDatesEqual = (firstDate: Date, secondDate: Date) => {
-  return (
-    new Date(firstDate).setHours(0, 0, 0, 0) ===
-    new Date(secondDate).setHours(0, 0, 0, 0)
-  );
+export const getBothDatesEqual = (
+  firstDate: string | Date,
+  secondDate: Date
+) => {
+  return setDateToMidnight(firstDate) === setDateToMidnight(secondDate);
 };
 
 export const isLeapYear = (month: number, year: number) => {
@@ -80,7 +80,7 @@ export const isLeapYear = (month: number, year: number) => {
   return 0;
 };
 
-export const getNewDay = (selectedDate: Date, getNextDay: boolean) => {
+export const getNewDay = (selectedDate: string | Date, getNextDay: boolean) => {
   const date = new Date(selectedDate);
   date.setDate(date.getDate() + (getNextDay ? 1 : -1));
   return date;
@@ -94,4 +94,20 @@ export const getNewMonth = (
   let newMonth = new Date(month || selectedMonth);
   newMonth.setMonth(newMonth.getMonth() + (getNextMonth ? 1 : -1));
   return newMonth;
+};
+
+export const getIsDateSelectedToday = (compareDate: string) => {
+  return (
+    new Date(compareDate).setHours(0, 0, 0, 0) ===
+    new Date().setHours(0, 0, 0, 0)
+  );
+};
+
+export const setDateToMidnight = (date?: string | number | Date) => {
+  const d = date || Date.now();
+  return new Date(new Date(d).setHours(0, 0, 0, 0));
+};
+
+export const setDateMidnightISOString = (date: string | Date) => {
+  return setDateToMidnight(date).toISOString();
 };

@@ -2,14 +2,14 @@ import { IAppTheme, TMealType } from '@utils/interfaces';
 
 export const getMealThemeColour = (theme: IAppTheme, id?: TMealType) => {
   switch (id) {
-    case 'Breakfast':
+    case 'breakfast':
       return theme.secondary;
-    case 'Lunch':
+    case 'lunch':
       return theme.primary;
-    case 'Dinner':
+    case 'dinner':
       return theme.tertiary;
-    case 'Snack 1':
-    case 'Snack 2':
+    case 'snack_1':
+    case 'snack_2':
       return theme.quaternary;
     default:
       return theme.primary;
