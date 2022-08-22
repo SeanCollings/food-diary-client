@@ -12,6 +12,7 @@ interface ISInput {
   isError?: boolean;
   hideInitialBorder?: boolean;
   hasIcon: boolean;
+  borderWidth: number;
 }
 
 const SContainer = styled.div<ISContainer>`
@@ -35,11 +36,11 @@ const SInput = styled.input<ISInput>`
 
   background-color: ${({ backgroundColour }) =>
     backgroundColour ? `${backgroundColour}${OPACITY_30}` : 'inherit'};
-  border: 2px solid
-    ${({ borderColour }) =>
+  border: solid
+    ${({ borderColour, borderWidth }) =>
       borderColour
-        ? `${borderColour}${OPACITY_30}`
-        : `${COLOURS.black}${OPACITY_30}`};
+        ? `${borderWidth}px ${borderColour}${OPACITY_30}`
+        : `${borderWidth}px ${COLOURS.black}${OPACITY_30}`};
   ${({ hideInitialBorder }) =>
     hideInitialBorder && 'border-color: transparent'};
 
@@ -61,8 +62,11 @@ const SIconContainer = styled.div`
   padding-left: 4px;
 `;
 
+type TType = string | number;
+type TInputType = 'text' | 'number';
+
 export interface IInputProps {
-  value: string;
+  value: TType;
   id: string;
   backgroundColour?: string;
   borderColour?: string;
@@ -73,6 +77,8 @@ export interface IInputProps {
   isError?: boolean;
   children?: ReactNode;
   tabIndex?: number;
+  type?: TInputType;
+  borderWidth?: number;
   onTabPressed?: () => void;
   onChange: (value: string) => void;
   onMouseDown?: () => void;
@@ -90,6 +96,8 @@ export const Input: FC<IInputProps> = ({
   isError,
   children,
   tabIndex,
+  borderWidth = 2,
+  type = 'text',
   onTabPressed,
   onChange,
   onMouseDown,
@@ -115,7 +123,8 @@ export const Input: FC<IInputProps> = ({
         backgroundColour={backgroundColour}
         hideInitialBorder={hideInitialBorder}
         borderColour={borderColour}
-        type="text"
+        borderWidth={borderWidth}
+        type={type}
         placeholder={placeholder}
         isError={isError}
         hasIcon={!!children}

@@ -80,6 +80,7 @@ export interface ITextAreaProps {
   borderStyle?: TBorderStylePropery;
   borderWidth?: number;
   tabIndex?: number;
+  placeholder?: string;
   onChange: (value: string) => void;
   onBlur?: () => void;
 }
@@ -94,6 +95,7 @@ export const TextArea: FC<ITextAreaProps> = ({
   totalRows = 4,
   borderStyle = 'solid',
   borderWidth = 2,
+  placeholder,
   onChange,
   onBlur,
 }) => {
@@ -113,6 +115,7 @@ export const TextArea: FC<ITextAreaProps> = ({
         backgroundColour={backgroundColour}
         borderStyle={borderStyle}
         borderWidth={borderWidth}
+        placeholder={placeholder}
         onChange={onChangeHandler}
         onBlur={onBlurHandler}
       />
