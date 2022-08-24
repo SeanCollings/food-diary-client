@@ -4,6 +4,7 @@ import {
   COLOURS,
   MEDIA_MAX_DESKTOP,
   MEDIA_MOBILE,
+  OPACITY_70,
 } from '@utils/constants';
 import { FC } from 'react';
 import styled from 'styled-components';
@@ -24,8 +25,10 @@ const SContainer = styled.div<ISContainer>`
   background: ${APP_THEME_DEFAULT.backgroundPrimary};
   height: 100%;
   width: ${({ menuWidth }) => menuWidth}px;
-  box-shadow: 0px 0px 20px 1px ${COLOURS.gray};
   z-index: 2;
+
+  box-shadow: ${({ menuWidth }) =>
+    menuWidth > 0 ? `0px 0px 20px 1px ${COLOURS.black}${OPACITY_70}` : `0`};
 
   ${MEDIA_MOBILE} {
     width: ${({ menuWidth }) => (menuWidth > 0 ? '100%' : 0)};

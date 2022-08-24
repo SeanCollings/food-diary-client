@@ -24,7 +24,11 @@ const SContent = styled.div<ISContent>`
   border-bottom: 3px solid transparent;
 
   ${({ isCurrentPath }) =>
-    isCurrentPath && `border-bottom: 3px solid ${APP_THEME_DEFAULT.primary}`}
+    isCurrentPath && `border-bottom: 3px solid ${APP_THEME_DEFAULT.primary}`};
+
+  :hover {
+    ${({ isCurrentPath }) => !isCurrentPath && `opacity: 0.6`};
+  }
 `;
 
 const FlatMenu: FC = () => {
