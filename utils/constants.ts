@@ -14,10 +14,11 @@ export const COLOURS = {
   gray_dark: '#a7a7a7',
   turquoise: '#66bfbf',
   purple: '#b8297f',
-  white_off: '#f7f7f7',
   blue: '#48a4d3',
   black: '#111111',
   error: '#ed0f0f',
+  white_off: '#f7f7f7',
+  white: '#ffffff',
 };
 
 export const ALL_MEAL_CARDS: ICardProps[] = [

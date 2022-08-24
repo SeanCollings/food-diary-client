@@ -1,7 +1,13 @@
 import { useOnClickOutsideElement } from '@hooks/use-onclick-outside-element';
-import { COLOURS, DAYS, OPACITY_30, WEEK_DAYS } from '@utils/constants';
 import {
-  formatMonthSmall,
+  APP_THEME_DEFAULT,
+  COLOURS,
+  DAYS,
+  OPACITY_30,
+  WEEK_DAYS,
+} from '@utils/constants';
+import {
+  formatMonthSmallYear,
   getBothDatesEqual,
   getCurrentDayInDate,
   getIsDayInTheFuture,
@@ -12,6 +18,7 @@ import { IDayNumber, isDayNumberTypeGuard } from '@utils/type-guards';
 import { FC, useRef, useState } from 'react';
 import styled from 'styled-components';
 import { MdArrowLeft, MdArrowRight } from 'react-icons/md';
+import { useAllEntriesPerMonthContext } from '@store/all-entries-per-month-context';
 
 const CALENDAR_HEIGHT = 320;
 const MONTH_SELECTOR_HEIGHT = 30;
@@ -26,6 +33,9 @@ interface ISDayContainer {
   bottomRight: boolean;
   isSelectedDay: boolean;
   isOtherMonthDay?: boolean;
+}
+interface ISDayHasEntry {
+  isSelectedDay: boolean;
 }
 
 const SContainer = styled.div`
@@ -88,25 +98,36 @@ const SDayContainer = styled.div<ISDayContainer>`
   flex-direction: row;
   flex: 1;
   font-size: 14px;
-  padding-left: 4px;
+  padding: 0 4px;
   cursor: ${({ isOtherMonthDay }) =>
     !isOtherMonthDay ? 'pointer' : 'inherit'};
 
   font-weight: ${({ isCurrentDay }) => (isCurrentDay ? 'bold' : '200')};
   height: ${({ rowHeight }) => rowHeight}px;
   color: ${({ isCurrentDay }) =>
-    isCurrentDay ? COLOURS.turquoise : COLOURS.black};
+    isCurrentDay ? APP_THEME_DEFAULT.primary : APP_THEME_DEFAULT.textDark};
   ${({ bottomRight }) => bottomRight && `border-radius: 0 0 5px 0`};
   ${({ bottomLeft }) => bottomLeft && `border-radius: 0 0 0 5px`};
   ${({ backgroundColour }) =>
     backgroundColour && `background-color: ${backgroundColour}`};
   ${({ isOtherMonthDay }) => isOtherMonthDay && `opacity: 0.4`};
   ${({ isSelectedDay }) =>
-    isSelectedDay && `background-color: ${COLOURS.turquoise}${OPACITY_30};`};
+    isSelectedDay &&
+    `background-color: ${APP_THEME_DEFAULT.primary}${OPACITY_30};`};
 `;
 const STitleRow = styled.div``;
 const SDayRow = styled.div`
   width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+`;
+const SDayHasEntry = styled.div<ISDayHasEntry>`
+  height: 8px;
+  width: 100%;
+  border-radius: 8px;
+  background: ${({ isSelectedDay }) =>
+    isSelectedDay ? APP_THEME_DEFAULT.secondary : APP_THEME_DEFAULT.primary};
 `;
 
 const generateMatrix = (selectedMonth: Date) => {
@@ -172,7 +193,7 @@ const DateSelector: FC<IDateSelectorProps> = ({
       <SButtonLeft onClick={onSelectPreviousMonth}>
         <MdArrowLeft size={30} color={COLOURS.black} />
       </SButtonLeft>
-      <SDateTitle>{formatMonthSmall(selectedMonthDate)}</SDateTitle>
+      <SDateTitle>{formatMonthSmallYear(selectedMonthDate)}</SDateTitle>
       <SButtonRight onClick={onSelectNextMonth}>
         <MdArrowRight size={30} color={COLOURS.black} />
       </SButtonRight>
@@ -185,7 +206,12 @@ const Calendar: FC<ICalendarProps> = ({
   selectedMonthDate,
   onDayClicked,
 }) => {
+  const { allEntriesPerMonth } = useAllEntriesPerMonthContext();
+
+  const currentMonthYear = formatMonthSmallYear(selectedMonthDate);
+  const entriesPerMonth = allEntriesPerMonth[currentMonthYear];
   const matrix = generateMatrix(selectedMonthDate);
+  const maxRows = (matrix[6][0] as IDayNumber).otherMonthDay ? 5 : 6;
 
   const daySelectedHandler = (day: number, isDisabled: boolean | undefined) => {
     if (isDisabled) {
@@ -198,8 +224,6 @@ const Calendar: FC<ICalendarProps> = ({
   return (
     <SMonthContainer>
       {matrix.map((row, rowIndex) => {
-        const maxRows = (matrix[6][0] as IDayNumber).otherMonthDay ? 5 : 6;
-
         if (rowIndex === 6 && (row[0] as IDayNumber).otherMonthDay) {
           return null;
         }
@@ -218,17 +242,16 @@ const Calendar: FC<ICalendarProps> = ({
           }
 
           if (!titleRow && isDayNumberTypeGuard(item)) {
+            const dayHasEntry = entriesPerMonth?.includes(item.day);
             const currentDateFromDay = getCurrentDayInDate(
               selectedMonthDate,
               item.day
             );
-            const isSelectedDay = getBothDatesEqual(
-              topLevelDate,
-              currentDateFromDay
-            );
-            const isCurrentDay =
-              item.day === new Date(selectedMonthDate).getDate() &&
+            const isSelectedDay =
+              getBothDatesEqual(topLevelDate, currentDateFromDay) &&
               !item.otherMonthDay;
+            const isCurrentDay =
+              item.day === new Date().getDate() && !item.otherMonthDay;
             const isDayInTheFuture = getIsDayInTheFuture(
               selectedMonthDate,
               item.day
@@ -253,7 +276,9 @@ const Calendar: FC<ICalendarProps> = ({
               >
                 <SDayRow>
                   {item.day}
-                  <div />
+                  {dayHasEntry && (
+                    <SDayHasEntry isSelectedDay={isSelectedDay} />
+                  )}
                 </SDayRow>
               </SDayContainer>
             );
@@ -275,7 +300,7 @@ const CalendarContainer: FC<ICalendarContainerProps> = ({
 }) => {
   const calendarRef = useRef<HTMLDivElement>(null);
   const [selectedMonthDate, setSelectedMonthDate] = useState(
-    new Date(Date.now())
+    new Date(topLevelDate)
   );
   useOnClickOutsideElement(calendarRef, onClose);
 

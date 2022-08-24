@@ -10,7 +10,10 @@ import {
 } from '@utils/date-utils';
 import { useDateSelectedContext } from '@store/date-selected-context';
 
-interface ISButton {
+interface ISButtonCommon {
+  calendarVisible: boolean;
+}
+interface ISButton extends ISButtonCommon {
   isDisabled: boolean;
 }
 interface ISDate {
@@ -35,12 +38,16 @@ const SContentWrapper = styled.div`
     height: 60px;
   }
 `;
-const SButtonCommon = styled.button`
+const SButtonCommon = styled.button<ISButtonCommon>`
+  transition: 0.1s;
   text-align: center;
   padding: 0;
   border: none;
   background: transparent;
   line-height: 0;
+  transform: rotateX(0);
+
+  ${({ calendarVisible }) => calendarVisible && `transform: rotateX(90deg);`}
 `;
 const SButtonLeft = styled(SButtonCommon)`
   margin-right: 6px;
@@ -72,6 +79,7 @@ const SDate = styled.button<ISDate>`
   padding: 0;
   border: none;
   background: transparent;
+  overflow: hidden:
 
   ${({ isCalendarShown }) => isCalendarShown && `opacity: 0.4`};
 
@@ -82,6 +90,7 @@ const SDate = styled.button<ISDate>`
 const SFullDateContainer = styled.div`
   min-width: 250px;
   text-align: center;
+  position: relative;
 
   ${MEDIA_MOBILE} {
     width: 100%;
@@ -99,7 +108,7 @@ const SCalendarContainer = styled.div`
 
   ${MEDIA_MOBILE} {
     max-width: 100%;
-    top: 70px;
+    top: 50px;
   }
 `;
 
@@ -133,7 +142,7 @@ const DateDisplay: FC = () => {
   return (
     <SContainer>
       <SContentWrapper>
-        <SButtonLeft onClick={onClickLeft}>
+        <SButtonLeft onClick={onClickLeft} calendarVisible={showCalendar}>
           <MdArrowBackIos size={28} color={COLOURS.gray} />
         </SButtonLeft>
         <SDate onClick={onDateClick} isCalendarShown={showCalendar}>
@@ -154,6 +163,7 @@ const DateDisplay: FC = () => {
           onClick={onClickRight}
           isDisabled={isDateSelectedToday}
           disabled={isDateSelectedToday}
+          calendarVisible={showCalendar}
         >
           <MdArrowForwardIos size={28} color={COLOURS.gray} />
         </SButtonRight>

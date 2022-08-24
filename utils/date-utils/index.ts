@@ -18,7 +18,14 @@ export const formatFullDate = (date: string | Date) => {
   });
 };
 
-export const formatMonthSmall = (date: Date) => {
+export const formatMonthSmallYear = (date: Date) => {
+  const newDate = new Date(date);
+  const year = newDate.getFullYear().toString();
+  const month = newDate.toLocaleString('en-US', { month: 'short' });
+  return `${month} ${year}`;
+};
+
+export const formatMonthMediumYear = (date: Date) => {
   const newDate = new Date(date);
   const year = newDate.getFullYear().toString();
   const month = MONTHS[newDate.getMonth()];
@@ -68,7 +75,10 @@ export const getBothDatesEqual = (
   firstDate: string | Date,
   secondDate: Date
 ) => {
-  return setDateToMidnight(firstDate) === setDateToMidnight(secondDate);
+  return (
+    setDateToMidnight(firstDate).getTime() ===
+    setDateToMidnight(secondDate).getTime()
+  );
 };
 
 export const isLeapYear = (month: number, year: number) => {
