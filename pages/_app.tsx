@@ -15,6 +15,8 @@ import SideMenuDisplay from '@components/menu/side-menu-display';
 import { DiaryEntriesContextProvider } from 'store/diary-entries-context';
 import { DateSelectedContextProvider } from '@store/date-selected-context';
 import { MenuContextProvider } from '@store/menu-context';
+import { WellnessEntriesContextProvider } from '@store/wellness-entries-context';
+import { MealEntriesContextProvider } from '@store/meal-entries-context';
 
 const theme: DefaultTheme = {
   colors: {
@@ -46,26 +48,33 @@ function MyApp({ Component, pageProps }: AppProps) {
   return (
     <>
       <DateSelectedContextProvider>
-        <DiaryEntriesContextProvider>
-          <MenuContextProvider>
-            <ThemeProvider theme={theme}>
-              <GlobalStyle />
-              <Head>
-                <title>{'Food & Wellness Diary'}</title>
-                <meta name="description" content={'Food & Wellness Diary'} />
-                <link rel="icon" href="/diary.ico" />
-              </Head>
+        <MealEntriesContextProvider>
+          <WellnessEntriesContextProvider>
+            <DiaryEntriesContextProvider>
+              <MenuContextProvider>
+                <ThemeProvider theme={theme}>
+                  <GlobalStyle />
+                  <Head>
+                    <title>{'Food & Wellness Diary'}</title>
+                    <meta
+                      name="description"
+                      content={'Food & Wellness Diary'}
+                    />
+                    <link rel="icon" href="/diary.ico" />
+                  </Head>
 
-              <SideMenuDisplay />
-              <SAppContainer>
-                <SMain>
-                  <Component {...pageProps} />
-                </SMain>
-                <Footer />
-              </SAppContainer>
-            </ThemeProvider>
-          </MenuContextProvider>
-        </DiaryEntriesContextProvider>
+                  <SideMenuDisplay />
+                  <SAppContainer>
+                    <SMain>
+                      <Component {...pageProps} />
+                    </SMain>
+                    <Footer />
+                  </SAppContainer>
+                </ThemeProvider>
+              </MenuContextProvider>
+            </DiaryEntriesContextProvider>
+          </WellnessEntriesContextProvider>
+        </MealEntriesContextProvider>
       </DateSelectedContextProvider>
     </>
   );
