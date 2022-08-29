@@ -45,7 +45,7 @@ const SContainer = styled.div`
   display: flex;
   flex-direction: column;
   padding: 4px;
-  box-shadow: 0px 8px 20px -8px ${COLOURS.gray_dark};
+  box-shadow: 0px 8px 20px -8px ${COLOURS.black};
   height: ${CALENDAR_HEIGHT + MONTH_SELECTOR_HEIGHT + 8}px;
 `;
 const SDateSelectorContainer = styled.div`

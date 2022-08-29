@@ -81,6 +81,7 @@ export interface ITextAreaProps {
   borderWidth?: number;
   tabIndex?: number;
   placeholder?: string;
+  title?: string;
   onChange: (value: string) => void;
   onBlur?: () => void;
 }
@@ -96,6 +97,7 @@ export const TextArea: FC<ITextAreaProps> = ({
   borderStyle = 'solid',
   borderWidth = 2,
   placeholder,
+  title,
   onChange,
   onBlur,
 }) => {
@@ -111,6 +113,7 @@ export const TextArea: FC<ITextAreaProps> = ({
         id={id}
         rows={totalRows}
         value={value}
+        title={title}
         tabIndex={tabIndex}
         backgroundColour={backgroundColour}
         borderStyle={borderStyle}

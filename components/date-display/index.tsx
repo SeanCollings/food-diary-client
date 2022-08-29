@@ -46,12 +46,13 @@ const SButtonCommon = styled.button<ISButtonCommon>`
   background: transparent;
   line-height: 0;
   transform: rotateX(0);
+  cursor: pointer;
 
-  ${({ calendarVisible }) => calendarVisible && `transform: rotateX(90deg);`}
+  ${({ calendarVisible }) =>
+    calendarVisible && `transform: rotateX(90deg); cursor: initial;`}
 `;
 const SButtonLeft = styled(SButtonCommon)`
   margin-right: 6px;
-  cursor: pointer;
 
   :hover {
     opacity: 0.7;
@@ -63,9 +64,8 @@ const SButtonRight = styled(SButtonCommon)<ISButton>`
 
   ${({ isDisabled }) =>
     isDisabled
-      ? `opacity: 0.2;`
+      ? `opacity: 0.2; cursor: initial;`
       : `
-  cursor: pointer;
   :hover {
 opacity: 0.7;
 scale: 1.1;

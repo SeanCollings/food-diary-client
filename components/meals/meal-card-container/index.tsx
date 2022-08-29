@@ -3,7 +3,7 @@ import { ALL_MEAL_CARDS } from '@utils/constants';
 import { FC } from 'react';
 import styled from 'styled-components';
 
-const SContainer = styled.div`
+const SContainer = styled.section`
   display: flex;
   flex-wrap: wrap;
   justify-content: center;

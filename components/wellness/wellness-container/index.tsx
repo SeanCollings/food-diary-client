@@ -1,10 +1,14 @@
 import ExcerciseCard from '@components/wellness/exercise-card';
 import WellnessCard from '@components/wellness/wellness-card';
-import { APP_THEME_DEFAULT, MEDIA_DESKTOP } from '@utils/constants';
+import {
+  APP_THEME_DEFAULT,
+  MEDIA_DESKTOP,
+  MEDIA_MOBILE,
+} from '@utils/constants';
 import { FC } from 'react';
 import styled from 'styled-components';
 
-const SContainer = styled.div`
+const SContainer = styled.section`
   margin-top: 20px;
   display: flex;
   gap: 20px;
@@ -13,9 +17,13 @@ const SContainer = styled.div`
   ${MEDIA_DESKTOP} {
     flex-direction: row;
   }
+  ${MEDIA_MOBILE} {
+    margin-top: 0px;
+  }
 `;
 const SDrinkContainer = styled.div`
-  border-radius: 20px;
+  border-radius: 12px;
+  border-bottom: 1px solid gainsboro;
   background: white;
   display: flex;
   flex-basis: 60%;
@@ -24,7 +32,8 @@ const SDrinkContainer = styled.div`
   background: ${APP_THEME_DEFAULT.backgroundSecondary};
 `;
 const SExcerciseContainer = styled.div`
-  border-radius: 20px;
+  border-radius: 12px;
+  border-bottom: 1px solid gainsboro;
   background: white;
   flex-basis: 40%;
   background: ${APP_THEME_DEFAULT.backgroundSecondary};

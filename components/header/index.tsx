@@ -4,7 +4,7 @@ import { MEDIA_MOBILE } from '@utils/constants';
 import { FC } from 'react';
 import styled from 'styled-components';
 
-const SContainer = styled.div`
+const SContainer = styled.header`
   padding: 3rem 0rem;
   justify-content: space-between;
   position: relative;
@@ -27,7 +27,7 @@ const SHeader = styled.div`
 const Header: FC = () => {
   return (
     <SContainer>
-      <SHeader>{'Food & Wellness Diary'}</SHeader>
+      <SHeader>{'Food & Wellness Diary (beta)'}</SHeader>
       <MenuIcon />
       <FlatMenu />
     </SContainer>

@@ -4,6 +4,7 @@ import styled from 'styled-components';
 
 interface ISInput {
   invertClock?: boolean;
+  hasNoValue: boolean;
 }
 
 const SContainer = styled.div``;
@@ -16,6 +17,8 @@ const SInput = styled.input<ISInput>`
   border: 1px solid transparent;
   border-radius: 4px;
   background: transparent;
+
+  ${({ hasNoValue }) => hasNoValue && 'opacity: 0.7'};
 
   ::-webkit-calendar-picker-indicator {
     cursor: pointer;
@@ -50,6 +53,7 @@ const TimeInput: FC<ITimeInputProps> = ({ id, value, onChange, onBlur }) => {
         min={'00:00'}
         max={'23:59'}
         value={value}
+        hasNoValue={value === '00:00'}
         onChange={handleOnChange}
         onBlur={onBlurHandler}
       />
