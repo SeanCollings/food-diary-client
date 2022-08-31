@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { MENU_ITEMS } from '@components/menu/menu.constants';
 import { useRouter } from 'next/router';
 import { APP_THEME_DEFAULT, MEDIA_MAX_DESKTOP } from '@utils/constants';
+import Link from 'next/link';
 
 interface ISContent {
   isCurrentPath: boolean;
@@ -17,7 +18,7 @@ const SContainer = styled.div`
     display: flex;
   }
 `;
-const SContent = styled.div<ISContent>`
+const SLink = styled.a<ISContent>`
   font-size: 20px;
   cursor: pointer;
   padding-bottom: 4px;
@@ -35,20 +36,12 @@ const FlatMenu: FC = () => {
   const router = useRouter();
   const { pathname } = router;
 
-  const handleMenuClick = (path: string) => {
-    router.push(path);
-  };
-
   return (
     <SContainer>
       {MENU_ITEMS.map(({ id, title, href }) => (
-        <SContent
-          key={id}
-          onClick={() => handleMenuClick(href)}
-          isCurrentPath={pathname === href}
-        >
-          {title}
-        </SContent>
+        <Link key={id} href={href} passHref>
+          <SLink isCurrentPath={pathname === href}>{title}</SLink>
+        </Link>
       ))}
     </SContainer>
   );

@@ -10,6 +10,7 @@ import { FC } from 'react';
 import styled from 'styled-components';
 import { MENU_ITEMS } from '@components/menu/menu.constants';
 import { useRouter } from 'next/router';
+import Link from 'next/link';
 
 interface ISContainer {
   menuWidth: number;
@@ -45,12 +46,12 @@ const SContents = styled.div`
   flex-direction: column;
   gap: 20px;
 `;
-const SContent = styled.div<ISContent>`
+const SLink = styled.a<ISContent>`
   cursor: pointer;
   font-size: 24px;
   padding-bottom: 4px;
-  width: fit-content;
   border-bottom: 3px solid transparent;
+  width: 100%;
 
   ${({ isCurrentPath }) =>
     isCurrentPath && `border-bottom: 3px solid ${APP_THEME_DEFAULT.primary}`}
@@ -62,8 +63,7 @@ const SideMenuDisplay: FC = () => {
 
   const { pathname } = router;
 
-  const handleMenuClick = (path: string) => {
-    router.push(path);
+  const handleMenuClick = () => {
     toggleMenu();
   };
 
@@ -71,13 +71,11 @@ const SideMenuDisplay: FC = () => {
     <SContainer menuWidth={isOpen ? 350 : 0}>
       <SContents>
         {MENU_ITEMS.map(({ id, title, href }) => (
-          <SContent
-            key={id}
-            onClick={() => handleMenuClick(href)}
-            isCurrentPath={pathname === href}
-          >
-            {title}
-          </SContent>
+          <Link key={id} href={href} passHref>
+            <SLink isCurrentPath={pathname === href} onClick={handleMenuClick}>
+              {title}
+            </SLink>
+          </Link>
         ))}
       </SContents>
     </SContainer>
