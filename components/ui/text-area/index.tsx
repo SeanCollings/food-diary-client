@@ -26,6 +26,10 @@ const SContainer = styled.div<ISContainer>`
     width: 100%;
     min-width: 100%;
   }
+
+  textarea::-webkit-input-placeholder {
+    opacity: 0.7;
+  }
 `;
 const STextArea = styled.textarea<ISTextArea>`
   transition: 0.5s;
@@ -37,6 +41,8 @@ const STextArea = styled.textarea<ISTextArea>`
   width: 100%;
   padding: 8px 10px;
   border-radius: 8px;
+  box-shadow: ${({ backgroundColour }) =>
+    !backgroundColour && `inset 0 3px ${COLOURS.gray_light}`};
   background-color: ${({ backgroundColour }) =>
     backgroundColour ? `${backgroundColour}${OPACITY_30}` : 'inherit'};
   border: ${({ backgroundColour, borderStyle, borderWidth }) =>
@@ -45,6 +51,7 @@ const STextArea = styled.textarea<ISTextArea>`
     }`};
 
   :focus {
+    box-shadow: inset 0 0 ${COLOURS.gray_light};
     border: solid
       ${({ backgroundColour, borderWidth }) =>
         `${borderWidth}px ${

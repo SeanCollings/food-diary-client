@@ -1,7 +1,7 @@
 import { COLOURS, MEDIA_MOBILE } from '@utils/constants';
 import { FC, useState } from 'react';
 import styled from 'styled-components';
-import { MdArrowForwardIos, MdArrowBackIos } from 'react-icons/md';
+import { MdArrowRight, MdArrowLeft } from 'react-icons/md';
 import CalendarContainer from '@components/calendar';
 import {
   formatFullDate,
@@ -52,7 +52,7 @@ const SButtonCommon = styled.button<ISButtonCommon>`
     calendarVisible && `transform: rotateX(90deg); cursor: initial;`}
 `;
 const SButtonLeft = styled(SButtonCommon)`
-  margin-right: 6px;
+  margin-right: 10px;
 
   :hover {
     opacity: 0.7;
@@ -143,7 +143,7 @@ const DateDisplay: FC = () => {
     <SContainer>
       <SContentWrapper>
         <SButtonLeft onClick={onClickLeft} calendarVisible={showCalendar}>
-          <MdArrowBackIos size={28} color={COLOURS.gray} />
+          <MdArrowLeft size={32} color={COLOURS.gray} />
         </SButtonLeft>
         <SDate onClick={onDateClick} isCalendarShown={showCalendar}>
           <SFullDateContainer>
@@ -165,7 +165,7 @@ const DateDisplay: FC = () => {
           disabled={isDateSelectedToday}
           calendarVisible={showCalendar}
         >
-          <MdArrowForwardIos size={28} color={COLOURS.gray} />
+          <MdArrowRight size={32} color={COLOURS.gray} />
         </SButtonRight>
       </SContentWrapper>
     </SContainer>

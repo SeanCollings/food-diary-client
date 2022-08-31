@@ -22,7 +22,7 @@ const SContainer = styled.section`
   }
 `;
 const SDrinkContainer = styled.div`
-  border-radius: 12px;
+  border-radius: 6px;
   border-bottom: 1px solid gainsboro;
   background: white;
   display: flex;
@@ -32,7 +32,7 @@ const SDrinkContainer = styled.div`
   background: ${APP_THEME_DEFAULT.backgroundSecondary};
 `;
 const SExcerciseContainer = styled.div`
-  border-radius: 12px;
+  border-radius: 6px;
   border-bottom: 1px solid gainsboro;
   background: white;
   flex-basis: 40%;
