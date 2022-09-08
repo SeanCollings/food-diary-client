@@ -6,22 +6,22 @@ import { validator } from '@utils/validation/input-length-max/validator';
  * `true` if input is less or equal to maxLength
  * @param maxLength number
  * @param props.id string
- * @param props.input number | string
+ * @param props.value number | string
  * @param props.errors TErrors
  * @returns TValidateProps
  */
 export const validateLengthMax =
   (maxLength: number) =>
-  ({ id, input, errors }: TValidateProps): TValidateProps => {
+  ({ id, value, errors }: TValidateProps): TValidateProps => {
     const updatedErrors = { ...errors };
 
-    if (!input || !validator(input, maxLength)) {
+    if (!value || !validator(value, maxLength)) {
       updatedErrors[id] = `${ERROR_INPUT_LENGTH_MAX} ${maxLength}`;
     }
 
     return {
       id,
-      input,
+      value,
       errors: updatedErrors,
     };
   };

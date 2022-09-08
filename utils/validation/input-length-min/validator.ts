@@ -1,2 +1,2 @@
-export const validator = (input: string | number, minlength: number) =>
-  input.toString().trim().length >= minlength;
+export const validator = (value: string | number, minlength: number) =>
+  value.toString().trim().length >= minlength;

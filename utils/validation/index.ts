@@ -1,35 +1,47 @@
 import { TErrors, TValidateProps } from '@utils/validation/validation.types';
 
-export type TInputsValidator = {
+export type TValidators = ((props: TValidateProps) => TValidateProps)[];
+
+export interface IInputsValidator {
   id: string;
-  input: string;
+  value: string;
   shouldValidate: boolean;
-  validators: ((props: TValidateProps) => TValidateProps)[];
-};
+  validators: TValidators;
+}
+export interface TSingleInputValidator extends IInputsValidator {
+  errors: TErrors;
+}
 
 export function validationCompose<T>(x: T) {
   return (fns: ((args: T) => T)[]) => fns.reduceRight((v, f) => f(v), x);
 }
 
-export const runValidation = (inputs: TInputsValidator[]) => {
-  const errors = inputs.reduce(
-    (acc, { id, input, shouldValidate, validators }) => {
-      if (!shouldValidate) {
-        return acc;
-      }
-
-      const compose = validationCompose<TValidateProps>({
+export const runValidations = (inputs: IInputsValidator[]) =>
+  inputs.reduce(
+    (acc, input) =>
+      runSingleValidation({
         errors: acc,
-        id,
-        input,
-      });
-
-      const { errors } = compose(validators);
-
-      return errors;
-    },
+        ...input,
+      }),
     {} as TErrors
   );
 
-  return errors;
+export const runSingleValidation = ({
+  id,
+  value,
+  shouldValidate,
+  validators,
+  errors = {},
+}: TSingleInputValidator) => {
+  if (!shouldValidate) {
+    return errors;
+  }
+
+  const compose = validationCompose<TValidateProps>({
+    errors,
+    id,
+    value,
+  });
+
+  return compose(validators).errors;
 };

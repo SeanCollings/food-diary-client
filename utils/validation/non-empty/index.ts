@@ -5,24 +5,24 @@ import { validator } from '@utils/validation/non-empty/validator';
 /**
  * `true` if input is not empty
  * @param props.id string
- * @param props.input number | string
+ * @param props.value number | string
  * @param props.errors TErrors
  * @returns TValidateProps
  */
 export const validateNonEmpty = ({
   id,
-  input,
+  value,
   errors,
 }: TValidateProps): TValidateProps => {
   const updatedErrors = { ...errors };
 
-  if (!input || !validator(input)) {
+  if (!value || !validator(value)) {
     updatedErrors[id] = ERROR_EMPTY_INPUT;
   }
 
   return {
     id,
-    input,
+    value,
     errors: updatedErrors,
   };
 };

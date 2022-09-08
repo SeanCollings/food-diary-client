@@ -1,3 +1,3 @@
-export const validator = (input: string) => {
-  return !!input.toString().trim();
+export const validator = (value: string) => {
+  return !!value.toString().trim();
 };

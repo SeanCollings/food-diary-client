@@ -3,25 +3,25 @@ import { TValidateProps } from '@utils/validation/validation.types';
 import { validator } from '@utils/validation/input-length-min/validator';
 
 /**
- * `true` if input is greater than or equal to minLength
+ * `true` if value is greater than or equal to minLength
  * @param minLength number
  * @param props.id string
- * @param props.input number | string
+ * @param props.value number | string
  * @param props.errors TErrors
  * @returns TValidateProps
  */
 export const validateLengthMin =
   (minLength: number) =>
-  ({ id, input, errors }: TValidateProps): TValidateProps => {
+  ({ id, value, errors }: TValidateProps): TValidateProps => {
     const updatedErrors = { ...errors };
 
-    if (!input || !validator(input, minLength)) {
+    if (!value || !validator(value, minLength)) {
       updatedErrors[id] = `${ERROR_INPUT_LEGTH_MIN} ${minLength}`;
     }
 
     return {
       id,
-      input,
+      value,
       errors: updatedErrors,
     };
   };
