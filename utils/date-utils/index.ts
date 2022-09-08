@@ -59,8 +59,11 @@ export const isMonthInFuture = (compareDate: Date) => {
   );
 };
 
-export const getCurrentDayInDate = (date: Date, day: number) =>
+export const getCurrentDayInDate = (date: string | Date, day: number) =>
   new Date(new Date(date).setDate(day));
+
+export const getTodaysDateFromDay = (day: number) =>
+  getCurrentDayInDate(new Date(), day);
 
 export const isDayInMonthInFuture = (compareDay: number) => {
   const d = new Date(Date.now()).setDate(compareDay);
@@ -96,17 +99,25 @@ export const getNewDay = (selectedDate: string | Date, getNextDay: boolean) => {
   return date;
 };
 
+type TMonthDirection = 'previous' | 'next';
+
 export const getNewMonth = (
   selectedMonth: Date,
-  getNextMonth: boolean,
-  month?: Date
+  direction: TMonthDirection
 ) => {
-  let newMonth = new Date(month || selectedMonth);
-  newMonth.setMonth(newMonth.getMonth() + (getNextMonth ? 1 : -1));
-  return newMonth;
+  const firstDayOfMonth = new Date(
+    selectedMonth.getFullYear(),
+    selectedMonth.getMonth(),
+    1
+  );
+
+  firstDayOfMonth.setMonth(
+    firstDayOfMonth.getMonth() + (direction === 'next' ? 1 : -1)
+  );
+  return firstDayOfMonth;
 };
 
-export const getIsDateSelectedToday = (compareDate: string) => {
+export const getIsDateSelectedToday = (compareDate: string | Date) => {
   return (
     new Date(compareDate).setHours(0, 0, 0, 0) ===
     new Date().setHours(0, 0, 0, 0)

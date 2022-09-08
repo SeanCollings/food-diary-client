@@ -1,6 +1,7 @@
 import { EMealType, IAppTheme, ICardProps } from '@utils/interfaces';
 
 export const OPACITY_10 = '1a';
+export const OPACITY_20 = '33';
 export const OPACITY_30 = '4d';
 export const OPACITY_40 = '66';
 export const OPACITY_50 = '80';
@@ -81,7 +82,4 @@ export const WEEK_DAYS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 export const DAYS = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
 
 // https://foodandwellnessdiary.my.canva.site/
-// https://github.com/missive/emoji-mart
-// https://www.cssscript.com/demo/fg-emoji-picker/
-// https://picmojs.com/storybook/?path=/story/emoji-picker--native
 // https://react-icons.github.io/react-icons/icons?name=md
