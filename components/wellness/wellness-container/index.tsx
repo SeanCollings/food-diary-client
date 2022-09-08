@@ -46,19 +46,19 @@ const WellnessContainer: FC = () => {
         <WellnessCard
           id="water"
           title="water"
-          imageSrc={'/static/images/water_bottle.png'}
+          imageSrc={'/static/images/water_bottle.webp'}
           color={APP_THEME_DEFAULT.quaternary}
         />
         <WellnessCard
           id="tea_coffee"
           title="tea/coffee"
-          imageSrc={'/static/images/coffee.png'}
+          imageSrc={'/static/images/coffee.webp'}
           color={APP_THEME_DEFAULT.quaternary}
         />
         <WellnessCard
           id="alcohol"
           title="alcohol"
-          imageSrc={'/static/images/wine.png'}
+          imageSrc={'/static/images/wine.webp'}
           color={APP_THEME_DEFAULT.quaternary}
         />
       </SDrinkContainer>
@@ -66,7 +66,7 @@ const WellnessContainer: FC = () => {
         <ExcerciseCard
           id="alcohol_counter"
           title="excercise"
-          imageSrc={'/static/images/exercise.png'}
+          imageSrc={'/static/images/exercise.webp'}
         />
       </SExcerciseContainer>
     </SContainer>
