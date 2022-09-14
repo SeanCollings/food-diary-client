@@ -89,6 +89,7 @@ export interface ISelectedEmoji {
   nativeSkin: string;
 }
 interface IEmojiPickerProps {
+  value: ISelectedEmoji | null;
   borderColour: string;
   tabIndex?: number;
   onChange: (emoji: ISelectedEmoji | null) => void;
@@ -136,6 +137,7 @@ const getEmojiDetail = (emoji: IEmoji): ISelectedEmoji => {
 };
 
 const EmojiPicker: FC<IEmojiPickerProps> = ({
+  value,
   borderColour,
   tabIndex,
   onChange,
@@ -144,7 +146,7 @@ const EmojiPicker: FC<IEmojiPickerProps> = ({
   const emojiBoxRef = useRef<HTMLDivElement>(null);
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedEmoji, setSelectedEmoji] = useState<ISelectedEmoji | null>(
-    null
+    value
   );
   const [availableEmojis, setAvailableEmojis] = useState<IEmoji[]>([]);
   useOnClickOutsideElementsArray([inputRef, emojiBoxRef], () =>
