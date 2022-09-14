@@ -1,11 +1,14 @@
-import TimeInput from '@components/ui/input/time-input';
 import TextArea from '@components/ui/text-area';
-import { MEDIA_DESKTOP } from '@utils/constants';
+import { MEDIA_DESKTOP, MEDIA_MOBILE } from '@utils/constants';
 import Image from 'next/image';
 import { FC, useEffect, useState } from 'react';
 import { useDateSelectedContext } from '@store/date-selected-context';
-import { useDiaryEntriesContext } from '@store/diary-entries-context';
 import styled from 'styled-components';
+import {
+  TExcercise,
+  useWellnessEntriesContext,
+} from '@store/wellness-entries-context';
+import TimeInputCustom from '@components/ui/input/time-input-custom';
 
 const SContainer = styled.div`
   padding: 20px;
@@ -29,7 +32,11 @@ const SAllDetailsContainer = styled.div`
   width: 100%;
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: baseline;
+
+  ${MEDIA_MOBILE} {
+    align-items: center;
+  }
 `;
 const STimeInputContainer = styled.div``;
 const STextAreaContainer = styled.div`
@@ -57,7 +64,7 @@ interface IProps {
 
 const ExcerciseCard: FC<IProps> = ({ title, imageSrc }) => {
   const { dateSelectedISO } = useDateSelectedContext();
-  const { diaryEntries, updateExerciseEntry } = useDiaryEntriesContext();
+  const { wellnessEntries, updateEntryByKey } = useWellnessEntriesContext();
 
   const [hasUpdated, setHasUpdated] = useState(false);
   const [hasBlurred, setHasBlurred] = useState(false);
@@ -65,53 +72,45 @@ const ExcerciseCard: FC<IProps> = ({ title, imageSrc }) => {
   const [excerciseDetails, setExcerciseDetails] = useState('');
 
   useEffect(() => {
-    const currentDayEntry = diaryEntries[dateSelectedISO];
-    setTime(currentDayEntry?.excercise.time || '00:00');
-    setExcerciseDetails(currentDayEntry?.excercise?.details || '');
-  }, [dateSelectedISO, diaryEntries]);
+    const currentDayEntry = wellnessEntries[dateSelectedISO];
+    setTime((currentDayEntry?.excercise as TExcercise)?.time || '00:00');
+    setExcerciseDetails(
+      (currentDayEntry?.excercise as TExcercise)?.details || ''
+    );
+  }, [dateSelectedISO, wellnessEntries]);
 
   useEffect(() => {
-    let timer: ReturnType<typeof setTimeout>;
-
     const listener = () => {
-      if (timer) {
-        clearTimeout(timer);
-      }
-      timer = setTimeout(async () => {
-        updateExerciseEntry({
-          date: dateSelectedISO,
-          excerciseDetails: { time, details: excerciseDetails },
-        });
-        setHasUpdated(false);
-        setHasBlurred(true);
-      }, 750);
+      updateEntryByKey<TExcercise>({
+        date: dateSelectedISO,
+        type: 'excercise',
+        content: { time, details: excerciseDetails },
+      });
+      setHasUpdated(false);
+      setHasBlurred(false);
     };
 
     if (hasUpdated && hasBlurred) {
       listener();
     }
-
-    return () => {
-      clearTimeout(timer);
-    };
   }, [
     time,
     excerciseDetails,
     hasBlurred,
     hasUpdated,
     dateSelectedISO,
-    updateExerciseEntry,
+    updateEntryByKey,
   ]);
 
-  const handleOnChange = (value: string) => {
+  const handleDetailsChange = (value: string) => {
     setExcerciseDetails(value);
-    if (!hasBlurred) setHasUpdated(true);
-    if (hasBlurred) setHasBlurred(false);
+    if (!hasUpdated) setHasUpdated(true);
   };
   const handleTimeChange = (value: string) => {
-    setTime(value);
-    if (!hasBlurred) setHasUpdated(true);
-    if (hasBlurred) setHasBlurred(false);
+    if (time !== value) {
+      setTime(value);
+      setHasUpdated(true);
+    }
   };
   const handleOnBlur = () => {
     if (!hasBlurred) setHasBlurred(true);
@@ -128,6 +127,7 @@ const ExcerciseCard: FC<IProps> = ({ title, imageSrc }) => {
             width="100%"
             height="100%"
             objectFit="contain"
+            draggable={false}
           />
         </SImageContainer>
       </STitleContainer>
@@ -140,13 +140,14 @@ const ExcerciseCard: FC<IProps> = ({ title, imageSrc }) => {
             borderStyle={'dashed'}
             borderWidth={1}
             totalRows={3}
-            placeholder="insert details here"
-            onChange={handleOnChange}
+            placeholder="details..."
+            title="insert excercise details"
+            onChange={handleDetailsChange}
             onBlur={handleOnBlur}
           />
         </STextAreaContainer>
         <STimeInputContainer>
-          <TimeInput
+          <TimeInputCustom
             id="exercise_time"
             onChange={handleTimeChange}
             value={time}
