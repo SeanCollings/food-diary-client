@@ -18,7 +18,7 @@ export interface IAllEntriesPerMonthContext {
 const initialState: IAllEntriesPerMonthContext = {
   allEntriesPerMonth: {
     'Jul 2022': [17],
-    'Aug 2022': [18, 19, 20],
+    'Aug 2022': [18, 19, 20, 31],
   },
   updateAllEntriesPerMonth: () => null,
 };
