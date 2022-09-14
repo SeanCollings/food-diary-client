@@ -3,8 +3,16 @@ import styled from 'styled-components';
 import Image from 'next/image';
 import { MdAddCircle, MdRemoveCircle } from 'react-icons/md';
 import { TWellnessTypes } from '@utils/interfaces';
-import { useDiaryEntriesContext } from '@store/diary-entries-context';
 import { useDateSelectedContext } from '@store/date-selected-context';
+import {
+  TDrink,
+  useWellnessEntriesContext,
+} from '@store/wellness-entries-context';
+import { COLOURS } from '@utils/constants';
+
+interface SCount {
+  hasNoValue: boolean;
+}
 
 const SContainer = styled.div`
   padding: 20px;
@@ -20,6 +28,11 @@ const SImageContainer = styled.div`
   height: 50px;
   width: 50px;
   user-select: none;
+  cursor: pointer;
+
+  :hover {
+    filter: drop-shadow(0px 0px 1px ${COLOURS.gray_dark});
+  }
 `;
 const SCounterContainer = styled.div`
   padding-top: 12px;
@@ -28,9 +41,12 @@ const SCounterContainer = styled.div`
   align-items: center;
   user-select: none;
 `;
-const SCount = styled.div`
+const SCount = styled.div<SCount>`
+  transition: 0.1s;
   text-align: center;
   min-width: 54px;
+
+  ${({ hasNoValue }) => hasNoValue && 'opacity: 0.7'};
 `;
 const SIconRemove = styled(MdRemoveCircle)`
   cursor: pointer;
@@ -56,28 +72,26 @@ interface IProps {
 
 const WellnessCard: FC<IProps> = ({ id, title, imageSrc, color }) => {
   const { dateSelectedISO } = useDateSelectedContext();
-  const { diaryEntries, updateWellnessEntry } = useDiaryEntriesContext();
+  const { wellnessEntries, updateEntryByKey } = useWellnessEntriesContext();
 
   const [counter, setCounter] = useState(0);
   const [hasUpdated, setHasUpdated] = useState(false);
 
   useEffect(() => {
-    const currentEntry = diaryEntries[dateSelectedISO];
-    setCounter(currentEntry?.[id]?.value || 0);
-  }, [dateSelectedISO, diaryEntries, id]);
+    const currentEntry = wellnessEntries[dateSelectedISO];
+    setCounter((currentEntry?.[id] as TDrink)?.value || 0);
+  }, [dateSelectedISO, wellnessEntries, id]);
 
   useEffect(() => {
     if (hasUpdated) {
-      const timer = setTimeout(async () => {
-        updateWellnessEntry({ date: dateSelectedISO, id, value: counter });
-        setHasUpdated(false);
-      }, 750);
-
-      return () => {
-        clearTimeout(timer);
-      };
+      updateEntryByKey<TDrink>({
+        date: dateSelectedISO,
+        type: id,
+        content: { value: counter },
+      });
+      setHasUpdated(false);
     }
-  }, [id, counter, hasUpdated, dateSelectedISO, updateWellnessEntry]);
+  }, [id, counter, hasUpdated, dateSelectedISO, updateEntryByKey]);
 
   const onClickRemove = () => {
     if (counter > 0) {
@@ -95,18 +109,19 @@ const WellnessCard: FC<IProps> = ({ id, title, imageSrc, color }) => {
   return (
     <SContainer>
       <SHeader>{title}</SHeader>
-      <SImageContainer>
+      <SImageContainer onClick={onClickAdd}>
         <Image
           src={imageSrc}
           alt={title}
           width="100%"
           height="100%"
           objectFit="contain"
+          draggable={false}
         />
       </SImageContainer>
       <SCounterContainer>
         <SIconRemove size={24} color={color} onClick={onClickRemove} />
-        <SCount>{counter}</SCount>
+        <SCount hasNoValue={counter === 0}>{counter}</SCount>
         <SIconAdd size={24} color={color} onClick={onClickAdd} />
       </SCounterContainer>
     </SContainer>
