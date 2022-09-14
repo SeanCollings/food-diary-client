@@ -23,22 +23,27 @@ type TInputType = 'input' | 'textarea';
 
 interface IInputContainerProps extends IInputProps {
   title: string;
-  type?: TInputType;
+  inputType?: TInputType;
   popup?: string;
+  required?: boolean;
 }
 
 const InputContainer: FC<IInputContainerProps> = ({
   title,
-  type = 'input',
+  inputType = 'input',
   popup,
   id,
+  required,
   ...rest
 }) => {
-  const InputType = type === 'input' ? Input : TextArea;
+  const InputType = inputType === 'input' ? Input : TextArea;
 
   return (
     <SInputContainer title={popup}>
-      <SLabel htmlFor={id}>{title}</SLabel>
+      <SLabel htmlFor={id}>
+        {title}
+        {required ? ' *' : ''}
+      </SLabel>
       <InputType id={id} {...rest} />
     </SInputContainer>
   );

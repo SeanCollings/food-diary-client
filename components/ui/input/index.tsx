@@ -62,11 +62,10 @@ const SIconContainer = styled.div`
   padding-left: 4px;
 `;
 
-type TType = string | number;
 type TInputType = 'text' | 'number';
 
 export interface IInputProps {
-  value: TType;
+  value: string;
   id: string;
   backgroundColour?: string;
   borderColour?: string;
