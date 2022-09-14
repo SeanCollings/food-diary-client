@@ -2,7 +2,15 @@ export enum EMenuItems {
   MY_DIARY = 'my_diary',
   MY_PROFILE = 'my_profile',
   LOGIN = 'login',
+  HOME = 'home',
 }
+
+export const pathnameMapper: { [key in EMenuItems]: string } = {
+  [EMenuItems.MY_DIARY]: '/',
+  [EMenuItems.MY_PROFILE]: '/profile',
+  [EMenuItems.LOGIN]: '/login',
+  [EMenuItems.HOME]: '/home',
+};
 
 interface IMenuItem {
   id: EMenuItems;
@@ -14,16 +22,16 @@ export const MENU_ITEMS: IMenuItem[] = [
   {
     id: EMenuItems.MY_DIARY,
     title: 'My Diary',
-    href: '/',
+    href: pathnameMapper.my_diary,
   },
   {
     id: EMenuItems.MY_PROFILE,
     title: 'My Profile',
-    href: '/profile',
+    href: pathnameMapper.my_profile,
   },
   {
     id: EMenuItems.LOGIN,
     title: 'Login',
-    href: '/login',
+    href: pathnameMapper.login,
   },
 ];
