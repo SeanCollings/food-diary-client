@@ -3,39 +3,61 @@ import {
   COLOURS,
   MEDIA_MOBILE,
   MEDIA_TABLET,
+  OPACITY_10,
+  OPACITY_40,
   OPACITY_70,
   OPACITY_80,
 } from '@utils/constants';
-import { FC, useEffect, useState } from 'react';
+import { FC, MouseEvent, useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { MdAddCircle } from 'react-icons/md';
+import { MdEdit, MdEditNote, MdOutlineEdit } from 'react-icons/md';
 import { getUniqueId } from '@utils/unique-id';
-import ModalAddFood from '@components/modals/add-food';
+import ModalAddToMealCard from '@components/modals/add-to-meal-card';
 import Modal from '@components/modals';
 import { IMealContent, TMealType } from '@utils/interfaces';
 import { getMealThemeColour } from '@utils/theme-utils';
-import { useDiaryEntriesContext } from '@store/diary-entries-context';
 import { useDateSelectedContext } from '@store/date-selected-context';
+import ModalEditMealCard from '@components/modals/edit-meal-card';
+import { useMealEntriesContext } from '@store/meal-entries-context';
 
 interface IScontainer {
   background: string;
+  hasContent: boolean;
 }
-interface IScroll extends IScontainer {
+interface ISIcon {
+  background: string;
+}
+interface IScroll {
+  background: string;
   fontColor: string;
 }
+// background-image: ${({ background }) => `linear-gradient(to right,${background} 50%, ${background}${OPACITY_80})`};
+
+// background-image: ${({ background }) => `linear-gradient(to right,${background}${OPACITY_80} 100%, ${background}${OPACITY_80})`};
 
 const SContainer = styled.div<IScontainer>`
   cursor: pointer;
-  background: ${({ background }) => `${background}`};
-  border-radius: 20px;
+  // background: ${({ background }) => `${background}`};
+  // background-image: linear-gradient(to bottom, #50abdf, #1f78aa);
+  border-radius: 8px;
   padding: 20px;
   flex: 0 0 18%;
   max-width: 300px;
   min-width: 250px;
   height: 400px;
+  transition: scale 0.1s;
+
+  ${({ hasContent, background }) =>
+    hasContent
+      ? `background-image: linear-gradient(225deg,${background} 20%, ${background}${OPACITY_80})`
+      : `background: ${background}`};
 
   :hover {
-    background: ${({ background }) => `${background}${OPACITY_80}`};
+    ${({ hasContent, background }) =>
+      hasContent
+        ? `background-image: linear-gradient(225deg,${background}${OPACITY_80} 100%, ${background}${OPACITY_80})`
+        : `background: ${background}${OPACITY_80}`};
+    // background: ${({ background }) => `${background}${OPACITY_80}`};
     box-shadow: 1px 1px 10px #6c6a6a;
     scale: 1.01;
   }
@@ -60,11 +82,17 @@ const SHeaderContainer = styled.div`
 const SHeader = styled.div`
   font-weight: bold;
   font-size: 20px;
+  letter-spacing: 2px;
 `;
-const SIcon = styled(MdAddCircle)`
+const SIcon = styled(MdEditNote)<ISIcon>`
+  transition: 0.4s;
+  background: ${({ background }) => `${background}`};
+  border-radius: 10px;
+  color: ${APP_THEME_DEFAULT.backgroundSecondary};
+
   :hover {
-    border-radius: 50%;
-    scale: 1.1;
+    color: ${({ background }) => `${background}`};
+    background: ${APP_THEME_DEFAULT.backgroundSecondary};
   }
 `;
 const SContentContainer = styled.div<IScroll>`
@@ -133,28 +161,74 @@ const buildContent = (content: IMealContent, index: number) => {
 
 const Card: FC<IProps> = ({ id, title }) => {
   const { dateSelectedISO } = useDateSelectedContext();
-  const { diaryEntries, updateMealEntry } = useDiaryEntriesContext();
+  const { mealEntries, addMealEntry, updateMealEntry, removeMealEntryById } =
+    useMealEntriesContext();
 
   const [contents, setContents] = useState<IMealContent[]>([]);
-  const [showModal, setShowModal] = useState(false);
+  const [editMealContent, setEditMealContent] = useState<IMealContent | null>(
+    null
+  );
+  const [showAddModal, setShowAddModal] = useState(false);
+  const [showEditModal, setShowEditModal] = useState(false);
 
   useEffect(() => {
-    const currentEntry = diaryEntries[dateSelectedISO];
-    setContents(currentEntry?.meals[id]?.contents || []);
-  }, [dateSelectedISO, diaryEntries, id]);
+    const currentEntry = mealEntries[dateSelectedISO];
+    setContents(currentEntry?.[id]?.contents || []);
+  }, [dateSelectedISO, mealEntries, id]);
 
   const onClickHandler = () => {
-    setShowModal(true);
+    setShowAddModal(true);
   };
-  const onModalClose = () => {
-    setShowModal(false);
+  const onModalAddClose = () => {
+    if (!!editMealContent) {
+      setShowEditModal(true);
+    }
+    setShowAddModal(false);
   };
-  const onModalSubmit = (mealId: TMealType, newValues: IMealContent) => {
-    setShowModal(false);
+  const onModalAddSubmit = (mealId: TMealType, newValues: IMealContent) => {
+    setShowAddModal(false);
+    setEditMealContent(null);
 
     if (!!newValues.food) {
-      updateMealEntry({ date: dateSelectedISO, mealId, newValues });
+      addMealEntry({ date: dateSelectedISO, mealId, newValues });
     }
+  };
+  const handleCardEdit = (event: MouseEvent<SVGElement>) => {
+    setShowEditModal(true);
+    event.stopPropagation();
+  };
+  const onModalEditClose = () => {
+    setShowEditModal(false);
+    setEditMealContent(null);
+  };
+  const onModalEditSubmit = () => {
+    setShowEditModal(false);
+    setEditMealContent(null);
+  };
+  const removeMealHandler = (contentId: number) => {
+    removeMealEntryById({ date: dateSelectedISO, mealId: id, contentId });
+  };
+  const editMealHandler = (contentId: number) => {
+    const editContent = contents?.find(({ id }) => id === contentId);
+    setShowEditModal(false);
+
+    if (editContent) {
+      setEditMealContent(editContent);
+      setShowAddModal(true);
+    }
+  };
+  const confirmContentEditHandler = (
+    updatedMealId: TMealType,
+    updatedContent: IMealContent
+  ) => {
+    updateMealEntry({
+      date: dateSelectedISO,
+      mealId: id,
+      updatedMealId,
+      updatedContent,
+    });
+    setShowAddModal(false);
+    setEditMealContent(null);
   };
 
   const background = getMealThemeColour(APP_THEME_DEFAULT, id);
@@ -162,14 +236,24 @@ const Card: FC<IProps> = ({ id, title }) => {
   return (
     <>
       <SContainer
+        hasContent={!!contents.length}
         background={background}
         onClick={onClickHandler}
+        onDoubleClick={() => console.log('DOUBLE CLICKED')}
         id="meal-card"
-        title="Click to add food"
+        title="Click to add"
       >
         <SHeaderContainer>
           <SHeader>{title}</SHeader>
-          <SIcon size={34} color={APP_THEME_DEFAULT.backgroundSecondary} />
+          {!!contents.length && (
+            <SIcon
+              size={34}
+              // color={APP_THEME_DEFAULT.backgroundSecondary}
+              background={background}
+              title="Click to edit"
+              onClick={handleCardEdit}
+            />
+          )}
         </SHeaderContainer>
         <SContentContainer
           background={background}
@@ -185,12 +269,23 @@ const Card: FC<IProps> = ({ id, title }) => {
           ))}
         </SContentContainer>
       </SContainer>
-      <Modal show={showModal} modalWidth={600}>
-        <ModalAddFood
+      <Modal show={showAddModal} modalWidth={600}>
+        <ModalAddToMealCard
           mealId={id}
-          primaryColour={background}
-          onClose={onModalClose}
-          onSubmit={onModalSubmit}
+          content={editMealContent}
+          onClose={onModalAddClose}
+          onSubmit={onModalAddSubmit}
+          onEditConfirm={confirmContentEditHandler}
+        />
+      </Modal>
+      <Modal show={showEditModal} modalWidth={600}>
+        <ModalEditMealCard
+          mealId={id}
+          contents={contents}
+          onClose={onModalEditClose}
+          onSubmit={onModalEditSubmit}
+          onRemoveMeal={removeMealHandler}
+          onEditMeal={editMealHandler}
         />
       </Modal>
     </>
