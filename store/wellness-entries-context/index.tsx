@@ -1,3 +1,4 @@
+import { getStructuredClone } from '@utils/get-structured-clone';
 import { TWellnessTypes } from '@utils/interfaces';
 import {
   createContext,
@@ -109,7 +110,7 @@ export const WellnessEntriesContextProvider: FC<{
       type,
       content,
     }: IUpdateEntryByTypeProps<K>) => {
-      const updatedEntries = structuredClone(wellnessEntries);
+      const updatedEntries = getStructuredClone(wellnessEntries);
       const dates = [...updatedDates];
 
       if (!updatedEntries[date]) {

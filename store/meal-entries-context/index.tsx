@@ -1,3 +1,4 @@
+import { getStructuredClone } from '@utils/get-structured-clone';
 import { IMealContent, TMealCard, TMealType } from '@utils/interfaces';
 import {
   createContext,
@@ -225,6 +226,13 @@ export interface IMealEntriesContext {
 
 const initialState: IMealEntriesContext = {
   mealEntries: {
+    '2022-08-30T22:00:00.000Z': {
+      breakfast: {
+        contents: [
+          { id: 11, food: 'cake', emoji: { nativeSkin: '🍰', name: 'Cake' } },
+        ],
+      },
+    },
     '2022-08-19T22:00:00.000Z': TEMP_DAY_DATA,
     '2022-08-18T22:00:00.000Z': TEMP_DAY_DATA_2,
     '2022-08-17T22:00:00.000Z': {
@@ -252,12 +260,12 @@ export const MealEntriesContextProvider: FC<{
 
   const addMealEntry = useCallback(
     ({ date, mealId, newValues }: IAddMealProps) => {
-      const updatedEntries = structuredClone(mealEntries);
+      const updatedEntries = getStructuredClone(mealEntries);
 
       if (!updatedEntries[date]) {
         updatedEntries[date] = {};
       }
-      const updatedContentsForId = structuredClone(
+      const updatedContentsForId = getStructuredClone(
         updatedEntries[date][mealId]?.contents || []
       );
       updatedEntries[date][mealId] = {
@@ -276,7 +284,7 @@ export const MealEntriesContextProvider: FC<{
 
   const updateMealEntry = useCallback(
     ({ date, mealId, updatedContent, updatedMealId }: IUpdateMealProps) => {
-      const updatedEntries = structuredClone(mealEntries);
+      const updatedEntries = getStructuredClone(mealEntries);
       const isNewMealId = mealId !== updatedMealId;
       const targetMealId = isNewMealId ? updatedMealId : mealId;
 
@@ -322,7 +330,7 @@ export const MealEntriesContextProvider: FC<{
 
   const removeMealEntryById = useCallback(
     ({ date, mealId, contentId }: IRemoveMealProps) => {
-      const updatedEntries = structuredClone(mealEntries);
+      const updatedEntries = getStructuredClone(mealEntries);
       const targetMealContents = [
         ...(updatedEntries[date][mealId]?.contents || []),
       ];
