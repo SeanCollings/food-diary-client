@@ -15,7 +15,7 @@ export const validateLengthMax =
   ({ id, value, errors }: TValidateProps): TValidateProps => {
     const updatedErrors = { ...errors };
 
-    if (!value || !validator(value, maxLength)) {
+    if (!validator(value, maxLength)) {
       updatedErrors[id] = `${ERROR_INPUT_LENGTH_MAX} ${maxLength}`;
     }
 
