@@ -5,6 +5,7 @@ import {
   OPACITY_40,
   OPACITY_70,
 } from '@utils/constants';
+import { TEXTAREA_MAX_LENGTH } from '@utils/validation/validation.constants';
 import { ChangeEvent, FC } from 'react';
 import styled from 'styled-components';
 
@@ -126,6 +127,7 @@ export const TextArea: FC<ITextAreaProps> = ({
         borderStyle={borderStyle}
         borderWidth={borderWidth}
         placeholder={placeholder}
+        maxLength={TEXTAREA_MAX_LENGTH}
         onChange={onChangeHandler}
         onBlur={onBlurHandler}
       />

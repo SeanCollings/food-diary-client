@@ -5,7 +5,7 @@ export type TValidators = ((props: TValidateProps) => TValidateProps)[];
 export interface IInputsValidator {
   id: string;
   value: string;
-  shouldValidate: boolean;
+  shouldValidate?: boolean;
   validators: TValidators;
 }
 export interface TSingleInputValidator extends IInputsValidator {
@@ -33,7 +33,7 @@ export const runSingleValidation = ({
   validators,
   errors = {},
 }: TSingleInputValidator) => {
-  if (!shouldValidate) {
+  if (shouldValidate === false) {
     return errors;
   }
 

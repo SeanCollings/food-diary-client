@@ -1,4 +1,5 @@
 import { COLOURS, MEDIA_MOBILE, OPACITY_30 } from '@utils/constants';
+import { INPUT_MAX_LENGTH } from '@utils/validation/validation.constants';
 import { ChangeEvent, FC, KeyboardEvent, ReactNode } from 'react';
 import styled from 'styled-components';
 
@@ -129,6 +130,7 @@ export const Input: FC<IInputProps> = ({
         hasIcon={!!children}
         autoComplete={'off'}
         spellCheck={false}
+        maxLength={INPUT_MAX_LENGTH}
         onKeyDown={onKeyDownHandler}
         onChange={onChangeHandler}
         onMouseDown={onMouseDownHandler}
