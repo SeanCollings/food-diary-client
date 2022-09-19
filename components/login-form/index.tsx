@@ -1,7 +1,7 @@
 import FormInput from '@components/ui/input/form-input';
 import { APP_THEME_DEFAULT, COLOURS, MEDIA_MOBILE } from '@utils/constants';
 import { runValidations } from '@utils/validation';
-import { FC, MouseEvent, useCallback, useReducer } from 'react';
+import { FC, FormEvent, useCallback, useReducer } from 'react';
 import styled from 'styled-components';
 import { PASSWORD_MIN_LENGTH } from '@utils/validation/validation.constants';
 import {
@@ -16,7 +16,7 @@ import {
 import { useMemoizeFunction } from '@hooks/use-memoize-function';
 import { loginFormValidators } from '@utils/validation/validators/collections';
 
-const SContainer = styled.form`
+const SForm = styled.form`
   background: ${COLOURS.white};
   max-width: 400px;
   width: 100%;
@@ -168,7 +168,7 @@ const LoginForm: FC = () => {
     isLogin,
   ]);
 
-  const submitHandler = (event: MouseEvent<HTMLButtonElement>) => {
+  const submitHandler = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const errors = runFormValidations();
 
@@ -226,7 +226,7 @@ const LoginForm: FC = () => {
   const handleOnBlurMemoized = useMemoizeFunction(handleOnBlur);
 
   return (
-    <SContainer>
+    <SForm onSubmit={submitHandler}>
       <SHeaderContainer>
         <SHeader>{formText.headerText}</SHeader>
         <InteractiveSubHeader
@@ -285,11 +285,9 @@ const LoginForm: FC = () => {
         )}
       </SContentContainer>
       <SLoginButtonContainer>
-        <SLoginButton type="submit" onClick={submitHandler}>
-          {formText.loginButtonText}
-        </SLoginButton>
+        <SLoginButton type="submit">{formText.loginButtonText}</SLoginButton>
       </SLoginButtonContainer>
-    </SContainer>
+    </SForm>
   );
 };
 
