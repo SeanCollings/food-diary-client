@@ -1,21 +1,20 @@
 import FormInput from '@components/ui/input/form-input';
 import { APP_THEME_DEFAULT, COLOURS, MEDIA_MOBILE } from '@utils/constants';
-import { runValidations, TValidators } from '@utils/validation';
-import {
-  FC,
-  MouseEvent,
-  useState,
-  useCallback,
-  useRef,
-  useEffect,
-} from 'react';
+import { runValidations } from '@utils/validation';
+import { FC, MouseEvent, useCallback, useReducer } from 'react';
 import styled from 'styled-components';
-import {
-  emailAddressValidators,
-  nameValidators,
-  passwordValidators,
-} from '@utils/validation/validators';
 import { PASSWORD_MIN_LENGTH } from '@utils/validation/validation.constants';
+import {
+  INITIAL_STATE,
+  loginFormReducer,
+} from '@components/login-form/reducer';
+import {
+  ELoginFormType,
+  TFormValues,
+  TInputTypes,
+} from '@components/login-form/types';
+import { useMemoizeFunction } from '@hooks/use-memoize-function';
+import { loginFormValidators } from '@utils/validation/validators/collections';
 
 const SContainer = styled.form`
   background: ${COLOURS.white};
@@ -87,23 +86,17 @@ const SLoginButton = styled.button`
   }
 `;
 
-enum EInputTypes {
-  EMAIL_ADDRESS = 'emailAddress',
-  PASSWORD = 'password',
-  NAME = 'name',
-}
-
-type TInputTypes = `${EInputTypes}`;
-
-const getFormText = (loginSelected: boolean, resetSelected: boolean) => {
-  if (loginSelected && !resetSelected) {
+const getFormText = (isLogin: boolean, isReset: boolean) => {
+  if (isLogin) {
     return {
       headerText: 'Login now',
       subHeaderText: 'Are you new?',
       typeChangeText: 'Create account.',
       loginButtonText: 'Login',
     };
-  } else if (resetSelected) {
+  }
+
+  if (isReset) {
     return {
       headerText: 'Reset password',
       subHeaderText: 'Remember password?',
@@ -141,137 +134,96 @@ const InteractiveSubHeader: FC<IInteractiveSubHeaderProps> = ({
   </SSubHeader>
 );
 
-type TLoginFormValitators = {
-  [key in TInputTypes]: (
-    formValues: TFormValues,
-    shouldValidate: boolean
-  ) => {
-    id: TInputTypes;
-    shouldValidate: boolean;
-    value: string;
-    validators: TValidators;
-  };
-};
-
-const loginFormValidators: TLoginFormValitators = {
-  emailAddress: (formValues: TFormValues, shouldValidate: boolean) => ({
-    id: 'emailAddress',
-    shouldValidate,
-    value: formValues.emailAddress,
-    validators: emailAddressValidators,
-  }),
-  password: (formValues: TFormValues, shouldValidate: boolean) => ({
-    id: 'password',
-    shouldValidate,
-    value: formValues.password,
-    validators: passwordValidators,
-  }),
-  name: (formValues: TFormValues, shouldValidate: boolean) => ({
-    id: 'name',
-    shouldValidate,
-    value: formValues.name,
-    validators: nameValidators,
-  }),
-};
-
-type TFormValues = {
-  [key in TInputTypes]: string;
-};
-type TFormErrors = {
-  [key in TInputTypes]?: string;
-};
-
-const defaultFormValues: TFormValues = {
-  emailAddress: '',
-  password: '',
-  name: '',
-};
-
 const LoginForm: FC = () => {
-  const [hasSubmitted, setHasSubmitted] = useState(false);
-  const [loginSelected, setLoginSelected] = useState(true);
-  const [isResetPassword, setIsResetPassword] = useState(false);
-  const [formErrors, setFormErrors] = useState<TFormErrors>({});
-  const [formValues, setFormValues] = useState<TFormValues>(defaultFormValues);
+  const [state, dispatch] = useReducer(loginFormReducer, INITIAL_STATE);
 
-  const formText = getFormText(loginSelected, isResetPassword);
-  const isLogin = loginSelected && !isResetPassword;
-  const isCreate = !loginSelected && !isResetPassword;
+  const isLogin = state.loginSelected && !state.isResetPassword;
+  const isCreate = !state.loginSelected && !state.isResetPassword;
+  const isReset = state.isResetPassword;
   const showNameInput = isCreate;
   const showPasswordInput = isLogin || isCreate;
+  const formText = getFormText(isLogin, isReset);
 
-  const runFormValidations = useCallback(
-    () =>
-      runValidations([
-        loginFormValidators['emailAddress'](formValues, true),
-        loginFormValidators['password'](formValues, isLogin || isCreate),
-        loginFormValidators['name'](formValues, isCreate),
-      ]),
-    [formValues, isCreate, isLogin]
-  );
+  const runFormValidations = useCallback(() => {
+    const { emailAddress, password, name } = loginFormValidators;
+
+    return runValidations([
+      emailAddress({
+        value: state.formValues.emailAddress,
+      }),
+      password({
+        value: state.formValues.password,
+        shouldValidate: isLogin || isCreate,
+      }),
+      name({
+        value: state.formValues.name,
+        shouldValidate: isCreate,
+      }),
+    ]);
+  }, [
+    state.formValues.emailAddress,
+    state.formValues.password,
+    state.formValues.name,
+    isCreate,
+    isLogin,
+  ]);
 
   const submitHandler = (event: MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
     const errors = runFormValidations();
 
-    setFormErrors(errors);
-    setHasSubmitted(true);
+    dispatch({ type: ELoginFormType.SUBMIT, payload: { errors } });
 
-    if (!Object.keys(errors).length) {
-      console.log(
-        'Sending request:',
-        isLogin ? 'LOGIN' : isCreate ? 'CREATE' : 'RESET'
-      );
-    }
-  };
+    const hasErrors = !!Object.keys(errors).length;
 
-  const handleInteract = () => {
-    if (isResetPassword) {
-      setIsResetPassword(false);
-      setLoginSelected(true);
-    } else {
-      setLoginSelected(!loginSelected);
+    if (hasErrors) {
+      return;
     }
 
-    setFormErrors({});
+    console.log(
+      'Sending request:',
+      isLogin ? 'LOGIN' : isCreate ? 'CREATE' : 'RESET'
+    );
   };
 
-  const handleResetPassword = () => {
-    setIsResetPassword(true);
-    setFormValues(defaultFormValues);
+  const handleToggleInteract = () => {
+    if (isLogin) {
+      return dispatch({ type: ELoginFormType.SELECT_CREATE_ACCOUNT });
+    } else if (isCreate || isReset) {
+      return dispatch({ type: ELoginFormType.SELECT_LOGIN });
+    }
+
+    return dispatch({ type: ELoginFormType.SELECT_RESET_PASSWORD });
+  };
+
+  const handleSelectResetPassword = () => {
+    dispatch({ type: ELoginFormType.SELECT_RESET_PASSWORD });
   };
 
   const handleOnBlur = () => {
-    if (hasSubmitted) {
-      setFormErrors(runFormValidations());
+    if (state.hasSubmitted) {
+      dispatch({
+        type: ELoginFormType.UPDATE_ERRORS,
+        payload: { errors: runFormValidations() },
+      });
     }
   };
-  const updateFormValues = useCallback(
-    (id: TInputTypes, value: string) => {
-      const updatedValues: TFormValues = { ...formValues, [id]: value };
-      setFormValues(updatedValues);
-    },
-    [formValues]
-  );
-  const handleOnBlurRef = useRef(handleOnBlur);
-  const updateFormValuesRef = useRef(updateFormValues);
+  const updateFormValues = ({
+    id,
+    value,
+  }: {
+    id: TInputTypes;
+    value: string;
+  }) => {
+    const updatedValues: TFormValues = { ...state.formValues, [id]: value };
+    dispatch({
+      type: ELoginFormType.UPDATE_VALUES,
+      payload: { values: updatedValues },
+    });
+  };
 
-  //https://stackoverflow.com/questions/55045566/react-hooks-usecallback-causes-child-to-re-render
-
-  useEffect(() => {
-    handleOnBlurRef.current = handleOnBlur;
-    updateFormValuesRef.current = updateFormValues;
-  });
-
-  const handleOnBlurMemoized = useCallback(() => {
-    handleOnBlurRef.current();
-  }, []);
-  const updateFormValuesMemoized = useCallback(
-    (type: TInputTypes, value: string) => {
-      updateFormValuesRef.current(type, value);
-    },
-    []
-  );
+  const updateFormValuesMemoized = useMemoizeFunction(updateFormValues);
+  const handleOnBlurMemoized = useMemoizeFunction(handleOnBlur);
 
   return (
     <SContainer>
@@ -280,7 +232,7 @@ const LoginForm: FC = () => {
         <InteractiveSubHeader
           subHeaderText={formText.subHeaderText}
           buttonText={formText.typeChangeText}
-          onClick={handleInteract}
+          onClick={handleToggleInteract}
         />
       </SHeaderContainer>
       <SContentContainer>
@@ -290,9 +242,9 @@ const LoginForm: FC = () => {
               id="name"
               name="Name"
               type="text"
-              value={formValues.name}
+              value={state.formValues.name}
               required
-              isError={formErrors['name']}
+              isError={state.formErrors['name']}
               onChange={updateFormValuesMemoized}
               onBlur={handleOnBlurMemoized}
             />
@@ -301,9 +253,9 @@ const LoginForm: FC = () => {
             id="emailAddress"
             name="Email address"
             type="email"
-            value={formValues.emailAddress}
+            value={state.formValues.emailAddress}
             required
-            isError={formErrors['emailAddress']}
+            isError={state.formErrors['emailAddress']}
             onChange={updateFormValuesMemoized}
             onBlur={handleOnBlurMemoized}
           />
@@ -312,10 +264,10 @@ const LoginForm: FC = () => {
               id="password"
               name="Password"
               type="password"
-              value={formValues.password}
+              value={state.formValues.password}
               required
               title={`Minimum of ${PASSWORD_MIN_LENGTH} characters.`}
-              isError={formErrors['password']}
+              isError={state.formErrors['password']}
               onChange={updateFormValuesMemoized}
               onBlur={handleOnBlurMemoized}
             />
@@ -325,10 +277,10 @@ const LoginForm: FC = () => {
           <InteractiveSubHeader
             subHeaderText="Forgot password?"
             buttonText="Reset here."
-            onClick={handleResetPassword}
+            onClick={handleSelectResetPassword}
           />
         )}
-        {isResetPassword && (
+        {state.isResetPassword && (
           <InteractiveSubHeader subHeaderText="Enter your email address and a reset code will be sent to you." />
         )}
       </SContentContainer>

@@ -1,13 +1,7 @@
 import { APP_THEME_DEFAULT, COLOURS, OPACITY_80 } from '@utils/constants';
-import {
-  ChangeEvent,
-  FC,
-  memo,
-  useCallback,
-  useEffect,
-  useRef,
-  useState,
-} from 'react';
+import { detectAutofill } from '@utils/document-utils';
+import { INPUT_MAX_LENGTH } from '@utils/validation/validation.constants';
+import { ChangeEvent, memo, useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 
 const SContainer = styled.div`
@@ -67,36 +61,9 @@ interface IFormInputProps<T> {
   placeholder?: string;
   isError?: string;
   title?: string;
-  onChange: (id: T, value: string) => void;
+  onChange: ({ id, value }: { id: T; value: string }) => void;
   onBlur?: () => void;
 }
-
-export const detectAutofillOld = (element: HTMLElement | null) => {
-  if (!element) {
-    return;
-  }
-
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      resolve(
-        window
-          .getComputedStyle(element, null)
-          .getPropertyValue('appearance') === 'menulist-button'
-      );
-    }, 600);
-  });
-};
-
-export const detectAutofill = (element: HTMLElement | null) => {
-  if (!element) {
-    return;
-  }
-
-  return (
-    window.getComputedStyle(element, null).getPropertyValue('appearance') ===
-    'menulist-button'
-  );
-};
 
 const FormInput = <T extends string>({
   id,
@@ -113,50 +80,38 @@ const FormInput = <T extends string>({
   const inputRef = useRef<HTMLInputElement>(null);
   const [labelTop, setlabelTop] = useState(false);
   const [isFocus, setIsFocus] = useState(false);
-  const [isAutoFilled, setisAutoFilled] = useState(false);
+  const [isAutoFilled, setIsAutoFilled] = useState(false);
 
-  const testAutoFill = useCallback(async () => {
-    const inputElement = document.getElementById(
-      `${id}_form_input`
-    ) as HTMLInputElement;
-
-    const autoFilled = await detectAutofill(inputElement);
-
-    if (autoFilled) {
-      setisAutoFilled(true);
-    }
-  }, [id]);
+  const resetLabel = labelTop && !value && !isFocus;
+  const moveLabelToTop = isAutoFilled || (!labelTop && (value || isFocus));
 
   useEffect(() => {
     const timeout = setTimeout(() => {
-      testAutoFill();
+      detectAutofill(id, () => setIsAutoFilled(true));
     }, 500);
 
     return () => {
       clearTimeout(timeout);
     };
-  }, [testAutoFill]);
+  }, [id]);
 
   useEffect(() => {
-    const moveLabelToTop = isAutoFilled || (!labelTop && (value || isFocus));
-    const resetLabel = labelTop && !value && !isFocus;
-
     if (moveLabelToTop) {
       setlabelTop(true);
     } else if (resetLabel) {
       setlabelTop(false);
     }
-  }, [value, labelTop, isFocus, isAutoFilled, id]);
+  }, [resetLabel, moveLabelToTop]);
 
   const onChangeHandler = (event: ChangeEvent<HTMLInputElement>) => {
-    isAutoFilled && setisAutoFilled(false);
-    onChange(id, event.target.value);
+    isAutoFilled && setIsAutoFilled(false);
+    onChange({ id, value: event.target.value });
   };
   const onBlurHandler = () => {
     setIsFocus(false);
     onBlur?.();
   };
-  console.log('------- ::', type);
+
   return (
     <SContainer>
       {required && (
@@ -180,6 +135,7 @@ const FormInput = <T extends string>({
         value={value}
         required={required}
         isError={!!isError}
+        maxLength={INPUT_MAX_LENGTH}
         onChange={onChangeHandler}
         onFocus={() => setIsFocus(true)}
         onBlur={onBlurHandler}
