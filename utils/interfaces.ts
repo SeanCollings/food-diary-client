@@ -1,4 +1,4 @@
-import { ISelectedEmoji } from '@components/emoji-picker';
+import { TSelectedEmoji } from '@components/emoji-picker';
 
 export interface ICardProps {
   id: TMealType;
@@ -35,7 +35,7 @@ export interface IAppTheme {
 
 export interface IMealContent {
   id: number;
-  emoji?: ISelectedEmoji | null;
+  emoji?: TSelectedEmoji;
   serving?: string;
   measurement?: string;
   food: string;
@@ -74,3 +74,13 @@ export enum EWellnessTypes {
 }
 
 export type TWellnessTypes = `${EWellnessTypes}`;
+
+export enum EAddMealOptions {
+  EMOJI_PICKER = 'emoji_picker',
+  SERVING_SIZE = 'serving_size',
+  UNIT_OF_MEASUREMENT = 'unit_of_measurement',
+  FOOD = 'food',
+  DESCRIPTION = 'description',
+  MEAL_TYPE = 'meal_type',
+}
+export type TAddMealOptions = `${EAddMealOptions}`;

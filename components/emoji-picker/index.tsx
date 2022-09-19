@@ -4,10 +4,8 @@ import { foodEmojis, IEmoji } from '@utils/food-emojis';
 import { FC, KeyboardEvent, useRef, useState } from 'react';
 import styled from 'styled-components';
 import { MdSearch } from 'react-icons/md';
-import {
-  useOnClickOutsideElement,
-  useOnClickOutsideElementsArray,
-} from '@hooks/use-onclick-outside-element';
+import { useOnClickOutsideElementsArray } from '@hooks/use-onclick-outside-element';
+import { EAddMealOptions } from '@utils/interfaces';
 
 interface ISEmojiBox {
   borderColour: string;
@@ -84,15 +82,15 @@ const SEmoji = styled.div`
   text-align: center;
 `;
 
-export interface ISelectedEmoji {
+export type TSelectedEmoji = {
   name: string;
   nativeSkin: string;
-}
+} | null;
 interface IEmojiPickerProps {
-  value: ISelectedEmoji | null;
+  value: TSelectedEmoji | null;
   borderColour: string;
   tabIndex?: number;
-  onChange: (emoji: ISelectedEmoji | null) => void;
+  onChange: (emoji: TSelectedEmoji | null) => void;
 }
 
 const getAllEmojis = (): IEmoji[] => {
@@ -131,7 +129,7 @@ const findEmojiBySearchTerm = (searchTerm: string) => {
   return allEmojis;
 };
 
-const getEmojiDetail = (emoji: IEmoji): ISelectedEmoji => {
+const getEmojiDetail = (emoji: IEmoji): TSelectedEmoji => {
   const { name, skins } = emoji;
   return { name, nativeSkin: skins[0].native };
 };
@@ -145,9 +143,7 @@ const EmojiPicker: FC<IEmojiPickerProps> = ({
   const inputRef = useRef<HTMLDivElement>(null);
   const emojiBoxRef = useRef<HTMLDivElement>(null);
   const [searchTerm, setSearchTerm] = useState('');
-  const [selectedEmoji, setSelectedEmoji] = useState<ISelectedEmoji | null>(
-    value
-  );
+  const [selectedEmoji, setSelectedEmoji] = useState<TSelectedEmoji>(value);
   const [availableEmojis, setAvailableEmojis] = useState<IEmoji[]>([]);
   useOnClickOutsideElementsArray([inputRef, emojiBoxRef], () =>
     setAvailableEmojis([])
@@ -207,7 +203,7 @@ const EmojiPicker: FC<IEmojiPickerProps> = ({
       </SSelectedontainer>
       <SEmojisContainer ref={inputRef}>
         <Input
-          id="emoji_picker"
+          id={EAddMealOptions.EMOJI_PICKER}
           tabIndex={tabIndex}
           value={searchTerm}
           placeholder="Search for emoji"
