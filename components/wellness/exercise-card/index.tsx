@@ -11,6 +11,7 @@ import {
 import TimeInputCustom from '@components/ui/input/time-input-custom';
 import { runValidations } from '@utils/validation';
 import { excerciseValidators } from '@utils/validation/validators/collections';
+import { trim } from '@utils/string-utils';
 
 const SContainer = styled.div`
   padding: 20px;
@@ -102,7 +103,7 @@ const ExcerciseCard: FC<IProps> = ({ title, imageSrc }) => {
       updateEntryByKey<TExcercise>({
         date: dateSelectedISO,
         type: 'excercise',
-        content: { time, details: excerciseDetails },
+        content: { time, details: trim(excerciseDetails) },
       });
       setHasUpdated(false);
       setHasBlurred(false);

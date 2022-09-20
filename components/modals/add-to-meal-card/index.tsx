@@ -18,6 +18,7 @@ import {
   IModalProps,
   IRunFormValidations,
 } from '@components/modals/add-to-meal-card/types';
+import { trim } from '@utils/string-utils';
 
 const SContainer = styled.div``;
 const SContentContainer = styled.div`
@@ -78,10 +79,10 @@ const ModalAddToMealCard: FC<IModalProps> = ({
     const mealContent: IMealContent = {
       id: isEditing ? content.id : Date.now(),
       emoji: state.emojiPicker,
-      serving: state.inputValues.servingSize,
-      measurement: state.inputValues.unitOfMeasurement,
-      food: state.inputValues.food,
-      description: state.inputValues.description,
+      serving: trim(state.inputValues.servingSize),
+      measurement: trim(state.inputValues.unitOfMeasurement),
+      food: trim(state.inputValues.food),
+      description: trim(state.inputValues.description),
     };
 
     if (isEditing) {
