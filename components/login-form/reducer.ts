@@ -48,9 +48,9 @@ export const loginFormReducer = (
         formErrors: action.payload.errors,
       };
     case ELoginFormType.UPDATE_VALUES:
-      return { ...state, formValues: action.payload?.values };
+      return { ...state, formValues: action.payload.values };
     case ELoginFormType.UPDATE_ERRORS:
-      return { ...state, formErrors: action.payload?.errors };
+      return { ...state, formErrors: action.payload.errors };
     default:
       return state;
   }
