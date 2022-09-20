@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { ChangeEvent, FC } from 'react';
 import styled from 'styled-components';
 import Input, { IInputProps } from '@components/ui/input';
 import TextArea from '@components/ui/text-area';
@@ -26,6 +26,9 @@ interface IInputContainerProps extends IInputProps {
   inputType?: TInputType;
   popup?: string;
   required?: boolean;
+  onChange: (
+    event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => void;
 }
 
 const InputContainer: FC<IInputContainerProps> = ({

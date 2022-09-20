@@ -1,6 +1,7 @@
 import {
   COLOURS,
   MEDIA_MOBILE,
+  OPACITY_10,
   OPACITY_30,
   OPACITY_40,
   OPACITY_70,
@@ -17,6 +18,7 @@ interface ISTextArea {
   backgroundColour?: string;
   borderStyle: TBorderStylePropery;
   borderWidth: number;
+  isError?: boolean;
 }
 
 const SContainer = styled.div<ISContainer>`
@@ -60,6 +62,8 @@ const STextArea = styled.textarea<ISTextArea>`
         }`};
   }
 
+  ${({ isError }) => isError && `border-color: ${COLOURS.error}`};
+
   ::-webkit-scrollbar {
     width: 5px;
   }
@@ -74,6 +78,10 @@ const STextArea = styled.textarea<ISTextArea>`
     background-color: ${({ backgroundColour }) =>
       backgroundColour ? `${backgroundColour}` : `${COLOURS.gray_dark}`};
   }
+`;
+const SError = styled.div`
+  text-align: right;
+  color: ${COLOURS.error};
 `;
 
 type TBorderStylePropery = 'solid' | 'dashed' | 'dotted' | 'none';
@@ -90,7 +98,8 @@ export interface ITextAreaProps {
   tabIndex?: number;
   placeholder?: string;
   title?: string;
-  onChange: (value: string) => void;
+  isError?: string;
+  onChange: (event: ChangeEvent<HTMLTextAreaElement>) => void;
   onBlur?: () => void;
 }
 
@@ -100,6 +109,7 @@ export const TextArea: FC<ITextAreaProps> = ({
   inputWidth,
   minWidth,
   value,
+  isError,
   tabIndex,
   totalRows = 4,
   borderStyle = 'solid',
@@ -109,8 +119,6 @@ export const TextArea: FC<ITextAreaProps> = ({
   onChange,
   onBlur,
 }) => {
-  const onChangeHandler = (event: ChangeEvent<HTMLTextAreaElement>) =>
-    onChange(event.target.value);
   const onBlurHandler = () => {
     onBlur?.();
   };
@@ -119,18 +127,21 @@ export const TextArea: FC<ITextAreaProps> = ({
     <SContainer inputWidth={inputWidth} minWidth={minWidth}>
       <STextArea
         id={id}
+        name={id}
         rows={totalRows}
         value={value}
         title={title}
+        isError={!!isError}
         tabIndex={tabIndex}
         backgroundColour={backgroundColour}
         borderStyle={borderStyle}
         borderWidth={borderWidth}
         placeholder={placeholder}
         maxLength={TEXTAREA_MAX_LENGTH}
-        onChange={onChangeHandler}
+        onChange={onChange}
         onBlur={onBlurHandler}
       />
+      {!!isError && <SError>{isError}</SError>}
     </SContainer>
   );
 };

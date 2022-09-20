@@ -1,4 +1,9 @@
-import { COLOURS, MEDIA_MOBILE, OPACITY_30 } from '@utils/constants';
+import {
+  COLOURS,
+  MEDIA_MOBILE,
+  OPACITY_10,
+  OPACITY_30,
+} from '@utils/constants';
 import { INPUT_MAX_LENGTH } from '@utils/validation/validation.constants';
 import { ChangeEvent, FC, KeyboardEvent, ReactNode } from 'react';
 import styled from 'styled-components';
@@ -52,15 +57,17 @@ const SInput = styled.input<ISInput>`
   }
 
   ${({ hasIcon }) => hasIcon && `padding-left: 38px`};
-  ${({ isError }) =>
-    isError &&
-    `border-color: ${COLOURS.error}; background-color:  ${COLOURS.error}${OPACITY_30}`}
+  ${({ isError }) => isError && `border-color: ${COLOURS.error}`};
 `;
 const SIconContainer = styled.div`
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
   padding-left: 4px;
+`;
+const SError = styled.div`
+  text-align: right;
+  color: ${COLOURS.error};
 `;
 
 type TInputType = 'text' | 'number';
@@ -74,13 +81,14 @@ export interface IInputProps {
   inputWidth?: number;
   minWidth?: number;
   placeholder?: string;
-  isError?: boolean;
+  isError?: string;
   children?: ReactNode;
   tabIndex?: number;
   type?: TInputType;
   borderWidth?: number;
+  onBlur?: () => void;
   onTabPressed?: () => void;
-  onChange: (value: string) => void;
+  onChange: (event: ChangeEvent<HTMLInputElement>) => void;
   onMouseDown?: () => void;
 }
 
@@ -98,14 +106,13 @@ export const Input: FC<IInputProps> = ({
   tabIndex,
   borderWidth = 2,
   type = 'text',
+  onBlur,
   onTabPressed,
   onChange,
   onMouseDown,
 }) => {
+  const onBlurHandler = () => onBlur?.();
   const onMouseDownHandler = () => onMouseDown?.();
-  const onChangeHandler = (event: ChangeEvent<HTMLInputElement>) =>
-    onChange(event.target.value);
-
   const onKeyDownHandler = (event: KeyboardEvent<HTMLInputElement>) => {
     if (event.key === 'Tab' && onTabPressed) {
       event.preventDefault();
@@ -118,6 +125,7 @@ export const Input: FC<IInputProps> = ({
       <SIconContainer>{children}</SIconContainer>
       <SInput
         id={id}
+        name={id}
         value={value}
         tabIndex={tabIndex}
         backgroundColour={backgroundColour}
@@ -126,15 +134,17 @@ export const Input: FC<IInputProps> = ({
         borderWidth={borderWidth}
         type={type}
         placeholder={placeholder}
-        isError={isError}
+        isError={!!isError}
         hasIcon={!!children}
         autoComplete={'off'}
         spellCheck={false}
         maxLength={INPUT_MAX_LENGTH}
+        onBlur={onBlurHandler}
         onKeyDown={onKeyDownHandler}
-        onChange={onChangeHandler}
+        onChange={onChange}
         onMouseDown={onMouseDownHandler}
       />
+      {!!isError && <SError>{isError}</SError>}
     </SContainer>
   );
 };
