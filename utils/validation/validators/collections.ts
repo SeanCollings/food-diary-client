@@ -79,18 +79,18 @@ type TAddMealValidators = {
 };
 
 export const addMealOptionsValidators: TAddMealValidators = {
-  emoji_picker: (args: TDynamicArgs<string>) => ({
-    id: 'emoji_picker',
+  emojiPicker: (args: TDynamicArgs<string>) => ({
+    id: 'emojiPicker',
     validators: emojiValidators,
     ...args,
   }),
-  serving_size: (args: TDynamicArgs<string>) => ({
-    id: 'serving_size',
+  servingSize: (args: TDynamicArgs<string>) => ({
+    id: 'servingSize',
     validators: maxLengthInputValidators,
     ...args,
   }),
-  unit_of_measurement: (args: TDynamicArgs<string>) => ({
-    id: 'unit_of_measurement',
+  unitOfMeasurement: (args: TDynamicArgs<string>) => ({
+    id: 'unitOfMeasurement',
     validators: maxLengthInputValidators,
     ...args,
   }),

@@ -76,11 +76,11 @@ export enum EWellnessTypes {
 export type TWellnessTypes = `${EWellnessTypes}`;
 
 export enum EAddMealOptions {
-  EMOJI_PICKER = 'emoji_picker',
-  SERVING_SIZE = 'serving_size',
-  UNIT_OF_MEASUREMENT = 'unit_of_measurement',
+  EMOJI_PICKER = 'emojiPicker',
+  SERVING_SIZE = 'servingSize',
+  UNIT_OF_MEASUREMENT = 'unitOfMeasurement',
   FOOD = 'food',
   DESCRIPTION = 'description',
-  MEAL_TYPE = 'meal_type',
+  MEAL_TYPE = 'mealType',
 }
 export type TAddMealOptions = `${EAddMealOptions}`;
