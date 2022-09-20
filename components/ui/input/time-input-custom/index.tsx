@@ -2,16 +2,17 @@ import { COLOURS, OPACITY_40 } from '@utils/constants';
 import {
   formatFinalTime,
   getFormatMinutesWithHours,
+  getNewHourValue,
+  getNewMinuteValue,
   getSplitTime,
+  truncateTimeValue,
 } from '@utils/time-utils';
 import { ChangeEvent, FC, useEffect, useState } from 'react';
 import styled from 'styled-components';
 
-const MAX_INPUT_HOURS = 23;
-const MAX_INPUT_NUMBER = 99;
-
 interface ISInput {
   isEmpty: boolean;
+  isError: boolean;
 }
 
 const SContainer = styled.div`
@@ -39,7 +40,10 @@ const SInput = styled.input<ISInput>`
   width: 40px;
   font-size: 18px;
   box-shadow: inset 0 3px ${COLOURS.gray_light};
-  border: 1px dashed ${COLOURS.gray_dark}${OPACITY_40};
+  border: ${({ isError }) =>
+    `1px dashed ${
+      isError ? COLOURS.error : `${COLOURS.gray_dark}${OPACITY_40}`
+    }`};
 
   color: ${({ isEmpty }) =>
     isEmpty ? `${COLOURS.black}${OPACITY_40}` : `${COLOURS.black}`};
@@ -62,6 +66,7 @@ type TTimeType = 'hours' | 'minutes';
 interface IComponentProps {
   id: string;
   value: string;
+  isError?: string;
   onChange: (value: string) => void;
   onBlur?: () => void;
 }
@@ -72,6 +77,7 @@ const getMinutesId = (id: string) => `${id}_minutes`;
 const TimeInputCustom: FC<IComponentProps> = ({
   id,
   value,
+  isError,
   onChange,
   onBlur,
 }) => {
@@ -86,30 +92,13 @@ const TimeInputCustom: FC<IComponentProps> = ({
 
   const handleOnChange =
     (type: TTimeType) => (event: ChangeEvent<HTMLInputElement>) => {
-      const { value } = event.target;
-      let newValue = value;
-
-      if (newValue.length > 2 && +newValue !== MAX_INPUT_NUMBER + 1) {
-        newValue = value.slice(0, 2);
-      }
+      const newValue = truncateTimeValue(event.target.value);
 
       if (type === 'hours') {
-        if (!newValue || +newValue === MAX_INPUT_HOURS + 1) {
-          newValue = '0';
-        } else if (+newValue === -1) {
-          newValue = MAX_INPUT_HOURS.toString();
-        }
-
-        return setHours(newValue);
+        return setHours(getNewHourValue(newValue));
       }
 
-      if (!newValue || +newValue === MAX_INPUT_NUMBER + 1) {
-        newValue = '0';
-      } else if (+newValue === -1) {
-        newValue = MAX_INPUT_NUMBER.toString();
-      }
-
-      setMinutes(newValue);
+      setMinutes(getNewMinuteValue(newValue));
     };
   const handleOnBlur = () => {
     const [updatedHours, updatedMinutes] = getFormatMinutesWithHours(
@@ -142,6 +131,7 @@ const TimeInputCustom: FC<IComponentProps> = ({
         value={hours}
         maxLength={2}
         isEmpty={isEmpty}
+        isError={!!isError}
         onChange={handleOnChange('hours')}
         onFocus={handleOnFocus(getHoursId(id))}
         onBlur={handleOnBlur}
@@ -153,6 +143,7 @@ const TimeInputCustom: FC<IComponentProps> = ({
         value={minutes}
         maxLength={2}
         isEmpty={isEmpty}
+        isError={!!isError}
         onChange={handleOnChange('minutes')}
         onFocus={handleOnFocus(getMinutesId(id))}
         onBlur={handleOnBlur}

@@ -8,9 +8,9 @@ export const validator = (value: string) => {
   const [hours, minutes] = getSplitTime(value);
 
   return (
-    !!hours.length ||
-    !!minutes.length ||
-    !isNaN(Number(hours)) ||
+    !!hours.length &&
+    !!minutes.length &&
+    !isNaN(Number(hours)) &&
     !isNaN(Number(minutes))
   );
 };

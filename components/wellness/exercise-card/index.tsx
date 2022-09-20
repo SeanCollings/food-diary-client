@@ -1,7 +1,7 @@
 import TextArea from '@components/ui/text-area';
 import { MEDIA_DESKTOP, MEDIA_MOBILE } from '@utils/constants';
 import Image from 'next/image';
-import { FC, useEffect, useState } from 'react';
+import { ChangeEvent, FC, useEffect, useState } from 'react';
 import { useDateSelectedContext } from '@store/date-selected-context';
 import styled from 'styled-components';
 import {
@@ -9,6 +9,8 @@ import {
   useWellnessEntriesContext,
 } from '@store/wellness-entries-context';
 import TimeInputCustom from '@components/ui/input/time-input-custom';
+import { runValidations } from '@utils/validation';
+import { excerciseValidators } from '@utils/validation/validators/collections';
 
 const SContainer = styled.div`
   padding: 20px;
@@ -56,6 +58,21 @@ const SImageContainer = styled.div`
   margin-bottom: 8px;
 `;
 
+interface IRunFormValidations {
+  details: string;
+  time: string;
+}
+
+const runFormValidations = (values: IRunFormValidations) =>
+  runValidations([
+    excerciseValidators['details']({
+      value: values.details,
+    }),
+    excerciseValidators['time']({
+      value: values.time,
+    }),
+  ]);
+
 interface IProps {
   id: string;
   title: string;
@@ -70,6 +87,7 @@ const ExcerciseCard: FC<IProps> = ({ title, imageSrc }) => {
   const [hasBlurred, setHasBlurred] = useState(false);
   const [time, setTime] = useState('00:00');
   const [excerciseDetails, setExcerciseDetails] = useState('');
+  const [errors, setErrors] = useState<Partial<IRunFormValidations>>({});
 
   useEffect(() => {
     const currentDayEntry = wellnessEntries[dateSelectedISO];
@@ -91,6 +109,12 @@ const ExcerciseCard: FC<IProps> = ({ title, imageSrc }) => {
     };
 
     if (hasUpdated && hasBlurred) {
+      const errors = runFormValidations({ details: excerciseDetails, time });
+
+      if (!!Object.keys(errors).length) {
+        return setErrors(errors);
+      }
+
       listener();
     }
   }, [
@@ -102,8 +126,8 @@ const ExcerciseCard: FC<IProps> = ({ title, imageSrc }) => {
     updateEntryByKey,
   ]);
 
-  const handleDetailsChange = (value: string) => {
-    setExcerciseDetails(value);
+  const handleDetailsChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
+    setExcerciseDetails(event.target.value);
     if (!hasUpdated) setHasUpdated(true);
   };
   const handleTimeChange = (value: string) => {
@@ -114,6 +138,9 @@ const ExcerciseCard: FC<IProps> = ({ title, imageSrc }) => {
   };
   const handleOnBlur = () => {
     if (!hasBlurred) setHasBlurred(true);
+
+    const errors = runFormValidations({ details: excerciseDetails, time });
+    setErrors(errors);
   };
 
   return (
@@ -137,6 +164,7 @@ const ExcerciseCard: FC<IProps> = ({ title, imageSrc }) => {
             id="exercise"
             minWidth={250}
             value={excerciseDetails}
+            isError={errors.details}
             borderStyle={'dashed'}
             borderWidth={1}
             totalRows={3}
@@ -149,8 +177,9 @@ const ExcerciseCard: FC<IProps> = ({ title, imageSrc }) => {
         <STimeInputContainer>
           <TimeInputCustom
             id="exercise_time"
-            onChange={handleTimeChange}
             value={time}
+            isError={errors.time}
+            onChange={handleTimeChange}
             onBlur={handleOnBlur}
           />
         </STimeInputContainer>

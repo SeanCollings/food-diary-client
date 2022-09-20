@@ -61,11 +61,6 @@ export const excerciseValidators: TExerciseValidators = {
   }),
 };
 
-// type TAddMealValidators = {
-//   [key in TAddMealOptions]: <T>(
-//     args: TDynamicArgs<T>
-//   ) => TDynamicArgs<T> & TStaticFields<TAddMealOptions>;
-// };
 type TAddMealValidatorCommon<T> = (
   args: TDynamicArgs<T>
 ) => TDynamicArgs<T> & TStaticFields<TAddMealOptions>;
