@@ -1,12 +1,23 @@
 import { APP_THEME_DEFAULT, ALL_MEAL_CARDS } from '@utils/constants';
-import { FC, useState } from 'react';
+import { ChangeEvent, FC, useReducer } from 'react';
 import styled from 'styled-components';
 import InputContainer from '@components/ui/input-container';
 import DropdownContainer from '@components/ui/dropdown-container';
-import EmojiPicker, { ISelectedEmoji } from '@components/emoji-picker';
-import { IMealContent, TMealType } from '@utils/interfaces';
+import EmojiPicker, { TSelectedEmoji } from '@components/emoji-picker';
+import { EAddMealOptions, IMealContent, TMealType } from '@utils/interfaces';
 import { getMealThemeColour } from '@utils/theme-utils';
 import { ModalHeader } from '@components/modals/styled';
+import { runValidations } from '@utils/validation';
+import { addMealOptionsValidators } from '@utils/validation/validators/collections';
+import {
+  addToMealReducer,
+  getIntialState,
+} from '@components/modals/add-to-meal-card/reducer';
+import {
+  EAddToMealType,
+  IModalProps,
+  IRunFormValidations,
+} from '@components/modals/add-to-meal-card/types';
 
 const SContainer = styled.div``;
 const SContentContainer = styled.div`
@@ -16,16 +27,24 @@ const SContentContainer = styled.div`
   padding: 20px;
 `;
 
-interface IModalProps {
-  mealId: TMealType;
-  content: IMealContent | null;
-  onClose: () => void;
-  onSubmit: (mealId: TMealType, values: IMealContent) => void;
-  onEditConfirm: (
-    updatedMealId: TMealType,
-    updatedContent: IMealContent
-  ) => void;
-}
+const runFormValidations = (values: IRunFormValidations) =>
+  runValidations([
+    addMealOptionsValidators['emojiPicker']({
+      value: values.emojiPicker?.nativeSkin || '',
+    }),
+    addMealOptionsValidators['servingSize']({
+      value: values.servingSize,
+    }),
+    addMealOptionsValidators['unitOfMeasurement']({
+      value: values.unitOfMeasurement,
+    }),
+    addMealOptionsValidators['food']({
+      value: values.food,
+    }),
+    addMealOptionsValidators['description']({
+      value: values.description,
+    }),
+  ]);
 
 const ModalAddToMealCard: FC<IModalProps> = ({
   mealId,
@@ -34,38 +53,79 @@ const ModalAddToMealCard: FC<IModalProps> = ({
   onSubmit,
   onEditConfirm,
 }) => {
-  const [selectedMealId, setSelectedMealId] = useState<TMealType>(mealId);
-  const [selectedEmoji, setSelectedEmoji] = useState<ISelectedEmoji | null>(
-    content?.emoji ?? null
+  const [state, dispatch] = useReducer(
+    addToMealReducer,
+    getIntialState({ mealId, content })
   );
-  const [servingSize, setServingSize] = useState(content?.serving ?? '');
-  const [measurement, setMeasurement] = useState(content?.measurement ?? '');
-  const [food, setFood] = useState(content?.food ?? '');
-  const [description, setDescription] = useState(content?.description ?? '');
 
   const isEditing = !!content;
-  const mealColour = getMealThemeColour(APP_THEME_DEFAULT, selectedMealId);
+  const mealColour = getMealThemeColour(APP_THEME_DEFAULT, state.mealType);
   const mealTile =
-    ALL_MEAL_CARDS.find((meal) => meal.id === selectedMealId)?.title || '';
+    ALL_MEAL_CARDS.find((meal) => meal.id === state.mealType)?.title || '';
 
   const onSubmitHandler = () => {
+    const errors = runFormValidations({
+      emojiPicker: state.emojiPicker,
+      ...state.inputValues,
+    });
+
+    dispatch({ type: EAddToMealType.SUBMIT, payload: { errors } });
+
+    if (!!Object.keys(errors).length) {
+      return;
+    }
+
     const mealContent: IMealContent = {
       id: isEditing ? content.id : Date.now(),
-      emoji: selectedEmoji,
-      serving: servingSize,
-      measurement,
-      food,
-      description,
+      emoji: state.emojiPicker,
+      serving: state.inputValues.servingSize,
+      measurement: state.inputValues.unitOfMeasurement,
+      food: state.inputValues.food,
+      description: state.inputValues.description,
     };
 
     if (isEditing) {
-      onEditConfirm(selectedMealId, mealContent);
+      onEditConfirm(state.mealType, mealContent);
     } else {
-      onSubmit(selectedMealId, mealContent);
+      onSubmit(state.mealType, mealContent);
     }
   };
-  const onSelectChangeHandler = (value: TMealType) => {
-    setSelectedMealId(value);
+
+  const updateMealType = (event: ChangeEvent<HTMLSelectElement>) => {
+    dispatch({
+      type: EAddToMealType.UPDATE_MEAL_TYPE,
+      payload: event.target.value as TMealType,
+    });
+  };
+  const updateSelecteedEmoji = (emoji: TSelectedEmoji) => {
+    dispatch({
+      type: EAddToMealType.UPDATE_EMOJI,
+      payload: emoji,
+    });
+  };
+  const updateInputValues = (
+    event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    dispatch({
+      type: EAddToMealType.UPDATE_INPUT_VALUES,
+      payload: { [event.target.name]: event.target.value },
+    });
+  };
+
+  const onBlurHandler = () => {
+    if (!state.hasSubmitted) {
+      return;
+    }
+
+    const errors = runFormValidations({
+      emojiPicker: state.emojiPicker,
+      ...state.inputValues,
+    });
+
+    dispatch({
+      type: EAddToMealType.UPDATE_ERRORS,
+      payload: { errors },
+    });
   };
 
   const commonInputProps = {
@@ -87,64 +147,67 @@ const ModalAddToMealCard: FC<IModalProps> = ({
       <SContentContainer>
         <EmojiPicker
           tabIndex={1}
-          value={selectedEmoji}
+          value={state.emojiPicker}
           borderColour={mealColour}
-          onChange={(newValue) => setSelectedEmoji(newValue)}
+          onChange={updateSelecteedEmoji}
         />
         <InputContainer
-          id="serving_size"
-          title="Serving size"
-          popup="Select a serving size"
+          id={EAddMealOptions.SERVING_SIZE}
+          value={state.inputValues.servingSize}
+          isError={state.formErrors.servingSize}
           tabIndex={2}
           inputWidth={180}
-          value={servingSize}
-          placeholder="-"
-          onChange={(newValue) => setServingSize(newValue)}
+          title="Serving size"
+          popup="Select a serving size"
+          onChange={updateInputValues}
           {...commonInputProps}
         />
         <InputContainer
-          id="unit_of_measurement"
-          title="Unit of measurement"
+          id={EAddMealOptions.UNIT_OF_MEASUREMENT}
+          value={state.inputValues.unitOfMeasurement}
+          isError={state.formErrors.unitOfMeasurement}
           tabIndex={3}
           inputWidth={180}
+          title="Unit of measurement"
           popup="Select a unit of measurement"
-          value={measurement}
-          placeholder="-"
-          onChange={(newValue) => setMeasurement(newValue)}
+          onChange={updateInputValues}
           {...commonInputProps}
         />
         <InputContainer
-          id="food"
-          title="Food"
+          id={EAddMealOptions.FOOD}
+          value={state.inputValues.food}
+          isError={state.formErrors.food}
           tabIndex={4}
           inputWidth={350}
+          title="Food"
           popup="Input your food/drink"
-          value={food}
           required
-          onChange={(newValue) => setFood(newValue)}
+          onBlur={onBlurHandler}
+          onChange={updateInputValues}
           {...commonInputProps}
         />
         <InputContainer
-          id="description"
-          title="Description"
+          id={EAddMealOptions.DESCRIPTION}
+          value={state.inputValues.description}
+          isError={state.formErrors.description}
           tabIndex={5}
-          popup="Add some extra descriptions to your food"
-          backgroundColour={mealColour}
           inputWidth={350}
+          backgroundColour={mealColour}
+          title="Description"
+          popup="Add some extra descriptions to your food"
           inputType="textarea"
-          value={description}
-          onChange={(newValue) => setDescription(newValue)}
+          onChange={updateInputValues}
         />
         <DropdownContainer
-          id="meal"
-          title="Meal"
+          id={EAddMealOptions.MEAL_TYPE}
+          value={state.mealType}
           tabIndex={6}
-          popup="Change meal to another"
-          backgroundColour={mealColour}
           inputWidth={180}
-          value={selectedMealId}
+          backgroundColour={mealColour}
           options={ALL_MEAL_CARDS}
-          onChange={onSelectChangeHandler}
+          title="Meal"
+          popup="Change meal to another"
+          onChange={updateMealType}
         />
       </SContentContainer>
     </SContainer>
