@@ -42,17 +42,19 @@ const SOption = styled.option<ISSelect>`
   background: var(--background-colour);
 `;
 
-export interface IDropdownProps {
+export type TDefaultOption = { id: string; title: string };
+
+export interface IDropdownProps<T, K> {
   id: string;
   backgroundColour?: string;
   inputWidth: number;
-  value: any;
-  options: any[];
+  value: T;
+  options: K[];
   tabIndex?: number;
-  onChange: (value: any) => void;
+  onChange: (event: ChangeEvent<HTMLSelectElement>) => void;
 }
 
-const Dropdown: FC<IDropdownProps> = ({
+const Dropdown = <T extends string, K extends TDefaultOption>({
   id,
   backgroundColour,
   inputWidth,
@@ -60,11 +62,7 @@ const Dropdown: FC<IDropdownProps> = ({
   value,
   tabIndex,
   onChange,
-}) => {
-  const onChangeHandler = (event: ChangeEvent<HTMLSelectElement>) => {
-    onChange(event.target.value);
-  };
-
+}: IDropdownProps<T, K>) => {
   return (
     <SContainer inputWidth={inputWidth}>
       <SSelect
@@ -73,7 +71,7 @@ const Dropdown: FC<IDropdownProps> = ({
         value={value}
         backgroundColour={backgroundColour}
         tabIndex={tabIndex}
-        onChange={onChangeHandler}
+        onChange={onChange}
         onBlur={(e) => e.preventDefault()}
       >
         {options?.map((option) => (

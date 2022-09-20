@@ -1,6 +1,9 @@
 import { FC } from 'react';
 import styled from 'styled-components';
-import Dropdown, { IDropdownProps } from '@components/ui/dropdown';
+import Dropdown, {
+  IDropdownProps,
+  TDefaultOption,
+} from '@components/ui/dropdown';
 
 const SInputContainer = styled.div`
   display: flex;
@@ -14,22 +17,22 @@ const SLabel = styled.label`
   pointer-events: none;
 `;
 
-interface IDropdownContainerProps extends IDropdownProps {
+interface IDropdownContainerProps<T, K> extends IDropdownProps<T, K> {
   id: string;
   title: string;
   popup?: string;
 }
 
-const DropdownContainer: FC<IDropdownContainerProps> = ({
+const DropdownContainer = <T extends string, K extends TDefaultOption>({
   id,
   title,
   popup,
   ...rest
-}) => {
+}: IDropdownContainerProps<T, K>) => {
   return (
     <SInputContainer title={popup}>
       <SLabel htmlFor={id}>{title}</SLabel>
-      <Dropdown id={id} {...rest} />
+      <Dropdown<T, K> id={id} {...rest} />
     </SInputContainer>
   );
 };
