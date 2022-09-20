@@ -66,6 +66,7 @@ const SIconContainer = styled.div`
   padding-left: 4px;
 `;
 const SError = styled.div`
+  font-size: 15px;
   text-align: right;
   color: ${COLOURS.error};
 `;

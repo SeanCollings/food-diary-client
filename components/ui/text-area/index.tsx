@@ -80,7 +80,10 @@ const STextArea = styled.textarea<ISTextArea>`
   }
 `;
 const SError = styled.div`
+  margin-top: -2px;
+  font-size: 15px;
   text-align: right;
+  padding-bottom: 4px;
   color: ${COLOURS.error};
 `;
 
