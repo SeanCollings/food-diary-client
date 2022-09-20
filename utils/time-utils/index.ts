@@ -1,5 +1,6 @@
 const MAX_HOURS = 23;
 const MAX_MINUTES = 59;
+const MAX_NUMBER = 99;
 
 /**
  * Converts time format from `12:15` to `[12,15]`
@@ -64,7 +65,7 @@ export const getFormatMinutesWithHours = (hours: string, minutes: string) => {
       updatedMinutes = MAX_MINUTES.toString();
     } else {
       updatedMinutes = `${+updatedMinutes - 60}`;
-      updatedHours = `${+updatedHours + 1}`;
+      updatedHours = !isNaN(+updatedHours) ? `${+updatedHours + 1}` : '0';
     }
   }
   if (+updatedHours > MAX_HOURS) {
@@ -72,4 +73,38 @@ export const getFormatMinutesWithHours = (hours: string, minutes: string) => {
   }
 
   return [frontPadNumber(updatedHours), frontPadNumber(updatedMinutes)];
+};
+
+export const truncateTimeValue = (timeValue: string) => {
+  let updatedTime = timeValue;
+
+  if (timeValue.length > 2 && +timeValue !== MAX_NUMBER + 1) {
+    updatedTime = timeValue.slice(0, 2);
+  }
+
+  return updatedTime;
+};
+
+export const getNewHourValue = (hourValue: string) => {
+  let updatedHour = hourValue;
+
+  if (!hourValue || +hourValue === MAX_HOURS + 1) {
+    updatedHour = '0';
+  } else if (+hourValue === -1) {
+    updatedHour = MAX_HOURS.toString();
+  }
+
+  return updatedHour;
+};
+
+export const getNewMinuteValue = (minuteValue: string) => {
+  let updatedMinute = minuteValue;
+
+  if (!minuteValue || +minuteValue === MAX_NUMBER + 1) {
+    updatedMinute = '0';
+  } else if (+minuteValue === -1) {
+    updatedMinute = MAX_MINUTES.toString();
+  }
+
+  return updatedMinute;
 };
