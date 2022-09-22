@@ -169,8 +169,8 @@ const ExcerciseCard: FC<IProps> = ({ title, imageSrc }) => {
             borderStyle={'dashed'}
             borderWidth={1}
             totalRows={3}
-            placeholder="details..."
-            title="insert excercise details"
+            placeholder="..."
+            title="add excercise details"
             onChange={handleDetailsChange}
             onBlur={handleOnBlur}
           />
