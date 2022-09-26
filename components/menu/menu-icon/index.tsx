@@ -11,13 +11,20 @@ import styled from 'styled-components';
 
 interface ISContainer {
   isOpen: boolean;
+  transparentBG: boolean;
+}
+
+interface ISLine {
+  isOpen: boolean;
 }
 
 const SContainer = styled.div<ISContainer>`
+  position: relative;
   transition: 0.2s;
   cursor: pointer;
-  background: ${({ isOpen }) =>
-    isOpen ? APP_THEME_DEFAULT.backgroundPrimary : APP_THEME_DEFAULT.primary};
+  background: ${({ isOpen, transparentBG }) =>
+    !transparentBG &&
+    (isOpen ? APP_THEME_DEFAULT.backgroundPrimary : APP_THEME_DEFAULT.primary)};
   border-radius: 50%;
   width: 55px;
   height: 55px;
@@ -25,14 +32,12 @@ const SContainer = styled.div<ISContainer>`
   align-items: center;
   justify-content: center;
   flex: none;
-  margin-top: 16px;
   z-index: 2;
 
   .line1 {
     ${({ isOpen }) =>
       isOpen &&
       'transform: rotate(44deg); transform-origin: 7% 0%; width: 33px; border-radius: 2px;'};
-    // transform: ${({ isOpen }) => isOpen && 'rotate3d(0, 0, 1, 48deg) '};
   }
 
   .line2 {
@@ -42,7 +47,6 @@ const SContainer = styled.div<ISContainer>`
     ${({ isOpen }) =>
       isOpen &&
       'transform-origin: 9% 110%; transform: rotate(-44deg); width: 33px; border-radius: 2px;'};
-    // transform: ${({ isOpen }) => isOpen && 'rotate3d(0, 0, 1, -48deg)'};
   }
 
   :hover {
@@ -63,7 +67,7 @@ const SHamburgerLines = styled.div`
   flex-direction: column;
   justify-content: space-between;
 `;
-const SLine = styled.span<ISContainer>`
+const SLine = styled.span<ISLine>`
   transition: transform 0.2s ease-in-out;
 
   display: block;
@@ -73,7 +77,11 @@ const SLine = styled.span<ISContainer>`
     isOpen ? APP_THEME_DEFAULT.textDark : APP_THEME_DEFAULT.textLight};
 `;
 
-const MenuIcon: FC = () => {
+interface IMenuIconProps {
+  transparentBG?: boolean;
+}
+
+const MenuIcon: FC<IMenuIconProps> = ({ transparentBG = false }) => {
   const { isOpen, toggleMenu } = useMenuContext();
 
   const onClickHandler = () => {
@@ -81,7 +89,11 @@ const MenuIcon: FC = () => {
   };
 
   return (
-    <SContainer onClick={onClickHandler} isOpen={isOpen}>
+    <SContainer
+      onClick={onClickHandler}
+      isOpen={isOpen}
+      transparentBG={transparentBG}
+    >
       <SHamburgerLines>
         <SLine isOpen={isOpen} className="line1" />
         <SLine isOpen={isOpen} className="line2" />

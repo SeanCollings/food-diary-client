@@ -8,6 +8,29 @@ export const OPACITY_50 = '80';
 export const OPACITY_70 = 'b3';
 export const OPACITY_80 = 'cc';
 
+export const HEADER_PROPS = {
+  mobile: {
+    padding: 0,
+    fontSize: 24,
+    height: 80,
+  },
+  tablet: {
+    padding: 0,
+    fontSize: 44,
+    height: 120,
+  },
+  desktopMedium: {
+    padding: 30,
+    fontSize: 64,
+    height: 170,
+  },
+  desktopLarge: {
+    padding: 30,
+    fontSize: 64,
+    height: 170,
+  },
+};
+
 export const COLOURS = {
   pink: '#e42a5a',
   gray_light: '#f4f4f4',

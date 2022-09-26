@@ -7,8 +7,12 @@ import Footer from '@components/footer';
 import {
   APP_THEME_DEFAULT,
   COLOURS,
+  HEADER_PROPS,
   MAX_PAGE_WIDTH,
+  MEDIA_DESKTOP,
+  MEDIA_MAX_DESKTOP,
   MEDIA_MOBILE,
+  MEDIA_TABLET,
 } from '@utils/constants';
 import SideMenuDisplay from '@components/menu/side-menu-display';
 import { DateSelectedContextProvider } from '@store/date-selected-context';
@@ -59,6 +63,17 @@ const SMain = styled.main`
 
   ${MEDIA_MOBILE} {
     padding: 0 1rem;
+    margin-top: ${HEADER_PROPS.mobile.height}px;
+    min-height: calc(100vh - ${HEADER_PROPS.mobile.height}px);
+  }
+  ${MEDIA_TABLET} {
+    min-height: calc(100vh - ${HEADER_PROPS.tablet.height}px);
+  }
+  ${MEDIA_DESKTOP} {
+    min-height: calc(100vh - ${HEADER_PROPS.desktopMedium.height}px);
+  }
+  ${MEDIA_MAX_DESKTOP} {
+    min-height: calc(100vh - ${HEADER_PROPS.desktopLarge.height}px);
   }
 `;
 const SInnerMain = styled.div`
