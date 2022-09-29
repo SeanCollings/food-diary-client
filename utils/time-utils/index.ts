@@ -35,7 +35,7 @@ export const formatFinalTime = (hours: string, minutes: string) => {
 /**
  * Front pads a number if provider padder value or 0
  * @param number string | number
- * @param pad number
+ * @param padder number
  * @returns string
  */
 export const frontPadNumber = (number: string | number, padder = 0) => {
@@ -107,4 +107,16 @@ export const getNewMinuteValue = (minuteValue: string) => {
   }
 
   return updatedMinute;
+};
+
+/**
+ * Converts minutes to format `01:25`
+ * @param time number
+ * @returns string
+ */
+export const formatMinutesToHoursMinutes = (time: number) => {
+  const minutes = time % 60;
+  const hours = (time - minutes) / 60;
+
+  return `${frontPadNumber(hours)}:${frontPadNumber(minutes)}`;
 };
