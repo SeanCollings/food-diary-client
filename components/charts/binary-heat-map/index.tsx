@@ -1,3 +1,4 @@
+import { useTheme } from '@hooks/use-theme';
 import {
   ALL_MEAL_CARDS,
   APP_THEME_DEFAULT,
@@ -11,8 +12,8 @@ import styled from 'styled-components';
 
 const LEGEND_HEIGHT = 30;
 const TITLE_WIDTH = 80;
-const DATA_WIDTH_MAX = 100;
-const DATA_WIDTH_MIN = 24;
+const COLUMN_WIDTH_MAX = 100;
+const COLUMN_WIDTH_MIN = 24;
 const CIRCLE_WIDTH_MAX = 30;
 const CIRCLE_WIDTH_MIN = 14;
 
@@ -23,13 +24,17 @@ interface ISMealDetailContainer {
   boxWidth: number;
   totalValues: number;
 }
-interface ISLegendContainer {
+interface ISHAxisContainer {
   boxWidth: number;
   totalValues: number;
 }
 interface ISCircleDisplay {
   colour: string;
   size: number;
+}
+interface ISHorizontalLine {
+  colour: string;
+  width: number;
 }
 
 const SContainer = styled.div`
@@ -54,12 +59,13 @@ const SDataItem = styled.span`
   display: flex;
   align-items: center;
   justify-content: center;
+  position: relative;
 `;
 
 const SMealDetailContainer = styled.div<ISMealDetailContainer>`
   display: grid;
   grid-template-columns: ${({ totalValues, boxWidth }) =>
-    `${TITLE_WIDTH}px repeat(${totalValues}, ${boxWidth}px`});
+    `${TITLE_WIDTH}px repeat(${totalValues}, ${boxWidth}px)`};
 
   span:not(:first-child):not(:last-child) {
     border-right: 1px solid ${COLOURS.gray}${OPACITY_40};
@@ -75,9 +81,17 @@ const SCircleDisplay = styled.span<ISCircleDisplay>`
   height: ${({ size }) => size}px;
   background: ${({ colour }) => colour};
   border-radius: 50%;
+  z-index: 2;
+`;
+const SHorizontalLine = styled.div<ISHorizontalLine>`
+  position: absolute;
+  height: 2px;
+  left: 50%;
+  width: ${({ width }) => width}px;
+  background: ${({ colour }) => colour};
 `;
 
-const SLegendContainer = styled.div<ISLegendContainer>`
+const SHAxisContainer = styled.div<ISHAxisContainer>`
   ::before {
     content: '';
   }
@@ -85,13 +99,13 @@ const SLegendContainer = styled.div<ISLegendContainer>`
   display: grid;
   font-size: 12px;
   grid-template-columns: ${({ totalValues, boxWidth }) =>
-    `${TITLE_WIDTH}px repeat(${totalValues}, ${boxWidth}px`});
+    `${TITLE_WIDTH}px repeat(${totalValues}, ${boxWidth}px)`};
 
   span:not(:last-child) {
     border-right: 1px solid ${COLOURS.gray}${OPACITY_40};
   }
 `;
-const SLegendKey = styled(SDataItem)``;
+const SHAxisKey = styled(SDataItem)``;
 
 const lastItem = <T extends unknown>(array: T[], index: number) => {
   if (!array?.length) {
@@ -106,6 +120,7 @@ interface IFoodTrendData {
   totalValues: number;
   legend: string[];
   data: { id: string; meals: (0 | 1)[] }[];
+  totals: { [key in EMealType]: number };
 }
 
 const MOCK_DATA_MONTH: IFoodTrendData = {
@@ -177,6 +192,13 @@ const MOCK_DATA_MONTH: IFoodTrendData = {
     { id: 'month_30', meals: [0, 0, 0, 1, 1] },
     { id: 'month_31', meals: [1, 0, 1, 1, 0] },
   ],
+  totals: {
+    breakfast: 23,
+    snack_1: 9,
+    lunch: 24,
+    snack_2: 23,
+    dinner: 26,
+  },
 };
 const MOCK_DATA_WEEK: IFoodTrendData = {
   type: 'week',
@@ -212,13 +234,13 @@ const MOCK_DATA_WEEK: IFoodTrendData = {
       meals: [1, 1, 1, 1, 1],
     },
   ],
-};
-const MEAL_TYPE_COLOUR = {
-  [EMealType.BREAKFAST]: APP_THEME_DEFAULT.secondary,
-  [EMealType.SNACK_1]: APP_THEME_DEFAULT.quaternary,
-  [EMealType.LUNCH]: APP_THEME_DEFAULT.primary,
-  [EMealType.SNACK_2]: APP_THEME_DEFAULT.quaternary,
-  [EMealType.DINNER]: APP_THEME_DEFAULT.tertiary,
+  totals: {
+    breakfast: 5,
+    snack_1: 6,
+    lunch: 6,
+    snack_2: 6,
+    dinner: 7,
+  },
 };
 
 interface IBinaryHeatMapProps {
@@ -230,16 +252,29 @@ const BinaryHeatMap: React.FC<IBinaryHeatMapProps> = ({
   height,
   timePeriod,
 }) => {
+  const theme = useTheme();
+
   const mealData = timePeriod === 'week' ? MOCK_DATA_WEEK : MOCK_DATA_MONTH;
-  const boxWidth = mealData.type === 'week' ? DATA_WIDTH_MAX : DATA_WIDTH_MIN;
+  const boxWidth =
+    mealData.type === 'week' ? COLUMN_WIDTH_MAX : COLUMN_WIDTH_MIN;
   const dataSize =
     mealData.type === 'week' ? CIRCLE_WIDTH_MAX : CIRCLE_WIDTH_MIN;
+
+  const MEAL_TYPE_COLOUR = {
+    [EMealType.BREAKFAST]: theme.secondary,
+    [EMealType.SNACK_1]: theme.snack,
+    [EMealType.LUNCH]: theme.primary,
+    [EMealType.SNACK_2]: theme.snack,
+    [EMealType.DINNER]: theme.tertiary,
+  };
 
   return (
     <SContainer>
       <SDataContainer height={height}>
-        {ALL_MEAL_CARDS.map(({ id, title }, index) => {
-          const className = lastItem(ALL_MEAL_CARDS, index) ? 'last-item' : '';
+        {ALL_MEAL_CARDS.map(({ id, title }, mealIindex) => {
+          const className = lastItem(ALL_MEAL_CARDS, mealIindex)
+            ? 'last-item'
+            : '';
 
           return (
             <SMealDetailContainer
@@ -248,28 +283,37 @@ const BinaryHeatMap: React.FC<IBinaryHeatMapProps> = ({
               boxWidth={boxWidth}
             >
               <SDataTitle className={className}>{title}</SDataTitle>
-              {mealData.data.map((data) => (
-                <SData key={data.id} className={className}>
-                  {!!data.meals[index] && (
-                    <SCircleDisplay
-                      colour={MEAL_TYPE_COLOUR[id]}
-                      size={dataSize}
-                    />
-                  )}
-                  <div />
-                </SData>
-              ))}
+              {mealData.data.map((data, index) => {
+                const colour = MEAL_TYPE_COLOUR[id];
+                const hasValue = !!data.meals[mealIindex];
+                const isLastValue = mealData.data[index + 1] === undefined;
+                const nextValueZero =
+                  mealData.data[index + 1]?.meals[mealIindex] === 0;
+                const showLine = hasValue && !isLastValue && !nextValueZero;
+
+                return (
+                  <SData key={data.id} className={className}>
+                    {hasValue && (
+                      <SCircleDisplay
+                        colour={colour}
+                        size={dataSize}
+                        title={`total: ${mealData.totals[id]}`}
+                      />
+                    )}
+                    {showLine && (
+                      <SHorizontalLine colour={colour} width={boxWidth} />
+                    )}
+                  </SData>
+                );
+              })}
             </SMealDetailContainer>
           );
         })}
-        <SLegendContainer
-          totalValues={mealData.totalValues}
-          boxWidth={boxWidth}
-        >
+        <SHAxisContainer totalValues={mealData.totalValues} boxWidth={boxWidth}>
           {mealData.legend.map((key) => (
-            <SLegendKey key={getUniqueId()}>{key}</SLegendKey>
+            <SHAxisKey key={getUniqueId()}>{key}</SHAxisKey>
           ))}
-        </SLegendContainer>
+        </SHAxisContainer>
       </SDataContainer>
     </SContainer>
   );

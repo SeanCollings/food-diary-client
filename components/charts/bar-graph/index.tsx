@@ -1,6 +1,8 @@
+import { useTheme } from '@hooks/use-theme';
 import { APP_THEME_DEFAULT, COLOURS, OPACITY_40 } from '@utils/constants';
 import { EWellnessTypes } from '@utils/interfaces';
 import { getUniqueId } from '@utils/unique-id';
+import { FC } from 'react';
 import styled from 'styled-components';
 
 const COLUMN_WIDTH = 95;
@@ -21,6 +23,12 @@ interface ISBar {
 }
 interface ISTick {
   topPosition: number;
+}
+interface ISLegendContainer {
+  show: boolean;
+}
+interface ISLegendCircle {
+  colour: string;
 }
 
 const SContainer = styled.div`
@@ -83,7 +91,7 @@ const SBar = styled.div<ISBar>`
   height: ${({ barHeight }) => barHeight}%;
   background: ${({ backgroundColour }) => backgroundColour};
 `;
-const SLegendContainer = styled.div`
+const SHAxisContainer = styled.div`
   display: flex;
   align-items: center;
   gap: ${BAR_GROUP_GAP}px;
@@ -91,9 +99,25 @@ const SLegendContainer = styled.div`
   height: ${LEGEND_HEIGHT}px;
   border-top: 1px solid ${COLOURS.gray}${OPACITY_40};
 `;
-const SLegendKey = styled.div`
+const SHAxisKey = styled.div`
   text-align: center;
   width: ${COLUMN_WIDTH}px;
+`;
+const SLegendContainer = styled.div<ISLegendContainer>`
+  gap: 10px;
+  font-size: 14px;
+  display: ${({ show }) => (show ? 'flex' : 'none')};
+`;
+const SLegend = styled.div`
+  display: flex;
+  gap: 4px;
+  align-items: center;
+`;
+const SLegendCircle = styled.div<ISLegendCircle>`
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: ${({ colour }) => colour};
 `;
 
 interface IWellnessTrendData {
@@ -130,11 +154,50 @@ interface IBarGraphProps {
 const percentage = (value: number, maxValue: number) =>
   +((value / maxValue) * 100).toFixed(2);
 
+interface IBarGraphLegendProps {
+  show: boolean;
+}
+
+export const BarGraphLegend: FC<IBarGraphLegendProps> = ({ show }) => {
+  const theme = useTheme();
+
+  const BEVERAGE_COLOUR: { [key in EWellnessTypes]: string } = {
+    [EWellnessTypes.WATER]: theme.primary,
+    [EWellnessTypes.TEA_COFFEE]: theme.snack,
+    [EWellnessTypes.ALCOHOL]: theme.secondary,
+  };
+
+  return (
+    <SLegendContainer show={show}>
+      <SLegend>
+        <SLegendCircle colour={BEVERAGE_COLOUR['water']} />
+        Water
+      </SLegend>
+      <SLegend>
+        <SLegendCircle colour={BEVERAGE_COLOUR['tea_coffee']} />
+        Tea/Coffee
+      </SLegend>
+      <SLegend>
+        <SLegendCircle colour={BEVERAGE_COLOUR['alcohol']} />
+        Alcohol
+      </SLegend>
+    </SLegendContainer>
+  );
+};
+
 const BarGraph: React.FC<IBarGraphProps> = ({ height }) => {
+  const theme = useTheme();
+
   const maxValue = Math.max(
     Math.ceil(MOCK_DATA_WEEK.highestValue / MIN_TICK_VALUE) * MIN_TICK_VALUE,
     MIN_TICK_VALUE
   );
+
+  const BEVERAGE_COLOUR: { [key in EWellnessTypes]: string } = {
+    [EWellnessTypes.WATER]: theme.primary,
+    [EWellnessTypes.TEA_COFFEE]: theme.snack,
+    [EWellnessTypes.ALCOHOL]: theme.secondary,
+  };
 
   return (
     <SContainer>
@@ -169,7 +232,7 @@ const BarGraph: React.FC<IBarGraphProps> = ({ height }) => {
                     backgroundColour={BEVERAGE_COLOUR['water']}
                     id={EWellnessTypes.WATER}
                     borderRadius={BORDER_RADIUS}
-                    title="water"
+                    title={`water (${water})`}
                   />
                   <SBar
                     className="tea_coffee"
@@ -179,7 +242,7 @@ const BarGraph: React.FC<IBarGraphProps> = ({ height }) => {
                     backgroundColour={BEVERAGE_COLOUR['tea_coffee']}
                     id={EWellnessTypes.TEA_COFFEE}
                     borderRadius={BORDER_RADIUS}
-                    title="tea/coffee"
+                    title={`tea/coffee (${tea_coffee})`}
                   />
                   <SBar
                     className="alcohol"
@@ -187,17 +250,17 @@ const BarGraph: React.FC<IBarGraphProps> = ({ height }) => {
                     backgroundColour={BEVERAGE_COLOUR['alcohol']}
                     id={EWellnessTypes.ALCOHOL}
                     borderRadius={BORDER_RADIUS}
-                    title="alcohol"
+                    title={`alcohol (${alcohol})`}
                   />
                 </SBarGroup>
               );
             })}{' '}
           </SBarGroupContainer>
-          <SLegendContainer>
+          <SHAxisContainer>
             {MOCK_DATA_WEEK.legend.map((key) => (
-              <SLegendKey key={getUniqueId()}>{key}</SLegendKey>
+              <SHAxisKey key={getUniqueId()}>{key}</SHAxisKey>
             ))}
-          </SLegendContainer>
+          </SHAxisContainer>
         </SDataContainer>
       </SInnerContainer>
     </SContainer>
