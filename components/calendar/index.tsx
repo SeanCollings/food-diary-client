@@ -68,7 +68,6 @@ const STodayButtonContainer = styled.div`
   flex: 1;
 `;
 const SSelectTodayButton = styled.button`
-  transtion: 0.2s;
   outline: none;
   cursor: pointer;
   border: 1px solid ${APP_THEME_DEFAULT.quaternary};
@@ -267,14 +266,14 @@ const CalendarContent: FC<ICalendarContentProps> = ({
                 key={`col-${colIndex}`}
                 rowHeight={rowHeight}
                 backgroundColour={COLOURS.gray_light}
-                isCurrentDay={isCurrentDay}
+                isCurrentDay={isCurrentDay && !isPeripheralMonthDay}
                 onClick={() =>
                   daySelectedHandler(item.day, isPeripheralMonthDay)
                 }
                 bottomLeft={rowIndex === maxRows && colIndex === 0}
                 bottomRight={rowIndex === maxRows && colIndex === 6}
                 isPeripheralMonthDay={isPeripheralMonthDay}
-                isSelectedDay={isSelectedDay}
+                isSelectedDay={isSelectedDay && !isPeripheralMonthDay}
               >
                 <SDayRow>
                   {item.day}
