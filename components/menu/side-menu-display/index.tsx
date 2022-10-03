@@ -13,6 +13,11 @@ import { useRouter } from 'next/router';
 import Link from 'next/link';
 import MenuIcon from '@components/menu/menu-icon/index';
 import { useOnClickOutsideElementsArray } from '@hooks/use-onclick-outside-element';
+import {
+  ThemeBackgroundSecondary,
+  ThemeTextColor,
+} from '@components/ui/style-themed';
+import { useTheme } from '@hooks/use-theme';
 
 const MENU_WIDTH = 350;
 
@@ -23,6 +28,7 @@ interface ISContainer {
 }
 interface ISContent {
   isCurrentPath: boolean;
+  primary: string;
 }
 interface ISMenuIconContainer {
   isOpen: boolean;
@@ -31,10 +37,11 @@ interface ISMenuIconContainer {
 const SContainer = styled.div<ISContainer>`
   position: fixed;
   right: 0;
-  background: ${APP_THEME_DEFAULT.backgroundPrimary};
   height: 100%;
   z-index: 101;
   width: 0;
+  ${ThemeTextColor}
+  ${ThemeBackgroundSecondary}
 
   animation-name: ${({ animateStyle }) => animateStyle};
   animation-duration: 0.2s;
@@ -81,9 +88,9 @@ const SMenuIconContainer = styled.div<ISMenuIconContainer>`
   height: 55px;
   display: flex;
   justify-content: end;
-  transition: 0.05s;
 
   margin-right: ${({ isOpen }) => (isOpen ? `2rem` : `-1000rem`)};
+  opacity: ${({ isOpen }) => (isOpen ? 1 : 0)};
 
   ${MEDIA_MOBILE} {
     top: 15px;
@@ -110,11 +117,12 @@ const SLink = styled.a<ISContent>`
   border-bottom: 3px solid transparent;
   width: 100%;
 
-  ${({ isCurrentPath }) =>
-    isCurrentPath && `border-bottom: 3px solid ${APP_THEME_DEFAULT.primary}`}
+  ${({ isCurrentPath, primary }) =>
+    isCurrentPath && `border-bottom: 3px solid ${primary}`}
 `;
 
 const SideMenuDisplay: FC = () => {
+  const theme = useTheme();
   const sideMenuRef = useRef<HTMLDivElement>(null);
   const { isOpen, toggleMenu } = useMenuContext();
   const { pathname } = useRouter();
@@ -165,7 +173,11 @@ const SideMenuDisplay: FC = () => {
       <SContents>
         {MENU_ITEMS.map(({ id, title, href }) => (
           <Link key={id} href={href} passHref>
-            <SLink isCurrentPath={pathname === href} onClick={handleMenuClick}>
+            <SLink
+              primary={theme.primary}
+              isCurrentPath={pathname === href}
+              onClick={handleMenuClick}
+            >
               {title}
             </SLink>
           </Link>

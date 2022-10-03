@@ -1,7 +1,6 @@
+import { useTheme } from '@hooks/use-theme';
 import {
-  COLOURS,
   MEDIA_MOBILE,
-  OPACITY_10,
   OPACITY_30,
   OPACITY_40,
   OPACITY_70,
@@ -19,6 +18,12 @@ interface ISTextArea {
   borderStyle: TBorderStylePropery;
   borderWidth: number;
   isError?: boolean;
+  colour: string;
+  errorColour: string;
+  borderColour: string;
+}
+interface ISError {
+  colour: string;
 }
 
 const SContainer = styled.div<ISContainer>`
@@ -44,47 +49,48 @@ const STextArea = styled.textarea<ISTextArea>`
   width: 100%;
   padding: 8px 10px;
   border-radius: 8px;
-  box-shadow: ${({ backgroundColour }) =>
-    !backgroundColour && `inset 0 3px ${COLOURS.gray_light}`};
+  color: ${({ colour }) => colour};
+  box-shadow: ${({ backgroundColour, borderColour }) =>
+    !backgroundColour && `inset 0 3px ${borderColour}${OPACITY_30}`};
   background-color: ${({ backgroundColour }) =>
     backgroundColour ? `${backgroundColour}${OPACITY_30}` : 'inherit'};
-  border: ${({ backgroundColour, borderStyle, borderWidth }) =>
+  border: ${({ backgroundColour, borderStyle, borderWidth, borderColour }) =>
     `${borderWidth}px ${borderStyle} ${
-      backgroundColour ? 'transparent' : `${COLOURS.gray_dark}${OPACITY_40}`
+      backgroundColour ? 'transparent' : `${borderColour}${OPACITY_40}`
     }`};
 
   :focus {
-    box-shadow: inset 0 0 ${COLOURS.gray_light};
+    box-shadow: inset 0 0 transparent;
     border: solid
-      ${({ backgroundColour, borderWidth }) =>
+      ${({ backgroundColour, borderWidth, borderColour }) =>
         `${borderWidth}px ${
-          backgroundColour ? `${backgroundColour}` : `${COLOURS.gray_dark}`
+          backgroundColour ? `${backgroundColour}` : borderColour
         }`};
   }
 
-  ${({ isError }) => isError && `border-color: ${COLOURS.error}`};
+  ${({ isError, errorColour }) => isError && `border-color: ${errorColour}`};
 
   ::-webkit-scrollbar {
     width: 5px;
   }
   ::-webkit-scrollbar-thumb {
     border-radius: 10px;
-    background-color: ${({ backgroundColour }) =>
+    background-color: ${({ backgroundColour, borderColour }) =>
         backgroundColour
           ? `${backgroundColour}`
-          : `${COLOURS.gray_dark}`}${OPACITY_70};
+          : `${borderColour}`}${OPACITY_70};
   }
   :hover::-webkit-scrollbar-thumb {
-    background-color: ${({ backgroundColour }) =>
-      backgroundColour ? `${backgroundColour}` : `${COLOURS.gray_dark}`};
+    background-color: ${({ backgroundColour, borderColour }) =>
+      backgroundColour ? `${backgroundColour}` : borderColour};
   }
 `;
-const SError = styled.div`
+const SError = styled.div<ISError>`
   margin-top: -2px;
   font-size: 15px;
   text-align: right;
   padding-bottom: 4px;
-  color: ${COLOURS.error};
+  color: ${({ colour }) => colour};
 `;
 
 type TBorderStylePropery = 'solid' | 'dashed' | 'dotted' | 'none';
@@ -122,6 +128,8 @@ export const TextArea: FC<ITextAreaProps> = ({
   onChange,
   onBlur,
 }) => {
+  const theme = useTheme();
+
   const onBlurHandler = () => {
     onBlur?.();
   };
@@ -141,10 +149,13 @@ export const TextArea: FC<ITextAreaProps> = ({
         borderWidth={borderWidth}
         placeholder={placeholder}
         maxLength={TEXTAREA_MAX_LENGTH}
+        colour={theme.text}
+        borderColour={theme.quaternary}
+        errorColour={theme.error}
         onChange={onChange}
         onBlur={onBlurHandler}
       />
-      {!!isError && <SError>{isError}</SError>}
+      {!!isError && <SError colour={theme.error}>{isError}</SError>}
     </SContainer>
   );
 };

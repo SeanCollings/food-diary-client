@@ -163,7 +163,7 @@ export const BarGraphLegend: FC<IBarGraphLegendProps> = ({ show }) => {
 
   const BEVERAGE_COLOUR: { [key in EWellnessTypes]: string } = {
     [EWellnessTypes.WATER]: theme.primary,
-    [EWellnessTypes.TEA_COFFEE]: theme.snack,
+    [EWellnessTypes.TEA_COFFEE]: theme.quaternary,
     [EWellnessTypes.ALCOHOL]: theme.secondary,
   };
 
@@ -195,7 +195,7 @@ const BarGraph: React.FC<IBarGraphProps> = ({ height }) => {
 
   const BEVERAGE_COLOUR: { [key in EWellnessTypes]: string } = {
     [EWellnessTypes.WATER]: theme.primary,
-    [EWellnessTypes.TEA_COFFEE]: theme.snack,
+    [EWellnessTypes.TEA_COFFEE]: theme.quaternary,
     [EWellnessTypes.ALCOHOL]: theme.secondary,
   };
 

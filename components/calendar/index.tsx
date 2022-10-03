@@ -20,6 +20,8 @@ import styled from 'styled-components';
 import { MdArrowLeft, MdArrowRight } from 'react-icons/md';
 import { useAllEntriesPerMonthContext } from '@store/all-entries-per-month-context';
 import { generateMonthMatrix } from '@utils/calendar-utils';
+import { ThemeBackgroundSecondary } from '@components/ui/style-themed';
+import { useTheme } from '@hooks/use-theme';
 
 const CALENDAR_HEIGHT = 320;
 const MONTH_SELECTOR_HEIGHT = 30;
@@ -34,20 +36,25 @@ interface ISDayContainer {
   bottomRight: boolean;
   isSelectedDay: boolean;
   isPeripheralMonthDay?: boolean;
+  primaryColour: string;
 }
 interface ISDayHasEntry {
   isSelectedDay: boolean;
+}
+interface ISSelectTodayButton {
+  colour: string;
+  background: string;
 }
 
 const SContainer = styled.div`
   width: 100%;
   border-radius: 10px;
-  background: white;
   display: flex;
   flex-direction: column;
   padding: 4px;
   box-shadow: 0px 8px 20px -8px ${COLOURS.black};
   height: ${CALENDAR_HEIGHT + MONTH_SELECTOR_HEIGHT + 8}px;
+  ${ThemeBackgroundSecondary}
 `;
 const SDateSelectorContainer = styled.div`
   font-size: 20px;
@@ -60,6 +67,7 @@ const SDateSelectorContainer = styled.div`
 `;
 const SMonthNavigatorContainer = styled.div`
   display: flex;
+  align-items: center;
 `;
 const STodayButtonContainer = styled.div`
   display: flex;
@@ -67,18 +75,19 @@ const STodayButtonContainer = styled.div`
   align-items: center;
   flex: 1;
 `;
-const SSelectTodayButton = styled.button`
+const SSelectTodayButton = styled.button<ISSelectTodayButton>`
   outline: none;
   cursor: pointer;
-  border: 1px solid ${APP_THEME_DEFAULT.quaternary};
-  background-color: ${APP_THEME_DEFAULT.quaternary}${OPACITY_40};
-  border-radius: 8px;
+  color: ${({ colour }) => colour};
+  border: 1px solid ${({ background }) => background};
+  background-color: ${({ background }) => background}${OPACITY_40};
+  border-radius: 4px;
 
   padding: 2px 12px;
   font-size: 14px;
 
   :hover {
-    background-color: ${APP_THEME_DEFAULT.quaternary}${OPACITY_20};
+    background-color: ${({ background }) => background}${OPACITY_20};
   }
 
   :active {
@@ -94,10 +103,12 @@ const SButtonNext = styled.button`
   border: none;
   background: transparent;
   line-height: 0;
+  scale: 0.8;
+  padding: 0;
 
   :hover {
     opacity: 0.7;
-    scale: 1.2;
+    scale: 1;
   }
 `;
 const SButtonLeft = styled(SButtonNext)``;
@@ -130,22 +141,21 @@ const SDayContainer = styled.div<ISDayContainer>`
   cursor: ${({ isPeripheralMonthDay }) =>
     !isPeripheralMonthDay ? 'pointer' : 'inherit'};
 
-  box-shadow: 0 0 0 1px ${APP_THEME_DEFAULT.quaternary}${OPACITY_20} inset;
+  box-shadow: 0 0 0 1px ${({ primaryColour }) => primaryColour}${OPACITY_20} inset;
 
-  ${({ isCurrentDay }) =>
-    isCurrentDay && `box-shadow: 0 0 0 1px ${APP_THEME_DEFAULT.primary} inset;`}
+  ${({ isCurrentDay, primaryColour }) =>
+    isCurrentDay && `box-shadow: 0 0 0 1px ${primaryColour} inset;`}
   font-weight: ${({ isCurrentDay }) => (isCurrentDay ? 'bold' : '200')};
   height: ${({ rowHeight }) => rowHeight}px;
-  color: ${({ isCurrentDay }) =>
-    isCurrentDay ? APP_THEME_DEFAULT.primary : APP_THEME_DEFAULT.textDark};
+  color: ${({ isCurrentDay, primaryColour }) =>
+    isCurrentDay ? primaryColour : APP_THEME_DEFAULT.textDark};
   ${({ bottomRight }) => bottomRight && `border-radius: 0 0 5px 0`};
   ${({ bottomLeft }) => bottomLeft && `border-radius: 0 0 0 5px`};
   ${({ backgroundColour }) =>
     backgroundColour && `background-color: ${backgroundColour}`};
   ${({ isPeripheralMonthDay }) => isPeripheralMonthDay && `opacity: 0.4`};
-  ${({ isSelectedDay }) =>
-    isSelectedDay &&
-    `background-color: ${APP_THEME_DEFAULT.primary}${OPACITY_30};`};
+  ${({ isSelectedDay, primaryColour }) =>
+    isSelectedDay && `background-color: ${primaryColour}${OPACITY_30};`};
 `;
 const STitleRow = styled.div``;
 const SDayRow = styled.div`
@@ -185,18 +195,26 @@ const DateSelector: FC<IDateSelectorProps> = ({
   onSelectNextMonth,
   onSelectToday,
 }) => {
+  const theme = useTheme();
+
   return (
     <SDateSelectorContainer>
       <STodayButtonContainer>
-        <SSelectTodayButton onClick={onSelectToday}>Today</SSelectTodayButton>
+        <SSelectTodayButton
+          colour={theme.text}
+          background={theme.quaternary}
+          onClick={onSelectToday}
+        >
+          Today
+        </SSelectTodayButton>
       </STodayButtonContainer>
       <SMonthNavigatorContainer>
         <SButtonLeft onClick={onSelectPreviousMonth}>
-          <MdArrowLeft size={30} color={COLOURS.black} />
+          <MdArrowLeft size={44} color={theme.text} />
         </SButtonLeft>
         <SDateTitle>{formatMonthSmallYear(selectedMonthDate)}</SDateTitle>
         <SButtonRight onClick={onSelectNextMonth}>
-          <MdArrowRight size={30} color={COLOURS.black} />
+          <MdArrowRight size={44} color={theme.text} />
         </SButtonRight>
       </SMonthNavigatorContainer>
     </SDateSelectorContainer>
@@ -208,6 +226,7 @@ const CalendarContent: FC<ICalendarContentProps> = ({
   selectedMonthDate,
   onDayClicked,
 }) => {
+  const theme = useTheme();
   const { allEntriesPerMonth } = useAllEntriesPerMonthContext();
 
   const currentMonthYear = formatMonthSmallYear(selectedMonthDate);
@@ -274,6 +293,7 @@ const CalendarContent: FC<ICalendarContentProps> = ({
                 bottomRight={rowIndex === maxRows && colIndex === 6}
                 isPeripheralMonthDay={isPeripheralMonthDay}
                 isSelectedDay={isSelectedDay && !isPeripheralMonthDay}
+                primaryColour={theme.primary}
               >
                 <SDayRow>
                   {item.day}

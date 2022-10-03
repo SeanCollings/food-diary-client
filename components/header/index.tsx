@@ -1,23 +1,28 @@
 import FlatMenu from '@components/menu/flat-menu';
 import MenuIcon from '@components/menu/menu-icon';
 import { pathnameMapper } from '@components/menu/menu.constants';
+import { useTheme } from '@hooks/use-theme';
 import { useMenuContext } from '@store/menu-context';
 import {
-  APP_THEME_DEFAULT,
-  COLOURS,
   HEADER_PROPS,
   MAX_PAGE_WIDTH,
   MEDIA_DESKTOP,
   MEDIA_MAX_DESKTOP,
   MEDIA_MOBILE,
   MEDIA_TABLET,
-  OPACITY_50,
 } from '@utils/constants';
 import { useRouter } from 'next/router';
 import { FC } from 'react';
 import styled from 'styled-components';
 
-const SContainer = styled.header`
+interface ISContainer {
+  background: string;
+}
+interface ISHeaderBanner {
+  background: string;
+}
+
+const SContainer = styled.header<ISContainer>`
   position: relative;
   width: 100%;
   margin: 0 auto;
@@ -26,7 +31,7 @@ const SContainer = styled.header`
   ${MEDIA_MOBILE} {
     position: fixed;
     height: ${HEADER_PROPS.mobile.height}px;
-    background: ${APP_THEME_DEFAULT.backgroundPrimary};
+    background: ${({ background }) => background};
   }
   ${MEDIA_TABLET} {
     height: ${HEADER_PROPS.tablet.height}px;
@@ -38,10 +43,10 @@ const SContainer = styled.header`
     height: ${HEADER_PROPS.desktopLarge.height}px;
   }
 `;
-const SHeaderBanner = styled.div`
+const SHeaderBanner = styled.div<ISHeaderBanner>`
   position: absolute;
   width: 100%;
-  background: ${COLOURS.white}${OPACITY_50};
+  background: ${({ background }) => background};
 
   ${MEDIA_MOBILE} {
     top: ${HEADER_PROPS.tablet.padding}px;
@@ -112,6 +117,7 @@ const SHeaderSpan = styled.span`
 `;
 
 const Header: FC = () => {
+  const theme = useTheme();
   const { isOpen } = useMenuContext();
   const { pathname, push } = useRouter();
 
@@ -124,8 +130,8 @@ const Header: FC = () => {
 
   return (
     <>
-      <SContainer>
-        {showBanner && <SHeaderBanner />}
+      <SContainer background={theme.backgroundPrimary}>
+        {showBanner && <SHeaderBanner background={theme.backgroundSecondary} />}
         <SHeaderWrapper>
           <SHeader>
             <SHeaderSpan onClick={handleHeaderClick}>

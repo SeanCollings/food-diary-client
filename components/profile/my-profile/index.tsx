@@ -7,6 +7,7 @@ import { useTheme } from '@hooks/use-theme';
 
 interface ISContainer {
   background: string;
+  borderBottom: string;
 }
 
 const SContainer = styled.div<ISContainer>`
@@ -18,7 +19,7 @@ const SContainer = styled.div<ISContainer>`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  border-bottom: 1px solid gainsboro;
+  border-bottom: 1px solid ${({ borderBottom }) => borderBottom};
   min-height: 560px;
   min-width: 400px;
   background: ${({ background }) => background};
@@ -34,7 +35,10 @@ const MyProfile: FC = () => {
   const [settingsSelected, setSettingsSelected] = useState(false);
 
   return (
-    <SContainer background={theme.backgroundSecondary}>
+    <SContainer
+      background={theme.backgroundSecondary}
+      borderBottom={theme.quaternary}
+    >
       {!settingsSelected && (
         <UserProfile settingsClick={() => setSettingsSelected(true)} />
       )}

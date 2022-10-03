@@ -15,10 +15,11 @@ export enum EThemeDark {
 
 interface IThemeDefault {
   text: string;
-  snack: string;
+  quaternary: string;
   error: string;
   backgroundPrimary: string;
   backgroundSecondary: string;
+  backgroundTertiary: string;
 }
 
 type TThemeTypes = 'light' | 'dark';
@@ -43,18 +44,20 @@ export type TThemeProperties = IThemeDefault & ITheme;
 
 export const STATIC_THEME: TStaticTheme = {
   light: {
-    text: '#232323',
-    snack: '#BDB9B9',
+    text: '#232323ff',
+    quaternary: '#BDB9B9',
     error: '#ff1507',
     backgroundPrimary: '#f4f4f4',
     backgroundSecondary: '#FFFFFF',
+    backgroundTertiary: '#FFFFFF',
   },
   dark: {
-    text: '#ffffff',
-    snack: '#959595',
+    text: '#ffffffe6',
+    quaternary: '#959595',
     error: '#fb3c36',
-    backgroundPrimary: '#232323',
-    backgroundSecondary: '#424242',
+    backgroundPrimary: '#121212',
+    backgroundSecondary: '#222222',
+    backgroundTertiary: '#424242',
   },
 };
 

@@ -262,9 +262,9 @@ const BinaryHeatMap: React.FC<IBinaryHeatMapProps> = ({
 
   const MEAL_TYPE_COLOUR = {
     [EMealType.BREAKFAST]: theme.secondary,
-    [EMealType.SNACK_1]: theme.snack,
+    [EMealType.SNACK_1]: theme.quaternary,
     [EMealType.LUNCH]: theme.primary,
-    [EMealType.SNACK_2]: theme.snack,
+    [EMealType.SNACK_2]: theme.quaternary,
     [EMealType.DINNER]: theme.tertiary,
   };
 

@@ -1,4 +1,6 @@
-import { COLOURS, OPACITY_40 } from '@utils/constants';
+import { useTheme } from '@hooks/use-theme';
+import { COLOURS, OPACITY_30, OPACITY_40 } from '@utils/constants';
+import { replaceTextAtEnd } from '@utils/string-utils';
 import {
   formatFinalTime,
   getFormatMinutesWithHours,
@@ -13,6 +15,9 @@ import styled from 'styled-components';
 interface ISInput {
   isEmpty: boolean;
   isError: boolean;
+  colour: string;
+  errorColour: string;
+  borderColour: string;
 }
 
 const SContainer = styled.div`
@@ -39,18 +44,17 @@ const SInput = styled.input<ISInput>`
   padding: 1px 4px;
   width: 40px;
   font-size: 18px;
-  box-shadow: inset 0 3px ${COLOURS.gray_light};
-  border: ${({ isError }) =>
-    `1px dashed ${
-      isError ? COLOURS.error : `${COLOURS.gray_dark}${OPACITY_40}`
-    }`};
+  background-color: transparent;
+  box-shadow: inset 0 3px
+    ${({ borderColour }) => `${borderColour}${OPACITY_30}`};
+  border: ${({ isError, errorColour, borderColour }) =>
+    `1px dashed ${isError ? errorColour : `${borderColour}${OPACITY_40}`}`};
 
-  color: ${({ isEmpty }) =>
-    isEmpty ? `${COLOURS.black}${OPACITY_40}` : `${COLOURS.black}`};
+  color: ${({ colour }) => colour};
 
   :focus {
-    box-shadow: inset 0 0 ${COLOURS.gray_light};
-    border: 1px solid ${COLOURS.gray_dark};
+    box-shadow: inset 0 0 transparent;
+    border: 1px solid ${({ borderColour }) => borderColour};
   }
 `;
 const SLabel = styled.label`
@@ -81,6 +85,7 @@ const TimeInputCustom: FC<IComponentProps> = ({
   onChange,
   onBlur,
 }) => {
+  const theme = useTheme();
   const [hours, setHours] = useState('00');
   const [minutes, setMinutes] = useState('00');
 
@@ -122,6 +127,7 @@ const TimeInputCustom: FC<IComponentProps> = ({
   };
 
   const isEmpty = hours === '00' && minutes === '00';
+  const opaqueColour = replaceTextAtEnd(theme.text, OPACITY_40, 2);
 
   return (
     <SContainer title="hh:mm">
@@ -132,6 +138,9 @@ const TimeInputCustom: FC<IComponentProps> = ({
         maxLength={2}
         isEmpty={isEmpty}
         isError={!!isError}
+        colour={isEmpty ? opaqueColour : theme.text}
+        borderColour={theme.quaternary}
+        errorColour={theme.error}
         onChange={handleOnChange('hours')}
         onFocus={handleOnFocus(getHoursId(id))}
         onBlur={handleOnBlur}
@@ -144,6 +153,9 @@ const TimeInputCustom: FC<IComponentProps> = ({
         maxLength={2}
         isEmpty={isEmpty}
         isError={!!isError}
+        colour={isEmpty ? opaqueColour : theme.text}
+        borderColour={theme.quaternary}
+        errorColour={theme.error}
         onChange={handleOnChange('minutes')}
         onFocus={handleOnFocus(getMinutesId(id))}
         onBlur={handleOnBlur}

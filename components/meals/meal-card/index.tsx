@@ -3,14 +3,12 @@ import {
   COLOURS,
   MEDIA_MOBILE,
   MEDIA_TABLET,
-  OPACITY_10,
-  OPACITY_40,
   OPACITY_70,
   OPACITY_80,
 } from '@utils/constants';
 import { FC, MouseEvent, useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { MdEdit, MdEditNote, MdOutlineEdit } from 'react-icons/md';
+import { MdEditNote } from 'react-icons/md';
 import { getUniqueId } from '@utils/unique-id';
 import ModalAddToMealCard from '@components/modals/add-to-meal-card';
 import Modal from '@components/modals';
@@ -19,6 +17,7 @@ import { getMealThemeColour } from '@utils/theme-utils';
 import { useDateSelectedContext } from '@store/date-selected-context';
 import ModalEditMealCard from '@components/modals/edit-meal-card';
 import { useMealEntriesContext } from '@store/meal-entries-context';
+import { useTheme } from '@hooks/use-theme';
 
 interface IScontainer {
   background: string;
@@ -160,6 +159,7 @@ const buildContent = (content: IMealContent, index: number) => {
 };
 
 const Card: FC<IProps> = ({ id, title }) => {
+  const theme = useTheme();
   const { dateSelectedISO } = useDateSelectedContext();
   const { mealEntries, addMealEntry, updateMealEntry, removeMealEntryById } =
     useMealEntriesContext();
@@ -231,7 +231,7 @@ const Card: FC<IProps> = ({ id, title }) => {
     setEditMealContent(null);
   };
 
-  const background = getMealThemeColour(APP_THEME_DEFAULT, id);
+  const background = getMealThemeColour(theme, id);
 
   return (
     <>
@@ -248,7 +248,6 @@ const Card: FC<IProps> = ({ id, title }) => {
           {!!contents.length && (
             <SIcon
               size={34}
-              // color={APP_THEME_DEFAULT.backgroundSecondary}
               background={background}
               title="Click to edit"
               onClick={handleCardEdit}

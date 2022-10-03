@@ -1,4 +1,4 @@
-import { COLOURS, MEDIA_MOBILE } from '@utils/constants';
+import { MEDIA_MOBILE } from '@utils/constants';
 import { FC, useState } from 'react';
 import styled from 'styled-components';
 import { MdArrowRight, MdArrowLeft } from 'react-icons/md';
@@ -9,7 +9,11 @@ import {
   getNewDay,
 } from '@utils/date-utils';
 import { useDateSelectedContext } from '@store/date-selected-context';
+import { useTheme } from '@hooks/use-theme';
 
+interface ISFullDateContainer {
+  colour: string;
+}
 interface ISButtonCommon {
   calendarVisible: boolean;
 }
@@ -47,28 +51,26 @@ const SButtonCommon = styled.button<ISButtonCommon>`
   line-height: 0;
   transform: rotateX(0);
   cursor: pointer;
+  scale: 0.8;
+  will-change: auto;
 
   ${({ calendarVisible }) =>
     calendarVisible && `transform: rotateX(90deg); cursor: initial;`}
 `;
 const SButtonLeft = styled(SButtonCommon)`
-  margin-right: 10px;
-
   :hover {
     opacity: 0.7;
-    scale: 1.1;
+    scale: 1;
   }
 `;
 const SButtonRight = styled(SButtonCommon)<ISButton>`
-  margin-left: 10px;
-
   ${({ isDisabled }) =>
     isDisabled
       ? `opacity: 0.2; cursor: initial;`
       : `
   :hover {
 opacity: 0.7;
-scale: 1.1;
+scale: 1;
 }`}
 `;
 const SDate = styled.button<ISDate>`
@@ -79,7 +81,7 @@ const SDate = styled.button<ISDate>`
   padding: 0;
   border: none;
   background: transparent;
-  overflow: hidden:
+  overflow: hidden;
 
   ${({ isCalendarShown }) => isCalendarShown && `opacity: 0.4`};
 
@@ -87,10 +89,11 @@ const SDate = styled.button<ISDate>`
     ${({ isCalendarShown }) => !isCalendarShown && `opacity: 0.7`};
   }
 `;
-const SFullDateContainer = styled.div`
+const SFullDateContainer = styled.div<ISFullDateContainer>`
   min-width: 250px;
   text-align: center;
   position: relative;
+  color: ${({ colour }) => colour};
 
   ${MEDIA_MOBILE} {
     width: 100%;
@@ -113,6 +116,7 @@ const SCalendarContainer = styled.div`
 `;
 
 const DateDisplay: FC = () => {
+  const theme = useTheme();
   const { dateSelectedISO, updateSelectedDateISO } = useDateSelectedContext();
   const [showCalendar, setShowCalendar] = useState(false);
 
@@ -143,10 +147,10 @@ const DateDisplay: FC = () => {
     <SContainer>
       <SContentWrapper>
         <SButtonLeft onClick={onClickLeft} calendarVisible={showCalendar}>
-          <MdArrowLeft size={32} color={COLOURS.gray} />
+          <MdArrowLeft size={46} color={theme.quaternary} />
         </SButtonLeft>
         <SDate onClick={onDateClick} isCalendarShown={showCalendar}>
-          <SFullDateContainer>
+          <SFullDateContainer colour={theme.text}>
             {formatFullDate(dateSelectedISO)}
           </SFullDateContainer>
         </SDate>
@@ -165,7 +169,7 @@ const DateDisplay: FC = () => {
           disabled={isDateSelectedToday}
           calendarVisible={showCalendar}
         >
-          <MdArrowRight size={32} color={COLOURS.gray} />
+          <MdArrowRight size={46} color={theme.quaternary} />
         </SButtonRight>
       </SContentWrapper>
     </SContainer>

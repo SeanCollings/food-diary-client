@@ -1,9 +1,7 @@
+import { useTheme } from '@hooks/use-theme';
 import { useMenuContext } from '@store/menu-context';
-import {
-  APP_THEME_DEFAULT,
-  MEDIA_MAX_DESKTOP,
-  MEDIA_MOBILE,
-} from '@utils/constants';
+import { useUserContext } from '@store/user-context';
+import { COLOURS, MEDIA_MAX_DESKTOP, MEDIA_MOBILE } from '@utils/constants';
 import { FC } from 'react';
 import styled from 'styled-components';
 
@@ -12,19 +10,21 @@ import styled from 'styled-components';
 interface ISContainer {
   isOpen: boolean;
   transparentBG: boolean;
+  primary: string;
+  backgroundPrimary: string;
 }
 
 interface ISLine {
   isOpen: boolean;
+  background: string;
 }
 
 const SContainer = styled.div<ISContainer>`
   position: relative;
   transition: 0.2s;
   cursor: pointer;
-  background: ${({ isOpen, transparentBG }) =>
-    !transparentBG &&
-    (isOpen ? APP_THEME_DEFAULT.backgroundPrimary : APP_THEME_DEFAULT.primary)};
+  background: ${({ isOpen, transparentBG, backgroundPrimary, primary }) =>
+    !transparentBG && (isOpen ? backgroundPrimary : primary)};
   border-radius: 50%;
   width: 55px;
   height: 55px;
@@ -39,7 +39,6 @@ const SContainer = styled.div<ISContainer>`
       isOpen &&
       'transform: rotate(44deg); transform-origin: 7% 0%; width: 33px; border-radius: 2px;'};
   }
-
   .line2 {
     ${({ isOpen }) => isOpen && 'transform: scaleY(0);'};
   }
@@ -73,8 +72,7 @@ const SLine = styled.span<ISLine>`
   display: block;
   height: 4px;
   width: ${({ isOpen }) => (isOpen ? '110%' : '100%')};
-  background: ${({ isOpen }) =>
-    isOpen ? APP_THEME_DEFAULT.textDark : APP_THEME_DEFAULT.textLight};
+  background: ${({ background }) => background};
 `;
 
 interface IMenuIconProps {
@@ -82,22 +80,44 @@ interface IMenuIconProps {
 }
 
 const MenuIcon: FC<IMenuIconProps> = ({ transparentBG = false }) => {
+  const theme = useTheme();
+  const {
+    user: { darkMode },
+  } = useUserContext();
   const { isOpen, toggleMenu } = useMenuContext();
 
   const onClickHandler = () => {
     toggleMenu();
   };
 
+  const darkModeColour = { open: COLOURS.white, closed: COLOURS.white };
+  const lightModeColour = { open: COLOURS.black, closed: COLOURS.white };
+  const lineColour = darkMode ? darkModeColour : lightModeColour;
+
   return (
     <SContainer
       onClick={onClickHandler}
       isOpen={isOpen}
       transparentBG={transparentBG}
+      primary={theme.primary}
+      backgroundPrimary={theme.backgroundPrimary}
     >
       <SHamburgerLines>
-        <SLine isOpen={isOpen} className="line1" />
-        <SLine isOpen={isOpen} className="line2" />
-        <SLine isOpen={isOpen} className="line3" />
+        <SLine
+          isOpen={isOpen}
+          background={isOpen ? lineColour.open : lineColour.closed}
+          className="line1"
+        />
+        <SLine
+          isOpen={isOpen}
+          background={isOpen ? lineColour.open : lineColour.closed}
+          className="line2"
+        />
+        <SLine
+          isOpen={isOpen}
+          background={isOpen ? lineColour.open : lineColour.closed}
+          className="line3"
+        />
       </SHamburgerLines>
     </SContainer>
   );

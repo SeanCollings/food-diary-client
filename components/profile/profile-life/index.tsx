@@ -25,6 +25,7 @@ const CHART_HEIGHT = 320;
 
 interface ISContainer {
   background: string;
+  borderBottom: string;
 }
 interface ISDataDisplayContainer {
   scrollVisible: boolean;
@@ -40,7 +41,7 @@ const SContainer = styled.div<ISContainer>`
   display: flex;
   flex-direction: column;
   gap: 24px;
-  border-bottom: 1px solid gainsboro;
+  border-bottom: 1px solid ${({ borderBottom }) => borderBottom};
   padding: ${PADDING}px;
   min-height: 560px;
 
@@ -387,7 +388,11 @@ const ProfileLife: FC = () => {
     selectedMenu === 'wellness_trends' && wellnessOption.id === 'excercise';
 
   return (
-    <SContainer ref={containerRef} background={theme.backgroundSecondary}>
+    <SContainer
+      ref={containerRef}
+      background={theme.backgroundSecondary}
+      borderBottom={theme.quaternary}
+    >
       <STopMenuContainer>
         <TrendMenu
           selectedMenu={selectedMenu}
