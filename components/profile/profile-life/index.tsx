@@ -1,7 +1,8 @@
-import BarGraph from '@components/charts/bar-graph';
+import BarGraph, { BarGraphLegend } from '@components/charts/bar-graph';
 import BinaryHeatMap from '@components/charts/binary-heat-map';
 import LineGraph from '@components/charts/line-graph';
 import DropdownProfile from '@components/ui/dropdown-profile';
+import { useTheme } from '@hooks/use-theme';
 import {
   APP_THEME_DEFAULT,
   COLOURS,
@@ -9,15 +10,22 @@ import {
   OPACITY_30,
   OPACITY_50,
 } from '@utils/constants';
+import {
+  INFO_BEVERAGE_TREND,
+  INFO_EXCERCISE_TREND,
+  INFO_FOOD_TREND,
+} from '@utils/constants/profile.contants';
 import { FC, useEffect, useRef, useState, ChangeEvent } from 'react';
 import styled from 'styled-components';
 
 const PADDING = 40;
 const TITLE_WIDTH = 80;
 const DATA_WIDTH = 60;
-const BINARY_HEAT_MAP_HEIGHT = 280;
-const BAR_GRAPH_HEIGHT = 320;
+const CHART_HEIGHT = 320;
 
+interface ISContainer {
+  background: string;
+}
 interface ISDataDisplayContainer {
   scrollVisible: boolean;
   scrollStart: boolean;
@@ -25,16 +33,16 @@ interface ISDataDisplayContainer {
   shadowHeight: number;
 }
 
-const SContainer = styled.div`
-  background: ${COLOURS.white};
+const SContainer = styled.div<ISContainer>`
+  background: ${({ background }) => background};
   flex: 2;
   border-radius: 12px;
   display: flex;
   flex-direction: column;
-  gap: 40px;
+  gap: 24px;
   border-bottom: 1px solid gainsboro;
   padding: ${PADDING}px;
-  min-height: 540px;
+  min-height: 560px;
 
   ${MEDIA_MOBILE} {
     padding: 20px;
@@ -160,6 +168,15 @@ const SDescriptorContainer = styled.div``;
 const SDescriptor = styled.div`
   font-size: 12px;
 `;
+const SLegendContainer = styled.div`
+  margin-top: -24px;
+  justify-content: center;
+  display: flex;
+
+  ${MEDIA_MOBILE} {
+    margin-top: 0;
+  }
+`;
 
 enum EProfileLifeTrends {
   FOOD_TRENDS = 'food_trends',
@@ -204,8 +221,8 @@ const getChartWidth = (dataPoints: number) => {
 };
 
 const shadowHeightLookup: { [key in TProfileLifeTrends]: number } = {
-  food_trends: BINARY_HEAT_MAP_HEIGHT,
-  wellness_trends: BAR_GRAPH_HEIGHT,
+  food_trends: CHART_HEIGHT,
+  wellness_trends: CHART_HEIGHT,
 };
 
 type TWellnessOptions = 'beverages' | 'excercise';
@@ -229,6 +246,7 @@ const TIME_PERIOD_OPTIONS: ITimePeriodOptions[] = [
 ];
 
 const ProfileLife: FC = () => {
+  const theme = useTheme();
   const containerRef = useRef<HTMLDivElement>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
   const [timePeriod, setTimePeriod] = useState<ITimePeriodOptions>(
@@ -362,8 +380,14 @@ const ProfileLife: FC = () => {
     }
   };
 
+  const showFoodTrend = selectedMenu === 'food_trends';
+  const showBeverageTrend =
+    selectedMenu === 'wellness_trends' && wellnessOption.id === 'beverages';
+  const showExcerciseTrend =
+    selectedMenu === 'wellness_trends' && wellnessOption.id === 'excercise';
+
   return (
-    <SContainer ref={containerRef}>
+    <SContainer ref={containerRef} background={theme.backgroundSecondary}>
       <STopMenuContainer>
         <TrendMenu
           selectedMenu={selectedMenu}
@@ -394,25 +418,25 @@ const ProfileLife: FC = () => {
         scrollEnd={scrollEnd}
       >
         <SChartScroll ref={scrollRef}>
-          {selectedMenu === 'food_trends' && (
-            <BinaryHeatMap
-              height={BAR_GRAPH_HEIGHT}
-              timePeriod={timePeriod.id}
-            />
+          {showFoodTrend && (
+            <BinaryHeatMap height={CHART_HEIGHT} timePeriod={timePeriod.id} />
           )}
-          {selectedMenu === 'wellness_trends' &&
-            wellnessOption.id === 'beverages' && (
-              <BarGraph height={BAR_GRAPH_HEIGHT} />
-            )}
-          {selectedMenu === 'wellness_trends' &&
-            wellnessOption.id === 'excercise' && (
-              <LineGraph height={BAR_GRAPH_HEIGHT} />
-            )}
+          {showBeverageTrend && <BarGraph height={CHART_HEIGHT} />}
+          {showExcerciseTrend && <LineGraph height={CHART_HEIGHT} />}
         </SChartScroll>
         <SDescriptorContainer>
-          <SDescriptor>{`CAMOUFLAGE PAINT DOESN'T LIKE PAYING TAXES. A KICKINGLY PRODIGIOUS PROFILE COULD PLEASE EVEN THE MOST DEMANDING FOLLOWER OF FREUD.`}</SDescriptor>
+          {showFoodTrend && <SDescriptor>{INFO_FOOD_TREND}</SDescriptor>}
+          {showBeverageTrend && (
+            <SDescriptor>{INFO_BEVERAGE_TREND}</SDescriptor>
+          )}
+          {showExcerciseTrend && (
+            <SDescriptor>{INFO_EXCERCISE_TREND}</SDescriptor>
+          )}
         </SDescriptorContainer>
       </SDataDisplayContainer>
+      <SLegendContainer>
+        <BarGraphLegend show={showBeverageTrend} />
+      </SLegendContainer>
     </SContainer>
   );
 };
