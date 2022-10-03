@@ -1,5 +1,4 @@
 import {
-  APP_THEME_DEFAULT,
   COLOURS,
   MEDIA_MOBILE,
   MEDIA_TABLET,
@@ -22,6 +21,7 @@ import { useTheme } from '@hooks/use-theme';
 interface IScontainer {
   background: string;
   hasContent: boolean;
+  boxShadow: boolean;
 }
 interface ISIcon {
   background: string;
@@ -30,6 +30,7 @@ interface IScroll {
   background: string;
   fontColor: string;
 }
+
 // background-image: ${({ background }) => `linear-gradient(to right,${background} 50%, ${background}${OPACITY_80})`};
 
 // background-image: ${({ background }) => `linear-gradient(to right,${background}${OPACITY_80} 100%, ${background}${OPACITY_80})`};
@@ -56,8 +57,8 @@ const SContainer = styled.div<IScontainer>`
       hasContent
         ? `background-image: linear-gradient(225deg,${background}${OPACITY_80} 100%, ${background}${OPACITY_80})`
         : `background: ${background}${OPACITY_80}`};
-    // background: ${({ background }) => `${background}${OPACITY_80}`};
-    box-shadow: 1px 1px 10px #6c6a6a;
+    ${({ boxShadow }) =>
+      boxShadow && `box-shadow: 1px 1px 10px ${COLOURS.black}${OPACITY_70}`};
     scale: 1.01;
   }
 
@@ -87,11 +88,11 @@ const SIcon = styled(MdEditNote)<ISIcon>`
   transition: 0.4s;
   background: ${({ background }) => `${background}`};
   border-radius: 10px;
-  color: ${APP_THEME_DEFAULT.backgroundSecondary};
+  color: ${COLOURS.white};
 
   :hover {
     color: ${({ background }) => `${background}`};
-    background: ${APP_THEME_DEFAULT.backgroundSecondary};
+    background: ${COLOURS.white};
   }
 `;
 const SContentContainer = styled.div<IScroll>`
@@ -131,7 +132,7 @@ const SContent = styled.span`
 const SContentDescription = styled.span`
   font-size: 16px;
   padding-left: 6px;
-  color: ${COLOURS.black}${OPACITY_80};
+  opacity: 0.8;
 `;
 
 interface IProps {
@@ -238,6 +239,7 @@ const Card: FC<IProps> = ({ id, title }) => {
       <SContainer
         hasContent={!!contents.length}
         background={background}
+        boxShadow={!theme.darkMode}
         onClick={onClickHandler}
         onDoubleClick={() => console.log('DOUBLE CLICKED')}
         id="meal-card"
@@ -256,7 +258,7 @@ const Card: FC<IProps> = ({ id, title }) => {
         </SHeaderContainer>
         <SContentContainer
           background={background}
-          fontColor={APP_THEME_DEFAULT.backgroundSecondary}
+          fontColor={theme.backgroundSecondary}
         >
           {contents?.map((content, index) => (
             <SContentWrapper key={getUniqueId()}>

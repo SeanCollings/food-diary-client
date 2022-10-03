@@ -72,7 +72,7 @@ const initialState: IUserContext = {
     name: 'Test Username',
     email: 'test@address.com',
     avatar: '',
-    darkMode: false,
+    darkMode: true,
     theme: { light: EThemeLight.DEFAULT_LIGHT, dark: EThemeDark.PASSION_FRUIT },
     preferences: {
       showDayStreak: true,

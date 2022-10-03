@@ -2,9 +2,9 @@ import BarGraph, { BarGraphLegend } from '@components/charts/bar-graph';
 import BinaryHeatMap from '@components/charts/binary-heat-map';
 import LineGraph from '@components/charts/line-graph';
 import DropdownProfile from '@components/ui/dropdown-profile';
+import { ThemeBorderBottom } from '@components/ui/style-themed';
 import { useTheme } from '@hooks/use-theme';
 import {
-  APP_THEME_DEFAULT,
   COLOURS,
   MEDIA_MOBILE,
   OPACITY_30,
@@ -14,7 +14,7 @@ import {
   INFO_BEVERAGE_TREND,
   INFO_EXCERCISE_TREND,
   INFO_FOOD_TREND,
-} from '@utils/constants/profile.contants';
+} from '@utils/constants/profile.constants';
 import { FC, useEffect, useRef, useState, ChangeEvent } from 'react';
 import styled from 'styled-components';
 
@@ -25,13 +25,16 @@ const CHART_HEIGHT = 320;
 
 interface ISContainer {
   background: string;
-  borderBottom: string;
 }
 interface ISDataDisplayContainer {
   scrollVisible: boolean;
   scrollStart: boolean;
   scrollEnd: boolean;
   shadowHeight: number;
+}
+interface ISMenuUnderline {
+  setLeft: number;
+  primary: string;
 }
 
 const SContainer = styled.div<ISContainer>`
@@ -41,9 +44,9 @@ const SContainer = styled.div<ISContainer>`
   display: flex;
   flex-direction: column;
   gap: 24px;
-  border-bottom: 1px solid ${({ borderBottom }) => borderBottom};
   padding: ${PADDING}px;
   min-height: 560px;
+  ${ThemeBorderBottom}
 
   ${MEDIA_MOBILE} {
     padding: 20px;
@@ -76,7 +79,7 @@ const STrendMenuContainer = styled.div`
 const SMenuItem = styled.span<any>`
   cursor: pointer;
   padding-bottom: 4px;
-  width: 140px;
+  width: 142px;
   justify-content: center;
   display: flex;
   border-bottom: 2px solid transparent;
@@ -91,10 +94,10 @@ const SMenuItem = styled.span<any>`
     opacity: 0.6;
   }
 `;
-const SMenuUnderline = styled.div<any>`
+const SMenuUnderline = styled.div<ISMenuUnderline>`
   width: 140px;
   height: 2px;
-  background: ${APP_THEME_DEFAULT.primary};
+  background: ${({ primary }) => primary};
   position: absolute;
   bottom: 0;
   transition: 0.1s;
@@ -201,6 +204,8 @@ interface ITrendMenuProps {
 }
 
 const TrendMenu: FC<ITrendMenuProps> = ({ selectedMenu, onClick }) => {
+  const theme = useTheme();
+
   return (
     <STrendMenuContainer>
       {TREND_MENU.map(({ id, title }) => (
@@ -212,7 +217,10 @@ const TrendMenu: FC<ITrendMenuProps> = ({ selectedMenu, onClick }) => {
           {title}
         </SMenuItem>
       ))}
-      <SMenuUnderline setLeft={selectedMenu === 'food_trends' ? 0 : 50} />
+      <SMenuUnderline
+        primary={theme.primary}
+        setLeft={selectedMenu === 'food_trends' ? 0 : 50}
+      />
     </STrendMenuContainer>
   );
 };
@@ -388,11 +396,7 @@ const ProfileLife: FC = () => {
     selectedMenu === 'wellness_trends' && wellnessOption.id === 'excercise';
 
   return (
-    <SContainer
-      ref={containerRef}
-      background={theme.backgroundSecondary}
-      borderBottom={theme.quaternary}
-    >
+    <SContainer ref={containerRef} background={theme.backgroundSecondary}>
       <STopMenuContainer>
         <TrendMenu
           selectedMenu={selectedMenu}

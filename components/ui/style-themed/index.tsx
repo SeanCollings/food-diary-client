@@ -10,6 +10,12 @@ export const ThemeBackgroundPrimary = () =>
 export const ThemeBackgroundSecondary = () =>
   `background-color: ${useTheme().backgroundSecondary};`;
 export const ThemeTextColor = () => `color: ${useTheme().text};`;
+export const ThemeBorderBottom = () => {
+  const theme = useTheme();
+  return `border-bottom: 1px solid ${
+    theme.darkMode ? theme.backgroundTertiary : theme.quaternary
+  };`;
+};
 
 export const ThemePrimary = ({
   background = true,

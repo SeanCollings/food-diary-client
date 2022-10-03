@@ -1,7 +1,9 @@
-import { ThemeBackgroundSecondary } from '@components/ui/style-themed';
+import {
+  ThemeBackgroundSecondary,
+  ThemeBorderBottom,
+} from '@components/ui/style-themed';
 import ExcerciseCard from '@components/wellness/exercise-card';
 import WellnessCard from '@components/wellness/wellness-card';
-import { useTheme } from '@hooks/use-theme';
 import {
   APP_THEME_DEFAULT,
   MEDIA_DESKTOP,
@@ -9,10 +11,6 @@ import {
 } from '@utils/constants';
 import { FC } from 'react';
 import styled from 'styled-components';
-
-interface ITheme {
-  borderBottom: string;
-}
 
 const SContainer = styled.section`
   margin-top: 20px;
@@ -27,30 +25,28 @@ const SContainer = styled.section`
     margin-top: 0px;
   }
 `;
-const SDrinkContainer = styled.div<ITheme>`
+const SDrinkContainer = styled.div`
   border-radius: 6px;
   background: white;
   display: flex;
   flex-basis: 60%;
   justify-content: space-evenly;
   flex-wrap: wrap;
-  border-bottom: 1px solid ${({ borderBottom }) => borderBottom};
+  ${ThemeBorderBottom}
   ${ThemeBackgroundSecondary}
 `;
-const SExcerciseContainer = styled.div<ITheme>`
+const SExcerciseContainer = styled.div`
   border-radius: 6px;
   background: white;
   flex-basis: 40%;
-  border-bottom: 1px solid ${({ borderBottom }) => borderBottom};
+  ${ThemeBorderBottom}
   ${ThemeBackgroundSecondary}
 `;
 
 const WellnessContainer: FC = () => {
-  const theme = useTheme();
-
   return (
     <SContainer>
-      <SDrinkContainer borderBottom={theme.quaternary}>
+      <SDrinkContainer>
         <WellnessCard
           id="water"
           title="water"
@@ -70,7 +66,7 @@ const WellnessContainer: FC = () => {
           color={APP_THEME_DEFAULT.quaternary}
         />
       </SDrinkContainer>
-      <SExcerciseContainer borderBottom={theme.quaternary}>
+      <SExcerciseContainer>
         <ExcerciseCard
           id="alcohol_counter"
           title="excercise"

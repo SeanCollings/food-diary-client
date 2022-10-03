@@ -6,6 +6,7 @@ import styled from 'styled-components';
 interface ITheme {
   colourOff: string;
   colourOn: string;
+  boxShadow: string;
 }
 
 const SInput = styled.input<ITheme>`
@@ -31,7 +32,7 @@ const SInput = styled.input<ITheme>`
     background-color: ${COLOURS.white};
     border-radius: 50%;
     border: 1px solid ${COLOURS.white};
-    box-shadow: 0px 1px 6px 1px ${COLOURS.gray}${OPACITY_70};
+    box-shadow: 0px 1px 6px 1px ${({ boxShadow }) => boxShadow}${OPACITY_70};
     transition: 0.2s;
   }
 
@@ -65,6 +66,7 @@ const Toggle: FC<IToggleProps> = ({ checked = false, onChange }) => {
       checked={checked}
       colourOff={theme.backgroundPrimary}
       colourOn={theme.primary}
+      boxShadow={theme.darkMode ? COLOURS.black : COLOURS.gray}
     />
   );
 };

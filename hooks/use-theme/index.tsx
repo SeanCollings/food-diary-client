@@ -11,18 +11,20 @@ import {
   TThemeProperties,
 } from '@utils/constants/theme.constants';
 
-export const useTheme = (): TThemeProperties => {
+type TUseTheme = TThemeProperties & { darkMode: boolean };
+
+export const useTheme = (): TUseTheme => {
   const {
     user: { darkMode, theme },
   } = useUserContext();
 
-  const userTheme = useMemo(() => {
+  const userTheme: TUseTheme = useMemo(() => {
     const themeDefaults = darkMode ? STATIC_THEME.dark : STATIC_THEME.light;
     const currentTheme: ITheme = darkMode
       ? THEME_DARK[theme.dark || (THEME_DARK_DEFAULT.name as EThemeDark)]
       : THEME_LIGHT[theme.light || (THEME_DARK_DEFAULT.name as EThemeLight)];
 
-    return { ...themeDefaults, ...currentTheme };
+    return { ...themeDefaults, ...currentTheme, darkMode };
   }, [darkMode, theme.dark, theme.light]);
 
   return userTheme;

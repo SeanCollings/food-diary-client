@@ -1,16 +1,14 @@
-import { COLOURS, MEDIA_MOBILE } from '@utils/constants';
+import { MEDIA_MOBILE } from '@utils/constants';
 import { FC, useState } from 'react';
 import styled from 'styled-components';
 import SettingsProfile from '@components/profile/my-profile/settings-profile';
 import UserProfile from '@components/profile/my-profile/user-profile';
-import { useTheme } from '@hooks/use-theme';
+import {
+  ThemeBackgroundSecondary,
+  ThemeBorderBottom,
+} from '@components/ui/style-themed';
 
-interface ISContainer {
-  background: string;
-  borderBottom: string;
-}
-
-const SContainer = styled.div<ISContainer>`
+const SContainer = styled.div`
   position: relative;
   flex: 1;
   border-radius: 12px;
@@ -19,10 +17,10 @@ const SContainer = styled.div<ISContainer>`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  border-bottom: 1px solid ${({ borderBottom }) => borderBottom};
   min-height: 560px;
   min-width: 400px;
-  background: ${({ background }) => background};
+  ${ThemeBackgroundSecondary}
+  ${ThemeBorderBottom}
 
   ${MEDIA_MOBILE} {
     padding: 20px;
@@ -31,14 +29,10 @@ const SContainer = styled.div<ISContainer>`
 `;
 
 const MyProfile: FC = () => {
-  const theme = useTheme();
   const [settingsSelected, setSettingsSelected] = useState(false);
 
   return (
-    <SContainer
-      background={theme.backgroundSecondary}
-      borderBottom={theme.quaternary}
-    >
+    <SContainer>
       {!settingsSelected && (
         <UserProfile settingsClick={() => setSettingsSelected(true)} />
       )}

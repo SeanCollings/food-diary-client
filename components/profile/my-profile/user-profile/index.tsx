@@ -1,8 +1,17 @@
+import { useTheme } from '@hooks/use-theme';
 import { useUserContext } from '@store/user-context';
-import { APP_THEME_DEFAULT, COLOURS, OPACITY_40 } from '@utils/constants';
+import { COLOURS, OPACITY_40 } from '@utils/constants';
 import { FC } from 'react';
 import { MdAccountCircle, MdPhotoCamera, MdSettings } from 'react-icons/md';
 import styled from 'styled-components';
+
+interface ISStatValue {
+  primary: string;
+}
+interface ISShareButton {
+  colour: string;
+  background: String;
+}
 
 const SLine = styled.div`
   border-bottom: 1px solid ${COLOURS.gray}${OPACITY_40};
@@ -80,10 +89,10 @@ const SStatWrapper = styled.div`
   flex-direction: column;
   align-items: center;
 `;
-const SStatValue = styled.div`
-  color: ${APP_THEME_DEFAULT.primary};
+const SStatValue = styled.div<ISStatValue>`
   font-size: 28px;
   line-height: 1.1;
+  color: ${({ primary }) => primary};
 `;
 const SStatLabel = styled.label`
   text-transform: uppercase;
@@ -96,7 +105,7 @@ const SButtonContainer = styled.div`
   align-items: center;
   height: 100px;
 `;
-const SShareButton = styled.button`
+const SShareButton = styled.button<ISShareButton>`
   outline: none;
   cursor: pointer;
   font-size: 22px;
@@ -104,8 +113,8 @@ const SShareButton = styled.button`
   border: 1px solid;
   border-radius: 8px;
   height: 50px;
-  background: ${APP_THEME_DEFAULT.primary};
-  color: ${APP_THEME_DEFAULT.textLight};
+  background: ${({ background }) => background};
+  color: ${({ colour }) => colour};
 `;
 
 interface IUserProfile {
@@ -113,6 +122,7 @@ interface IUserProfile {
 }
 
 const UserProfile: FC<IUserProfile> = ({ settingsClick }) => {
+  const theme = useTheme();
   const { user } = useUserContext();
 
   return (
@@ -122,11 +132,7 @@ const UserProfile: FC<IUserProfile> = ({ settingsClick }) => {
           <MdSettings size={34} color={COLOURS.gray} />
         </SSettingsButton>
         <SAvatarContainer>
-          <SAvatar
-            size={100}
-            color={APP_THEME_DEFAULT.primary}
-            title="Change avatar"
-          />
+          <SAvatar size={100} color={theme.primary} title="Change avatar" />
           <SCameraContainer>
             <MdPhotoCamera size={24} />
           </SCameraContainer>
@@ -143,26 +149,34 @@ const UserProfile: FC<IUserProfile> = ({ settingsClick }) => {
         <SStatsContainer>
           {user.preferences.showDayStreak && (
             <SStatWrapper>
-              <SStatValue>{user.stats.dayStreak}</SStatValue>
+              <SStatValue primary={theme.primary}>
+                {user.stats.dayStreak}
+              </SStatValue>
               <SStatLabel>day streak</SStatLabel>
             </SStatWrapper>
           )}
           {user.preferences.showWeeklyExcercise && (
             <SStatWrapper>
-              <SStatValue>{user.stats.weeklyExercise}</SStatValue>
+              <SStatValue primary={theme.primary}>
+                {user.stats.weeklyExercise}
+              </SStatValue>
               <SStatLabel>weekly excercise</SStatLabel>
             </SStatWrapper>
           )}
           {user.preferences.showWeeklyWater && (
             <SStatWrapper>
-              <SStatValue>{user.stats.weeklyWater}</SStatValue>
+              <SStatValue primary={theme.primary}>
+                {user.stats.weeklyWater}
+              </SStatValue>
               <SStatLabel>weekly water</SStatLabel>
             </SStatWrapper>
           )}
         </SStatsContainer>
       )}
       <SButtonContainer>
-        <SShareButton>Share Profile</SShareButton>
+        <SShareButton colour={theme.text} background={theme.primary}>
+          Share Profile
+        </SShareButton>
       </SButtonContainer>
     </>
   );
