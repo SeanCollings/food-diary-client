@@ -25,6 +25,7 @@ const SContainer = styled.div`
   ${MEDIA_MOBILE} {
     padding: 20px;
     min-width: 100%;
+    min-height: 480px;
   }
 `;
 

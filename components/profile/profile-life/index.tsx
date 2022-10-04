@@ -45,11 +45,12 @@ const SContainer = styled.div<ISContainer>`
   flex-direction: column;
   gap: 24px;
   padding: ${PADDING}px;
-  min-height: 560px;
+  min-height: 600px;
   ${ThemeBorderBottom}
 
   ${MEDIA_MOBILE} {
     padding: 20px;
+    min-height: fit-content;
   }
 `;
 const STopMenuContainer = styled.div`

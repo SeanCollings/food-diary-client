@@ -46,6 +46,8 @@ const SAppContainer = styled.div<ISAppContainer>`
   `}
 `;
 const SMain = styled.main`
+  position: relative;
+  display: flex;
   padding: 0 2rem;
 
   ${MEDIA_MOBILE} {
@@ -64,6 +66,7 @@ const SMain = styled.main`
   }
 `;
 const SInnerMain = styled.div`
+  position: relative;
   max-width: ${MAX_PAGE_WIDTH}px;
   width: 100%;
   margin: 0 auto;

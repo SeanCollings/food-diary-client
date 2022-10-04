@@ -20,7 +20,7 @@ import { useTheme } from '@hooks/use-theme';
 const CALENDAR_HEIGHT = 320;
 const MONTH_SELECTOR_HEIGHT = 30;
 const DAY_NAME_HEIGHT = 24;
-const DAY_GAP = 4;
+const DAY_GAP = 2;
 
 interface ISDayContainer {
   rowHeight: number;
@@ -46,7 +46,7 @@ const SContainer = styled.div`
   display: flex;
   flex-direction: column;
   padding: 4px;
-  box-shadow: 0px 8px 20px -8px ${COLOURS.black};
+  box-shadow: 0px 8px 20px -8px ${COLOURS.black}${OPACITY_40};
   height: ${CALENDAR_HEIGHT + MONTH_SELECTOR_HEIGHT + 8}px;
   ${ThemeBackgroundTertiary}
 `;

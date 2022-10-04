@@ -7,6 +7,9 @@ const SProfileContainer = styled.section`
   display: flex;
   gap: 20px;
   flex-wrap: wrap;
+  align-items: center;
+  height: 100%;
+  padding: 20px 0;
 `;
 
 const ProilePage: NextPage = () => {

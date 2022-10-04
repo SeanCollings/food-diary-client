@@ -39,7 +39,7 @@ export const COLOURS = {
   turquoise: '#66bfbf',
   purple: '#b8297f',
   blue: '#48a4d3',
-  black: '#232323',
+  black: '#121212',
   error: '#ed0f0f',
   white_off: '#f7f7f7',
   white: '#ffffff',
