@@ -1,5 +1,5 @@
 import { useTheme } from '@hooks/use-theme';
-import { APP_THEME_DEFAULT, COLOURS, OPACITY_40 } from '@utils/constants';
+import { COLOURS, OPACITY_40 } from '@utils/constants';
 import { formatMinutesToHoursMinutes } from '@utils/time-utils';
 import { getUniqueId } from '@utils/unique-id';
 import styled from 'styled-components';

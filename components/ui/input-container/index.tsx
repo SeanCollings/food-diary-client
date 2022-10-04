@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import Input, { IInputProps } from '@components/ui/input';
 import TextArea from '@components/ui/text-area';
 import { MEDIA_MOBILE } from '@utils/constants';
+import { ThemeTextColor } from '@components/ui/style-themed';
 
 const SInputContainer = styled.div`
   display: flex;
@@ -17,6 +18,7 @@ const SInputContainer = styled.div`
 const SLabel = styled.label`
   font-size: 22px;
   font-weight: 200;
+  ${ThemeTextColor};
 `;
 
 type TInputType = 'input' | 'textarea';

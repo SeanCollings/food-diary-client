@@ -46,7 +46,7 @@ const SCount = styled.div<SCount>`
   text-align: center;
   min-width: 54px;
 
-  ${({ hasNoValue }) => hasNoValue && 'opacity: 0.7'};
+  ${({ hasNoValue }) => hasNoValue && 'opacity: 0.4'};
 `;
 const SIconRemove = styled(MdRemoveCircle)`
   cursor: pointer;

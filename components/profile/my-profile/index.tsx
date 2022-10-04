@@ -17,7 +17,7 @@ const SContainer = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  min-height: 560px;
+  min-height: 600px;
   min-width: 400px;
   ${ThemeBackgroundSecondary}
   ${ThemeBorderBottom}

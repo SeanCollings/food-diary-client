@@ -61,10 +61,13 @@ type IPartialPreference =
   | { [EPrefences.SHOW_WEEKLY_EXERCISE]: boolean }
   | { [EPrefences.SHOW_WEEKLY_WATER]: boolean };
 
+type IPartialTheme = { light: EThemeLight } | { dark: EThemeDark };
+
 export interface IUserContext {
   user: IUserModel;
   updateUser: (updated: IPartialUserUpdate) => void;
   updatePreferences: (preferences: IPartialPreference) => void;
+  updateTheme: (theme: IPartialTheme) => void;
 }
 
 const initialState: IUserContext = {
@@ -73,7 +76,10 @@ const initialState: IUserContext = {
     email: 'test@address.com',
     avatar: '',
     darkMode: true,
-    theme: { light: EThemeLight.DEFAULT_LIGHT, dark: EThemeDark.PASSION_FRUIT },
+    theme: {
+      light: EThemeLight.DEFAULT_LIGHT,
+      dark: EThemeDark.CUPCAKE_SPRINKLES,
+    },
     preferences: {
       showDayStreak: true,
     },
@@ -85,6 +91,7 @@ const initialState: IUserContext = {
   },
   updateUser: () => null,
   updatePreferences: () => null,
+  updateTheme: () => null,
 };
 
 const UserContext = createContext(initialState);
@@ -97,6 +104,7 @@ export const UserContextProvider: FC<{
   const [updatedPreferences, setUpdatedPreferences] = useState<
     IPartialPreference[]
   >([]);
+  const [updatedTheme, setUpdatedTheme] = useState<IPartialTheme[]>([]);
   const [user, setCurrentUser] = useState<IUserModel>(initialState?.user || {});
 
   useEffect(() => {
@@ -139,6 +147,26 @@ export const UserContextProvider: FC<{
     };
   }, [updatedPreferences]);
 
+  useEffect(() => {
+    if (!updatedTheme.length) {
+      return;
+    }
+
+    const timer = setTimeout(async () => {
+      const payload = updatedTheme.reduce((curr, theme) => {
+        return { ...curr, ...theme };
+      }, {} as IPartialTheme);
+
+      console.log('THEME PATCH:', payload);
+
+      setUpdatedTheme([]);
+    }, 500);
+
+    return () => {
+      clearTimeout(timer);
+    };
+  }, [updatedTheme]);
+
   const updateUser = useCallback((update: IPartialUserUpdate) => {
     setCurrentUser((curr) => ({ ...getStructuredClone(curr), ...update }));
     setUpdatedFields((curr) => [...curr, update]);
@@ -152,9 +180,17 @@ export const UserContextProvider: FC<{
     setUpdatedPreferences((curr) => [...curr, preference]);
   }, []);
 
+  const updateTheme = useCallback((theme: IPartialTheme) => {
+    setCurrentUser((curr) => ({
+      ...getStructuredClone(curr),
+      theme: { ...getStructuredClone(curr.theme), ...theme },
+    }));
+    setUpdatedTheme((curr) => [...curr, theme]);
+  }, []);
+
   const context = useMemo(
-    () => ({ user, updateUser, updatePreferences }),
-    [user, updateUser, updatePreferences]
+    () => ({ user, updateUser, updatePreferences, updateTheme }),
+    [user, updateUser, updatePreferences, updateTheme]
   );
 
   return (

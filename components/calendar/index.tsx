@@ -1,11 +1,5 @@
 import { useOnClickOutsideElement } from '@hooks/use-onclick-outside-element';
-import {
-  APP_THEME_DEFAULT,
-  COLOURS,
-  OPACITY_20,
-  OPACITY_30,
-  OPACITY_40,
-} from '@utils/constants';
+import { COLOURS, OPACITY_20, OPACITY_40 } from '@utils/constants';
 import {
   formatMonthSmallYear,
   getBothDatesEqual,
@@ -20,7 +14,7 @@ import styled from 'styled-components';
 import { MdArrowLeft, MdArrowRight } from 'react-icons/md';
 import { useAllEntriesPerMonthContext } from '@store/all-entries-per-month-context';
 import { generateMonthMatrix } from '@utils/calendar-utils';
-import { ThemeBackgroundSecondary } from '@components/ui/style-themed';
+import { ThemeBackgroundTertiary } from '@components/ui/style-themed';
 import { useTheme } from '@hooks/use-theme';
 
 const CALENDAR_HEIGHT = 320;
@@ -39,7 +33,7 @@ interface ISDayContainer {
   primaryColour: string;
 }
 interface ISDayHasEntry {
-  isSelectedDay: boolean;
+  background: string;
 }
 interface ISSelectTodayButton {
   colour: string;
@@ -54,7 +48,7 @@ const SContainer = styled.div`
   padding: 4px;
   box-shadow: 0px 8px 20px -8px ${COLOURS.black};
   height: ${CALENDAR_HEIGHT + MONTH_SELECTOR_HEIGHT + 8}px;
-  ${ThemeBackgroundSecondary}
+  ${ThemeBackgroundTertiary}
 `;
 const SDateSelectorContainer = styled.div`
   font-size: 20px;
@@ -138,24 +132,24 @@ const SDayContainer = styled.div<ISDayContainer>`
   flex: 1;
   font-size: 14px;
   padding: 0 4px;
+  box-shadow: 0 0 0 1px ${COLOURS.gray}${OPACITY_20} inset;
+
   cursor: ${({ isPeripheralMonthDay }) =>
     !isPeripheralMonthDay ? 'pointer' : 'inherit'};
-
-  box-shadow: 0 0 0 1px ${({ primaryColour }) => primaryColour}${OPACITY_20} inset;
-
-  ${({ isCurrentDay, primaryColour }) =>
-    isCurrentDay && `box-shadow: 0 0 0 1px ${primaryColour} inset;`}
   font-weight: ${({ isCurrentDay }) => (isCurrentDay ? 'bold' : '200')};
   height: ${({ rowHeight }) => rowHeight}px;
-  color: ${({ isCurrentDay, primaryColour }) =>
-    isCurrentDay ? primaryColour : APP_THEME_DEFAULT.textDark};
+
+  ${({ isCurrentDay, isSelectedDay, primaryColour }) =>
+    isCurrentDay && !isSelectedDay && `color: ${primaryColour}`};
+  ${({ isCurrentDay, primaryColour }) =>
+    isCurrentDay && `box-shadow: 0 0 0 1px ${primaryColour} inset;`}
   ${({ bottomRight }) => bottomRight && `border-radius: 0 0 5px 0`};
   ${({ bottomLeft }) => bottomLeft && `border-radius: 0 0 0 5px`};
   ${({ backgroundColour }) =>
     backgroundColour && `background-color: ${backgroundColour}`};
   ${({ isPeripheralMonthDay }) => isPeripheralMonthDay && `opacity: 0.4`};
   ${({ isSelectedDay, primaryColour }) =>
-    isSelectedDay && `background-color: ${primaryColour}${OPACITY_30};`};
+    isSelectedDay && `background-color: ${primaryColour}${OPACITY_40};`};
 `;
 const STitleRow = styled.div``;
 const SDayRow = styled.div`
@@ -168,8 +162,7 @@ const SDayHasEntry = styled.div<ISDayHasEntry>`
   height: 8px;
   width: 100%;
   border-radius: 8px;
-  background: ${({ isSelectedDay }) =>
-    isSelectedDay ? APP_THEME_DEFAULT.secondary : APP_THEME_DEFAULT.primary};
+  background: ${({ background }) => background};
 `;
 
 interface ICalendarContentProps {
@@ -284,7 +277,11 @@ const CalendarContent: FC<ICalendarContentProps> = ({
               <SDayContainer
                 key={`col-${colIndex}`}
                 rowHeight={rowHeight}
-                backgroundColour={COLOURS.gray_light}
+                backgroundColour={
+                  theme.darkMode
+                    ? theme.backgroundSecondary
+                    : COLOURS.gray_light
+                }
                 isCurrentDay={isCurrentDay && !isPeripheralMonthDay}
                 onClick={() =>
                   daySelectedHandler(item.day, isPeripheralMonthDay)
@@ -298,7 +295,7 @@ const CalendarContent: FC<ICalendarContentProps> = ({
                 <SDayRow>
                   {item.day}
                   {dayHasEntry && !isPeripheralMonthDay && (
-                    <SDayHasEntry isSelectedDay={isSelectedDay} />
+                    <SDayHasEntry background={theme.primary} />
                   )}
                 </SDayRow>
               </SDayContainer>

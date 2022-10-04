@@ -49,19 +49,19 @@ const WellnessContainer: FC = () => {
       <SDrinkContainer>
         <WellnessCard
           id="water"
-          title="water"
+          title="Water"
           imageSrc={'/static/images/water_bottle.webp'}
           color={APP_THEME_DEFAULT.quaternary}
         />
         <WellnessCard
           id="tea_coffee"
-          title="tea/coffee"
+          title="Tea / coffee"
           imageSrc={'/static/images/coffee.webp'}
           color={APP_THEME_DEFAULT.quaternary}
         />
         <WellnessCard
           id="alcohol"
-          title="alcohol"
+          title="Alcohol"
           imageSrc={'/static/images/wine.webp'}
           color={APP_THEME_DEFAULT.quaternary}
         />
@@ -69,7 +69,7 @@ const WellnessContainer: FC = () => {
       <SExcerciseContainer>
         <ExcerciseCard
           id="alcohol_counter"
-          title="excercise"
+          title="Excercise"
           imageSrc={'/static/images/exercise.webp'}
         />
       </SExcerciseContainer>

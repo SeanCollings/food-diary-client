@@ -1,4 +1,4 @@
-import { APP_THEME_DEFAULT, ALL_MEAL_CARDS } from '@utils/constants';
+import { ALL_MEAL_CARDS } from '@utils/constants';
 import { ChangeEvent, FC, useReducer } from 'react';
 import styled from 'styled-components';
 import InputContainer from '@components/ui/input-container';
@@ -19,6 +19,7 @@ import {
   IRunFormValidations,
 } from '@components/modals/add-to-meal-card/types';
 import { trim } from '@utils/string-utils';
+import { useTheme } from '@hooks/use-theme';
 
 const SContainer = styled.div``;
 const SContentContainer = styled.div`
@@ -54,13 +55,14 @@ const ModalAddToMealCard: FC<IModalProps> = ({
   onSubmit,
   onEditConfirm,
 }) => {
+  const theme = useTheme();
   const [state, dispatch] = useReducer(
     addToMealReducer,
     getIntialState({ mealId, content })
   );
 
   const isEditing = !!content;
-  const mealColour = getMealThemeColour(APP_THEME_DEFAULT, state.mealType);
+  const mealColour = getMealThemeColour(theme, state.mealType);
   const mealTile =
     ALL_MEAL_CARDS.find((meal) => meal.id === state.mealType)?.title || '';
 

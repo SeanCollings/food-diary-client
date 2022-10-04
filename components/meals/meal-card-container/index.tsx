@@ -8,7 +8,7 @@ const SContainer = styled.section`
   flex-wrap: wrap;
   justify-content: center;
   padding: 20px 0;
-  gap: 20px;
+  gap: 16px;
 `;
 
 const CardContainer: FC = () => {

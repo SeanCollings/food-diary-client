@@ -9,6 +9,8 @@ export const ThemeBackgroundPrimary = () =>
   `background-color: ${useTheme().backgroundPrimary};`;
 export const ThemeBackgroundSecondary = () =>
   `background-color: ${useTheme().backgroundSecondary};`;
+export const ThemeBackgroundTertiary = () =>
+  `background-color: ${useTheme().backgroundTertiary};`;
 export const ThemeTextColor = () => `color: ${useTheme().text};`;
 export const ThemeBorderBottom = () => {
   const theme = useTheme();

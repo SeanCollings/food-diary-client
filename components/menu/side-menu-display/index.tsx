@@ -1,6 +1,5 @@
 import { useMenuContext } from '@store/menu-context';
 import {
-  APP_THEME_DEFAULT,
   COLOURS,
   MEDIA_MAX_DESKTOP,
   MEDIA_MOBILE,

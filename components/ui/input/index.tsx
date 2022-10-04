@@ -1,12 +1,9 @@
-import {
-  COLOURS,
-  MEDIA_MOBILE,
-  OPACITY_10,
-  OPACITY_30,
-} from '@utils/constants';
+import { COLOURS, MEDIA_MOBILE, OPACITY_30 } from '@utils/constants';
 import { INPUT_MAX_LENGTH } from '@utils/validation/validation.constants';
 import { ChangeEvent, FC, KeyboardEvent, ReactNode } from 'react';
 import styled from 'styled-components';
+import { ThemeTextColor } from '@components/ui/style-themed';
+import { useTheme } from '@hooks/use-theme';
 
 interface ISContainer {
   inputWidth?: number;
@@ -19,6 +16,10 @@ interface ISInput {
   hideInitialBorder?: boolean;
   hasIcon: boolean;
   borderWidth: number;
+  errorColour: string;
+}
+interface ISError {
+  errorColour: string;
 }
 
 const SContainer = styled.div<ISContainer>`
@@ -50,6 +51,8 @@ const SInput = styled.input<ISInput>`
   ${({ hideInitialBorder }) =>
     hideInitialBorder && 'border-color: transparent'};
 
+  ${ThemeTextColor};
+
   :focus {
     border: 2px solid
       ${({ borderColour }) =>
@@ -57,7 +60,7 @@ const SInput = styled.input<ISInput>`
   }
 
   ${({ hasIcon }) => hasIcon && `padding-left: 38px`};
-  ${({ isError }) => isError && `border-color: ${COLOURS.error}`};
+  ${({ isError, errorColour }) => isError && `border-color: ${errorColour}`};
 `;
 const SIconContainer = styled.div`
   position: absolute;
@@ -65,10 +68,10 @@ const SIconContainer = styled.div`
   transform: translateY(-50%);
   padding-left: 4px;
 `;
-const SError = styled.div`
+const SError = styled.div<ISError>`
   font-size: 15px;
   text-align: right;
-  color: ${COLOURS.error};
+  color: ${({ errorColour }) => errorColour};
 `;
 
 type TInputType = 'text' | 'number';
@@ -112,6 +115,7 @@ export const Input: FC<IInputProps> = ({
   onChange,
   onMouseDown,
 }) => {
+  const theme = useTheme();
   const onBlurHandler = () => onBlur?.();
   const onMouseDownHandler = () => onMouseDown?.();
   const onKeyDownHandler = (event: KeyboardEvent<HTMLInputElement>) => {
@@ -136,6 +140,7 @@ export const Input: FC<IInputProps> = ({
         type={type}
         placeholder={placeholder}
         isError={!!isError}
+        errorColour={theme.error}
         hasIcon={!!children}
         autoComplete={'off'}
         spellCheck={false}
@@ -145,7 +150,7 @@ export const Input: FC<IInputProps> = ({
         onChange={onChange}
         onMouseDown={onMouseDownHandler}
       />
-      {!!isError && <SError>{isError}</SError>}
+      {!!isError && <SError errorColour={theme.error}>{isError}</SError>}
     </SContainer>
   );
 };

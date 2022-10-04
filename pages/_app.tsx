@@ -3,7 +3,6 @@ import { ThemeProvider, DefaultTheme } from 'styled-components';
 import GlobalStyle from '../components/global-styles';
 import type { AppProps } from 'next/app';
 import Head from 'next/head';
-import Footer from '@components/footer';
 import { COLOURS } from '@utils/constants';
 import SideMenuDisplay from '@components/menu/side-menu-display';
 import { DateSelectedContextProvider } from '@store/date-selected-context';

@@ -1,11 +1,5 @@
 import { useTheme } from '@hooks/use-theme';
-import {
-  ALL_MEAL_CARDS,
-  APP_THEME_DEFAULT,
-  COLOURS,
-  OPACITY_20,
-  OPACITY_40,
-} from '@utils/constants';
+import { ALL_MEAL_CARDS, OPACITY_20, OPACITY_50 } from '@utils/constants';
 import { EMealType } from '@utils/interfaces';
 import { getUniqueId } from '@utils/unique-id';
 import styled from 'styled-components';
@@ -20,13 +14,21 @@ const CIRCLE_WIDTH_MIN = 14;
 interface ISDataContainer {
   height: number;
 }
+interface ISDataTitle {
+  border: string;
+}
+interface ISDataItem {
+  border: string;
+}
 interface ISMealDetailContainer {
   boxWidth: number;
   totalValues: number;
+  border: string;
 }
 interface ISHAxisContainer {
   boxWidth: number;
   totalValues: number;
+  border: string;
 }
 interface ISCircleDisplay {
   colour: string;
@@ -46,16 +48,16 @@ const SDataContainer = styled.div<ISDataContainer>`
   grid-template-rows: repeat(5, auto) ${LEGEND_HEIGHT}px;
   height: ${({ height }) => height}px;
 `;
-const SDataTitle = styled.span`
+const SDataTitle = styled.span<ISDataTitle>`
   display: flex;
   align-items: center;
   padding: 0 8px;
 
   :not(.last-item) {
-    border-bottom: 1px solid ${COLOURS.gray}${OPACITY_20};
+    border-bottom: 1px solid ${({ border }) => border};
   }
 `;
-const SDataItem = styled.span`
+const SDataItem = styled.span<ISDataItem>`
   display: flex;
   align-items: center;
   justify-content: center;
@@ -68,12 +70,12 @@ const SMealDetailContainer = styled.div<ISMealDetailContainer>`
     `${TITLE_WIDTH}px repeat(${totalValues}, ${boxWidth}px)`};
 
   span:not(:first-child):not(:last-child) {
-    border-right: 1px solid ${COLOURS.gray}${OPACITY_40};
+    border-right: 1px solid ${({ border }) => border};
   }
 `;
 const SData = styled(SDataItem)`
   :not(.last-item) {
-    border-bottom: 1px solid ${COLOURS.gray}${OPACITY_20};
+    border-bottom: 1px solid ${({ border }) => border};
   }
 `;
 const SCircleDisplay = styled.span<ISCircleDisplay>`
@@ -102,7 +104,7 @@ const SHAxisContainer = styled.div<ISHAxisContainer>`
     `${TITLE_WIDTH}px repeat(${totalValues}, ${boxWidth}px)`};
 
   span:not(:last-child) {
-    border-right: 1px solid ${COLOURS.gray}${OPACITY_40};
+    border-right: 1px solid ${({ border }) => border};
   }
 `;
 const SHAxisKey = styled(SDataItem)``;
@@ -268,6 +270,10 @@ const BinaryHeatMap: React.FC<IBinaryHeatMapProps> = ({
     [EMealType.DINNER]: theme.tertiary,
   };
 
+  const borderColour = theme.darkMode
+    ? `${theme.quaternary}${OPACITY_20}`
+    : `${theme.quaternary}${OPACITY_50}`;
+
   return (
     <SContainer>
       <SDataContainer height={height}>
@@ -281,8 +287,11 @@ const BinaryHeatMap: React.FC<IBinaryHeatMapProps> = ({
               key={id}
               totalValues={mealData.totalValues}
               boxWidth={boxWidth}
+              border={borderColour}
             >
-              <SDataTitle className={className}>{title}</SDataTitle>
+              <SDataTitle className={className} border={borderColour}>
+                {title}
+              </SDataTitle>
               {mealData.data.map((data, index) => {
                 const colour = MEAL_TYPE_COLOUR[id];
                 const hasValue = !!data.meals[mealIindex];
@@ -292,7 +301,11 @@ const BinaryHeatMap: React.FC<IBinaryHeatMapProps> = ({
                 const showLine = hasValue && !isLastValue && !nextValueZero;
 
                 return (
-                  <SData key={data.id} className={className}>
+                  <SData
+                    key={data.id}
+                    className={className}
+                    border={borderColour}
+                  >
                     {hasValue && (
                       <SCircleDisplay
                         colour={colour}
@@ -309,9 +322,15 @@ const BinaryHeatMap: React.FC<IBinaryHeatMapProps> = ({
             </SMealDetailContainer>
           );
         })}
-        <SHAxisContainer totalValues={mealData.totalValues} boxWidth={boxWidth}>
+        <SHAxisContainer
+          totalValues={mealData.totalValues}
+          boxWidth={boxWidth}
+          border={borderColour}
+        >
           {mealData.legend.map((key) => (
-            <SHAxisKey key={getUniqueId()}>{key}</SHAxisKey>
+            <SHAxisKey key={getUniqueId()} border={borderColour}>
+              {key}
+            </SHAxisKey>
           ))}
         </SHAxisContainer>
       </SDataContainer>

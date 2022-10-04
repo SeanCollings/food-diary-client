@@ -1,5 +1,9 @@
 import { ChangeEvent, FC } from 'react';
 import styled from 'styled-components';
+import {
+  ThemeBackgroundSecondary,
+  ThemeTextColor,
+} from '@components/ui/style-themed';
 
 interface ISSelect {
   width?: number;
@@ -8,10 +12,19 @@ interface ISSelect {
 
 const SSelect = styled.select<ISSelect>`
   height: 35px;
+  border-radius: 4px;
+  font-size: 14px;
+  cursor: pointer;
+  padding: 0 4px;
   ${({ width }) => width && `width: ${width}px`};
   ${({ hide }) => hide && `display: none`};
+
+  ${ThemeTextColor}
+  ${ThemeBackgroundSecondary}
 `;
-const SOption = styled.option``;
+const SOption = styled.option`
+  padding: 5px 0;
+`;
 
 interface IOption {
   id: string;

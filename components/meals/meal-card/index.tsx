@@ -41,7 +41,7 @@ const SContainer = styled.div<IScontainer>`
   // background-image: linear-gradient(to bottom, #50abdf, #1f78aa);
   border-radius: 8px;
   padding: 20px;
-  flex: 0 0 18%;
+  flex: 0 0 19%;
   max-width: 300px;
   min-width: 250px;
   height: 400px;

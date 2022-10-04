@@ -1,13 +1,13 @@
 import { pathnameMapper } from '@components/menu/menu.constants';
-import {
-  APP_THEME_DEFAULT,
-  COLOURS,
-  MEDIA_MAX_DESKTOP,
-  MEDIA_MOBILE,
-} from '@utils/constants';
+import { useTheme } from '@hooks/use-theme';
+import { COLOURS, MEDIA_MAX_DESKTOP, MEDIA_MOBILE } from '@utils/constants';
 import { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import styled from 'styled-components';
+
+interface ISExploreButton {
+  background: string;
+}
 
 const SHomeContainer = styled.section`
   display: flex;
@@ -57,10 +57,10 @@ const SParagraphContent = styled.div`
   text-align: right;
 `;
 const SExploreButtonContainer = styled.div``;
-const SExploreButton = styled.button`
+const SExploreButton = styled.button<ISExploreButton>`
   outline: none;
   color: ${COLOURS.white};
-  background: ${APP_THEME_DEFAULT.primary};
+  background: ${({ background }) => background};
   border: 1px solid transparent;
   border-radius: 8px;
   padding: 8px;
@@ -78,6 +78,7 @@ const SExploreButton = styled.button`
 `;
 
 const HomePage: NextPage = () => {
+  const theme = useTheme();
   const { push } = useRouter();
 
   const handleExploreClick = () => {
@@ -99,7 +100,9 @@ const HomePage: NextPage = () => {
         </SParagraphWrapper>
       </SParagraphContainer>
       <SExploreButtonContainer>
-        <SExploreButton onClick={handleExploreClick}>Explore</SExploreButton>
+        <SExploreButton background={theme.primary} onClick={handleExploreClick}>
+          Explore
+        </SExploreButton>
       </SExploreButtonContainer>
     </SHomeContainer>
   );

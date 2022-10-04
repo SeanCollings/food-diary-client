@@ -407,7 +407,7 @@ const ProfileLife: FC = () => {
             id={'wellness-picker'}
             value={wellnessOption}
             options={WELLNESS_OPTIONS}
-            width={120}
+            width={140}
             hide={selectedMenu === 'food_trends'}
             onChange={handleWellnessDropdownChange}
           />
@@ -415,7 +415,7 @@ const ProfileLife: FC = () => {
             id={'time-picker'}
             value={timePeriod}
             options={TIME_PERIOD_OPTIONS}
-            width={120}
+            width={140}
             onChange={handleTimeDropdownChange}
           />
         </SDropdownContainer>

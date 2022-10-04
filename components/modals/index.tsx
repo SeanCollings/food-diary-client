@@ -1,9 +1,5 @@
-import {
-  COLOURS,
-  MEDIA_DESKTOP,
-  MEDIA_MOBILE,
-  OPACITY_40,
-} from '@utils/constants';
+import { ThemeBackgroundSecondary } from '@components/ui/style-themed';
+import { COLOURS, MEDIA_MOBILE, OPACITY_40 } from '@utils/constants';
 import { FC, ReactNode, useEffect, useRef, useState } from 'react';
 import ReactDOM from 'react-dom';
 import styled from 'styled-components';
@@ -35,9 +31,9 @@ const SBackgroundContainer = styled.div<ISBackgroundContainer>`
   }
 `;
 const SModalContainer = styled.div<ISModalContainer>`
-  background: ${COLOURS.white_off};
   box-shadow: 0px 4px 8px ${COLOURS.black}${OPACITY_40};
   border-radius: 12px;
+  ${ThemeBackgroundSecondary};
 
   width: ${({ modalWidth }) => modalWidth}px;
 `;

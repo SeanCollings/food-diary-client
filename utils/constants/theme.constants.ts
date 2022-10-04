@@ -54,7 +54,7 @@ export const STATIC_THEME: TStaticTheme = {
   dark: {
     text: '#ffffffe6',
     quaternary: '#959595',
-    error: '#fb3c36',
+    error: '#CF6679',
     backgroundPrimary: '#121212',
     backgroundSecondary: '#222222',
     backgroundTertiary: '#424242',

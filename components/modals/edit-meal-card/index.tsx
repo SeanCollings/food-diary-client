@@ -3,7 +3,6 @@ import styled from 'styled-components';
 import { ModalHeader } from '@components/modals/styled';
 import {
   ALL_MEAL_CARDS,
-  APP_THEME_DEFAULT,
   COLOURS,
   OPACITY_30,
   OPACITY_70,
@@ -12,6 +11,11 @@ import { getMealThemeColour } from '@utils/theme-utils';
 import { IMealContent, TMealType } from '@utils/interfaces';
 import { MdDeleteForever, MdEdit } from 'react-icons/md';
 import RadioButton from '@components/ui/radio-button';
+import { useTheme } from '@hooks/use-theme';
+import {
+  ThemeBackgroundSecondary,
+  ThemeTextColor,
+} from '@components/ui/style-themed';
 
 interface ISColour {
   colour: string;
@@ -45,7 +49,8 @@ const SConfirmPrompt = styled.div`
   gap: 16px;
   font-size: 17px;
   z-index: 1;
-  background: ${COLOURS.white_off};
+  ${ThemeTextColor}
+  ${ThemeBackgroundSecondary}
 `;
 const SButtonPromptContainer = styled.div`
   display: flex;
@@ -69,8 +74,8 @@ const SPromptButton = styled.button<IPromptButton>`
     opacity: 0.5;
   }
 
-  ${({ isConfirm, colour }) =>
-    isConfirm && `color: ${COLOURS.white}; background: ${colour}`}
+  ${ThemeTextColor};
+  ${({ isConfirm, colour }) => isConfirm && `background: ${colour}`}
 `;
 const SContentWrapper = styled.div<ISColour>`
   display: flex;
@@ -122,6 +127,7 @@ const SRadioLabel = styled.label`
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  ${ThemeTextColor};
 
   :hover {
     opacity: 0.6;
@@ -195,10 +201,11 @@ const ModalEditMealCard: FC<IModalEditMealCardProps> = ({
   onRemoveMeal,
   onEditMeal,
 }) => {
+  const theme = useTheme();
   const [isRemoveItemId, setIsRemoveItemId] = useState<number | null>(null);
   const [selectedItem, setSelectedItem] = useState('');
 
-  const mealColour = getMealThemeColour(APP_THEME_DEFAULT, mealId);
+  const mealColour = getMealThemeColour(theme, mealId);
   const mealTile =
     ALL_MEAL_CARDS.find((meal) => meal.id === mealId)?.title || '';
 
@@ -239,7 +246,10 @@ const ModalEditMealCard: FC<IModalEditMealCardProps> = ({
               >
                 Confirm
               </SPromptButton>
-              <SPromptButton onClick={() => setIsRemoveItemId(null)}>
+              <SPromptButton
+                onClick={() => setIsRemoveItemId(null)}
+                color={theme.text}
+              >
                 Cancel
               </SPromptButton>
             </SButtonPromptContainer>

@@ -1,5 +1,5 @@
 import { useTheme } from '@hooks/use-theme';
-import { APP_THEME_DEFAULT, COLOURS, OPACITY_40 } from '@utils/constants';
+import { COLOURS, OPACITY_40 } from '@utils/constants';
 import { EWellnessTypes } from '@utils/interfaces';
 import { getUniqueId } from '@utils/unique-id';
 import { FC } from 'react';
@@ -114,8 +114,8 @@ const SLegend = styled.div`
   align-items: center;
 `;
 const SLegendCircle = styled.div<ISLegendCircle>`
-  width: 10px;
-  height: 10px;
+  width: 12px;
+  height: 12px;
   border-radius: 50%;
   background: ${({ colour }) => colour};
 `;
@@ -140,11 +140,6 @@ const MOCK_DATA_WEEK: IWellnessTrendData = {
     { water: 5, tea_coffee: 2, alcohol: 8 },
   ],
   highestValue: 8,
-};
-const BEVERAGE_COLOUR: { [key in EWellnessTypes]: string } = {
-  [EWellnessTypes.WATER]: APP_THEME_DEFAULT.primary,
-  [EWellnessTypes.TEA_COFFEE]: APP_THEME_DEFAULT.quaternary,
-  [EWellnessTypes.ALCOHOL]: APP_THEME_DEFAULT.secondary,
 };
 
 interface IBarGraphProps {

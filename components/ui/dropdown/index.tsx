@@ -1,6 +1,7 @@
 import { COLOURS, OPACITY_30 } from '@utils/constants';
-import { ChangeEvent, FC } from 'react';
+import { ChangeEvent } from 'react';
 import styled from 'styled-components';
+import { ThemeTextColor } from '@components/ui/style-themed';
 
 interface ISContainer {
   inputWidth: number;
@@ -31,6 +32,8 @@ const SSelect = styled.select<ISSelect>`
     ${({ backgroundColour }) =>
       backgroundColour ? `transparent` : `${COLOURS.black}${OPACITY_30}`};
 
+  ${ThemeTextColor};
+
   :focus {
     border: 2px solid
       ${({ backgroundColour }) =>
@@ -40,6 +43,7 @@ const SSelect = styled.select<ISSelect>`
 const SOption = styled.option<ISSelect>`
   --background-colour: ${COLOURS.white_off};
   background: var(--background-colour);
+  color: ${COLOURS.black};
 `;
 
 export type TDefaultOption = { id: string; title: string };
