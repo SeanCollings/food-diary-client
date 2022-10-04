@@ -12,6 +12,8 @@ interface ISContainer {
   transparentBG: boolean;
   primary: string;
   backgroundPrimary: string;
+  colourLeft: string;
+  colourRight: string;
 }
 
 interface ISLine {
@@ -23,8 +25,6 @@ const SContainer = styled.div<ISContainer>`
   position: relative;
   transition: 0.2s;
   cursor: pointer;
-  background: ${({ isOpen, transparentBG, backgroundPrimary, primary }) =>
-    !transparentBG && (isOpen ? backgroundPrimary : primary)};
   border-radius: 50%;
   width: 55px;
   height: 55px;
@@ -33,6 +33,14 @@ const SContainer = styled.div<ISContainer>`
   justify-content: center;
   flex: none;
   z-index: 2;
+
+  background: ${({ isOpen, transparentBG, backgroundPrimary, primary }) =>
+    !transparentBG && (isOpen ? backgroundPrimary : primary)};
+
+  ${({ isOpen, transparentBG, colourLeft, colourRight }) =>
+    !isOpen &&
+    !transparentBG &&
+    `background-image: linear-gradient(to right, ${colourLeft}, ${colourRight})`};
 
   .line1 {
     ${({ isOpen }) =>
@@ -101,6 +109,8 @@ const MenuIcon: FC<IMenuIconProps> = ({ transparentBG = false }) => {
       transparentBG={transparentBG}
       primary={theme.primary}
       backgroundPrimary={theme.backgroundPrimary}
+      colourLeft={theme.primary}
+      colourRight={theme.tertiary}
     >
       <SHamburgerLines>
         <SLine

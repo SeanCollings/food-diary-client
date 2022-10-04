@@ -7,6 +7,8 @@ interface ITheme {
   colourOff: string;
   colourOn: string;
   boxShadow: string;
+  colourLeft: string;
+  colourRight: string;
 }
 
 const SInput = styled.input<ITheme>`
@@ -39,6 +41,8 @@ const SInput = styled.input<ITheme>`
   :checked {
     background-color: ${({ colourOn }) => `${colourOn}${OPACITY_70}`};
     border-color: ${({ colourOn }) => `${colourOn}${OPACITY_70}`};
+    background-image: ${({ colourLeft, colourRight }) =>
+      `linear-gradient(to right, ${colourLeft}, ${colourRight})`};
   }
 
   :checked:after {
@@ -66,6 +70,8 @@ const Toggle: FC<IToggleProps> = ({ checked = false, onChange }) => {
       checked={checked}
       colourOff={theme.backgroundPrimary}
       colourOn={theme.primary}
+      colourLeft={theme.primary}
+      colourRight={theme.tertiary}
       boxShadow={theme.darkMode ? COLOURS.black : COLOURS.gray}
     />
   );
