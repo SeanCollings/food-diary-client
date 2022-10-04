@@ -10,7 +10,7 @@ interface ISStatValue {
 }
 interface ISShareButton {
   colour: string;
-  background: String;
+  background: string;
 }
 
 const SLine = styled.div`

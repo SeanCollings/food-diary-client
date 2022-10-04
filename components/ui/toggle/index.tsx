@@ -57,14 +57,16 @@ const SInput = styled.input<ITheme>`
 
 interface IToggleProps {
   checked?: boolean;
+  tabIndex?: number;
   onChange: () => void;
 }
 
-const Toggle: FC<IToggleProps> = ({ checked = false, onChange }) => {
+const Toggle: FC<IToggleProps> = ({ checked = false, tabIndex, onChange }) => {
   const theme = useTheme();
 
   return (
     <SInput
+      tabIndex={tabIndex}
       type={'checkbox'}
       onChange={onChange}
       checked={checked}

@@ -5,6 +5,7 @@ import { FC } from 'react';
 import { MdClose } from 'react-icons/md';
 import styled from 'styled-components';
 import ThemeDisplay from '@components/profile/my-profile/theme-display';
+import EditInput from '@components/profile/my-profile/edit-input';
 
 const SContainer = styled.div`
   display: flex;
@@ -76,13 +77,16 @@ const SettingsProfile: FC<ISettingsProfile> = ({ onCancel }) => {
       showWeeklyWater: !user.preferences.showWeeklyWater,
     });
   };
+  const updateUsername = (name: string) => {
+    updateUser({ name });
+  };
 
   return (
     <SContainer>
       <STopContainer>
         <SHeader>
           Settings
-          <SCancelButton onClick={onCancel} title="cancel">
+          <SCancelButton onClick={onCancel} title="cancel" tabIndex={0}>
             <MdClose size={34} color={COLOURS.gray} />
           </SCancelButton>
         </SHeader>
@@ -94,7 +98,9 @@ const SettingsProfile: FC<ISettingsProfile> = ({ onCancel }) => {
           Theme
           <ThemeDisplay />
         </SPanel>
-        <SPanel>{user.name}</SPanel>
+        <SPanel>
+          <EditInput value={user.name} onSave={updateUsername} />
+        </SPanel>
       </STopContainer>
       <SPreferenceContainer>
         <SPreferenceHeader>Preferences</SPreferenceHeader>
