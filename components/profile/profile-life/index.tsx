@@ -416,6 +416,7 @@ const ProfileLife: FC = () => {
             value={timePeriod}
             options={TIME_PERIOD_OPTIONS}
             width={140}
+            isDisabled={selectedMenu === 'wellness_trends'}
             onChange={handleTimeDropdownChange}
           />
         </SDropdownContainer>
