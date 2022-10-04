@@ -3,6 +3,7 @@ import {
   COLOURS,
   MEDIA_MAX_DESKTOP,
   MEDIA_MOBILE,
+  OPACITY_30,
   OPACITY_70,
 } from '@utils/constants';
 import { FC, useEffect, useRef, useState } from 'react';
@@ -24,6 +25,7 @@ type TAnimateStyle = 'open' | 'close' | 'idle';
 
 interface ISContainer {
   animateStyle: TAnimateStyle;
+  darkMode: boolean;
 }
 interface ISContent {
   isCurrentPath: boolean;
@@ -53,7 +55,10 @@ const SContainer = styled.div<ISContainer>`
       width: 0;
     }
     to {
-      box-shadow: 0px 0px 20px 1px ${COLOURS.black}${OPACITY_70};
+      ${({ darkMode }) =>
+        `box-shadow: 0px 0px 20px 1px ${COLOURS.black}${
+          darkMode ? '' : OPACITY_30
+        }`};
       width: ${MENU_WIDTH}px;
 
       ${MEDIA_MOBILE} {
@@ -164,7 +169,11 @@ const SideMenuDisplay: FC = () => {
   };
 
   return (
-    <SContainer ref={sideMenuRef} animateStyle={animateStyle}>
+    <SContainer
+      ref={sideMenuRef}
+      animateStyle={animateStyle}
+      darkMode={theme.darkMode}
+    >
       <SMenuIconContainer isOpen={isOpen}>
         <MenuIcon transparentBG />
       </SMenuIconContainer>

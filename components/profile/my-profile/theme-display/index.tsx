@@ -62,10 +62,10 @@ const SThemePickerContainer = styled.div`
     max-height: 0;
   }
   &.open {
-    animation: open 0.2s ease-out forwards;
+    animation: open-themes 0.2s ease-out forwards;
   }
 
-  @keyframes open {
+  @keyframes open-themes {
     from {
       max-height: 0px;
     }
@@ -110,6 +110,7 @@ const ThemeDisplay: React.FC = () => {
     updateTheme,
   } = useUserContext();
   const [themeOpened, setThemeOpened] = useState(false);
+
   useOnClickOutsideElementsArray([currentThemeRef, themePickerRef], () =>
     setThemeOpened(false)
   );
