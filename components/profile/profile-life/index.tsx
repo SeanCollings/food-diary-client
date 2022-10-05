@@ -18,9 +18,8 @@ import {
 import { FC, useEffect, useRef, useState, ChangeEvent } from 'react';
 import styled from 'styled-components';
 
+const SCROLL_TOLERANCE = 1;
 const PADDING = 40;
-const TITLE_WIDTH = 80;
-const DATA_WIDTH = 60;
 const CHART_HEIGHT = 320;
 
 interface ISContainer {
@@ -226,10 +225,6 @@ const TrendMenu: FC<ITrendMenuProps> = ({ selectedMenu, onClick }) => {
   );
 };
 
-const getChartWidth = (dataPoints: number) => {
-  return TITLE_WIDTH + dataPoints * DATA_WIDTH;
-};
-
 const shadowHeightLookup: { [key in TProfileLifeTrends]: number } = {
   food_trends: CHART_HEIGHT,
   wellness_trends: CHART_HEIGHT,
@@ -276,17 +271,9 @@ const ProfileLife: FC = () => {
       containerRef.current?.getBoundingClientRect().width ?? 0;
     const scrollWidth = scrollRef.current?.scrollWidth ?? 0;
 
-    // console.log('containerWidth ::', containerWidth - PADDING - PADDING);
-    // console.log('containerRef.current ::', containerRef.current);
-    // console.log('scrollWidth ::', scrollWidth);
-    // console.log('scrollRef.current ::', scrollRef.current);
-
     if (scrollWidth > containerWidth - PADDING - PADDING) {
       setScrollVisible(true);
     }
-    // if (width < getChartWidth(7)) {
-    //   setScrollVisible(true);
-    // }
   }, []);
 
   useEffect(() => {
@@ -299,37 +286,23 @@ const ProfileLife: FC = () => {
     const resizeObserver = new ResizeObserver((entries) => {
       const rect = entries[0].contentRect;
       const { width } = rect;
-      const isScrollVisible = width < getChartWidth(7);
 
       const scrollWidth = scrollRef.current?.scrollWidth ?? 0;
-      const containerWidth =
-        containerRef.current?.getBoundingClientRect().width ?? 0;
+      const isScrollVisible = width + SCROLL_TOLERANCE < scrollWidth;
 
-      const isScrollVisible2 = scrollWidth > containerWidth - PADDING - PADDING;
-
-      // console.log('containerWidth ::', containerWidth - PADDING - PADDING);
-      // console.log('scrollWidth ::', scrollWidth);
-      // console.log('isScrollVisible2 ::', isScrollVisible2);
-
-      if (isScrollVisible2 && !scrollVisible) {
+      if (isScrollVisible && !scrollVisible) {
         setScrollVisible(true);
-        // console.log('SETTING');
-      } else if (!isScrollVisible2 && scrollVisible) {
+        setScrollEnd(false);
+      } else if (!isScrollVisible && scrollVisible) {
         setScrollVisible(false);
-        // console.log('restet');
       }
-      // if (isScrollVisible && !scrollVisible) {
-      //   setScrollVisible(true);
-      // } else if (!isScrollVisible && scrollVisible) {
-      //   setScrollVisible(false);
-      // }
     });
     resizeObserver.observe(scrollCurrent);
 
     return () => {
       resizeObserver.unobserve(scrollCurrent);
     };
-  }, [scrollVisible]);
+  }, [scrollVisible, selectedMenu]);
 
   useEffect(() => {
     const scrollCurrent = scrollRef.current;
@@ -341,7 +314,7 @@ const ProfileLife: FC = () => {
     const scrollListener = (e: Event) => {
       const { scrollLeft, scrollWidth } = scrollCurrent;
       const { width } = scrollCurrent.getBoundingClientRect();
-      const isScrolledMax = scrollWidth - (width + scrollLeft) === 0;
+      const isScrolledMax = scrollWidth < width + scrollLeft;
 
       if (isScrolledMax && !scrollEnd) {
         setScrollEnd(true);

@@ -115,6 +115,13 @@ const SShareButton = styled.button<ISShareButton>`
   height: 50px;
   background: ${({ background }) => background};
   color: ${({ colour }) => colour};
+
+  :hover {
+    opacity: 0.6;
+  }
+  :active {
+    opacity: 0.4;
+  }
 `;
 
 interface IUserProfile {

@@ -136,7 +136,7 @@ const EditInput: FC<IEditInputProps> = ({ value, onSave }) => {
       {!editEnabled && (
         <SIconButton
           onClick={() => setEditEnabled(true)}
-          title="Update your name"
+          title="Edit your name"
         >
           <MdEdit color={COLOURS.gray} size={28} />
         </SIconButton>

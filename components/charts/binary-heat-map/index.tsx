@@ -10,6 +10,7 @@ const COLUMN_WIDTH_MAX = 100;
 const COLUMN_WIDTH_MIN = 24;
 const CIRCLE_WIDTH_MAX = 30;
 const CIRCLE_WIDTH_MIN = 14;
+const CIRCLE_HEIGHT_MIN = 20;
 
 interface ISDataContainer {
   height: number;
@@ -33,6 +34,7 @@ interface ISHAxisContainer {
 interface ISCircleDisplay {
   colour: string;
   size: number;
+  height: number;
 }
 interface ISHorizontalLine {
   colour: string;
@@ -80,14 +82,14 @@ const SData = styled(SDataItem)`
 `;
 const SCircleDisplay = styled.span<ISCircleDisplay>`
   width: ${({ size }) => size}px;
-  height: ${({ size }) => size}px;
+  height: ${({ height }) => height}px;
   background: ${({ colour }) => colour};
   border-radius: 50%;
   z-index: 2;
 `;
 const SHorizontalLine = styled.div<ISHorizontalLine>`
   position: absolute;
-  height: 2px;
+  height: 4px;
   left: 50%;
   width: ${({ width }) => width}px;
   background: ${({ colour }) => colour};
@@ -261,6 +263,8 @@ const BinaryHeatMap: React.FC<IBinaryHeatMapProps> = ({
     mealData.type === 'week' ? COLUMN_WIDTH_MAX : COLUMN_WIDTH_MIN;
   const dataSize =
     mealData.type === 'week' ? CIRCLE_WIDTH_MAX : CIRCLE_WIDTH_MIN;
+  const dataHeight =
+    mealData.type === 'week' ? CIRCLE_WIDTH_MAX : CIRCLE_HEIGHT_MIN;
 
   const MEAL_TYPE_COLOUR = {
     [EMealType.BREAKFAST]: theme.secondary,
@@ -310,6 +314,7 @@ const BinaryHeatMap: React.FC<IBinaryHeatMapProps> = ({
                       <SCircleDisplay
                         colour={colour}
                         size={dataSize}
+                        height={dataHeight}
                         title={`total: ${mealData.totals[id]}`}
                       />
                     )}
