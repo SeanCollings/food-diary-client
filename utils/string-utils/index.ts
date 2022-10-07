@@ -1,3 +1,5 @@
+import { v4 as uuidv4 } from 'uuid';
+
 export const trim = (value: string) => {
   return value?.trim();
 };
@@ -19,4 +21,8 @@ export const replaceTextAtEnd = (
   }
 
   return text.slice(0, -from) + newText;
+};
+
+export const createGuid = () => {
+  return uuidv4();
 };

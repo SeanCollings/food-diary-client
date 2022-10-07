@@ -1,4 +1,10 @@
-import { EMealType, IAppTheme, ICardProps } from '@utils/interfaces';
+import {
+  EMealType,
+  EWellnessTypes,
+  IAppTheme,
+  ICardProps,
+  IWellnessProps,
+} from '@utils/interfaces';
 
 export const OPACITY_10 = '1a';
 export const OPACITY_20 = '33';
@@ -65,6 +71,21 @@ export const ALL_MEAL_CARDS: ICardProps[] = [
   {
     id: EMealType.DINNER,
     title: 'Dinner',
+  },
+];
+
+export const ALL_WELLNESS_CARDS: IWellnessProps[] = [
+  {
+    id: EWellnessTypes.WATER,
+    title: 'Water',
+  },
+  {
+    id: EWellnessTypes.TEA_COFFEE,
+    title: 'Tea / Coffee',
+  },
+  {
+    id: EWellnessTypes.ALCOHOL,
+    title: 'Alcohol',
   },
 ];
 

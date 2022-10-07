@@ -8,7 +8,16 @@ export const getTodaysDate = () =>
     day: 'numeric',
   });
 
-export const formatFullDate = (date: string | Date) => {
+/**
+ * Converts date to format `Thursday, 29 Sept 2022`
+ * @param date string | Date
+ * @returns string
+ */
+export const formatFullDate = (date: string | Date | null) => {
+  if (!date) {
+    return '';
+  }
+
   const d = new Date(date);
   return d.toLocaleDateString('en-GB', {
     weekday: 'long',
@@ -18,14 +27,38 @@ export const formatFullDate = (date: string | Date) => {
   });
 };
 
-export const formatMonthSmallYear = (date: Date) => {
+/**
+ * Converts date to format `29 Sept 2022`
+ * @param date string | Date
+ * @returns string
+ */
+export const formatFullDateNoDay = (date: string | Date) => {
+  const d = new Date(date);
+  return d.toLocaleDateString('en-GB', {
+    year: 'numeric',
+    month: 'short',
+    day: 'numeric',
+  });
+};
+
+/**
+ * Converts date to format `Sep 2022`
+ * @param date string | Date
+ * @returns string
+ */
+export const formatMonthSmallYear = (date: string | Date) => {
   const newDate = new Date(date);
   const year = newDate.getFullYear().toString();
   const month = newDate.toLocaleString('en-US', { month: 'short' });
   return `${month} ${year}`;
 };
 
-export const formatMonthMediumYear = (date: Date) => {
+/**
+ * Converts date to format `September 2022`
+ * @param date string | Date
+ * @returns string
+ */
+export const formatMonthMediumYear = (date: string | Date) => {
   const newDate = new Date(date);
   const year = newDate.getFullYear().toString();
   const month = MONTHS[newDate.getMonth()];
@@ -129,6 +162,18 @@ export const setDateToMidnight = (date?: string | number | Date) => {
   return new Date(new Date(d).setHours(0, 0, 0, 0));
 };
 
+/**
+ * Converts date to format `2022-10-04T22:00:00.000Z`
+ * @param date string | Date
+ * @returns string
+ */
 export const setDateMidnightISOString = (date: string | Date) => {
   return setDateToMidnight(date).toISOString();
+};
+
+export const getDaysAwayFromDate = (date: Date, days: number) => {
+  const d = new Date(date);
+  d.setDate(d.getDate() + days);
+
+  return d;
 };

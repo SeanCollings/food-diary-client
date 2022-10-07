@@ -12,13 +12,7 @@ export enum EMealType {
   SNACK_2 = 'snack_2',
   DINNER = 'dinner',
 }
-
 export type TMealType = `${EMealType}`;
-
-interface IThemeColour {
-  colour: string;
-  opacity: string;
-}
 
 export interface IAppTheme {
   primary: string;
@@ -72,8 +66,12 @@ export enum EWellnessTypes {
   TEA_COFFEE = 'tea_coffee',
   ALCOHOL = 'alcohol',
 }
-
 export type TWellnessTypes = `${EWellnessTypes}`;
+
+export interface IWellnessProps {
+  id: TWellnessTypes;
+  title: string;
+}
 
 export enum EAddMealOptions {
   EMOJI_PICKER = 'emojiPicker',
