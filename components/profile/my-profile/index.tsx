@@ -6,6 +6,7 @@ import UserProfile from '@components/profile/my-profile/user-profile';
 import {
   ThemeBackgroundSecondary,
   ThemeBorderBottom,
+  ThemeBorderRight,
 } from '@components/ui/style-themed';
 
 const SContainer = styled.div`
@@ -21,6 +22,7 @@ const SContainer = styled.div`
   min-width: 400px;
   ${ThemeBackgroundSecondary}
   ${ThemeBorderBottom}
+  ${ThemeBorderRight}
 
   ${MEDIA_MOBILE} {
     padding: 20px;

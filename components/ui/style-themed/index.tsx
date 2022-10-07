@@ -18,6 +18,12 @@ export const ThemeBorderBottom = () => {
     theme.darkMode ? theme.backgroundTertiary : theme.quaternary
   };`;
 };
+export const ThemeBorderRight = () => {
+  const theme = useTheme();
+  return `border-right: 1px solid ${
+    theme.darkMode ? theme.backgroundTertiary : theme.quaternary
+  };`;
+};
 
 export const ThemePrimary = ({
   background = true,

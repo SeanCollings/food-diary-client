@@ -2,7 +2,10 @@ import BarGraph, { BarGraphLegend } from '@components/charts/bar-graph';
 import BinaryHeatMap from '@components/charts/binary-heat-map';
 import LineGraph from '@components/charts/line-graph';
 import DropdownProfile from '@components/ui/dropdown-profile';
-import { ThemeBorderBottom } from '@components/ui/style-themed';
+import {
+  ThemeBorderBottom,
+  ThemeBorderRight,
+} from '@components/ui/style-themed';
 import { useTheme } from '@hooks/use-theme';
 import {
   COLOURS,
@@ -46,6 +49,7 @@ const SContainer = styled.div<ISContainer>`
   padding: ${PADDING}px;
   min-height: 600px;
   ${ThemeBorderBottom}
+  ${ThemeBorderRight}
 
   ${MEDIA_MOBILE} {
     padding: 20px;
