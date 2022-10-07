@@ -1,7 +1,9 @@
+import Modal from '@components/modals';
+import ModalShareProfile from '@components/modals/share-profile';
 import { useTheme } from '@hooks/use-theme';
 import { useUserContext } from '@store/user-context';
 import { COLOURS, OPACITY_40 } from '@utils/constants';
-import { FC } from 'react';
+import { FC, useState } from 'react';
 import { MdAccountCircle, MdPhotoCamera, MdSettings } from 'react-icons/md';
 import styled from 'styled-components';
 
@@ -113,6 +115,7 @@ const SShareButton = styled.button<ISShareButton>`
   border: 1px solid;
   border-radius: 8px;
   height: 50px;
+  transition: 0.2s;
   background: ${({ background }) => background};
   color: ${({ colour }) => colour};
 
@@ -131,6 +134,11 @@ interface IUserProfile {
 const UserProfile: FC<IUserProfile> = ({ settingsClick }) => {
   const theme = useTheme();
   const { user } = useUserContext();
+  const [profileShared, setProfileShared] = useState(false);
+
+  const shareProfileHandler = () => {
+    setProfileShared(true);
+  };
 
   return (
     <>
@@ -181,10 +189,17 @@ const UserProfile: FC<IUserProfile> = ({ settingsClick }) => {
         </SStatsContainer>
       )}
       <SButtonContainer>
-        <SShareButton colour={theme.text} background={theme.primary}>
+        <SShareButton
+          colour={theme.text}
+          background={theme.primary}
+          onClick={shareProfileHandler}
+        >
           Share Profile
         </SShareButton>
       </SButtonContainer>
+      <Modal show={profileShared} modalWidth={600}>
+        <ModalShareProfile onClose={() => setProfileShared(false)} />
+      </Modal>
     </>
   );
 };

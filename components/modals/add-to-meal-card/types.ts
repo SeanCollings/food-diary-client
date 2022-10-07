@@ -7,7 +7,7 @@ import {
 } from '@utils/interfaces';
 import { TErrors } from '@utils/validation/validation.types';
 
-export interface IModalProps {
+export interface IModalAddMealProps {
   mealId: TMealType;
   content: IMealContent | null;
   onClose: () => void;

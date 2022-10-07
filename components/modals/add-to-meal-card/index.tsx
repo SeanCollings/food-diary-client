@@ -15,7 +15,7 @@ import {
 } from '@components/modals/add-to-meal-card/reducer';
 import {
   EAddToMealType,
-  IModalProps,
+  IModalAddMealProps,
   IRunFormValidations,
 } from '@components/modals/add-to-meal-card/types';
 import { trim } from '@utils/string-utils';
@@ -48,7 +48,7 @@ const runFormValidations = (values: IRunFormValidations) =>
     }),
   ]);
 
-const ModalAddToMealCard: FC<IModalProps> = ({
+const ModalAddToMealCard: FC<IModalAddMealProps> = ({
   mealId,
   content,
   onClose,
