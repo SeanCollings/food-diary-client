@@ -24,6 +24,7 @@ const SInput = styled.input<ITheme>`
   transition: 0.2s;
   border: 1px solid ${COLOURS.gray}${OPACITY_50};
   background-color: ${COLOURS.white_off};
+  opacity: 1;
 
   :after {
     content: '';
@@ -53,28 +54,43 @@ const SInput = styled.input<ITheme>`
   :active {
     opacity: 0.6;
   }
+
+  &.disabled {
+    opacity: 0.4;
+  }
 `;
 
 interface IToggleProps {
+  title?: string;
   checked?: boolean;
   tabIndex?: number;
+  disabled?: boolean;
   onChange: () => void;
 }
 
-const Toggle: FC<IToggleProps> = ({ checked = false, tabIndex, onChange }) => {
+const Toggle: FC<IToggleProps> = ({
+  title,
+  checked = false,
+  tabIndex,
+  disabled,
+  onChange,
+}) => {
   const theme = useTheme();
 
   return (
     <SInput
       tabIndex={tabIndex}
       type={'checkbox'}
+      title={title}
       onChange={onChange}
       checked={checked}
+      disabled={disabled}
       colourOff={theme.backgroundPrimary}
       colourOn={theme.primary}
       colourLeft={theme.primary}
       colourRight={theme.tertiary}
       boxShadow={theme.darkMode ? COLOURS.black : COLOURS.gray}
+      className={disabled ? 'disabled' : ''}
     />
   );
 };
