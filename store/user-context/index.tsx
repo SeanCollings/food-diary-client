@@ -15,6 +15,7 @@ export enum EUser {
   NAME = 'name',
   EMAIL = 'email',
   AVATAR = 'avatar',
+  SHARE_LINK = 'shareLink',
   DARK_MODE = 'darkMode',
   THEME = 'theme',
   STATS = 'stats',
@@ -24,6 +25,7 @@ export enum EPrefences {
   SHOW_DAY_STREAK = 'showDayStreak',
   SHOW_WEEKLY_EXERCISE = 'showWeeklyExcercise',
   SHOW_WEEKLY_WATER = 'showWeeklyWater',
+  IS_PROFILE_SHARED = 'isProfileShared',
 }
 
 export interface IUserTheme {
@@ -37,10 +39,12 @@ export interface IUserModel {
   [EUser.AVATAR]: string;
   [EUser.DARK_MODE]: boolean;
   [EUser.THEME]: IUserTheme;
+  [EUser.SHARE_LINK]: string;
   [EUser.PREFERENCES]: {
     [EPrefences.SHOW_DAY_STREAK]?: boolean;
     [EPrefences.SHOW_WEEKLY_EXERCISE]?: boolean;
     [EPrefences.SHOW_WEEKLY_WATER]?: boolean;
+    [EPrefences.IS_PROFILE_SHARED]?: boolean;
   };
   [EUser.STATS]?: {
     dayStreak: number;
@@ -54,12 +58,14 @@ type IPartialUserUpdate =
   | { [EUser.NAME]: string }
   | { [EUser.EMAIL]: string }
   | { [EUser.AVATAR]: string }
-  | { [EUser.DARK_MODE]: boolean };
+  | { [EUser.DARK_MODE]: boolean }
+  | { [EUser.SHARE_LINK]: string };
 
 type IPartialPreference =
   | { [EPrefences.SHOW_DAY_STREAK]?: boolean }
   | { [EPrefences.SHOW_WEEKLY_EXERCISE]: boolean }
-  | { [EPrefences.SHOW_WEEKLY_WATER]: boolean };
+  | { [EPrefences.SHOW_WEEKLY_WATER]: boolean }
+  | { [EPrefences.IS_PROFILE_SHARED]: boolean };
 
 type IPartialTheme = { light: EThemeLight } | { dark: EThemeDark };
 
@@ -75,6 +81,7 @@ const initialState: IUserContext = {
     name: 'Test Username',
     email: 'test@address.com',
     avatar: '',
+    shareLink: '',
     darkMode: true,
     theme: {
       light: EThemeLight.DEFAULT_LIGHT,
