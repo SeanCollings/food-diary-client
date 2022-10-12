@@ -27,7 +27,9 @@ import {
 } from '@components/share/content-rows';
 import SharePagination from '@components/share/pagination';
 import { getPaddedNestedArray } from '@utils/array-utils';
+import Calendar from '@components/calendar';
 
+const CALENDAR_HEIGHT = 280;
 const DEFAULT_DAYS_SHOW = 7;
 const MAX_DAYS_PER_ROW = 2;
 const MAX_ROWS_PER_PAGE = 4;
@@ -106,11 +108,38 @@ const SRange = styled.button`
   ${ThemeTextColor}
   ${ThemeBackgroundSecondary}
 
-  :hover {
+  :hover:not(.fade) {
     border: 1px solid;
   }
   :active {
     opacity: 0.6;
+  }
+
+  &.selected {
+    border: 1px solid;
+  }
+  &.fade {
+    opacity: 0.4;
+  }
+`;
+const SCalendarContainer = styled.div`
+  position: absolute;
+  max-width: 340px;
+  width: fit-content;
+  top: 50px;
+  height: auto;
+  z-index: 1;
+
+  &.from-date {
+    left: 0px;
+  }
+
+  &.to-date {
+    right: 0px;
+  }
+
+  ${MEDIA_MOBILE} {
+    max-width: 100%;
   }
 `;
 const SApplyButton = styled.button<ISApplyButton>`
@@ -354,6 +383,8 @@ const SharePage: NextPage<ISharePageProps> = ({ guid }) => {
     getDaysAwayFromDate(new Date(), -(DEFAULT_DAYS_SHOW - 1))
   );
   const [toDate, setToDate] = useState(new Date());
+  const [showToDateCalendar, setShowToDateCalendar] = useState(false);
+  const [showFromDateCalendar, setshowFromDateCalendar] = useState(false);
 
   useEffect(() => {
     const getData = () => {
@@ -392,6 +423,33 @@ const SharePage: NextPage<ISharePageProps> = ({ guid }) => {
     }
   };
 
+  const onClickStartDate = () => {
+    setshowFromDateCalendar((curr) => !curr);
+    setShowToDateCalendar(false);
+  };
+  const onClickEndDate = () => {
+    setShowToDateCalendar((curr) => !curr);
+    setshowFromDateCalendar(false);
+  };
+  const onClickChangeDateFrom = (date: Date) => {
+    setFromDate(date);
+    setshowFromDateCalendar(false);
+    setDateRangeChanged(true);
+  };
+  const onClickChangeDateTo = (date: Date) => {
+    setToDate(date);
+    setShowToDateCalendar(false);
+    setDateRangeChanged(true);
+  };
+  const onClickApplyDateRange = () => {
+    console.log(
+      'APPLY DATE RANGE ::',
+      setDateMidnightISOString(fromDate),
+      setDateMidnightISOString(toDate)
+    );
+    setDateRangeChanged(false);
+  };
+
   if (!userData) {
     return (
       <SContainer>
@@ -423,12 +481,46 @@ const SharePage: NextPage<ISharePageProps> = ({ guid }) => {
       <STopContainer>
         <SFakeRange />
         <SRangeContainer>
-          <SRange title="Select start date">
+          {showFromDateCalendar && (
+            <SCalendarContainer className="from-date">
+              <Calendar
+                topLevelDate={fromDate}
+                calendarHeight={CALENDAR_HEIGHT}
+                restricDaysAfter={toDate}
+                onClose={() => setshowFromDateCalendar(false)}
+                onClickNewDate={onClickChangeDateFrom}
+              />
+            </SCalendarContainer>
+          )}
+          <SRange
+            title="Select start date"
+            onClick={onClickStartDate}
+            className={`${showToDateCalendar ? 'fade' : ''} ${
+              showFromDateCalendar ? 'selected' : ''
+            }`}
+          >
             {formatFullDateNoDay(fromDate)}
             <MdCalendarToday />
           </SRange>
           -
-          <SRange title="Select end date">
+          {showToDateCalendar && (
+            <SCalendarContainer className="to-date">
+              <Calendar
+                topLevelDate={toDate}
+                calendarHeight={CALENDAR_HEIGHT}
+                restrictDaysBefore={fromDate}
+                onClose={() => setShowToDateCalendar(false)}
+                onClickNewDate={onClickChangeDateTo}
+              />
+            </SCalendarContainer>
+          )}
+          <SRange
+            title="Select end date"
+            onClick={onClickEndDate}
+            className={`${showFromDateCalendar ? 'fade' : ''} ${
+              showToDateCalendar ? 'selected' : ''
+            }`}
+          >
             {formatFullDateNoDay(toDate)}
             <MdCalendarToday />
           </SRange>
@@ -438,6 +530,7 @@ const SharePage: NextPage<ISharePageProps> = ({ guid }) => {
           colour={theme.text}
           disabled={!dateRangeChanged}
           className={dateRangeChanged ? 'apply-enabled' : 'apply-disabled'}
+          onClick={onClickApplyDateRange}
         >
           Apply
         </SApplyButton>
