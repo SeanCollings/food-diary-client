@@ -2,7 +2,7 @@ import { MEDIA_MOBILE } from '@utils/constants';
 import { FC, useState } from 'react';
 import styled from 'styled-components';
 import { MdArrowRight, MdArrowLeft } from 'react-icons/md';
-import CalendarContainer from '@components/calendar';
+import Calendar from '@components/calendar';
 import {
   formatFullDate,
   getIsDateSelectedToday,
@@ -10,6 +10,7 @@ import {
 } from '@utils/date-utils';
 import { useDateSelectedContext } from '@store/date-selected-context';
 import { useTheme } from '@hooks/use-theme';
+import { useAllEntriesPerMonthContext } from '@store/all-entries-per-month-context';
 
 interface ISFullDateContainer {
   colour: string;
@@ -117,6 +118,7 @@ const SCalendarContainer = styled.div`
 
 const DateDisplay: FC = () => {
   const theme = useTheme();
+  const { allEntriesPerMonth } = useAllEntriesPerMonthContext();
   const { dateSelectedISO, updateSelectedDateISO } = useDateSelectedContext();
   const [showCalendar, setShowCalendar] = useState(false);
 
@@ -156,8 +158,9 @@ const DateDisplay: FC = () => {
         </SDate>
         {showCalendar && (
           <SCalendarContainer>
-            <CalendarContainer
+            <Calendar
               topLevelDate={dateSelectedISO}
+              allEntriesPerMonth={allEntriesPerMonth}
               onClose={closeCalendarHandler}
               onClickNewDate={onClickNewDateHandler}
             />

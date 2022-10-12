@@ -1,36 +1,36 @@
 import { useOnClickOutsideElement } from '@hooks/use-onclick-outside-element';
-import { COLOURS, OPACITY_20, OPACITY_40 } from '@utils/constants';
-import {
-  formatMonthSmallYear,
-  getBothDatesEqual,
-  getCurrentDayInDate,
-  getIsDateSelectedToday,
-  getIsDayInTheFuture,
-  getNewMonth,
-} from '@utils/date-utils';
+import { COLOURS, OPACITY_20, OPACITY_40, OPACITY_80 } from '@utils/constants';
+import { formatMonthSmallYear, getNewMonth } from '@utils/date-utils';
 import { IDayNumber, isDayNumberTypeGuard } from '@utils/type-guards';
 import { FC, useRef, useState } from 'react';
 import styled from 'styled-components';
 import { MdArrowLeft, MdArrowRight } from 'react-icons/md';
-import { useAllEntriesPerMonthContext } from '@store/all-entries-per-month-context';
-import { generateMonthMatrix } from '@utils/calendar-utils';
+import { TEntriePerMonth } from '@store/all-entries-per-month-context';
+import {
+  generateMonthMatrix,
+  getCalendarDayProperties,
+  getCalendarRestrictions,
+} from '@utils/calendar-utils';
 import { ThemeBackgroundTertiary } from '@components/ui/style-themed';
 import { useTheme } from '@hooks/use-theme';
+import { getClassNames } from '@utils/string-utils';
 
 const CALENDAR_HEIGHT = 320;
 const MONTH_SELECTOR_HEIGHT = 30;
 const DAY_NAME_HEIGHT = 24;
 const DAY_GAP = 2;
 
+interface ISContainer {
+  calendarHeight: number;
+}
 interface ISDayContainer {
   rowHeight: number;
-  isCurrentDay: boolean;
   backgroundColour: string;
   bottomLeft: boolean;
   bottomRight: boolean;
-  isSelectedDay: boolean;
-  isPeripheralMonthDay?: boolean;
-  primaryColour: string;
+  primary: string;
+  secondary: string;
+  colour: string;
 }
 interface ISDayHasEntry {
   background: string;
@@ -40,14 +40,15 @@ interface ISSelectTodayButton {
   background: string;
 }
 
-const SContainer = styled.div`
+const SContainer = styled.div<ISContainer>`
   width: 100%;
   border-radius: 10px;
   display: flex;
   flex-direction: column;
   padding: 4px;
   box-shadow: 0px 8px 20px -8px ${COLOURS.black}${OPACITY_40};
-  height: ${CALENDAR_HEIGHT + MONTH_SELECTOR_HEIGHT + 8}px;
+  height: ${({ calendarHeight }) =>
+    `${calendarHeight + MONTH_SELECTOR_HEIGHT + 8}`}px;
   ${ThemeBackgroundTertiary}
 `;
 const SDateSelectorContainer = styled.div`
@@ -131,47 +132,110 @@ const SDayContainer = styled.div<ISDayContainer>`
   flex-direction: row;
   flex: 1;
   font-size: 14px;
-  padding: 0 4px;
-  box-shadow: 0 0 0 1px ${COLOURS.gray}${OPACITY_20} inset;
-
-  cursor: ${({ isPeripheralMonthDay }) =>
-    !isPeripheralMonthDay ? 'pointer' : 'inherit'};
-  font-weight: ${({ isCurrentDay }) => (isCurrentDay ? 'bold' : '200')};
+  padding: 0 2px;
+  cursor: pointer;
+  font-weight: 200;
+  box-shadow: inset 0 0 0 1px ${COLOURS.gray}${OPACITY_20};
   height: ${({ rowHeight }) => rowHeight}px;
 
-  ${({ isCurrentDay, isSelectedDay, primaryColour }) =>
-    isCurrentDay && !isSelectedDay && `color: ${primaryColour}`};
-  ${({ isCurrentDay, primaryColour }) =>
-    isCurrentDay && `box-shadow: 0 0 0 1px ${primaryColour} inset;`}
   ${({ bottomRight }) => bottomRight && `border-radius: 0 0 5px 0`};
   ${({ bottomLeft }) => bottomLeft && `border-radius: 0 0 0 5px`};
   ${({ backgroundColour }) =>
     backgroundColour && `background-color: ${backgroundColour}`};
-  ${({ isPeripheralMonthDay }) => isPeripheralMonthDay && `opacity: 0.4`};
-  ${({ isSelectedDay, primaryColour }) =>
-    isSelectedDay && `background-color: ${primaryColour}${OPACITY_40};`};
+
+  &.selected-date {
+    background-color: ${({ primary }) => `${primary}${OPACITY_80}`};
+  }
+
+  &.today {
+    font-weight: bold;
+  }
+
+  &.selected-date {
+    .day-entry {
+      background: ${({ backgroundColour }) => backgroundColour};
+    }
+  }
+
+  &.selected-date&.today {
+    display: flex;
+    align-items: center;
+
+    > div:first-of-type {
+      height: calc(100% - 4px);
+      padding: 0 2px;
+      gap: 4px;
+    }
+  }
+
+  &.selected-from-date {
+    border-top-left-radius: 8px;
+    border-bottom-left-radius: 8px;
+  }
+  &.selected-to-date {
+    border-top-right-radius: 8px;
+    border-bottom-right-radius: 8px;
+  }
+  &.inbetween-from-to-dates {
+    box-shadow: inset 0px 1px 0px 0px ${({ primary }) => primary},
+      inset 0px -1px 0px 0px ${({ primary }) => primary};
+  }
+
+  &.restrict-before {
+    border-top-left-radius: 8px;
+    border-bottom-left-radius: 8px;
+    box-shadow: inset 2px 0px 0px 0px ${({ primary }) => primary},
+      inset 0px 1px 0px 0px ${({ primary }) => primary},
+      inset 0px -1px 0px 0px ${({ primary }) => primary};
+  }
+  &.restrict-after {
+    border-top-right-radius: 8px;
+    border-bottom-right-radius: 8px;
+    box-shadow: inset -2px 0px 0px 0px ${({ primary }) => primary},
+      inset 0px 1px 0px 0px ${({ primary }) => primary},
+      inset 0px -1px 0px 0px ${({ primary }) => primary};
+  }
+
+  &.restricted-day {
+    cursor: inherit;
+    opacity: 0.4;
+  }
+
+  &.peripheral-month {
+    cursor: inherit;
+    opacity: 0.1;
+  }
 `;
 const STitleRow = styled.div``;
 const SDayRow = styled.div`
   width: 100%;
   display: flex;
   flex-direction: column;
-  gap: 2px;
+  padding: 2px;
+  gap: 4px;
 `;
 const SDayHasEntry = styled.div<ISDayHasEntry>`
   height: 8px;
-  width: 100%;
+  width: 80%;
   border-radius: 8px;
   background: ${({ background }) => background};
 `;
 
 interface ICalendarContentProps {
-  topLevelDate: string;
+  topLevelDate: string | Date;
+  calendarHeight: number;
   selectedMonthDate: Date;
+  restricDaysAfter?: string | Date;
+  restrictDaysBefore?: string | Date;
+  allEntriesPerMonth?: TEntriePerMonth;
   onDayClicked: (day: number) => void;
 }
-interface ICalendarContainerProps {
-  topLevelDate: string;
+interface ICalendarProps {
+  topLevelDate: string | Date;
+  calendarHeight?: number;
+  allEntriesPerMonth?: TEntriePerMonth;
+  restricDaysAfter?: string | Date;
+  restrictDaysBefore?: string | Date;
   onClickNewDate: (newDate: Date) => void;
   onClose: () => void;
 }
@@ -215,15 +279,18 @@ const DateSelector: FC<IDateSelectorProps> = ({
 };
 
 const CalendarContent: FC<ICalendarContentProps> = ({
+  calendarHeight,
   topLevelDate,
   selectedMonthDate,
+  allEntriesPerMonth,
+  restricDaysAfter,
+  restrictDaysBefore,
   onDayClicked,
 }) => {
   const theme = useTheme();
-  const { allEntriesPerMonth } = useAllEntriesPerMonthContext();
 
   const currentMonthYear = formatMonthSmallYear(selectedMonthDate);
-  const entriesPerMonth = allEntriesPerMonth[currentMonthYear];
+  const entriesPerMonth = allEntriesPerMonth?.[currentMonthYear];
   const matrix = generateMonthMatrix(selectedMonthDate);
   const maxRows = (matrix[6][0] as IDayNumber).otherMonthDay ? 5 : 6;
 
@@ -245,7 +312,7 @@ const CalendarContent: FC<ICalendarContentProps> = ({
         const rowItems = row.map((item, colIndex) => {
           const titleRow = rowIndex === 0;
           const rowHeight =
-            (CALENDAR_HEIGHT - DAY_NAME_HEIGHT - maxRows * DAY_GAP) / maxRows;
+            (calendarHeight - DAY_NAME_HEIGHT - maxRows * DAY_GAP) / maxRows;
 
           if (titleRow && !isDayNumberTypeGuard(item)) {
             return (
@@ -256,22 +323,39 @@ const CalendarContent: FC<ICalendarContentProps> = ({
           }
 
           if (!titleRow && isDayNumberTypeGuard(item)) {
-            const dayHasEntry = entriesPerMonth?.includes(item.day);
-            const currentDateFromDay = getCurrentDayInDate(
-              selectedMonthDate,
-              item.day
-            );
-            const isSelectedDay =
-              getBothDatesEqual(topLevelDate, currentDateFromDay) &&
-              !item.otherMonthDay;
-            const isCurrentDay = getIsDateSelectedToday(
-              getCurrentDayInDate(selectedMonthDate, item.day)
-            );
-            const isDayInTheFuture = getIsDayInTheFuture(
-              selectedMonthDate,
-              item.day
-            );
-            const isPeripheralMonthDay = item.otherMonthDay || isDayInTheFuture;
+            const {
+              calendarDay,
+              dayHasEntry,
+              isDayInTheFuture,
+              isPeripheralMonth,
+              isSelectedDay,
+              isToday,
+            } = getCalendarDayProperties({
+              day: item.day,
+              otherMonthDay: item.otherMonthDay,
+              entriesPerMonth,
+              selectedDay: selectedMonthDate,
+              topLevelDate,
+              restricDaysAfter,
+              restrictDaysBefore,
+            });
+            const { isDayRestricted, isRestrictAfterDay, isRestrictBeforeDay } =
+              getCalendarRestrictions({
+                calendarDay,
+                restricDaysAfter,
+                restrictDaysBefore,
+              });
+
+            const classNames = getClassNames({
+              'peripheral-month': item.otherMonthDay,
+              'restricted-day': isDayInTheFuture || isDayRestricted,
+              today: isToday && !isPeripheralMonth,
+              'selected-date': isSelectedDay && !isPeripheralMonth,
+              'restrict-before': isRestrictBeforeDay,
+              'restrict-after': isRestrictAfterDay,
+              'selected-from-date': isSelectedDay && !!restricDaysAfter,
+              'selected-to-date': isSelectedDay && !!restrictDaysBefore,
+            });
 
             return (
               <SDayContainer
@@ -282,20 +366,26 @@ const CalendarContent: FC<ICalendarContentProps> = ({
                     ? theme.backgroundSecondary
                     : COLOURS.gray_light
                 }
-                isCurrentDay={isCurrentDay && !isPeripheralMonthDay}
                 onClick={() =>
-                  daySelectedHandler(item.day, isPeripheralMonthDay)
+                  daySelectedHandler(
+                    item.day,
+                    isPeripheralMonth || isDayRestricted
+                  )
                 }
                 bottomLeft={rowIndex === maxRows && colIndex === 0}
                 bottomRight={rowIndex === maxRows && colIndex === 6}
-                isPeripheralMonthDay={isPeripheralMonthDay}
-                isSelectedDay={isSelectedDay && !isPeripheralMonthDay}
-                primaryColour={theme.primary}
+                primary={theme.primary}
+                secondary={theme.secondary}
+                colour={theme.text}
+                className={classNames}
               >
                 <SDayRow>
                   {item.day}
-                  {dayHasEntry && !isPeripheralMonthDay && (
-                    <SDayHasEntry background={theme.primary} />
+                  {dayHasEntry && (
+                    <SDayHasEntry
+                      background={theme.primary}
+                      className="day-entry"
+                    />
                   )}
                 </SDayRow>
               </SDayContainer>
@@ -311,8 +401,12 @@ const CalendarContent: FC<ICalendarContentProps> = ({
   );
 };
 
-const CalendarContainer: FC<ICalendarContainerProps> = ({
+const Calendar: FC<ICalendarProps> = ({
   topLevelDate,
+  allEntriesPerMonth,
+  restrictDaysBefore,
+  restricDaysAfter,
+  calendarHeight = CALENDAR_HEIGHT,
   onClose,
   onClickNewDate,
 }) => {
@@ -337,7 +431,7 @@ const CalendarContainer: FC<ICalendarContainerProps> = ({
   };
 
   return (
-    <SContainer ref={calendarRef}>
+    <SContainer ref={calendarRef} calendarHeight={calendarHeight}>
       <DateSelector
         selectedMonthDate={selectedMonthDate}
         onSelectNextMonth={nextMonthHandler}
@@ -345,12 +439,16 @@ const CalendarContainer: FC<ICalendarContainerProps> = ({
         onSelectToday={onSelecteTodayHandler}
       />
       <CalendarContent
+        calendarHeight={calendarHeight}
         topLevelDate={topLevelDate}
         selectedMonthDate={selectedMonthDate}
+        allEntriesPerMonth={allEntriesPerMonth}
+        restrictDaysBefore={restrictDaysBefore}
+        restricDaysAfter={restricDaysAfter}
         onDayClicked={handleDayClicked}
       />
     </SContainer>
   );
 };
 
-export default CalendarContainer;
+export default Calendar;
