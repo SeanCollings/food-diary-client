@@ -26,3 +26,12 @@ export const replaceTextAtEnd = (
 export const createGuid = () => {
   return uuidv4();
 };
+
+export const getClassNames = (classNames: { [name in string]?: boolean }) =>
+  Object.keys(classNames).reduce((curr, add) => {
+    if (classNames[add]) {
+      curr += `${!curr.length ? '' : ' '}${add}`;
+    }
+
+    return curr;
+  }, '');

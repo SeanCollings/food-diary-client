@@ -1,5 +1,7 @@
 import { MONTHS } from '@utils/constants';
 
+type TDate = string | Date;
+
 export const getTodaysDate = () =>
   new Date().toLocaleDateString('en-GB', {
     weekday: 'long',
@@ -13,7 +15,7 @@ export const getTodaysDate = () =>
  * @param date string | Date
  * @returns string
  */
-export const formatFullDate = (date: string | Date | null) => {
+export const formatFullDate = (date: TDate | null) => {
   if (!date) {
     return '';
   }
@@ -32,7 +34,7 @@ export const formatFullDate = (date: string | Date | null) => {
  * @param date string | Date
  * @returns string
  */
-export const formatFullDateNoDay = (date: string | Date) => {
+export const formatFullDateNoDay = (date: TDate) => {
   const d = new Date(date);
   return d.toLocaleDateString('en-GB', {
     year: 'numeric',
@@ -46,7 +48,7 @@ export const formatFullDateNoDay = (date: string | Date) => {
  * @param date string | Date
  * @returns string
  */
-export const formatMonthSmallYear = (date: string | Date) => {
+export const formatMonthSmallYear = (date: TDate) => {
   const newDate = new Date(date);
   const year = newDate.getFullYear().toString();
   const month = newDate.toLocaleString('en-US', { month: 'short' });
@@ -58,7 +60,7 @@ export const formatMonthSmallYear = (date: string | Date) => {
  * @param date string | Date
  * @returns string
  */
-export const formatMonthMediumYear = (date: string | Date) => {
+export const formatMonthMediumYear = (date: TDate) => {
   const newDate = new Date(date);
   const year = newDate.getFullYear().toString();
   const month = MONTHS[newDate.getMonth()];
@@ -92,7 +94,7 @@ export const isMonthInFuture = (compareDate: Date) => {
   );
 };
 
-export const getCurrentDayInDate = (date: string | Date, day: number) =>
+export const getCurrentDayInDate = (date: TDate, day: number) =>
   new Date(new Date(date).setDate(day));
 
 export const getTodaysDateFromDay = (day: number) =>
@@ -107,15 +109,18 @@ export const getIsDayInTheFuture = (compareDate: Date, compareDay: number) =>
   isMonthInFuture(compareDate) ||
   (isCurrentMonth(compareDate) && isDayInMonthInFuture(compareDay));
 
-export const getBothDatesEqual = (
-  firstDate: string | Date,
-  secondDate: Date
-) => {
+export const getBothDatesEqual = (firstDate: TDate, secondDate: Date) => {
   return (
     setDateToMidnight(firstDate).getTime() ===
     setDateToMidnight(secondDate).getTime()
   );
 };
+
+export const getDayFromDate = (date: TDate) => new Date(date).getDate();
+
+export const isBetweenDates = (compare: TDate, from: TDate, to: TDate) =>
+  new Date(compare).valueOf() > new Date(from).valueOf() &&
+  new Date(compare).valueOf() < new Date(to).valueOf();
 
 export const isLeapYear = (month: number, year: number) => {
   if (month === 1) {
@@ -126,7 +131,7 @@ export const isLeapYear = (month: number, year: number) => {
   return 0;
 };
 
-export const getNewDay = (selectedDate: string | Date, getNextDay: boolean) => {
+export const getNewDay = (selectedDate: TDate, getNextDay: boolean) => {
   const date = new Date(selectedDate);
   date.setDate(date.getDate() + (getNextDay ? 1 : -1));
   return date;
@@ -150,7 +155,7 @@ export const getNewMonth = (
   return firstDayOfMonth;
 };
 
-export const getIsDateSelectedToday = (compareDate: string | Date) => {
+export const getIsDateSelectedToday = (compareDate: TDate) => {
   return (
     new Date(compareDate).setHours(0, 0, 0, 0) ===
     new Date().setHours(0, 0, 0, 0)
@@ -167,7 +172,7 @@ export const setDateToMidnight = (date?: string | number | Date) => {
  * @param date string | Date
  * @returns string
  */
-export const setDateMidnightISOString = (date: string | Date) => {
+export const setDateMidnightISOString = (date: TDate) => {
   return setDateToMidnight(date).toISOString();
 };
 
@@ -176,4 +181,12 @@ export const getDaysAwayFromDate = (date: Date, days: number) => {
   d.setDate(d.getDate() + days);
 
   return d;
+};
+
+export const isDayAfter = (thisDate: TDate, compareDate: TDate) => {
+  return setDateToMidnight(thisDate) > setDateToMidnight(compareDate);
+};
+
+export const isDayBefore = (thisDate: TDate, compareDate: TDate) => {
+  return setDateToMidnight(thisDate) < setDateToMidnight(compareDate);
 };

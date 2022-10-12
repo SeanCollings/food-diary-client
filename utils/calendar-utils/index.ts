@@ -1,5 +1,14 @@
 import { DAYS, WEEK_DAYS } from '@utils/constants';
-import { getNewMonth, isLeapYear } from '@utils/date-utils';
+import {
+  getBothDatesEqual,
+  getCurrentDayInDate,
+  getIsDateSelectedToday,
+  getIsDayInTheFuture,
+  getNewMonth,
+  isDayAfter,
+  isDayBefore,
+  isLeapYear,
+} from '@utils/date-utils';
 import { IDayNumber } from '@utils/type-guards';
 
 type TMonthMatrix = (string | IDayNumber)[][];
@@ -54,3 +63,70 @@ export const monthMatrix = () => {
 };
 
 export const generateMonthMatrix = monthMatrix();
+
+type TDate = string | Date;
+export interface ICalendarDayProperties {
+  day: number;
+  otherMonthDay: boolean | undefined;
+  selectedDay: Date;
+  entriesPerMonth: number[] | undefined;
+  topLevelDate: TDate;
+  restrictDaysBefore: TDate | undefined;
+  restricDaysAfter: TDate | undefined;
+}
+
+export const getCalendarDayProperties = ({
+  day,
+  selectedDay,
+  topLevelDate,
+  otherMonthDay,
+  entriesPerMonth,
+}: ICalendarDayProperties) => {
+  const calendarDay = getCurrentDayInDate(selectedDay, day);
+  const isToday = getIsDateSelectedToday(calendarDay);
+
+  const isDayInTheFuture = getIsDayInTheFuture(selectedDay, day);
+  const isPeripheralMonth = otherMonthDay || isDayInTheFuture;
+  const dayHasEntry = entriesPerMonth?.includes(day) && !isPeripheralMonth;
+  const isSelectedDay =
+    getBothDatesEqual(topLevelDate, calendarDay) && !otherMonthDay;
+
+  return {
+    isToday,
+    calendarDay,
+    dayHasEntry,
+    isSelectedDay,
+    isDayInTheFuture,
+    isPeripheralMonth,
+  };
+};
+
+interface ICalendarRestrictions {
+  calendarDay: Date;
+  restrictDaysBefore?: TDate;
+  restricDaysAfter?: TDate;
+}
+
+export const getCalendarRestrictions = ({
+  calendarDay,
+  restrictDaysBefore,
+  restricDaysAfter,
+}: ICalendarRestrictions) => {
+  const isRestrictBeforeDay =
+    (restrictDaysBefore &&
+      getBothDatesEqual(restrictDaysBefore, calendarDay)) ||
+    false;
+  const isRestrictAfterDay =
+    (restricDaysAfter && getBothDatesEqual(restricDaysAfter, calendarDay)) ||
+    false;
+  const isDayRestricted =
+    (restrictDaysBefore && isDayBefore(calendarDay, restrictDaysBefore)) ||
+    (restricDaysAfter && isDayAfter(calendarDay, restricDaysAfter)) ||
+    false;
+
+  return {
+    isRestrictBeforeDay,
+    isRestrictAfterDay,
+    isDayRestricted,
+  };
+};

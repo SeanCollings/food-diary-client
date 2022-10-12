@@ -11,6 +11,7 @@ export const OPACITY_20 = '33';
 export const OPACITY_30 = '4d';
 export const OPACITY_40 = '66';
 export const OPACITY_50 = '80';
+export const OPACITY_60 = '99';
 export const OPACITY_70 = 'b3';
 export const OPACITY_80 = 'cc';
 
