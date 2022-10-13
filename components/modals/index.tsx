@@ -72,6 +72,12 @@ const Modal: FC<IModalProps> = ({ show, ...rest }) => {
     return null;
   }
 
+  if (show) {
+    document.documentElement.style.overflow = 'hidden';
+  } else {
+    document.documentElement.style.overflow = 'scroll';
+  }
+
   return ReactDOM.createPortal(
     show ? (
       <SBackgroundContainer blurBackground>
