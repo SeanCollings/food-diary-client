@@ -5,7 +5,7 @@ import {
 import Toggle from '@components/ui/toggle';
 import { useTheme } from '@hooks/use-theme';
 import { useUserContext } from '@store/user-context';
-import { COLOURS, OPACITY_40 } from '@utils/constants';
+import { COLOURS, MEDIA_MOBILE, OPACITY_40 } from '@utils/constants';
 import {
   SHARE_INFORMATION,
   SHARE_PRE_GENERATE,
@@ -73,18 +73,27 @@ const SLinkContainer = styled.div`
   gap: 10px;
   justify-content: space-between;
   align-items: center;
+  min-width: 0;
+
+  ${MEDIA_MOBILE} {
+    margin-top: 20px;
+    flex-wrap: wrap;
+    justify-content: end;
+  }
 `;
-const SLink = styled.div<ISLink>`
+const SLink = styled.input<ISLink>`
   user-select: all;
   cursor: default;
   opacity: 0.8;
   width: 100%;
+  height: 30px;
+  font-size: 15px;
   border-radius: 4px;
   padding: 4px 8px;
-  overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
+  user-select: none;
   border: 1px solid ${COLOURS.gray}${OPACITY_40};
+  ${ThemeBackgroundTertiary}
+  ${ThemeTextColor}
 
   &.copied {
     animation: 0.5s copied ease-in none;
@@ -157,7 +166,7 @@ const getShareLink = (shareLink: string) =>
 
 const ModalShareProfile: React.FC<IModalShareProfileProps> = ({ onClose }) => {
   const theme = useTheme();
-  const linkRef = useRef<HTMLDivElement>(null);
+  const linkRef = useRef<HTMLInputElement>(null);
   const { user, updatePreferences, updateUser } = useUserContext();
 
   const onToggleChange = () => {
@@ -170,7 +179,9 @@ const ModalShareProfile: React.FC<IModalShareProfileProps> = ({ onClose }) => {
     });
   };
   const copyLinkClicked = () => {
-    navigator.clipboard.writeText(getShareLink(user.shareLink));
+    if (navigator.clipboard) {
+      navigator.clipboard.writeText(getShareLink(user.shareLink));
+    }
 
     if (linkRef.current) {
       linkRef.current.classList.remove('copied');
@@ -211,13 +222,18 @@ const ModalShareProfile: React.FC<IModalShareProfileProps> = ({ onClose }) => {
             />
           </SShareableContainer>
           <SLinkContainer>
-            <SLink ref={linkRef} primary={theme.primary}>
-              {linkAddress}
-            </SLink>
+            <SLink
+              ref={linkRef}
+              primary={theme.primary}
+              value={linkAddress}
+              readOnly
+            />
             <SButton
               primary={theme.primary}
-              disabled={!user.shareLink}
-              className={!user.shareLink ? 'disabled' : ''}
+              disabled={!user.shareLink || !navigator.clipboard}
+              className={
+                !user.shareLink || !navigator.clipboard ? 'disabled' : ''
+              }
               onClick={copyLinkClicked}
             >
               Copy link
