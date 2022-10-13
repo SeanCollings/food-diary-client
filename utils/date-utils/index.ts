@@ -176,8 +176,8 @@ export const setDateMidnightISOString = (date: TDate) => {
   return setDateToMidnight(date).toISOString();
 };
 
-export const getDaysAwayFromDate = (date: Date, days: number) => {
-  const d = new Date(date);
+export const getDaysAwayFromDate = (days: number, date?: TDate) => {
+  const d = date ? new Date(date) : new Date();
   d.setDate(d.getDate() + days);
 
   return d;

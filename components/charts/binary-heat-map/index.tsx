@@ -84,7 +84,7 @@ const SCircleDisplay = styled.span<ISCircleDisplay>`
   width: ${({ size }) => size}px;
   height: ${({ height }) => height}px;
   background: ${({ colour }) => colour};
-  border-radius: 50%;
+  border-radius: 15px;
   z-index: 2;
 `;
 const SHorizontalLine = styled.div<ISHorizontalLine>`

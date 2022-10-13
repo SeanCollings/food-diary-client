@@ -104,6 +104,7 @@ export const APP_THEME_DEFAULT: IAppTheme = {
 };
 
 export const MEDIA_MOBILE = '@media (max-width: 480px)';
+export const MEDIA_MOBILE_TABLET = '@media (max-width: 768px)';
 export const MEDIA_TABLET = '@media (min-width: 481px) and (max-width: 768px)';
 export const MEDIA_DESKTOP = '@media (min-width: 769px)';
 export const MEDIA_MAX_DESKTOP = '@media (min-width: 1420px)';

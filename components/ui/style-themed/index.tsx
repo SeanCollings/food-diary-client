@@ -1,4 +1,5 @@
 import { useTheme } from '@hooks/use-theme';
+import { OPACITY_40 } from '@utils/constants';
 
 interface IThemePick {
   background?: boolean;
@@ -15,13 +16,17 @@ export const ThemeTextColor = () => `color: ${useTheme().text};`;
 export const ThemeBorderBottom = () => {
   const theme = useTheme();
   return `border-bottom: 1px solid ${
-    theme.darkMode ? theme.backgroundTertiary : theme.quaternary
+    theme.darkMode
+      ? theme.backgroundTertiary
+      : `${theme.quaternary}${OPACITY_40}`
   };`;
 };
 export const ThemeBorderRight = () => {
   const theme = useTheme();
   return `border-right: 1px solid ${
-    theme.darkMode ? theme.backgroundTertiary : theme.quaternary
+    theme.darkMode
+      ? theme.backgroundTertiary
+      : `${theme.quaternary}${OPACITY_40}`
   };`;
 };
 
