@@ -10,7 +10,7 @@ import styled from 'styled-components';
 import Header from '@components/header';
 import Footer from '@components/footer';
 import { useRouter } from 'next/router';
-import { pathnameMapper } from '@components/menu/menu.constants';
+import { pathnameMapper } from '@utils/constants/menu.constants';
 import { AppProps } from 'next/app';
 import { useTheme } from '@hooks/use-theme';
 

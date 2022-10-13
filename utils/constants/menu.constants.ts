@@ -3,6 +3,7 @@ export enum EMenuItems {
   MY_PROFILE = 'my_profile',
   LOGIN = 'login',
   HOME = 'home',
+  SUMMARY = 'summary',
 }
 
 export const pathnameMapper: { [key in EMenuItems]: string } = {
@@ -10,6 +11,7 @@ export const pathnameMapper: { [key in EMenuItems]: string } = {
   [EMenuItems.MY_PROFILE]: '/profile',
   [EMenuItems.LOGIN]: '/login',
   [EMenuItems.HOME]: '/home',
+  [EMenuItems.SUMMARY]: '/summary',
 };
 
 interface IMenuItem {
@@ -23,6 +25,11 @@ export const MENU_ITEMS: IMenuItem[] = [
     id: EMenuItems.MY_DIARY,
     title: 'My Diary',
     href: pathnameMapper.my_diary,
+  },
+  {
+    id: EMenuItems.SUMMARY,
+    title: 'My Summary',
+    href: pathnameMapper.summary,
   },
   {
     id: EMenuItems.MY_PROFILE,

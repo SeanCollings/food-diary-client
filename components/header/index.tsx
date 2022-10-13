@@ -1,6 +1,6 @@
 import FlatMenu from '@components/menu/flat-menu';
 import MenuIcon from '@components/menu/menu-icon';
-import { pathnameMapper } from '@components/menu/menu.constants';
+import { pathnameMapper } from '@utils/constants/menu.constants';
 import { useTheme } from '@hooks/use-theme';
 import { useMenuContext } from '@store/menu-context';
 import {

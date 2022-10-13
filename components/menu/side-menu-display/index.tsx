@@ -8,7 +8,7 @@ import {
 } from '@utils/constants';
 import { FC, useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
-import { MENU_ITEMS } from '@components/menu/menu.constants';
+import { MENU_ITEMS } from '@utils/constants/menu.constants';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
 import MenuIcon from '@components/menu/menu-icon/index';

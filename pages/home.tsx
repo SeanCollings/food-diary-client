@@ -1,4 +1,4 @@
-import { pathnameMapper } from '@components/menu/menu.constants';
+import { pathnameMapper } from '@utils/constants/menu.constants';
 import { useTheme } from '@hooks/use-theme';
 import { COLOURS, MEDIA_MAX_DESKTOP, MEDIA_MOBILE } from '@utils/constants';
 import { NextPage } from 'next';
