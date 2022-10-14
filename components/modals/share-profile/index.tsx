@@ -82,7 +82,7 @@ const SLinkContainer = styled.div`
   }
 `;
 const SLink = styled.input<ISLink>`
-  user-select: all;
+  user-select: text;
   cursor: default;
   opacity: 0.8;
   width: 100%;
@@ -90,7 +90,6 @@ const SLink = styled.input<ISLink>`
   font-size: 15px;
   border-radius: 4px;
   padding: 4px 8px;
-  user-select: none;
   border: 1px solid ${COLOURS.gray}${OPACITY_40};
   ${ThemeBackgroundTertiary}
   ${ThemeTextColor}
@@ -191,6 +190,12 @@ const ModalShareProfile: React.FC<IModalShareProfileProps> = ({ onClose }) => {
     }
   };
 
+  const onInputClick = () => {
+    if (linkRef.current) {
+      linkRef.current.select();
+    }
+  };
+
   const linkAddress = user.shareLink
     ? getShareLink(user.shareLink)
     : 'No link created';
@@ -227,6 +232,7 @@ const ModalShareProfile: React.FC<IModalShareProfileProps> = ({ onClose }) => {
               primary={theme.primary}
               value={linkAddress}
               readOnly
+              onClick={onInputClick}
             />
             <SButton
               primary={theme.primary}
