@@ -241,7 +241,6 @@ const Card: FC<IProps> = ({ id, title }) => {
         background={background}
         boxShadow={!theme.darkMode}
         onClick={onClickHandler}
-        onDoubleClick={() => console.log('DOUBLE CLICKED')}
         id="meal-card"
         title="Click to add"
       >
@@ -270,24 +269,25 @@ const Card: FC<IProps> = ({ id, title }) => {
           ))}
         </SContentContainer>
       </SContainer>
-      <Modal show={showAddModal} modalWidth={600}>
-        <ModalAddToMealCard
-          mealId={id}
-          content={editMealContent}
-          onClose={onModalAddClose}
-          onSubmit={onModalAddSubmit}
-          onEditConfirm={confirmContentEditHandler}
-        />
-      </Modal>
-      <Modal show={showEditModal} modalWidth={600}>
-        <ModalEditMealCard
-          mealId={id}
-          contents={contents}
-          onClose={onModalEditClose}
-          onSubmit={onModalEditSubmit}
-          onRemoveMeal={removeMealHandler}
-          onEditMeal={editMealHandler}
-        />
+      <Modal show={showAddModal || showEditModal} modalWidth={600}>
+        {showAddModal ? (
+          <ModalAddToMealCard
+            mealId={id}
+            content={editMealContent}
+            onClose={onModalAddClose}
+            onSubmit={onModalAddSubmit}
+            onEditConfirm={confirmContentEditHandler}
+          />
+        ) : (
+          <ModalEditMealCard
+            mealId={id}
+            contents={contents}
+            onClose={onModalEditClose}
+            onSubmit={onModalEditSubmit}
+            onRemoveMeal={removeMealHandler}
+            onEditMeal={editMealHandler}
+          />
+        )}
       </Modal>
     </>
   );
