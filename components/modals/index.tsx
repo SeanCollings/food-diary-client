@@ -73,9 +73,12 @@ const Modal: FC<IModalProps> = ({ show, ...rest }) => {
   }
 
   if (show) {
+    const scrollbarWidth = window.innerWidth - document.body.clientWidth;
     document.documentElement.style.overflow = 'hidden';
+    document.documentElement.style.paddingRight = `${scrollbarWidth}px`;
   } else {
-    document.documentElement.style.overflow = 'scroll';
+    document.documentElement.style.overflow = 'auto';
+    document.documentElement.style.paddingRight = '0px';
   }
 
   return ReactDOM.createPortal(
