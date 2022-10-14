@@ -1,4 +1,4 @@
-import { COLOURS, OPACITY_30 } from '@utils/constants';
+import { COLOURS, MEDIA_MOBILE, OPACITY_30 } from '@utils/constants';
 import { ChangeEvent } from 'react';
 import styled from 'styled-components';
 import { ThemeTextColor } from '@components/ui/style-themed';
@@ -12,6 +12,10 @@ interface ISSelect {
 
 const SContainer = styled.div<ISContainer>`
   width: ${({ inputWidth }) => inputWidth}px;
+
+  ${MEDIA_MOBILE} {
+    width: 100%;
+  }
 `;
 const SSelect = styled.select<ISSelect>`
   appearance: none;

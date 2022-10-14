@@ -119,7 +119,7 @@ const SLink = styled.a<ISContent>`
   font-size: 24px;
   padding-bottom: 4px;
   border-bottom: 3px solid transparent;
-  width: 100%;
+  width: fit-content;
 
   ${({ isCurrentPath, primary }) =>
     isCurrentPath && `border-bottom: 3px solid ${primary}`}

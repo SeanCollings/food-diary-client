@@ -1,5 +1,5 @@
 import { ALL_MEAL_CARDS } from '@utils/constants';
-import { ChangeEvent, FC, useReducer } from 'react';
+import { ChangeEvent, FC, useReducer, useEffect, useCallback } from 'react';
 import styled from 'styled-components';
 import InputContainer from '@components/ui/input-container';
 import DropdownContainer from '@components/ui/dropdown-container';
@@ -20,8 +20,13 @@ import {
 } from '@components/modals/add-to-meal-card/types';
 import { trim } from '@utils/string-utils';
 import { useTheme } from '@hooks/use-theme';
+import { ThemeBackgroundSecondary } from '@components/ui/style-themed';
 
-const SContainer = styled.div``;
+const SContainer = styled.div`
+  margin: auto;
+  width: 600px;
+  ${ThemeBackgroundSecondary}
+`;
 const SContentContainer = styled.div`
   display: flex;
   flex-direction: column;
@@ -66,7 +71,7 @@ const ModalAddToMealCard: FC<IModalAddMealProps> = ({
   const mealTile =
     ALL_MEAL_CARDS.find((meal) => meal.id === state.mealType)?.title || '';
 
-  const onSubmitHandler = () => {
+  const onSubmitHandler = useCallback(() => {
     const errors = runFormValidations({
       emojiPicker: state.emojiPicker,
       ...state.inputValues,
@@ -92,7 +97,29 @@ const ModalAddToMealCard: FC<IModalAddMealProps> = ({
     } else {
       onSubmit(state.mealType, mealContent);
     }
-  };
+  }, [
+    content?.id,
+    isEditing,
+    state.emojiPicker,
+    state.inputValues,
+    state.mealType,
+    onEditConfirm,
+    onSubmit,
+  ]);
+
+  useEffect(() => {
+    const listener = (event: KeyboardEvent) => {
+      if (event.code === 'Enter' || event.code === 'NumpadEnter') {
+        onSubmitHandler();
+      }
+    };
+
+    document.addEventListener('keydown', listener);
+
+    return () => {
+      document.removeEventListener('keydown', listener);
+    };
+  }, [onSubmitHandler]);
 
   const updateMealType = (event: ChangeEvent<HTMLSelectElement>) => {
     dispatch({

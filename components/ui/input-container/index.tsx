@@ -9,6 +9,7 @@ const SInputContainer = styled.div`
   display: flex;
   justify-content: space-between;
   flex-wrap: wrap;
+  align-items: flex-start;
   gap: 10px;
 
   ${MEDIA_MOBILE} {

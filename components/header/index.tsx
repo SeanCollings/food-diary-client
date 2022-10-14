@@ -29,6 +29,7 @@ const SContainer = styled.header<ISContainer>`
   z-index: 100;
 
   ${MEDIA_MOBILE} {
+    padding-top: 1rem;
     position: fixed;
     height: ${HEADER_PROPS.mobile.height}px;
     background: ${({ background }) => background};
@@ -79,7 +80,7 @@ const SHeaderWrapper = styled.div`
   ${MEDIA_MOBILE} {
     padding: 0 1rem;
     top: ${HEADER_PROPS.mobile.padding}px;
-    height: calc(100% - ${HEADER_PROPS.mobile.padding * 2}px);
+    height: 50px;
   }
   ${MEDIA_TABLET} {
     top: ${HEADER_PROPS.tablet.padding}px;
@@ -113,6 +114,7 @@ const SHeader = styled.div`
   }
 `;
 const SHeaderSpan = styled.span`
+  user-select: none;
   cursor: default;
 `;
 

@@ -1,5 +1,10 @@
-import { ThemeBackgroundSecondary } from '@components/ui/style-themed';
-import { COLOURS, MEDIA_MOBILE, OPACITY_40 } from '@utils/constants';
+import { useTheme } from '@hooks/use-theme';
+import {
+  COLOURS,
+  MEDIA_MOBILE,
+  MEDIA_TABLET,
+  OPACITY_40,
+} from '@utils/constants';
 import { FC, ReactNode, useEffect, useRef, useState } from 'react';
 import ReactDOM from 'react-dom';
 import styled from 'styled-components';
@@ -26,16 +31,23 @@ const SBackgroundContainer = styled.div<ISBackgroundContainer>`
   ${({ blurBackground }) =>
     blurBackground && `background: ${COLOURS.black}${OPACITY_40}`};
 
+  ${MEDIA_TABLET} {
+    padding: 2rem;
+  }
   ${MEDIA_MOBILE} {
-    align-items: baseline;
+    padding: 1rem;
+    max-height: 100vh;
   }
 `;
 const SModalContainer = styled.div<ISModalContainer>`
   box-shadow: 0px 4px 8px ${COLOURS.black}${OPACITY_40};
   border-radius: 12px;
-  ${ThemeBackgroundSecondary};
+  overflow-x: hidden;
+  align-items: center;
+  display: flex;
+  margin: auto;
 
-  width: ${({ modalWidth }) => modalWidth}px;
+  max-width: ${({ modalWidth }) => modalWidth}px;
 `;
 
 interface IModalCommonProps {
@@ -62,6 +74,7 @@ const ModalContent: React.FC<IModalCommonProps> = ({
 };
 
 const Modal: FC<IModalProps> = ({ show, ...rest }) => {
+  const theme = useTheme();
   const [domReady, setDomReady] = useState(false);
 
   useEffect(() => {
@@ -76,9 +89,11 @@ const Modal: FC<IModalProps> = ({ show, ...rest }) => {
     const scrollbarWidth = window.innerWidth - document.body.clientWidth;
     document.documentElement.style.overflow = 'hidden';
     document.documentElement.style.paddingRight = `${scrollbarWidth}px`;
+    document.documentElement.style.backgroundColor = theme.backgroundPrimary;
   } else {
     document.documentElement.style.overflow = 'auto';
     document.documentElement.style.paddingRight = '0px';
+    document.documentElement.style.backgroundColor = 'unset';
   }
 
   return ReactDOM.createPortal(

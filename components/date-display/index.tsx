@@ -111,7 +111,6 @@ const SCalendarContainer = styled.div`
   z-index: 1;
 
   ${MEDIA_MOBILE} {
-    max-width: 100%;
     top: 50px;
   }
 `;

@@ -4,6 +4,7 @@ import { ModalHeader } from '@components/modals/styled';
 import {
   ALL_MEAL_CARDS,
   COLOURS,
+  MEDIA_MOBILE,
   OPACITY_30,
   OPACITY_70,
 } from '@utils/constants';
@@ -24,7 +25,12 @@ interface IPromptButton extends Partial<ISColour> {
   isConfirm?: boolean;
 }
 
-const SContainer = styled.div``;
+const SContainer = styled.div`
+  overflow-x: hidden;
+  margin: auto;
+  width: 600px;
+  ${ThemeBackgroundSecondary}
+`;
 const SContentContainer = styled.div`
   padding: 40px 20px;
   max-height: 400px;
@@ -80,13 +86,13 @@ const SPromptButton = styled.button<IPromptButton>`
 const SContentWrapper = styled.div<ISColour>`
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 8px;
   max-height: 320px;
   min-height: 100px;
   overflow-y: auto;
 
   ::-webkit-scrollbar {
-    width: 10px;
+    width: 8px;
   }
   ::-webkit-scrollbar-button {
     height: 2px;
@@ -118,7 +124,9 @@ const SContentDisplayContainer = styled.div`
   gap: 10px;
   align-items: center;
   height: 30px;
-  width: 80%;
+  overflow: hidden;
+  width: 100%;
+  height: 34px;
 `;
 const SRadioLabel = styled.label`
   cursor: pointer;
@@ -130,14 +138,25 @@ const SRadioLabel = styled.label`
   ${ThemeTextColor};
 
   :hover {
+    opacity: 0.8;
+  }
+  :active {
     opacity: 0.6;
+  }
+
+  ${MEDIA_MOBILE} {
+    :hover {
+      opacity: 1;
+    }
+    :active {
+      opacity: 0.6;
+    }
   }
 `;
 const SButtonContainer = styled.div`
+  width: 100px;
   display: flex;
   align-items: center;
-  gap: 10px;
-  padding-right: 10px;
 `;
 const SButton = styled.button`
   margin: auto;

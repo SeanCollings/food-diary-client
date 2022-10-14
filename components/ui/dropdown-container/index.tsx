@@ -8,6 +8,7 @@ import { ThemeTextColor } from '@components/ui/style-themed';
 const SInputContainer = styled.div`
   display: flex;
   justify-content: space-between;
+  align-items: flex-start;
   flex-wrap: wrap;
   gap: 10px;
 `;

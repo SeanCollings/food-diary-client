@@ -53,13 +53,17 @@ const SContainer = styled.div<IScontainer>`
       : `background: ${background}`};
 
   :hover {
+    scale: 1.01;
     ${({ hasContent, background }) =>
       hasContent
         ? `background-image: linear-gradient(225deg,${background}${OPACITY_80} 100%, ${background}${OPACITY_80})`
         : `background: ${background}${OPACITY_80}`};
     ${({ boxShadow }) =>
       boxShadow && `box-shadow: 1px 1px 10px ${COLOURS.black}${OPACITY_70}`};
-    scale: 1.01;
+
+    ${MEDIA_MOBILE} {
+      scale: 1;
+    }
   }
 
   ${MEDIA_TABLET} {
