@@ -9,7 +9,6 @@ import {
 import { getUniqueId } from '@utils/unique-id';
 import { formatFullDate } from '@utils/date-utils';
 import styled from 'styled-components';
-import { ThemeBackgroundSecondary } from '@components/ui/style-themed';
 import { MEDIA_MOBILE_TABLET } from '@utils/constants';
 
 const MARGIN = 20;
@@ -51,7 +50,7 @@ const SContentRow = styled.div<ISContentRow>`
   display: grid;
   grid-template-columns: 110px 1fr;
 
-  ${ThemeBackgroundSecondary}
+  background-color: var(--bg-secondary);
 
   border-left: 1px solid ${({ primary }) => primary};
   border-right: 1px solid ${({ primary }) => primary};

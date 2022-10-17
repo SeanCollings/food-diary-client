@@ -1,7 +1,3 @@
-import {
-  ThemeBackgroundSecondary,
-  ThemeTextColor,
-} from '@components/ui/style-themed';
 import { useTheme } from '@hooks/use-theme';
 import { DOTS, getPaginationRange } from '@utils/get-pagination-range';
 import { memo } from 'react';
@@ -33,8 +29,7 @@ const SButton = styled.button<ISButton>`
   border-radius: 4px;
   border: 1px solid transparent;
   transition: 0.1s;
-  ${ThemeBackgroundSecondary}
-  ${ThemeTextColor}
+  background-color: var(--bg-secondary);
 
   &.active {
     border: 1px solid;

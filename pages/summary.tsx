@@ -1,45 +1,40 @@
-import { useEffect, useState } from 'react';
-import { GetServerSideProps, NextPage } from 'next';
-import styled from 'styled-components';
+import Summary from '@components/summary';
+import { IUserData, MOCK_USER_DATA } from '@components/summary/mock-data';
 import {
   getDaysAwayFromDate,
   setDateMidnightISOString,
 } from '@utils/date-utils';
-import { IUserData, MOCK_USER_DATA } from '@components/summary/mock-data';
-import Summary from '@components/summary';
+import { NextPage } from 'next';
+import { useEffect, useState, useLayoutEffect } from 'react';
+import styled from 'styled-components';
+import { protectedSeverSideProps } from 'lib/server-props';
+import { Session } from 'next-auth';
+import { useUserContext } from '@store/user-context';
 
 const DEFAULT_DAYS_SHOW = 7;
 
 const SContainer = styled.section`
   display: flex;
-  flex-direction: column;
-  padding: 0 0 40px 0;
-  min-height: 100%;
-`;
-const SUsernameContainer = styled.div`
-  display: flex;
-  align-items: baseline;
-  gap: 12px;
-  font-size: 20px;
-  font-weight: 200;
-  padding-bottom: 20px;
-`;
-const SUsername = styled.span`
-  font-size: 28px;
-  font-weight: 600;
+  align-items: center;
+  justify-content: center;
 `;
 
-interface ISharePageProps {
-  guid: string;
+interface ISummaryPageProps {
+  session: Session;
 }
 
-const SharePage: NextPage<ISharePageProps> = ({ guid }) => {
+const SummaryPage: NextPage<ISummaryPageProps> = ({ session }) => {
+  const { user } = useUserContext();
   const [userData, setUserData] = useState<IUserData | null>(null);
   const [hasError, setHasError] = useState(false);
   const [fromDate, setFromDate] = useState(
     getDaysAwayFromDate(-(DEFAULT_DAYS_SHOW - 1))
   );
   const [toDate, setToDate] = useState(new Date());
+
+  useLayoutEffect(() => {
+    // console.log('-----------', user);
+  }, [user]);
 
   useEffect(() => {
     const getData = () => {
@@ -55,7 +50,7 @@ const SharePage: NextPage<ISharePageProps> = ({ guid }) => {
     };
 
     getData();
-  }, [guid]);
+  }, []);
 
   const updateFromDate = (date: Date) => setFromDate(date);
   const updateToDate = (date: Date) => setToDate(date);
@@ -65,11 +60,7 @@ const SharePage: NextPage<ISharePageProps> = ({ guid }) => {
   };
 
   if (!userData) {
-    return (
-      <SContainer>
-        <SUsernameContainer>Loading...</SUsernameContainer>
-      </SContainer>
-    );
+    return <SContainer>Loading...</SContainer>;
   }
 
   if (hasError) {
@@ -80,10 +71,6 @@ const SharePage: NextPage<ISharePageProps> = ({ guid }) => {
 
   return (
     <SContainer>
-      <SUsernameContainer>
-        This profile belongs to:<SUsername>{userData.user}</SUsername>
-      </SUsernameContainer>
-
       <Summary
         userData={userData}
         fromDate={fromDate}
@@ -96,26 +83,6 @@ const SharePage: NextPage<ISharePageProps> = ({ guid }) => {
   );
 };
 
-type TParams = { guid: string };
+export const getServerSideProps = protectedSeverSideProps;
 
-export const getServerSideProps: GetServerSideProps<ISharePageProps> = async (
-  context
-) => {
-  const { guid } = context.params as TParams;
-
-  const guidExists = await Promise.resolve(true);
-
-  if (!guidExists) {
-    return {
-      notFound: true,
-    };
-  }
-
-  return {
-    props: {
-      guid,
-    },
-  };
-};
-
-export default SharePage;
+export default SummaryPage;
