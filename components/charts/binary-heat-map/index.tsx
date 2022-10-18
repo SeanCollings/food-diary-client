@@ -1,5 +1,5 @@
 import { useTheme } from '@hooks/use-theme';
-import { ALL_MEAL_CARDS, OPACITY_20, OPACITY_50 } from '@utils/constants';
+import { ALL_MEAL_CARDS } from '@utils/constants';
 import { EMealType } from '@utils/interfaces';
 import { getUniqueId } from '@utils/unique-id';
 import styled from 'styled-components';
@@ -34,7 +34,7 @@ interface ISHAxisContainer {
 interface ISCircleDisplay {
   colour: string;
   size: number;
-  height: number;
+  dataHeight: number;
 }
 interface ISHorizontalLine {
   colour: string;
@@ -56,7 +56,7 @@ const SDataTitle = styled.span<ISDataTitle>`
   padding: 0 8px;
 
   :not(.last-item) {
-    border-bottom: 1px solid ${({ border }) => border};
+    border-bottom: 1px solid var(${({ border }) => border});
   }
 `;
 const SDataItem = styled.span<ISDataItem>`
@@ -72,27 +72,27 @@ const SMealDetailContainer = styled.div<ISMealDetailContainer>`
     `${TITLE_WIDTH}px repeat(${totalValues}, ${boxWidth}px)`};
 
   span:not(:first-child):not(:last-child) {
-    border-right: 1px solid ${({ border }) => border};
+    border-right: 1px solid var(${({ border }) => border});
   }
 `;
 const SData = styled(SDataItem)`
   :not(.last-item) {
-    border-bottom: 1px solid ${({ border }) => border};
+    border-bottom: 1px solid var(${({ border }) => border});
   }
 `;
 const SCircleDisplay = styled.span<ISCircleDisplay>`
   width: ${({ size }) => size}px;
-  height: ${({ height }) => height}px;
-  background: ${({ colour }) => colour};
+  height: ${({ dataHeight }) => dataHeight}px;
   border-radius: 15px;
   z-index: 2;
+  background-color: ${({ colour }) => `var(--th-${colour})`};
 `;
 const SHorizontalLine = styled.div<ISHorizontalLine>`
   position: absolute;
   height: 4px;
   left: 50%;
   width: ${({ width }) => width}px;
-  background: ${({ colour }) => colour};
+  background-color: ${({ colour }) => `var(--th-${colour})`};
 `;
 
 const SHAxisContainer = styled.div<ISHAxisContainer>`
@@ -106,7 +106,7 @@ const SHAxisContainer = styled.div<ISHAxisContainer>`
     `${TITLE_WIDTH}px repeat(${totalValues}, ${boxWidth}px)`};
 
   span:not(:last-child) {
-    border-right: 1px solid ${({ border }) => border};
+    border-right: 1px solid var(${({ border }) => border});
   }
 `;
 const SHAxisKey = styled(SDataItem)``;
@@ -256,7 +256,7 @@ const BinaryHeatMap: React.FC<IBinaryHeatMapProps> = ({
   height,
   timePeriod,
 }) => {
-  const theme = useTheme();
+  const { darkMode } = useTheme();
 
   const mealData = timePeriod === 'week' ? MOCK_DATA_WEEK : MOCK_DATA_MONTH;
   const boxWidth =
@@ -267,16 +267,14 @@ const BinaryHeatMap: React.FC<IBinaryHeatMapProps> = ({
     mealData.type === 'week' ? CIRCLE_WIDTH_MAX : CIRCLE_HEIGHT_MIN;
 
   const MEAL_TYPE_COLOUR = {
-    [EMealType.BREAKFAST]: theme.secondary,
-    [EMealType.SNACK_1]: theme.quaternary,
-    [EMealType.LUNCH]: theme.primary,
-    [EMealType.SNACK_2]: theme.quaternary,
-    [EMealType.DINNER]: theme.tertiary,
+    [EMealType.BREAKFAST]: 'secondary',
+    [EMealType.SNACK_1]: 'quaternary',
+    [EMealType.LUNCH]: 'primary',
+    [EMealType.SNACK_2]: 'quaternary',
+    [EMealType.DINNER]: 'tertiary',
   };
 
-  const borderColour = theme.darkMode
-    ? `${theme.quaternary}${OPACITY_20}`
-    : `${theme.quaternary}${OPACITY_50}`;
+  const borderColour = darkMode ? `--th-quaternary__20` : `--th-quaternary__50`;
 
   return (
     <SContainer>
@@ -314,7 +312,7 @@ const BinaryHeatMap: React.FC<IBinaryHeatMapProps> = ({
                       <SCircleDisplay
                         colour={colour}
                         size={dataSize}
-                        height={dataHeight}
+                        dataHeight={dataHeight}
                         title={`total: ${mealData.totals[id]}`}
                       />
                     )}

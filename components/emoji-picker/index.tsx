@@ -7,10 +7,6 @@ import { MdSearch } from 'react-icons/md';
 import { useOnClickOutsideElementsArray } from '@hooks/use-onclick-outside-element';
 import { EAddMealOptions } from '@utils/interfaces';
 
-interface ISEmojiBox {
-  borderColour: string;
-}
-
 const SContainer = styled.div`
   display: flex;
   justify-content: space-between;
@@ -43,8 +39,8 @@ const SEmojisContainer = styled.div`
     width: 100%;
   }
 `;
-const SEmojiBox = styled.div<ISEmojiBox>`
-  background: ${COLOURS.white_off};
+const SEmojiBox = styled.div`
+  background: var(--bg-tertiary);
   width: calc(100% - 12px);
   position: absolute;
   padding: 12px;
@@ -59,7 +55,7 @@ const SEmojiBox = styled.div<ISEmojiBox>`
   max-height: 280px;
   overflow-y: auto;
   border-radius: 0 0 4px 4px;
-  border: 1px solid ${({ borderColour }) => `${borderColour}${OPACITY_40}`};
+  border: 1px solid var(--bg-primary);
   border-top: 0px;
 
   ::-webkit-scrollbar {
@@ -213,10 +209,10 @@ const EmojiPicker: FC<IEmojiPickerProps> = ({
           onChange={handleOnChange}
           onMouseDown={handleOnMouseDown}
         >
-          <MdSearch size={30} color={`${borderColour}${OPACITY_40}`} />
+          <MdSearch size={30} color={`var(${borderColour}__80)`} />
         </Input>
         {!!availableEmojis.length && (
-          <SEmojiBox borderColour={borderColour} ref={emojiBoxRef}>
+          <SEmojiBox ref={emojiBoxRef}>
             {availableEmojis.map((emoji, index) => (
               <SEmoji
                 id={`available-emoji-${index}`}

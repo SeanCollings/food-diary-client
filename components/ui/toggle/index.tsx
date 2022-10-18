@@ -4,11 +4,7 @@ import { FC } from 'react';
 import styled from 'styled-components';
 
 interface ITheme {
-  colourOff: string;
-  colourOn: string;
   boxShadow: string;
-  colourLeft: string;
-  colourRight: string;
 }
 
 const SInput = styled.input<ITheme>`
@@ -40,10 +36,13 @@ const SInput = styled.input<ITheme>`
   }
 
   :checked {
-    background-color: ${({ colourOn }) => `${colourOn}${OPACITY_70}`};
-    border-color: ${({ colourOn }) => `${colourOn}${OPACITY_70}`};
-    background-image: ${({ colourLeft, colourRight }) =>
-      `linear-gradient(to right, ${colourLeft}, ${colourRight})`};
+    background-color: var(--th-primary__80);
+    border-color: var(--th-primary__80);
+    background-image: linear-gradient(
+      to right,
+      var(--th-primary),
+      var(--th-tertiary)
+    );
   }
 
   :checked:after {
@@ -75,7 +74,7 @@ const Toggle: FC<IToggleProps> = ({
   disabled,
   onChange,
 }) => {
-  const theme = useTheme();
+  const { darkMode } = useTheme();
 
   return (
     <SInput
@@ -85,11 +84,7 @@ const Toggle: FC<IToggleProps> = ({
       onChange={onChange}
       checked={checked}
       disabled={disabled}
-      colourOff={theme.backgroundPrimary}
-      colourOn={theme.primary}
-      colourLeft={theme.primary}
-      colourRight={theme.tertiary}
-      boxShadow={theme.darkMode ? COLOURS.black : COLOURS.gray}
+      boxShadow={darkMode ? COLOURS.black : COLOURS.gray}
       className={disabled ? 'disabled' : ''}
     />
   );

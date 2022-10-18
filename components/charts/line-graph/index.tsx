@@ -1,4 +1,3 @@
-import { useTheme } from '@hooks/use-theme';
 import { COLOURS, OPACITY_40 } from '@utils/constants';
 import { formatMinutesToHoursMinutes } from '@utils/time-utils';
 import { getUniqueId } from '@utils/unique-id';
@@ -21,13 +20,11 @@ interface ISTick {
 }
 interface ISPoint {
   position: number;
-  colour: string;
 }
 interface ISRotateLine {
   length: number;
   position: number;
   rotate: number;
-  colour: string;
 }
 
 const SContainer = styled.div`
@@ -90,12 +87,12 @@ const SPoint = styled.div<ISPoint>`
   border-radius: ${CIRCLE_WIDTH}px;
   margin-top: -4px;
   z-index: 2;
-  background: ${({ colour }) => colour};
+  background: var(--th-primary);
   top: ${({ position }) => position}%;
 `;
 const SRotateLine = styled.div<ISRotateLine>`
   width: 2px;
-  background: ${({ colour }) => colour};
+  background: var(--th-primary);
   position: absolute;
   transform-origin: top;
   transform: ${({ rotate }) => `rotate(${rotate}deg)`};
@@ -158,8 +155,6 @@ const getMaxBound = (highestValue: number) => {
 };
 
 const LineGraph: React.FC<ILineGraphProps> = ({ height }) => {
-  const theme = useTheme();
-
   const graphHeight = height - LEGEND_HEIGHT;
   const ptpLength = COLUMN_WIDTH + COLUMN_GAP;
   const maxBound = getMaxBound(MOCK_EXERCISE_DATA.highestValue);
@@ -225,14 +220,12 @@ const LineGraph: React.FC<ILineGraphProps> = ({ height }) => {
                   <SPoint
                     position={currentPosition}
                     title={`${formatMinutesToHoursMinutes(value)}`}
-                    colour={theme.primary}
                   />
                   {!isLastValue && (
                     <SRotateLine
                       length={lineLength}
                       position={currentPosition}
                       rotate={lineRotate}
-                      colour={theme.primary}
                     />
                   )}
                 </SPointContainer>

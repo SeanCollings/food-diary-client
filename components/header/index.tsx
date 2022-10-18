@@ -1,7 +1,6 @@
 import FlatMenu from '@components/menu/flat-menu';
 import MenuIcon from '@components/menu/menu-icon';
 import { pathnameMapper } from '@utils/constants/menu.constants';
-import { useTheme } from '@hooks/use-theme';
 import { useMenuContext } from '@store/menu-context';
 import {
   HEADER_PROPS,
@@ -15,14 +14,7 @@ import { useRouter } from 'next/router';
 import { FC } from 'react';
 import styled from 'styled-components';
 
-interface ISContainer {
-  background: string;
-}
-interface ISHeaderBanner {
-  background: string;
-}
-
-const SContainer = styled.header<ISContainer>`
+const SContainer = styled.header`
   position: relative;
   width: 100%;
   margin: 0 auto;
@@ -32,7 +24,7 @@ const SContainer = styled.header<ISContainer>`
     padding-top: 1rem;
     position: fixed;
     height: ${HEADER_PROPS.mobile.height}px;
-    background: ${({ background }) => background};
+    background: var(--bg-primary);
   }
   ${MEDIA_TABLET} {
     height: ${HEADER_PROPS.tablet.height}px;
@@ -44,10 +36,10 @@ const SContainer = styled.header<ISContainer>`
     height: ${HEADER_PROPS.desktopLarge.height}px;
   }
 `;
-const SHeaderBanner = styled.div<ISHeaderBanner>`
+const SHeaderBanner = styled.div`
   position: absolute;
   width: 100%;
-  background: ${({ background }) => background};
+  background: var(--bg-secondary__60);
 
   ${MEDIA_MOBILE} {
     top: ${HEADER_PROPS.tablet.padding}px;
@@ -119,7 +111,6 @@ const SHeaderSpan = styled.span`
 `;
 
 const Header: FC = () => {
-  const theme = useTheme();
   const { isOpen } = useMenuContext();
   const { pathname, push } = useRouter();
 
@@ -132,8 +123,8 @@ const Header: FC = () => {
 
   return (
     <>
-      <SContainer background={theme.backgroundPrimary}>
-        {showBanner && <SHeaderBanner background={theme.backgroundSecondary} />}
+      <SContainer>
+        {showBanner && <SHeaderBanner />}
         <SHeaderWrapper>
           <SHeader>
             <SHeaderSpan onClick={handleHeaderClick}>

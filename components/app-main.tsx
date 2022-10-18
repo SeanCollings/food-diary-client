@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import {
   HEADER_PROPS,
   MAX_PAGE_WIDTH,
@@ -12,13 +13,11 @@ import Footer from '@components/footer';
 import { useRouter } from 'next/router';
 import { pathnameMapper } from '@utils/constants/menu.constants';
 import { AppProps } from 'next/app';
-import { useTheme } from '@hooks/use-theme';
+import { useUserContext } from '@store/user-context';
 
 interface ISAppContainer {
   showBackgroundImage: boolean;
   fullOpacity: boolean;
-  background: string;
-  colour: string;
 }
 
 const SAppContainer = styled.div<ISAppContainer>`
@@ -27,8 +26,6 @@ const SAppContainer = styled.div<ISAppContainer>`
   justify-content: space-between;
   outline-style: none;
   min-height: calc(100vh + 5rem);
-  background: ${({ background }) => background};
-  color: ${({ colour }) => colour};
 
   ${({ showBackgroundImage, fullOpacity }) =>
     showBackgroundImage &&
@@ -73,8 +70,14 @@ const SInnerMain = styled.div`
 `;
 
 const AppMain: React.FC<AppProps> = ({ Component, pageProps }) => {
+  const { user, setInitialUser } = useUserContext();
   const { pathname } = useRouter();
-  const theme = useTheme();
+
+  useEffect(() => {
+    if (pageProps.session?.user && !user) {
+      setInitialUser(pageProps.session?.user);
+    }
+  }, [pageProps.session?.user, user, setInitialUser]);
 
   const showBackgroundImage =
     pathname === pathnameMapper.login || pathname === pathnameMapper.home;
@@ -82,8 +85,6 @@ const AppMain: React.FC<AppProps> = ({ Component, pageProps }) => {
 
   return (
     <SAppContainer
-      background={theme.backgroundPrimary}
-      colour={theme.text}
       showBackgroundImage={showBackgroundImage}
       fullOpacity={fullOpacity}
     >

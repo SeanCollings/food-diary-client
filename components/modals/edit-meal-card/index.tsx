@@ -1,27 +1,17 @@
 import { FC, useState } from 'react';
 import styled from 'styled-components';
 import { ModalHeader } from '@components/modals/styled';
-import {
-  ALL_MEAL_CARDS,
-  COLOURS,
-  MEDIA_MOBILE,
-  OPACITY_30,
-  OPACITY_70,
-} from '@utils/constants';
-import { getMealThemeColour } from '@utils/theme-utils';
+import { ALL_MEAL_CARDS, COLOURS, MEDIA_MOBILE } from '@utils/constants';
+import { getThemeColoursFromMealId } from '@utils/theme-utils';
 import { IMealContent, TMealType } from '@utils/interfaces';
 import { MdDeleteForever, MdEdit } from 'react-icons/md';
 import RadioButton from '@components/ui/radio-button';
-import { useTheme } from '@hooks/use-theme';
-import {
-  ThemeBackgroundSecondary,
-  ThemeTextColor,
-} from '@components/ui/style-themed';
 
 interface ISColour {
   colour: string;
 }
-interface IPromptButton extends Partial<ISColour> {
+interface IPromptButton {
+  colour?: string;
   isConfirm?: boolean;
 }
 
@@ -29,7 +19,7 @@ const SContainer = styled.div`
   overflow-x: hidden;
   margin: auto;
   width: 600px;
-  ${ThemeBackgroundSecondary}
+  background-color: var(--bg-secondary);
 `;
 const SContentContainer = styled.div`
   padding: 40px 20px;
@@ -55,8 +45,7 @@ const SConfirmPrompt = styled.div`
   gap: 16px;
   font-size: 17px;
   z-index: 1;
-  ${ThemeTextColor}
-  ${ThemeBackgroundSecondary}
+  background-color: var(--bg-secondary);
 `;
 const SButtonPromptContainer = styled.div`
   display: flex;
@@ -72,6 +61,7 @@ const SPromptButton = styled.button<IPromptButton>`
   font-size: 17px;
   padding: 8px;
   font-weight: 200;
+  color: var(--text);
 
   :hover {
     scale: 1.05;
@@ -80,8 +70,7 @@ const SPromptButton = styled.button<IPromptButton>`
     opacity: 0.5;
   }
 
-  ${ThemeTextColor};
-  ${({ isConfirm, colour }) => isConfirm && `background: ${colour}`}
+  ${({ isConfirm, colour }) => isConfirm && `background: var(${colour})`}
 `;
 const SContentWrapper = styled.div<ISColour>`
   display: flex;
@@ -98,12 +87,11 @@ const SContentWrapper = styled.div<ISColour>`
     height: 2px;
   }
   ::-webkit-scrollbar-thumb {
-    background-color: ${({ colour }) => `${colour}${OPACITY_70}`};
+    background-color: ${({ colour }) => `var(${colour}__80)`};
     border-radius: 10px;
     max-height: 20px;
   }
   ::-webkit-scrollbar-track {
-    background-color: ${({ colour }) => `${colour}${OPACITY_30}`};
     border-radius: 10px;
   }
 `;
@@ -135,7 +123,6 @@ const SRadioLabel = styled.label`
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  ${ThemeTextColor};
 
   :hover {
     opacity: 0.8;
@@ -220,11 +207,10 @@ const ModalEditMealCard: FC<IModalEditMealCardProps> = ({
   onRemoveMeal,
   onEditMeal,
 }) => {
-  const theme = useTheme();
   const [isRemoveItemId, setIsRemoveItemId] = useState<number | null>(null);
   const [selectedItem, setSelectedItem] = useState('');
 
-  const mealColour = getMealThemeColour(theme, mealId);
+  const mealColour = getThemeColoursFromMealId(mealId);
   const mealTile =
     ALL_MEAL_CARDS.find((meal) => meal.id === mealId)?.title || '';
 
@@ -265,10 +251,7 @@ const ModalEditMealCard: FC<IModalEditMealCardProps> = ({
               >
                 Confirm
               </SPromptButton>
-              <SPromptButton
-                onClick={() => setIsRemoveItemId(null)}
-                color={theme.text}
-              >
+              <SPromptButton onClick={() => setIsRemoveItemId(null)}>
                 Cancel
               </SPromptButton>
             </SButtonPromptContainer>
@@ -286,7 +269,7 @@ const ModalEditMealCard: FC<IModalEditMealCardProps> = ({
               {selectedItem === content.id.toString() && (
                 <SButtonContainer>
                   <SButton onClick={() => onEditMeal(content.id)}>
-                    <MdEdit size={28} color={mealColour} />
+                    <MdEdit size={28} color={`var(${mealColour})`} />
                   </SButton>
                   <SButton onClick={() => setIsRemoveItemId(content.id)}>
                     <MdDeleteForever size={28} color={COLOURS.gray_dark} />

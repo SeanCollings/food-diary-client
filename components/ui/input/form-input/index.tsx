@@ -1,39 +1,28 @@
-import { useTheme } from '@hooks/use-theme';
-import { COLOURS, OPACITY_80 } from '@utils/constants';
+import { COLOURS } from '@utils/constants';
 import { detectAutofill } from '@utils/document-utils';
 import { INPUT_MAX_LENGTH } from '@utils/validation/validation.constants';
 import { ChangeEvent, memo, useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 
-interface ISRequired {
-  isError: boolean;
-  errorColour: string;
-  primary: string;
-}
 interface ISLabel {
   positionTop: boolean;
-}
-interface ISInput {
-  errorColour: string;
-  isError: boolean;
-}
-interface ISError {
-  errorColour: string;
 }
 
 const SContainer = styled.div`
   position: relative;
 `;
-const SRequired = styled.span<ISRequired>`
+const SRequired = styled.span`
   transition: 0.1s;
   position: absolute;
   top: -24px;
   left: 8px;
   font-size: 20px;
   opacity: 1;
+  color: var(--th-primary);
 
-  color: ${({ isError, errorColour, primary }) =>
-    isError ? errorColour : primary};
+  &.error {
+    color: var(--error);
+  }
 `;
 const SLabel = styled.label<ISLabel>`
   transition: 0.1s;
@@ -44,7 +33,7 @@ const SLabel = styled.label<ISLabel>`
 
   top: ${({ positionTop }) => (positionTop ? '-24' : '18')}px;
 `;
-const SInput = styled.input<ISInput>`
+const SInput = styled.input`
   outline: none;
   width: 100%;
   padding: 16px 20px;
@@ -52,16 +41,18 @@ const SInput = styled.input<ISInput>`
   font-size: 18px;
   height: 58px;
   background: ${COLOURS.gray_light};
+  border: 1px solid transparent;
 
-  border: 1px solid
-    ${({ isError, errorColour }) => (isError ? errorColour : 'transparent')};
+  &.error {
+    border-color: var(--error);
+  }
 
   :focus {
     border: 1px solid ${COLOURS.gray_dark};
   }
 `;
-const SError = styled.div<ISError>`
-  color: ${({ errorColour }) => errorColour}${OPACITY_80};
+const SError = styled.div`
+  color: var(--error);
   font-size: 15px;
   padding-top: 2px;
   padding-left: 4px;
@@ -94,7 +85,6 @@ const FormInput = <T extends string>({
   onChange,
   onBlur,
 }: IFormInputProps<T>) => {
-  const theme = useTheme();
   const inputRef = useRef<HTMLInputElement>(null);
   const [labelTop, setlabelTop] = useState(false);
   const [isFocus, setIsFocus] = useState(false);
@@ -133,13 +123,7 @@ const FormInput = <T extends string>({
   return (
     <SContainer>
       {required && (
-        <SRequired
-          isError={!!isError}
-          errorColour={theme.error}
-          primary={theme.primary}
-        >
-          *
-        </SRequired>
+        <SRequired className={!!isError ? 'error' : ''}>*</SRequired>
       )}
       <SLabel htmlFor={`${id}_form_input`} positionTop={labelTop}>
         {name}
@@ -152,14 +136,13 @@ const FormInput = <T extends string>({
         placeholder={placeholder}
         value={value}
         required={required}
-        isError={!!isError}
         maxLength={INPUT_MAX_LENGTH}
-        errorColour={theme.error}
         onChange={onChangeHandler}
         onFocus={() => setIsFocus(true)}
         onBlur={onBlurHandler}
+        className={!!isError ? 'error' : ''}
       />
-      {isError && <SError errorColour={theme.error}>{isError}</SError>}
+      {isError && <SError>{isError}</SError>}
     </SContainer>
   );
 };

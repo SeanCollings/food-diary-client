@@ -1,10 +1,4 @@
-import { useTheme } from '@hooks/use-theme';
-import {
-  MEDIA_MOBILE,
-  OPACITY_30,
-  OPACITY_40,
-  OPACITY_70,
-} from '@utils/constants';
+import { MEDIA_MOBILE } from '@utils/constants';
 import { TEXTAREA_MAX_LENGTH } from '@utils/validation/validation.constants';
 import { ChangeEvent, FC } from 'react';
 import styled from 'styled-components';
@@ -18,12 +12,6 @@ interface ISTextArea {
   borderStyle: TBorderStylePropery;
   borderWidth: number;
   isError?: boolean;
-  colour: string;
-  errorColour: string;
-  borderColour: string;
-}
-interface ISError {
-  colour: string;
 }
 
 const SContainer = styled.div<ISContainer>`
@@ -49,48 +37,46 @@ const STextArea = styled.textarea<ISTextArea>`
   width: 100%;
   padding: 8px 10px;
   border-radius: 8px;
-  color: ${({ colour }) => colour};
-  box-shadow: ${({ backgroundColour, borderColour }) =>
-    !backgroundColour && `inset 0 3px ${borderColour}${OPACITY_30}`};
+  color: var(--text);
+  box-shadow: ${({ backgroundColour }) =>
+    !backgroundColour && `inset 0 3px var(--th-quaternary__40)`};
   background-color: ${({ backgroundColour }) =>
-    backgroundColour ? `${backgroundColour}${OPACITY_30}` : 'inherit'};
-  border: ${({ backgroundColour, borderStyle, borderWidth, borderColour }) =>
+    backgroundColour ? `var(${backgroundColour}__40)` : 'inherit'};
+  border: ${({ backgroundColour, borderStyle, borderWidth }) =>
     `${borderWidth}px ${borderStyle} ${
-      backgroundColour ? 'transparent' : `${borderColour}${OPACITY_40}`
+      backgroundColour ? 'transparent' : `var(--th-quaternary__40)`
     }`};
 
   :focus {
     box-shadow: inset 0 0 transparent;
     border: solid
-      ${({ backgroundColour, borderWidth, borderColour }) =>
+      ${({ backgroundColour, borderWidth }) =>
         `${borderWidth}px ${
-          backgroundColour ? `${backgroundColour}` : borderColour
+          backgroundColour ? `var(${backgroundColour})` : 'var(--th-quaternary)'
         }`};
   }
 
-  ${({ isError, errorColour }) => isError && `border-color: ${errorColour}`};
+  ${({ isError }) => isError && `border-color: var(--error);`};
 
   ::-webkit-scrollbar {
     width: 5px;
   }
   ::-webkit-scrollbar-thumb {
     border-radius: 10px;
-    background-color: ${({ backgroundColour, borderColour }) =>
-        backgroundColour
-          ? `${backgroundColour}`
-          : `${borderColour}`}${OPACITY_70};
+    background-color: ${({ backgroundColour }) =>
+      backgroundColour ? `var(${backgroundColour})` : `var(--th-quaternary)`};
   }
   :hover::-webkit-scrollbar-thumb {
-    background-color: ${({ backgroundColour, borderColour }) =>
-      backgroundColour ? `${backgroundColour}` : borderColour};
+    background-color: ${({ backgroundColour }) =>
+      backgroundColour ? `${backgroundColour}` : 'var(--th-quaternary)'};
   }
 `;
-const SError = styled.div<ISError>`
+const SError = styled.div`
   margin-top: -2px;
   font-size: 15px;
   text-align: right;
   padding-bottom: 4px;
-  color: ${({ colour }) => colour};
+  color: var(--error);
 `;
 
 type TBorderStylePropery = 'solid' | 'dashed' | 'dotted' | 'none';
@@ -128,8 +114,6 @@ export const TextArea: FC<ITextAreaProps> = ({
   onChange,
   onBlur,
 }) => {
-  const theme = useTheme();
-
   const onBlurHandler = () => {
     onBlur?.();
   };
@@ -149,13 +133,10 @@ export const TextArea: FC<ITextAreaProps> = ({
         borderWidth={borderWidth}
         placeholder={placeholder}
         maxLength={TEXTAREA_MAX_LENGTH}
-        colour={theme.text}
-        borderColour={theme.quaternary}
-        errorColour={theme.error}
         onChange={onChange}
         onBlur={onBlurHandler}
       />
-      {!!isError && <SError colour={theme.error}>{isError}</SError>}
+      {!!isError && <SError>{isError}</SError>}
     </SContainer>
   );
 };

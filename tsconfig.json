@@ -21,7 +21,8 @@
       "@public/*": ["public/*"],
       "@hooks/*": ["hooks/*"],
       "@store/*": ["store/*"],
-      "@client/*": ["client/*"]
+      "@client/*": ["client/*"],
+      "@lib/*": ["lib/*"],
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],

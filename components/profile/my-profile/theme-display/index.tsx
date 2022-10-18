@@ -1,24 +1,18 @@
-import {
-  ThemeBackgroundPrimary,
-  ThemeBackgroundSecondary,
-  ThemeBackgroundTertiary,
-} from '@components/ui/style-themed';
 import { useOnClickOutsideElementsArray } from '@hooks/use-onclick-outside-element';
 import { useTheme } from '@hooks/use-theme';
-import { useUserContext } from '@store/user-context';
 import { COLOURS } from '@utils/constants';
+import { DARK_THEMES, LIGHT_THEMES } from '@utils/constants/theme.constants';
 import {
-  EThemeDark,
-  EThemeLight,
-  THEME_DARK,
-  THEME_LIGHT,
-} from '@utils/constants/theme.constants';
+  TApplicationTheme,
+  TDarkThemeIds,
+  TLightThemeIds,
+  TThemeIds,
+} from '@utils/constants/theme.interfaces';
 import { useState, useRef } from 'react';
 import styled from 'styled-components';
 
 interface ISTheme {
   background: string;
-  border?: string;
 }
 
 const SContainer = styled.div`
@@ -52,7 +46,7 @@ const SThemePickerContainer = styled.div`
   top: 5px;
   z-index: 1;
   border-radius: 4px;
-  ${ThemeBackgroundTertiary};
+  background-color: var(--bg-tertiary);
 
   &.light {
     box-shadow: 0px 8px 20px -8px ${COLOURS.black};
@@ -87,7 +81,7 @@ const SThemePickerRow = styled.div`
   cursor: pointer;
 
   :not(.isSelected) {
-    ${ThemeBackgroundSecondary}
+    background-color: var(--bg-secondary);
   }
   &.isSelected {
     cursor: default;
@@ -97,39 +91,35 @@ const SThemePickerRow = styled.div`
     }
   }
   :hover:not(.isSelected) {
-    ${ThemeBackgroundPrimary}
+    background-color: var(--bg-primary);
   }
 `;
 
 const ThemeDisplay: React.FC = () => {
-  const theme = useTheme();
+  const { darkMode, setTheme, theme } = useTheme();
   const currentThemeRef = useRef<HTMLDivElement>(null);
   const themePickerRef = useRef<HTMLDivElement>(null);
-  const {
-    user: { darkMode },
-    updateTheme,
-  } = useUserContext();
   const [themeOpened, setThemeOpened] = useState(false);
 
   useOnClickOutsideElementsArray([currentThemeRef, themePickerRef], () =>
     setThemeOpened(false)
   );
 
-  const currentTheme = darkMode ? THEME_DARK : THEME_LIGHT;
+  const currentTheme: TApplicationTheme =
+    darkMode && theme
+      ? DARK_THEMES[theme as TDarkThemeIds]
+      : LIGHT_THEMES[theme as TLightThemeIds];
+  const currentMode = darkMode ? DARK_THEMES : LIGHT_THEMES;
 
   const openThemeSelection = () => {
     setThemeOpened((curr) => !curr);
   };
-  const onClickHandler = (name: EThemeDark | EThemeLight) => {
-    if (name === theme.name) {
+  const onClickHandler = (id: TThemeIds) => {
+    if (theme === id) {
       return;
     }
 
-    const newTheme = darkMode
-      ? { dark: name as EThemeDark }
-      : { light: name as EThemeLight };
-
-    updateTheme(newTheme);
+    setTheme(id);
     setThemeOpened(false);
   };
 
@@ -137,22 +127,13 @@ const ThemeDisplay: React.FC = () => {
     <>
       <SContainer
         ref={currentThemeRef}
-        title={theme.name}
+        title={currentTheme.name}
         onClick={openThemeSelection}
       >
         <SColoursContainer>
-          <STheme
-            background={theme.secondary}
-            border={theme.backgroundSecondary}
-          />
-          <STheme
-            background={theme.primary}
-            border={theme.backgroundSecondary}
-          />
-          <STheme
-            background={theme.tertiary}
-            border={theme.backgroundSecondary}
-          />
+          <STheme background={currentTheme.themes['--th-secondary']} />
+          <STheme background={currentTheme.themes['--th-primary']} />
+          <STheme background={currentTheme.themes['--th-tertiary']} />
         </SColoursContainer>
       </SContainer>
       <SThemePickerContainer
@@ -162,19 +143,17 @@ const ThemeDisplay: React.FC = () => {
         }`}
       >
         <SThemePickerWrapper>
-          {Object.values(currentTheme).map((themeChoice) => (
+          {Object.values(currentMode).map((themeChoice) => (
             <SThemePickerRow
-              key={themeChoice.name}
-              className={`${
-                themeChoice.name === theme.name ? 'isSelected' : ''
-              }`}
-              onClick={() => onClickHandler(themeChoice.name)}
+              key={themeChoice.id}
+              className={`${theme === themeChoice.id ? 'isSelected' : ''}`}
+              onClick={() => onClickHandler(themeChoice.id)}
             >
               {themeChoice.name}
               <SColoursContainer>
-                <STheme background={themeChoice.secondary} />
-                <STheme background={themeChoice.primary} />
-                <STheme background={themeChoice.tertiary} />
+                <STheme background={themeChoice.themes['--th-secondary']} />
+                <STheme background={themeChoice.themes['--th-primary']} />
+                <STheme background={themeChoice.themes['--th-tertiary']} />
               </SColoursContainer>
             </SThemePickerRow>
           ))}

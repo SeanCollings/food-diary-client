@@ -6,7 +6,6 @@ import {
   ThemeBorderBottom,
   ThemeBorderRight,
 } from '@components/ui/style-themed';
-import { useTheme } from '@hooks/use-theme';
 import {
   COLOURS,
   MEDIA_MOBILE,
@@ -25,9 +24,6 @@ const SCROLL_TOLERANCE = 1;
 const PADDING = 40;
 const CHART_HEIGHT = 320;
 
-interface ISContainer {
-  background: string;
-}
 interface ISDataDisplayContainer {
   scrollVisible: boolean;
   scrollStart: boolean;
@@ -36,11 +32,10 @@ interface ISDataDisplayContainer {
 }
 interface ISMenuUnderline {
   setLeft: number;
-  primary: string;
 }
 
-const SContainer = styled.div<ISContainer>`
-  background: ${({ background }) => background};
+const SContainer = styled.div`
+  background-color: var(--bg-secondary);
   flex: 2;
   border-radius: 12px;
   display: flex;
@@ -101,7 +96,7 @@ const SMenuItem = styled.span<any>`
 const SMenuUnderline = styled.div<ISMenuUnderline>`
   width: 140px;
   height: 2px;
-  background: ${({ primary }) => primary};
+  background: var(--th-primary);
   position: absolute;
   bottom: 0;
   transition: 0.1s;
@@ -208,8 +203,6 @@ interface ITrendMenuProps {
 }
 
 const TrendMenu: FC<ITrendMenuProps> = ({ selectedMenu, onClick }) => {
-  const theme = useTheme();
-
   return (
     <STrendMenuContainer>
       {TREND_MENU.map(({ id, title }) => (
@@ -221,10 +214,7 @@ const TrendMenu: FC<ITrendMenuProps> = ({ selectedMenu, onClick }) => {
           {title}
         </SMenuItem>
       ))}
-      <SMenuUnderline
-        primary={theme.primary}
-        setLeft={selectedMenu === 'food_trends' ? 0 : 50}
-      />
+      <SMenuUnderline setLeft={selectedMenu === 'food_trends' ? 0 : 50} />
     </STrendMenuContainer>
   );
 };
@@ -255,7 +245,6 @@ const TIME_PERIOD_OPTIONS: ITimePeriodOptions[] = [
 ];
 
 const ProfileLife: FC = () => {
-  const theme = useTheme();
   const containerRef = useRef<HTMLDivElement>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
   const [timePeriod, setTimePeriod] = useState<ITimePeriodOptions>(
@@ -374,7 +363,7 @@ const ProfileLife: FC = () => {
     selectedMenu === 'wellness_trends' && wellnessOption.id === 'excercise';
 
   return (
-    <SContainer ref={containerRef} background={theme.backgroundSecondary}>
+    <SContainer ref={containerRef}>
       <STopMenuContainer>
         <TrendMenu
           selectedMenu={selectedMenu}

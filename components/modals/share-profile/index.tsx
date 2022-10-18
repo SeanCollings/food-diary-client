@@ -1,9 +1,4 @@
-import {
-  ThemeBackgroundTertiary,
-  ThemeTextColor,
-} from '@components/ui/style-themed';
 import Toggle from '@components/ui/toggle';
-import { useTheme } from '@hooks/use-theme';
 import { useUserContext } from '@store/user-context';
 import { COLOURS, MEDIA_MOBILE, OPACITY_40 } from '@utils/constants';
 import {
@@ -17,20 +12,14 @@ import styled from 'styled-components';
 
 interface ISButton {
   isDisabled?: boolean;
-  primary?: string;
 }
-interface ISLink {
-  primary: string;
-}
-
 const SContainer = styled.div`
   display: flex;
   flex-direction: column;
   gap: 14px;
   padding: 30px;
   border-radius: 16px;
-  ${ThemeTextColor}
-  ${ThemeBackgroundTertiary}
+  background-color: var(--bg-tertiary);
 `;
 const STopContainer = styled.div`
   display: flex;
@@ -81,7 +70,7 @@ const SLinkContainer = styled.div`
     justify-content: end;
   }
 `;
-const SLink = styled.input<ISLink>`
+const SLink = styled.input`
   user-select: text;
   cursor: default;
   opacity: 0.8;
@@ -91,8 +80,8 @@ const SLink = styled.input<ISLink>`
   border-radius: 4px;
   padding: 4px 8px;
   border: 1px solid ${COLOURS.gray}${OPACITY_40};
-  ${ThemeBackgroundTertiary}
-  ${ThemeTextColor}
+  background-color: var(--bg-tertiary);
+  color: var(--text);
 
   &.copied {
     animation: 0.5s copied ease-in none;
@@ -101,8 +90,8 @@ const SLink = styled.input<ISLink>`
   @keyframes copied {
     0% {
       opacity: 1;
-      border-color: ${({ primary }) => primary};
-      box-shadow: inset 0px 0px 4px 2px ${({ primary }) => primary};
+      border-color: var(--th-primary);
+      box-shadow: inset 0px 0px 4px 2px var(--th-primary);
     }
     100% {
       opacity: 0.8;
@@ -133,14 +122,14 @@ const SButton = styled.button<ISButton>`
   font-size: 18px;
   border: 1px solid;
   border-radius: 4px;
+  color: var(--text);
 
-  background-color: ${({ primary }) => primary || 'transparent'};
-  ${ThemeTextColor}
+  background-color: var(--th-primary);
 
   &.subtle {
     border: 0;
     background-color: transparent;
-    ${({ primary }) => primary && `color: ${primary}`}
+    color: var(--th-primary);
   }
 
   :hover {
@@ -160,16 +149,20 @@ interface IModalShareProfileProps {
   onClose: () => void;
 }
 
-const getShareLink = (shareLink: string) =>
-  `${window?.location.origin}/share/${shareLink}`;
+const getShareLink = (shareLink?: string) => {
+  if (!shareLink) {
+    return '';
+  }
+
+  return `${window?.location.origin}/share/${shareLink}`;
+};
 
 const ModalShareProfile: React.FC<IModalShareProfileProps> = ({ onClose }) => {
-  const theme = useTheme();
   const linkRef = useRef<HTMLInputElement>(null);
   const { user, updatePreferences, updateUser } = useUserContext();
 
   const onToggleChange = () => {
-    updatePreferences({ isProfileShared: !user.preferences.isProfileShared });
+    updatePreferences({ isProfileShared: !user?.preferences?.isProfileShared });
   };
   const onCreateLinkHandler = () => {
     updatePreferences({ isProfileShared: true });
@@ -179,7 +172,7 @@ const ModalShareProfile: React.FC<IModalShareProfileProps> = ({ onClose }) => {
   };
   const copyLinkClicked = () => {
     if (navigator.clipboard) {
-      navigator.clipboard.writeText(getShareLink(user.shareLink));
+      navigator.clipboard.writeText(getShareLink(user?.shareLink));
     }
 
     if (linkRef.current) {
@@ -196,10 +189,10 @@ const ModalShareProfile: React.FC<IModalShareProfileProps> = ({ onClose }) => {
     }
   };
 
-  const linkAddress = user.shareLink
+  const linkAddress = user?.shareLink
     ? getShareLink(user.shareLink)
     : 'No link created';
-  const generateButtonText = !user.shareLink
+  const generateButtonText = !user?.shareLink
     ? 'Generate link'
     : 'Generate new link';
 
@@ -211,31 +204,29 @@ const ModalShareProfile: React.FC<IModalShareProfileProps> = ({ onClose }) => {
           <MdClose size={34} color={COLOURS.gray} />
         </SCloseButton>
       </STopContainer>
-      {user.shareLink && (
+      {user?.shareLink && (
         <>
           <SShareableContainer>
             Shareable link
             <Toggle
               title={
-                user.preferences.isProfileShared
+                user?.preferences?.isProfileShared
                   ? 'Sharing is on'
                   : 'Sharing is off'
               }
               onChange={onToggleChange}
-              checked={user.preferences.isProfileShared}
+              checked={user?.preferences?.isProfileShared}
               disabled={!user.shareLink}
             />
           </SShareableContainer>
           <SLinkContainer>
             <SLink
               ref={linkRef}
-              primary={theme.primary}
               value={linkAddress}
               readOnly
               onClick={onInputClick}
             />
             <SButton
-              primary={theme.primary}
               disabled={!user.shareLink || !navigator.clipboard}
               className={
                 !user.shareLink || !navigator.clipboard ? 'disabled' : ''
@@ -248,13 +239,12 @@ const ModalShareProfile: React.FC<IModalShareProfileProps> = ({ onClose }) => {
         </>
       )}
       <SInformationContainer>
-        {user.shareLink ? SHARE_INFORMATION : SHARE_PRE_GENERATE}
+        {user?.shareLink ? SHARE_INFORMATION : SHARE_PRE_GENERATE}
       </SInformationContainer>
       <SGenerateButtonContainer>
         <SButton
           onClick={onCreateLinkHandler}
-          primary={theme.primary}
-          className={user.shareLink ? 'subtle' : ''}
+          className={user?.shareLink ? 'subtle' : ''}
         >
           {generateButtonText}
         </SButton>

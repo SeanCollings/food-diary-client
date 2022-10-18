@@ -1,4 +1,3 @@
-import { useTheme } from '@hooks/use-theme';
 import {
   COLOURS,
   MEDIA_MOBILE,
@@ -74,7 +73,6 @@ const ModalContent: React.FC<IModalCommonProps> = ({
 };
 
 const Modal: FC<IModalProps> = ({ show, ...rest }) => {
-  const theme = useTheme();
   const [domReady, setDomReady] = useState(false);
 
   useEffect(() => {
@@ -89,7 +87,7 @@ const Modal: FC<IModalProps> = ({ show, ...rest }) => {
     const scrollbarWidth = window.innerWidth - document.body.clientWidth;
     document.documentElement.style.overflow = 'hidden';
     document.documentElement.style.paddingRight = `${scrollbarWidth}px`;
-    document.documentElement.style.backgroundColor = theme.backgroundPrimary;
+    document.documentElement.style.backgroundColor = 'var(--bg-primary)';
   } else {
     document.documentElement.style.overflow = 'auto';
     document.documentElement.style.paddingRight = '0px';

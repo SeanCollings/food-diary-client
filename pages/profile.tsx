@@ -2,6 +2,7 @@ import MyProfile from '@components/profile/my-profile';
 import ProfileLife from '@components/profile/profile-life';
 import { NextPage } from 'next';
 import styled from 'styled-components';
+import { protectedSeverSideProps } from '@lib/server-props';
 
 const SProfileContainer = styled.section`
   display: flex;
@@ -20,5 +21,7 @@ const ProilePage: NextPage = () => {
     </SProfileContainer>
   );
 };
+
+export const getServerSideProps = protectedSeverSideProps;
 
 export default ProilePage;

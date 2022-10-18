@@ -4,7 +4,6 @@ import styled from 'styled-components';
 import SettingsProfile from '@components/profile/my-profile/settings-profile';
 import UserProfile from '@components/profile/my-profile/user-profile';
 import {
-  ThemeBackgroundSecondary,
   ThemeBorderBottom,
   ThemeBorderRight,
 } from '@components/ui/style-themed';
@@ -20,7 +19,7 @@ const SContainer = styled.div`
   justify-content: space-between;
   min-height: 600px;
   min-width: 400px;
-  ${ThemeBackgroundSecondary}
+  background-color: var(--bg-secondary);
   ${ThemeBorderBottom}
   ${ThemeBorderRight}
 

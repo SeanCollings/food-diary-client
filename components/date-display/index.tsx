@@ -9,12 +9,8 @@ import {
   getNewDay,
 } from '@utils/date-utils';
 import { useDateSelectedContext } from '@store/date-selected-context';
-import { useTheme } from '@hooks/use-theme';
 import { useAllEntriesPerMonthContext } from '@store/all-entries-per-month-context';
 
-interface ISFullDateContainer {
-  colour: string;
-}
 interface ISButtonCommon {
   calendarVisible: boolean;
 }
@@ -90,11 +86,11 @@ const SDate = styled.button<ISDate>`
     ${({ isCalendarShown }) => !isCalendarShown && `opacity: 0.7`};
   }
 `;
-const SFullDateContainer = styled.div<ISFullDateContainer>`
+const SFullDateContainer = styled.div`
   min-width: 250px;
   text-align: center;
   position: relative;
-  color: ${({ colour }) => colour};
+  color: var(--text);
 
   ${MEDIA_MOBILE} {
     width: 100%;
@@ -116,7 +112,6 @@ const SCalendarContainer = styled.div`
 `;
 
 const DateDisplay: FC = () => {
-  const theme = useTheme();
   const { allEntriesPerMonth } = useAllEntriesPerMonthContext();
   const { dateSelectedISO, updateSelectedDateISO } = useDateSelectedContext();
   const [showCalendar, setShowCalendar] = useState(false);
@@ -148,10 +143,10 @@ const DateDisplay: FC = () => {
     <SContainer>
       <SContentWrapper>
         <SButtonLeft onClick={onClickLeft} calendarVisible={showCalendar}>
-          <MdArrowLeft size={46} color={theme.quaternary} />
+          <MdArrowLeft size={46} color={'var(--th-quaternary)'} />
         </SButtonLeft>
         <SDate onClick={onDateClick} isCalendarShown={showCalendar}>
-          <SFullDateContainer colour={theme.text}>
+          <SFullDateContainer>
             {formatFullDate(dateSelectedISO)}
           </SFullDateContainer>
         </SDate>
@@ -171,7 +166,7 @@ const DateDisplay: FC = () => {
           disabled={isDateSelectedToday}
           calendarVisible={showCalendar}
         >
-          <MdArrowRight size={46} color={theme.quaternary} />
+          <MdArrowRight size={46} color={'var(--th-quaternary)'} />
         </SButtonRight>
       </SContentWrapper>
     </SContainer>

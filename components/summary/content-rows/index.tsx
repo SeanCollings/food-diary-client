@@ -1,5 +1,4 @@
 import { FC, memo } from 'react';
-import { useTheme } from '@hooks/use-theme';
 import {
   EMealType,
   EWellnessTypes,
@@ -13,22 +12,15 @@ import { MEDIA_MOBILE_TABLET } from '@utils/constants';
 
 const MARGIN = 20;
 
-interface ISDateHeader {
-  primary: string;
-}
 interface ISContentRow {
-  primary: string;
   bottomRadius?: boolean;
   hideBorderBottom?: boolean;
   borderTop?: boolean;
   padBottom?: boolean;
   gridArea?: TMealType | TWellnessTypes;
 }
-interface ISContentTypeHeader {
-  primary: string;
-}
 
-const SDateHeader = styled.div<ISDateHeader>`
+const SDateHeader = styled.div`
   font-size: 18px;
   text-align: center;
   padding: 4px;
@@ -37,8 +29,8 @@ const SDateHeader = styled.div<ISDateHeader>`
   border-top-left-radius: 8px;
   border-top-right-radius: 8px;
 
-  background-color: ${({ primary }) => primary};
-  border: 1px solid ${({ primary }) => primary};
+  background-color: var(--th-primary);
+  border: 1px solid var(--th-primary);
 
   ${MEDIA_MOBILE_TABLET} {
     &.grid-area {
@@ -52,13 +44,12 @@ const SContentRow = styled.div<ISContentRow>`
 
   background-color: var(--bg-secondary);
 
-  border-left: 1px solid ${({ primary }) => primary};
-  border-right: 1px solid ${({ primary }) => primary};
-  ${({ borderTop, primary }) =>
-    borderTop && `border-top: 1px solid ${primary}`};
+  border-left: 1px solid var(--th-primary);
+  border-right: 1px solid var(--th-primary);
+  ${({ borderTop }) => borderTop && `border-top: 1px solid var(--th-primary)`};
   border-bottom: solid
-    ${({ primary, hideBorderBottom }) =>
-      `${hideBorderBottom ? '0' : '1'}px ${primary}`};
+    ${({ hideBorderBottom }) =>
+      `${hideBorderBottom ? '0' : '1'}px var(--th-primary)`};
 
   ${({ padBottom }) => padBottom && `margin-bottom: ${MARGIN}px`};
   ${({ bottomRadius }) =>
@@ -70,13 +61,13 @@ const SContentRow = styled.div<ISContentRow>`
     ${({ gridArea }) => gridArea && `grid-area: ${gridArea};`}
   }
 `;
-const SContentTypeHeader = styled.div<ISContentTypeHeader>`
+const SContentTypeHeader = styled.div`
   display: flex;
   align-items: center;
   padding: 4px 8px;
   font-weight: 600;
 
-  border-right: 1px solid ${({ primary }) => primary};
+  border-right: 1px solid var(--th-primary);
 `;
 const SMealValuesList = styled.ul`
   margin: 0;
@@ -106,8 +97,6 @@ interface IDateHeaderRowProps {
 }
 export const DateHeaderRow: FC<IDateHeaderRowProps> = memo(
   ({ dates, data }) => {
-    const theme = useTheme();
-
     return (
       <>
         {dates.map((date, index) => {
@@ -118,7 +107,6 @@ export const DateHeaderRow: FC<IDateHeaderRowProps> = memo(
           return (
             <SDateHeader
               key={`${date}-${getUniqueId()}`}
-              primary={theme.primary}
               className={index === 0 ? 'grid-area' : ''}
             >
               {formatFullDate(date)}
@@ -141,8 +129,6 @@ interface IMealDataRowProps {
 }
 export const MealDataRow: FC<IMealDataRowProps> = memo(
   ({ id, dates, title, data }) => {
-    const theme = useTheme();
-
     return (
       <>
         {dates.map((date, index) => {
@@ -155,12 +141,9 @@ export const MealDataRow: FC<IMealDataRowProps> = memo(
           return (
             <SContentRow
               key={`${date}-${id}-${getUniqueId()}`}
-              primary={theme.primary}
               gridArea={(index === 0 && id) || undefined}
             >
-              <SContentTypeHeader primary={theme.primary}>
-                {title}
-              </SContentTypeHeader>
+              <SContentTypeHeader>{title}</SContentTypeHeader>
               <SMealValuesList>
                 {listItems.map((item) => (
                   <SMealValue key={getUniqueId()}>{item}</SMealValue>
@@ -187,7 +170,6 @@ interface IWellnessDataRowProps {
 }
 export const WellnessDataRow: FC<IWellnessDataRowProps> = memo(
   ({ id, dates, title, data, firstIndex, lastIndex }) => {
-    const theme = useTheme();
     const borderTop = firstIndex;
     const bottomRadius = lastIndex;
     const hideBorderBottom = !lastIndex;
@@ -206,16 +188,13 @@ export const WellnessDataRow: FC<IWellnessDataRowProps> = memo(
           return (
             <SContentRow
               key={`${date}-${id}-${getUniqueId()}`}
-              primary={theme.primary}
               borderTop={borderTop}
               bottomRadius={bottomRadius}
               hideBorderBottom={hideBorderBottom}
               padBottom={lastIndex}
               gridArea={gridArea}
             >
-              <SContentTypeHeader primary={theme.primary}>
-                {title}
-              </SContentTypeHeader>
+              <SContentTypeHeader>{title}</SContentTypeHeader>
               <SWellnessValue>{value}</SWellnessValue>
             </SContentRow>
           );

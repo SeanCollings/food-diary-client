@@ -5,7 +5,7 @@ import InputContainer from '@components/ui/input-container';
 import DropdownContainer from '@components/ui/dropdown-container';
 import EmojiPicker, { TSelectedEmoji } from '@components/emoji-picker';
 import { EAddMealOptions, IMealContent, TMealType } from '@utils/interfaces';
-import { getMealThemeColour } from '@utils/theme-utils';
+import { getThemeColoursFromMealId } from '@utils/theme-utils';
 import { ModalHeader } from '@components/modals/styled';
 import { runValidations } from '@utils/validation';
 import { addMealOptionsValidators } from '@utils/validation/validators/collections';
@@ -19,13 +19,11 @@ import {
   IRunFormValidations,
 } from '@components/modals/add-to-meal-card/types';
 import { trim } from '@utils/string-utils';
-import { useTheme } from '@hooks/use-theme';
-import { ThemeBackgroundSecondary } from '@components/ui/style-themed';
 
 const SContainer = styled.div`
   margin: auto;
   width: 600px;
-  ${ThemeBackgroundSecondary}
+  background-color: var(--bg-secondary);
 `;
 const SContentContainer = styled.div`
   display: flex;
@@ -60,14 +58,13 @@ const ModalAddToMealCard: FC<IModalAddMealProps> = ({
   onSubmit,
   onEditConfirm,
 }) => {
-  const theme = useTheme();
   const [state, dispatch] = useReducer(
     addToMealReducer,
     getIntialState({ mealId, content })
   );
 
   const isEditing = !!content;
-  const mealColour = getMealThemeColour(theme, state.mealType);
+  const mealColour = getThemeColoursFromMealId(state.mealType);
   const mealTile =
     ALL_MEAL_CARDS.find((meal) => meal.id === state.mealType)?.title || '';
 

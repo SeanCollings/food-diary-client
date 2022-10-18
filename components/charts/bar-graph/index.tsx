@@ -1,4 +1,3 @@
-import { useTheme } from '@hooks/use-theme';
 import { COLOURS, OPACITY_40 } from '@utils/constants';
 import { EWellnessTypes } from '@utils/interfaces';
 import { getUniqueId } from '@utils/unique-id';
@@ -89,7 +88,7 @@ const SBar = styled.div<ISBar>`
   border-top-left-radius: ${({ borderRadius }) => borderRadius}px;
   border-top-right-radius: ${({ borderRadius }) => borderRadius}px;
   height: ${({ barHeight }) => barHeight}%;
-  background: ${({ backgroundColour }) => backgroundColour};
+  background: var(--th-${({ backgroundColour }) => backgroundColour});
 `;
 const SHAxisContainer = styled.div`
   display: flex;
@@ -117,7 +116,7 @@ const SLegendCircle = styled.div<ISLegendCircle>`
   width: 12px;
   height: 12px;
   border-radius: 50%;
-  background: ${({ colour }) => colour};
+  background: var(--th-${({ colour }) => colour});
 `;
 
 interface IWellnessTrendData {
@@ -154,12 +153,10 @@ interface IBarGraphLegendProps {
 }
 
 export const BarGraphLegend: FC<IBarGraphLegendProps> = ({ show }) => {
-  const theme = useTheme();
-
   const BEVERAGE_COLOUR: { [key in EWellnessTypes]: string } = {
-    [EWellnessTypes.WATER]: theme.primary,
-    [EWellnessTypes.TEA_COFFEE]: theme.quaternary,
-    [EWellnessTypes.ALCOHOL]: theme.secondary,
+    [EWellnessTypes.WATER]: 'primary',
+    [EWellnessTypes.TEA_COFFEE]: 'quaternary',
+    [EWellnessTypes.ALCOHOL]: 'secondary',
   };
 
   return (
@@ -181,17 +178,15 @@ export const BarGraphLegend: FC<IBarGraphLegendProps> = ({ show }) => {
 };
 
 const BarGraph: React.FC<IBarGraphProps> = ({ height }) => {
-  const theme = useTheme();
-
   const maxValue = Math.max(
     Math.ceil(MOCK_DATA_WEEK.highestValue / MIN_TICK_VALUE) * MIN_TICK_VALUE,
     MIN_TICK_VALUE
   );
 
   const BEVERAGE_COLOUR: { [key in EWellnessTypes]: string } = {
-    [EWellnessTypes.WATER]: theme.primary,
-    [EWellnessTypes.TEA_COFFEE]: theme.quaternary,
-    [EWellnessTypes.ALCOHOL]: theme.secondary,
+    [EWellnessTypes.WATER]: 'primary',
+    [EWellnessTypes.TEA_COFFEE]: 'quaternary',
+    [EWellnessTypes.ALCOHOL]: 'secondary',
   };
 
   return (

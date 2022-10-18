@@ -3,7 +3,6 @@ import Dropdown, {
   IDropdownProps,
   TDefaultOption,
 } from '@components/ui/dropdown';
-import { ThemeTextColor } from '@components/ui/style-themed';
 
 const SInputContainer = styled.div`
   display: flex;
@@ -16,7 +15,6 @@ const SLabel = styled.label`
   font-size: 22px;
   font-weight: 200;
   pointer-events: none;
-  ${ThemeTextColor}
 `;
 
 interface IDropdownContainerProps<T, K> extends IDropdownProps<T, K> {

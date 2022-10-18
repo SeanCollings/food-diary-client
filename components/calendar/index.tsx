@@ -1,5 +1,5 @@
 import { useOnClickOutsideElement } from '@hooks/use-onclick-outside-element';
-import { COLOURS, OPACITY_20, OPACITY_40, OPACITY_80 } from '@utils/constants';
+import { COLOURS, OPACITY_20, OPACITY_40 } from '@utils/constants';
 import { formatMonthSmallYear, getNewMonth } from '@utils/date-utils';
 import { IDayNumber, isDayNumberTypeGuard } from '@utils/type-guards';
 import { FC, useRef, useState } from 'react';
@@ -11,9 +11,8 @@ import {
   getCalendarDayProperties,
   getCalendarRestrictions,
 } from '@utils/calendar-utils';
-import { ThemeBackgroundTertiary } from '@components/ui/style-themed';
-import { useTheme } from '@hooks/use-theme';
 import { getClassNames } from '@utils/string-utils';
+import { useTheme } from '@hooks/use-theme';
 
 const CALENDAR_HEIGHT = 320;
 const MONTH_SELECTOR_HEIGHT = 30;
@@ -28,18 +27,10 @@ interface ISDayContainer {
   backgroundColour: string;
   bottomLeft: boolean;
   bottomRight: boolean;
-  primary: string;
-  secondary: string;
-  colour: string;
 }
 interface ISDayHasEntry {
   background: string;
 }
-interface ISSelectTodayButton {
-  colour: string;
-  background: string;
-}
-
 const SContainer = styled.div<ISContainer>`
   width: 100%;
   border-radius: 10px;
@@ -49,7 +40,7 @@ const SContainer = styled.div<ISContainer>`
   box-shadow: 0px 8px 20px -8px ${COLOURS.black}${OPACITY_40};
   height: ${({ calendarHeight }) =>
     `${calendarHeight + MONTH_SELECTOR_HEIGHT + 8}`}px;
-  ${ThemeBackgroundTertiary}
+  background-color: var(--bg-tertiary);
 `;
 const SDateSelectorContainer = styled.div`
   font-size: 20px;
@@ -70,19 +61,19 @@ const STodayButtonContainer = styled.div`
   align-items: center;
   flex: 1;
 `;
-const SSelectTodayButton = styled.button<ISSelectTodayButton>`
+const SSelectTodayButton = styled.button`
   outline: none;
   cursor: pointer;
-  color: ${({ colour }) => colour};
-  border: 1px solid ${({ background }) => background};
-  background-color: ${({ background }) => background}${OPACITY_40};
   border-radius: 4px;
+  border: 1px solid var(--th-quaternary);
+  background-color: var(--th-quaternary__40);
+  color: var(--text);
 
   padding: 2px 12px;
   font-size: 14px;
 
   :hover {
-    background-color: ${({ background }) => background}${OPACITY_20};
+    background-color: var(--th-quaternary__20);
   }
 
   :active {
@@ -140,11 +131,10 @@ const SDayContainer = styled.div<ISDayContainer>`
 
   ${({ bottomRight }) => bottomRight && `border-radius: 0 0 5px 0`};
   ${({ bottomLeft }) => bottomLeft && `border-radius: 0 0 0 5px`};
-  ${({ backgroundColour }) =>
-    backgroundColour && `background-color: ${backgroundColour}`};
+  background-color: ${({ backgroundColour }) => backgroundColour};
 
   &.selected-date {
-    background-color: ${({ primary }) => `${primary}${OPACITY_80}`};
+    background-color: var(--th-primary__80);
   }
 
   &.today {
@@ -177,23 +167,23 @@ const SDayContainer = styled.div<ISDayContainer>`
     border-bottom-right-radius: 8px;
   }
   &.inbetween-from-to-dates {
-    box-shadow: inset 0px 1px 0px 0px ${({ primary }) => primary},
-      inset 0px -1px 0px 0px ${({ primary }) => primary};
+    box-shadow: inset 0px 1px 0px 0px var(--th-primary),
+      inset 0px -1px 0px 0px var(--th-primary);
   }
 
   &.restrict-before {
     border-top-left-radius: 8px;
     border-bottom-left-radius: 8px;
-    box-shadow: inset 2px 0px 0px 0px ${({ primary }) => primary},
-      inset 0px 1px 0px 0px ${({ primary }) => primary},
-      inset 0px -1px 0px 0px ${({ primary }) => primary};
+    box-shadow: inset 2px 0px 0px 0px var(--th-primary),
+      inset 0px 1px 0px 0px var(--th-primary),
+      inset 0px -1px 0px 0px var(--th-primary);
   }
   &.restrict-after {
     border-top-right-radius: 8px;
     border-bottom-right-radius: 8px;
-    box-shadow: inset -2px 0px 0px 0px ${({ primary }) => primary},
-      inset 0px 1px 0px 0px ${({ primary }) => primary},
-      inset 0px -1px 0px 0px ${({ primary }) => primary};
+    box-shadow: inset -2px 0px 0px 0px var(--th-primary),
+      inset 0px 1px 0px 0px var(--th-primary),
+      inset 0px -1px 0px 0px var(--th-primary);
   }
 
   &.restricted-day {
@@ -214,11 +204,11 @@ const SDayRow = styled.div`
   padding: 2px;
   gap: 4px;
 `;
-const SDayHasEntry = styled.div<ISDayHasEntry>`
+const SDayHasEntry = styled.div`
   height: 8px;
   width: 80%;
   border-radius: 8px;
-  background: ${({ background }) => background};
+  background: var(--th-primary);
 `;
 
 interface ICalendarContentProps {
@@ -252,26 +242,18 @@ const DateSelector: FC<IDateSelectorProps> = ({
   onSelectNextMonth,
   onSelectToday,
 }) => {
-  const theme = useTheme();
-
   return (
     <SDateSelectorContainer>
       <STodayButtonContainer>
-        <SSelectTodayButton
-          colour={theme.text}
-          background={theme.quaternary}
-          onClick={onSelectToday}
-        >
-          Today
-        </SSelectTodayButton>
+        <SSelectTodayButton onClick={onSelectToday}>Today</SSelectTodayButton>
       </STodayButtonContainer>
       <SMonthNavigatorContainer>
         <SButtonLeft onClick={onSelectPreviousMonth}>
-          <MdArrowLeft size={44} color={theme.text} />
+          <MdArrowLeft size={44} color={'var(--th-text)'} />
         </SButtonLeft>
         <SDateTitle>{formatMonthSmallYear(selectedMonthDate)}</SDateTitle>
         <SButtonRight onClick={onSelectNextMonth}>
-          <MdArrowRight size={44} color={theme.text} />
+          <MdArrowRight size={44} color={'var(--th-text)'} />
         </SButtonRight>
       </SMonthNavigatorContainer>
     </SDateSelectorContainer>
@@ -287,7 +269,7 @@ const CalendarContent: FC<ICalendarContentProps> = ({
   restrictDaysBefore,
   onDayClicked,
 }) => {
-  const theme = useTheme();
+  const { darkMode } = useTheme();
 
   const currentMonthYear = formatMonthSmallYear(selectedMonthDate);
   const entriesPerMonth = allEntriesPerMonth?.[currentMonthYear];
@@ -362,9 +344,7 @@ const CalendarContent: FC<ICalendarContentProps> = ({
                 key={`col-${colIndex}`}
                 rowHeight={rowHeight}
                 backgroundColour={
-                  theme.darkMode
-                    ? theme.backgroundSecondary
-                    : COLOURS.gray_light
+                  darkMode ? 'var(--bg-secondary)' : COLOURS.gray_light
                 }
                 onClick={() =>
                   daySelectedHandler(
@@ -374,19 +354,11 @@ const CalendarContent: FC<ICalendarContentProps> = ({
                 }
                 bottomLeft={rowIndex === maxRows && colIndex === 0}
                 bottomRight={rowIndex === maxRows && colIndex === 6}
-                primary={theme.primary}
-                secondary={theme.secondary}
-                colour={theme.text}
                 className={classNames}
               >
                 <SDayRow>
                   {item.day}
-                  {dayHasEntry && (
-                    <SDayHasEntry
-                      background={theme.primary}
-                      className="day-entry"
-                    />
-                  )}
+                  {dayHasEntry && <SDayHasEntry className="day-entry" />}
                 </SDayRow>
               </SDayContainer>
             );

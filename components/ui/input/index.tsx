@@ -2,8 +2,6 @@ import { COLOURS, MEDIA_MOBILE, OPACITY_30 } from '@utils/constants';
 import { INPUT_MAX_LENGTH } from '@utils/validation/validation.constants';
 import { ChangeEvent, FC, KeyboardEvent, ReactNode } from 'react';
 import styled from 'styled-components';
-import { ThemeTextColor } from '@components/ui/style-themed';
-import { useTheme } from '@hooks/use-theme';
 
 interface ISContainer {
   inputWidth?: number;
@@ -16,10 +14,6 @@ interface ISInput {
   hideInitialBorder?: boolean;
   hasIcon: boolean;
   borderWidth: number;
-  errorColour: string;
-}
-interface ISError {
-  errorColour: string;
 }
 
 const SContainer = styled.div<ISContainer>`
@@ -35,32 +29,30 @@ const SInput = styled.input<ISInput>`
   transition: 0.25s;
   outline: none;
   text-align: center;
-
   font-size: 18px;
   width: 100%;
   padding: 8px 10px;
   border-radius: 8px;
+  color: var(--text);
 
   background-color: ${({ backgroundColour }) =>
-    backgroundColour ? `${backgroundColour}${OPACITY_30}` : 'inherit'};
+    backgroundColour ? `var(${backgroundColour}__40)` : 'inherit'};
   border: solid
     ${({ borderColour, borderWidth }) =>
       borderColour
-        ? `${borderWidth}px ${borderColour}${OPACITY_30}`
+        ? `${borderWidth}px var(${borderColour}__40)`
         : `${borderWidth}px ${COLOURS.black}${OPACITY_30}`};
   ${({ hideInitialBorder }) =>
     hideInitialBorder && 'border-color: transparent'};
 
-  ${ThemeTextColor};
-
   :focus {
     border: 2px solid
       ${({ borderColour }) =>
-        borderColour ? `${borderColour}` : `${COLOURS.black}`};
+        borderColour ? `var(${borderColour})` : 'var(--text)'};
   }
 
   ${({ hasIcon }) => hasIcon && `padding-left: 38px`};
-  ${({ isError, errorColour }) => isError && `border-color: ${errorColour}`};
+  ${({ isError }) => isError && `border-color: var(--error)`};
 `;
 const SIconContainer = styled.div`
   position: absolute;
@@ -68,10 +60,10 @@ const SIconContainer = styled.div`
   transform: translateY(-50%);
   padding-left: 4px;
 `;
-const SError = styled.div<ISError>`
+const SError = styled.div`
   font-size: 15px;
   text-align: right;
-  color: ${({ errorColour }) => errorColour};
+  color: var(--error);
 `;
 
 type TInputType = 'text' | 'number';
@@ -115,7 +107,6 @@ export const Input: FC<IInputProps> = ({
   onChange,
   onMouseDown,
 }) => {
-  const theme = useTheme();
   const onBlurHandler = () => onBlur?.();
   const onMouseDownHandler = () => onMouseDown?.();
   const onKeyDownHandler = (event: KeyboardEvent<HTMLInputElement>) => {
@@ -140,7 +131,6 @@ export const Input: FC<IInputProps> = ({
         type={type}
         placeholder={placeholder}
         isError={!!isError}
-        errorColour={theme.error}
         hasIcon={!!children}
         autoComplete={'off'}
         spellCheck={false}
@@ -150,7 +140,7 @@ export const Input: FC<IInputProps> = ({
         onChange={onChange}
         onMouseDown={onMouseDownHandler}
       />
-      {!!isError && <SError errorColour={theme.error}>{isError}</SError>}
+      {!!isError && <SError>{isError}</SError>}
     </SContainer>
   );
 };

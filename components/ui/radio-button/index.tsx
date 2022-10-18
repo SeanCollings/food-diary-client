@@ -17,13 +17,13 @@ const SContainer = styled.div<ISContainer>`
     height: 16px;
     border-radius: 16px;
     outline: none;
-    margin-right: 9.5px;
+    margin-right: 8px;
     cursor: pointer;
     background-color: ${COLOURS.white_off};
     border: 2px solid ${COLOURS.gray_dark};
   }
   input[type='radio']:checked {
-    border: 5px solid ${({ colour }) => colour || COLOURS.black};
+    border: 4px solid var(${({ colour }) => colour});
   }
 `;
 const SRadio = styled.input`

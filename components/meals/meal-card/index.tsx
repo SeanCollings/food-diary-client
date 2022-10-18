@@ -3,7 +3,6 @@ import {
   MEDIA_MOBILE,
   MEDIA_TABLET,
   OPACITY_70,
-  OPACITY_80,
 } from '@utils/constants';
 import { FC, MouseEvent, useEffect, useState } from 'react';
 import styled from 'styled-components';
@@ -12,7 +11,7 @@ import { getUniqueId } from '@utils/unique-id';
 import ModalAddToMealCard from '@components/modals/add-to-meal-card';
 import Modal from '@components/modals';
 import { IMealContent, TMealType } from '@utils/interfaces';
-import { getMealThemeColour } from '@utils/theme-utils';
+import { getThemeColoursFromMealId } from '@utils/theme-utils';
 import { useDateSelectedContext } from '@store/date-selected-context';
 import ModalEditMealCard from '@components/modals/edit-meal-card';
 import { useMealEntriesContext } from '@store/meal-entries-context';
@@ -28,7 +27,6 @@ interface ISIcon {
 }
 interface IScroll {
   background: string;
-  fontColor: string;
 }
 
 // background-image: ${({ background }) => `linear-gradient(to right,${background} 50%, ${background}${OPACITY_80})`};
@@ -49,15 +47,16 @@ const SContainer = styled.div<IScontainer>`
 
   ${({ hasContent, background }) =>
     hasContent
-      ? `background-image: linear-gradient(225deg,${background} 20%, ${background}${OPACITY_80})`
-      : `background: ${background}`};
+      ? `background-image: linear-gradient(225deg, var(${background}) 20%, var(${background}__80))`
+      : `background: var(${background})`};
 
   :hover {
     scale: 1.01;
     ${({ hasContent, background }) =>
       hasContent
-        ? `background-image: linear-gradient(225deg,${background}${OPACITY_80} 100%, ${background}${OPACITY_80})`
-        : `background: ${background}${OPACITY_80}`};
+        ? `background-image: linear-gradient(225deg, var(${background}__80) 100%, var(${background}__80))`
+        : `background: var(${background}__80)`};
+
     ${({ boxShadow }) =>
       boxShadow && `box-shadow: 1px 1px 10px ${COLOURS.black}${OPACITY_70}`};
 
@@ -90,12 +89,12 @@ const SHeader = styled.div`
 `;
 const SIcon = styled(MdEditNote)<ISIcon>`
   transition: 0.4s;
-  background: ${({ background }) => `${background}`};
+  background: ${({ background }) => `var(${background})`};
   border-radius: 10px;
   color: ${COLOURS.white};
 
   :hover {
-    color: ${({ background }) => `${background}`};
+    color: ${({ background }) => `var(${background})`};
     background: ${COLOURS.white};
   }
 `;
@@ -120,12 +119,12 @@ const SContentContainer = styled.div<IScroll>`
     display: none;
   }
   :hover::-webkit-scrollbar-thumb {
-    background-color: ${({ fontColor }) => `${fontColor}${OPACITY_70}`};
+    background-color: var(--bg-secondary);
     border-radius: 10px;
     max-height: 20px;
   }
   :hover::-webkit-scrollbar-track {
-    background-color: ${({ background }) => `${background}`};
+    background-color: ${({ background }) => `var(${background})`};
     border-radius: 10px;
   }
 `;
@@ -164,7 +163,7 @@ const buildContent = (content: IMealContent, index: number) => {
 };
 
 const Card: FC<IProps> = ({ id, title }) => {
-  const theme = useTheme();
+  const { darkMode } = useTheme();
   const { dateSelectedISO } = useDateSelectedContext();
   const { mealEntries, addMealEntry, updateMealEntry, removeMealEntryById } =
     useMealEntriesContext();
@@ -236,14 +235,14 @@ const Card: FC<IProps> = ({ id, title }) => {
     setEditMealContent(null);
   };
 
-  const background = getMealThemeColour(theme, id);
+  const colour = getThemeColoursFromMealId(id);
 
   return (
     <>
       <SContainer
         hasContent={!!contents.length}
-        background={background}
-        boxShadow={!theme.darkMode}
+        background={colour}
+        boxShadow={darkMode}
         onClick={onClickHandler}
         id="meal-card"
         title="Click to add"
@@ -253,16 +252,13 @@ const Card: FC<IProps> = ({ id, title }) => {
           {!!contents.length && (
             <SIcon
               size={34}
-              background={background}
+              background={colour}
               title="Click to edit"
               onClick={handleCardEdit}
             />
           )}
         </SHeaderContainer>
-        <SContentContainer
-          background={background}
-          fontColor={theme.backgroundSecondary}
-        >
+        <SContentContainer background={colour}>
           {contents?.map((content, index) => (
             <SContentWrapper key={getUniqueId()}>
               <SContent>{buildContent(content, index)}</SContent>

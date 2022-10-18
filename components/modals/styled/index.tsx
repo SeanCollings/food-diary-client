@@ -17,7 +17,7 @@ const SHeader = styled.div<ISHeader>`
   justify-content: space-between;
   align-items: center;
   border-radius: 10px 10px 0 0;
-  background: ${({ backgroundColour }) => backgroundColour};
+  background: var(${({ backgroundColour }) => backgroundColour});
 `;
 const SIconClose = styled(MdWest)`
   cursor: pointer;

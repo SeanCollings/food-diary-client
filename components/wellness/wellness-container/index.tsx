@@ -1,7 +1,4 @@
-import {
-  ThemeBackgroundSecondary,
-  ThemeBorderBottom,
-} from '@components/ui/style-themed';
+import { ThemeBorderBottom } from '@components/ui/style-themed';
 import ExcerciseCard from '@components/wellness/exercise-card';
 import WellnessCard from '@components/wellness/wellness-card';
 import {
@@ -32,15 +29,15 @@ const SDrinkContainer = styled.div`
   flex-basis: 60%;
   justify-content: space-evenly;
   flex-wrap: wrap;
+  background-color: var(--bg-secondary);
   ${ThemeBorderBottom}
-  ${ThemeBackgroundSecondary}
 `;
 const SExcerciseContainer = styled.div`
   border-radius: 6px;
   background: white;
   flex-basis: 40%;
+  background-color: var(--bg-secondary);
   ${ThemeBorderBottom}
-  ${ThemeBackgroundSecondary}
 `;
 
 const WellnessContainer: FC = () => {

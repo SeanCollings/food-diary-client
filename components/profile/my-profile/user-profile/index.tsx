@@ -1,19 +1,10 @@
 import Modal from '@components/modals';
 import ModalShareProfile from '@components/modals/share-profile';
-import { useTheme } from '@hooks/use-theme';
 import { useUserContext } from '@store/user-context';
 import { COLOURS, OPACITY_40 } from '@utils/constants';
 import { FC, useState } from 'react';
 import { MdAccountCircle, MdPhotoCamera, MdSettings } from 'react-icons/md';
 import styled from 'styled-components';
-
-interface ISStatValue {
-  primary: string;
-}
-interface ISShareButton {
-  colour: string;
-  background: string;
-}
 
 const SLine = styled.div`
   border-bottom: 1px solid ${COLOURS.gray}${OPACITY_40};
@@ -91,10 +82,10 @@ const SStatWrapper = styled.div`
   flex-direction: column;
   align-items: center;
 `;
-const SStatValue = styled.div<ISStatValue>`
+const SStatValue = styled.div`
   font-size: 28px;
   line-height: 1.1;
-  color: ${({ primary }) => primary};
+  color: var(--th-primary);
 `;
 const SStatLabel = styled.label`
   text-transform: uppercase;
@@ -107,7 +98,7 @@ const SButtonContainer = styled.div`
   align-items: center;
   height: 100px;
 `;
-const SShareButton = styled.button<ISShareButton>`
+const SShareButton = styled.button`
   outline: none;
   cursor: pointer;
   font-size: 22px;
@@ -116,8 +107,8 @@ const SShareButton = styled.button<ISShareButton>`
   border-radius: 8px;
   height: 50px;
   transition: 0.2s;
-  background: ${({ background }) => background};
-  color: ${({ colour }) => colour};
+  color: var(--text);
+  background-color: var(--th-primary);
 
   :hover {
     opacity: 0.6;
@@ -132,7 +123,6 @@ interface IUserProfile {
 }
 
 const UserProfile: FC<IUserProfile> = ({ settingsClick }) => {
-  const theme = useTheme();
   const { user } = useUserContext();
   const [profileShared, setProfileShared] = useState(false);
 
@@ -147,55 +137,47 @@ const UserProfile: FC<IUserProfile> = ({ settingsClick }) => {
           <MdSettings size={34} color={COLOURS.gray} />
         </SSettingsButton>
         <SAvatarContainer>
-          <SAvatar size={100} color={theme.primary} title="Change avatar" />
+          <SAvatar
+            size={100}
+            color={'var(--th-primary)'}
+            title="Change avatar"
+          />
           <SCameraContainer>
             <MdPhotoCamera size={24} />
           </SCameraContainer>
         </SAvatarContainer>
-        <SEmail>{user.email}</SEmail>
+        <SEmail>{user?.email}</SEmail>
       </STopContainer>
       <SLine />
       <div>
         <SProfileHeader>My Profile</SProfileHeader>
-        <SName>{user.name}</SName>
+        <SName>{user?.name}</SName>
       </div>
       <SLine />
-      {!!user.stats && (
+      {!!user?.stats && (
         <SStatsContainer>
-          {user.preferences.showDayStreak && (
+          {user.preferences?.showDayStreak && (
             <SStatWrapper>
-              <SStatValue primary={theme.primary}>
-                {user.stats.dayStreak}
-              </SStatValue>
+              <SStatValue>{user.stats.dayStreak}</SStatValue>
               <SStatLabel>day streak</SStatLabel>
             </SStatWrapper>
           )}
-          {user.preferences.showWeeklyExcercise && (
+          {user?.preferences?.showWeeklyExcercise && (
             <SStatWrapper>
-              <SStatValue primary={theme.primary}>
-                {user.stats.weeklyExercise}
-              </SStatValue>
+              <SStatValue>{user.stats.weeklyExercise}</SStatValue>
               <SStatLabel>weekly excercise</SStatLabel>
             </SStatWrapper>
           )}
-          {user.preferences.showWeeklyWater && (
+          {user?.preferences?.showWeeklyWater && (
             <SStatWrapper>
-              <SStatValue primary={theme.primary}>
-                {user.stats.weeklyWater}
-              </SStatValue>
+              <SStatValue>{user.stats.weeklyWater}</SStatValue>
               <SStatLabel>weekly water</SStatLabel>
             </SStatWrapper>
           )}
         </SStatsContainer>
       )}
       <SButtonContainer>
-        <SShareButton
-          colour={theme.text}
-          background={theme.primary}
-          onClick={shareProfileHandler}
-        >
-          Share Profile
-        </SShareButton>
+        <SShareButton onClick={shareProfileHandler}>Share Profile</SShareButton>
       </SButtonContainer>
       <Modal show={profileShared} modalWidth={600}>
         <ModalShareProfile onClose={() => setProfileShared(false)} />

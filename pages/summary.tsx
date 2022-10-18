@@ -5,11 +5,10 @@ import {
   setDateMidnightISOString,
 } from '@utils/date-utils';
 import { NextPage } from 'next';
-import { useEffect, useState, useLayoutEffect } from 'react';
+import { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { protectedSeverSideProps } from 'lib/server-props';
+import { protectedSeverSideProps } from '@lib/server-props';
 import { Session } from 'next-auth';
-import { useUserContext } from '@store/user-context';
 
 const DEFAULT_DAYS_SHOW = 7;
 
@@ -24,17 +23,12 @@ interface ISummaryPageProps {
 }
 
 const SummaryPage: NextPage<ISummaryPageProps> = ({ session }) => {
-  const { user } = useUserContext();
   const [userData, setUserData] = useState<IUserData | null>(null);
   const [hasError, setHasError] = useState(false);
   const [fromDate, setFromDate] = useState(
     getDaysAwayFromDate(-(DEFAULT_DAYS_SHOW - 1))
   );
   const [toDate, setToDate] = useState(new Date());
-
-  useLayoutEffect(() => {
-    // console.log('-----------', user);
-  }, [user]);
 
   useEffect(() => {
     const getData = () => {

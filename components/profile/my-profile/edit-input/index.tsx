@@ -1,5 +1,4 @@
-import { useTheme } from '@hooks/use-theme';
-import { COLOURS, OPACITY_50 } from '@utils/constants';
+import { COLOURS } from '@utils/constants';
 import { runSingleValidation } from '@utils/validation';
 import {
   ERROR_EMPTY_INPUT,
@@ -10,13 +9,6 @@ import { nonEmptyInputValidators } from '@utils/validation/validators';
 import { useState, FC, ChangeEvent, KeyboardEvent } from 'react';
 import { MdClose, MdEdit, MdDone } from 'react-icons/md';
 import styled from 'styled-components';
-
-interface ISInput {
-  background: string;
-  colour: string;
-  border: string;
-  errorColour: string;
-}
 
 const SContainer = styled.div`
   height: 30px;
@@ -31,16 +23,23 @@ const SName = styled.span`
   white-space: nowrap;
   text-overflow: ellipsis;
 `;
-const SInput = styled.input<ISInput>`
+const SInput = styled.input`
   width: 100%;
   border-radius: 4px;
   font-size: 16px;
   font-weight: 200;
   padding: 4px;
-  color: ${({ colour }) => colour};
-  background-color: ${({ background }) => `${background}${OPACITY_50}`};
-  border: 1px solid
-    ${({ border, errorColour }) => (errorColour ? errorColour : border)};
+  color: var(--text);
+  background-color: var(--bg-primary);
+  border: 1px solid var(--th-quaternary);
+
+  &.error {
+    border: 1px solid var(--error);
+
+    ::-webkit-input-placeholder {
+      color: var(--error);
+    }
+  }
 `;
 const SIconButton = styled.button`
   outline: none;
@@ -67,7 +66,6 @@ interface IEditInputProps {
 }
 
 const EditInput: FC<IEditInputProps> = ({ value, onSave }) => {
-  const theme = useTheme();
   const [editableValue, setEditableValue] = useState(value);
   const [editEnabled, setEditEnabled] = useState(false);
   const [inputErrors, setInputErrors] = useState<TErrors>({});
@@ -112,13 +110,10 @@ const EditInput: FC<IEditInputProps> = ({ value, onSave }) => {
         <SInput
           type={'text'}
           value={editableValue}
-          background={theme.backgroundPrimary}
-          border={theme.quaternary}
-          colour={theme.text}
           maxLength={INPUT_MAX_LENGTH}
-          errorColour={(!!inputErrors[id] && theme.error) || ''}
           title={inputErrors[id] || ''}
           placeholder={!!inputErrors[id] ? ERROR_EMPTY_INPUT : 'Enter name'}
+          className={!!inputErrors[id] ? 'error' : ''}
           onChange={onChangeHandler}
           onKeyDown={onKeyDownHandler}
         />

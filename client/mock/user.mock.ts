@@ -1,5 +1,4 @@
 import { IUserModel } from '@store/user-context';
-import { EThemeDark, EThemeLight } from '@utils/constants/theme.constants';
 
 export const userMock: IUserModel = {
   id: '123456789',
@@ -7,11 +6,6 @@ export const userMock: IUserModel = {
   email: 'test@address.com',
   avatar: '',
   shareLink: '',
-  darkMode: false,
-  theme: {
-    light: EThemeLight.DEFAULT_LIGHT,
-    dark: EThemeDark.CUPCAKE_SPRINKLES,
-  },
   preferences: {
     showDayStreak: true,
   },

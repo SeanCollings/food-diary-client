@@ -10,7 +10,6 @@ import {
 import { formatFullDateNoDay } from '@utils/date-utils';
 import styled from 'styled-components';
 import Pagination from '@components/summary/pagination';
-import { useTheme } from '@hooks/use-theme';
 import { getPaddedNestedArray } from '@utils/array-utils';
 import Calendar from '@components/calendar';
 import { MdCalendarToday } from 'react-icons/md';
@@ -21,10 +20,6 @@ const CALENDAR_HEIGHT = 280;
 const MAX_DAYS_PER_ROW = 2;
 const MAX_ROWS_PER_PAGE = 4;
 
-interface ISApplyButton {
-  background: string;
-  colour: string;
-}
 interface ISRowContainer {
   gridTemplateArea: string;
 }
@@ -82,6 +77,7 @@ const SRange = styled.button`
   border-radius: 4px;
   font-size: 22px;
   background-color: var(--bg-secondary);
+  color: var(--text);
 
   :hover:not(.fade) {
     border: 1px solid;
@@ -128,7 +124,7 @@ const SCalendarContainer = styled.div`
     max-width: 100%;
   }
 `;
-const SApplyButton = styled.button<ISApplyButton>`
+const SApplyButton = styled.button`
   padding: 4px 8px;
   width: 80px;
   right: 0;
@@ -136,8 +132,8 @@ const SApplyButton = styled.button<ISApplyButton>`
   border-radius: 4px;
   font-size: 16px;
   height: 32px;
-  background-color: ${({ background }) => background};
-  color: ${({ colour }) => colour};
+  background-color: var(--th-primary);
+  color: var(--text);
 
   &.apply-disabled {
     opacity: 0.4;
@@ -200,7 +196,6 @@ const Summary: FC<ISummaryProps> = ({
   updateToDate,
   onDateRangeChanged,
 }) => {
-  const theme = useTheme();
   const [currentPage, setcurrentPage] = useState(1);
   const [allViewKeys, setAllViewKeys] = useState<string[][]>([]);
   const [currentViewKeys, setCurrentViewKeys] = useState<string[][]>([]);
@@ -315,8 +310,6 @@ const Summary: FC<ISummaryProps> = ({
           </SRange>
         </SRangeContainer>
         <SApplyButton
-          background={theme.primary}
-          colour={theme.text}
           disabled={!dateRangeChanged}
           className={dateRangeChanged ? 'apply-enabled' : 'apply-disabled'}
           onClick={onClickApplyDateRange}

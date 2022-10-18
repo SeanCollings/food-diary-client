@@ -13,9 +13,8 @@ import { useRouter } from 'next/router';
 import Link from 'next/link';
 import MenuIcon from '@components/menu/menu-icon/index';
 import { useOnClickOutsideElementsArray } from '@hooks/use-onclick-outside-element';
-import { ThemeTextColor } from '@components/ui/style-themed';
-import { useTheme } from '@hooks/use-theme';
 import { signOut, useSession } from 'next-auth/react';
+import { useTheme } from '@hooks/use-theme';
 
 const MENU_WIDTH = 350;
 
@@ -24,10 +23,6 @@ type TAnimateStyle = 'open' | 'close' | 'idle';
 interface ISContainer {
   animateStyle: TAnimateStyle;
   darkMode?: boolean;
-}
-interface ISContent {
-  isCurrentPath: boolean;
-  primary: string;
 }
 interface ISMenuIconContainer {
   isOpen: boolean;
@@ -110,7 +105,7 @@ const SContents = styled.div`
     top: 0px;
   }
 `;
-const SLink = styled.a<ISContent>`
+const SLink = styled.a`
   white-space: nowrap;
   cursor: pointer;
   font-size: 24px;
@@ -118,12 +113,13 @@ const SLink = styled.a<ISContent>`
   border-bottom: 3px solid transparent;
   width: fit-content;
 
-  ${({ isCurrentPath, primary }) =>
-    isCurrentPath && `border-bottom: 3px solid ${primary}`}
+  &.current-path {
+    border-bottom: 3px solid var(--th-primary);
+  }
 `;
 
 const SideMenuDisplay: FC = () => {
-  const theme = useTheme();
+  const { darkMode } = useTheme();
   const { data: session } = useSession();
   const sideMenuRef = useRef<HTMLDivElement>(null);
   const { isOpen, toggleMenu } = useMenuContext();
@@ -174,7 +170,7 @@ const SideMenuDisplay: FC = () => {
     <SContainer
       ref={sideMenuRef}
       animateStyle={animateStyle}
-      darkMode={theme.darkMode}
+      darkMode={darkMode}
     >
       <SMenuIconContainer isOpen={isOpen}>
         <MenuIcon transparentBG />
@@ -191,8 +187,7 @@ const SideMenuDisplay: FC = () => {
           return (
             <Link key={id} href={href} passHref>
               <SLink
-                primary={theme.primary}
-                isCurrentPath={pathname === href}
+                className={pathname === href ? 'current-path' : ''}
                 onClick={handleMenuClick}
               >
                 {title}
@@ -200,15 +195,7 @@ const SideMenuDisplay: FC = () => {
             </Link>
           );
         })}
-        {session && (
-          <SLink
-            primary={theme.primary}
-            isCurrentPath={false}
-            onClick={onLogoutClick}
-          >
-            {'Logout'}
-          </SLink>
-        )}
+        {session && <SLink onClick={onLogoutClick}>{'Logout'}</SLink>}
       </SContents>
     </SContainer>
   );

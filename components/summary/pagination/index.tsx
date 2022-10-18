@@ -1,4 +1,3 @@
-import { useTheme } from '@hooks/use-theme';
 import { DOTS, getPaginationRange } from '@utils/get-pagination-range';
 import { memo } from 'react';
 import { MdNavigateBefore, MdNavigateNext } from 'react-icons/md';
@@ -6,17 +5,13 @@ import styled from 'styled-components';
 
 const WIDTH = 35;
 
-interface ISButton {
-  primary?: string;
-}
-
 const SContainer = styled.div`
   display: flex;
   align-items: center;
   gap: 4px;
   flex-wrap: wrap;
 `;
-const SButton = styled.button<ISButton>`
+const SButton = styled.button`
   display: flex;
   justify-content: center;
   align-items: center;
@@ -30,11 +25,12 @@ const SButton = styled.button<ISButton>`
   border: 1px solid transparent;
   transition: 0.1s;
   background-color: var(--bg-secondary);
+  color: var(--text);
 
   &.active {
     border: 1px solid;
-    color: ${({ primary }) => primary};
-    box-shadow: inset 0px 0px 1px 1px ${({ primary }) => primary};
+    color: var(--th-primary);
+    box-shadow: inset 0px 0px 1px 1px var(--th-primary);
     font-weight: 600;
   }
   :hover:not(&.disabled) {
@@ -61,7 +57,6 @@ interface IPaginationProps {
 
 const Pagination: React.FC<IPaginationProps> = memo(
   ({ itemsPerPage, currentPage, totalItems, siblingCount = 1, onChange }) => {
-    const theme = useTheme();
     const paginationRange = getPaginationRange({
       currentPage,
       siblingCount,
@@ -107,7 +102,6 @@ const Pagination: React.FC<IPaginationProps> = memo(
               key={`paginate-${value}-${index}`}
               onClick={() => onChangeHandler(value)}
               className={currentPage === value ? 'active' : ''}
-              primary={theme.primary}
             >
               {value}
             </SButton>

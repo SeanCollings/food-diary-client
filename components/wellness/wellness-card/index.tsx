@@ -1,4 +1,4 @@
-import { FC, useEffect, useRef, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import Image from 'next/image';
 import { MdAddCircle, MdRemoveCircle } from 'react-icons/md';
@@ -9,10 +9,6 @@ import {
   useWellnessEntriesContext,
 } from '@store/wellness-entries-context';
 import { COLOURS } from '@utils/constants';
-
-interface SCount {
-  hasNoValue: boolean;
-}
 
 const SContainer = styled.div`
   padding: 20px;
@@ -41,12 +37,14 @@ const SCounterContainer = styled.div`
   align-items: center;
   user-select: none;
 `;
-const SCount = styled.div<SCount>`
+const SCount = styled.div`
   transition: 0.1s;
   text-align: center;
   min-width: 54px;
 
-  ${({ hasNoValue }) => hasNoValue && 'opacity: 0.4'};
+  &.no-value {
+    opacity: 0.4;
+  }
 `;
 const SIconRemove = styled(MdRemoveCircle)`
   cursor: pointer;
@@ -121,7 +119,7 @@ const WellnessCard: FC<IProps> = ({ id, title, imageSrc, color }) => {
       </SImageContainer>
       <SCounterContainer>
         <SIconRemove size={24} color={color} onClick={onClickRemove} />
-        <SCount hasNoValue={counter === 0}>{counter}</SCount>
+        <SCount className={counter === 0 ? 'no-value' : ''}>{counter}</SCount>
         <SIconAdd size={24} color={color} onClick={onClickAdd} />
       </SCounterContainer>
     </SContainer>

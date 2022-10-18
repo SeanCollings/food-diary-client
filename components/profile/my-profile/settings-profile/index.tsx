@@ -6,6 +6,7 @@ import { MdClose } from 'react-icons/md';
 import styled from 'styled-components';
 import ThemeDisplay from '@components/profile/my-profile/theme-display';
 import EditInput from '@components/profile/my-profile/edit-input';
+import { useTheme } from '@hooks/use-theme';
 
 const SContainer = styled.div`
   display: flex;
@@ -57,24 +58,26 @@ interface ISettingsProfile {
 }
 
 const SettingsProfile: FC<ISettingsProfile> = ({ onCancel }) => {
+  const { theme, darkMode, setTheme } = useTheme();
   const { user, updateUser, updatePreferences } = useUserContext();
 
   const updateDarkMode = () => {
-    updateUser({ darkMode: !user.darkMode });
+    const newTheme = !theme ? 'light_1' : darkMode ? 'light_1' : 'dark_1';
+    setTheme(newTheme);
   };
   const updatePreferenceStreak = () => {
     updatePreferences({
-      showDayStreak: !user.preferences.showDayStreak,
+      showDayStreak: !user?.preferences?.showDayStreak,
     });
   };
   const updatePreferenceExcercise = () => {
     updatePreferences({
-      showWeeklyExcercise: !user.preferences.showWeeklyExcercise,
+      showWeeklyExcercise: !user?.preferences?.showWeeklyExcercise,
     });
   };
   const updatePreferenceWater = () => {
     updatePreferences({
-      showWeeklyWater: !user.preferences.showWeeklyWater,
+      showWeeklyWater: !user?.preferences?.showWeeklyWater,
     });
   };
   const updateUsername = (name: string) => {
@@ -92,14 +95,14 @@ const SettingsProfile: FC<ISettingsProfile> = ({ onCancel }) => {
         </SHeader>
         <SPanel>
           Dark mode
-          <Toggle onChange={updateDarkMode} checked={user.darkMode} />
+          <Toggle onChange={updateDarkMode} checked={theme?.includes('dark')} />
         </SPanel>
         <SPanel>
           Theme
           <ThemeDisplay />
         </SPanel>
         <SPanel>
-          <EditInput value={user.name} onSave={updateUsername} />
+          <EditInput value={user?.name || ''} onSave={updateUsername} />
         </SPanel>
       </STopContainer>
       <SPreferenceContainer>
@@ -108,21 +111,21 @@ const SettingsProfile: FC<ISettingsProfile> = ({ onCancel }) => {
           Show day streak
           <Toggle
             onChange={updatePreferenceStreak}
-            checked={user.preferences.showDayStreak}
+            checked={user?.preferences?.showDayStreak}
           />
         </SPanel>
         <SPanel>
           Show weekly excercise
           <Toggle
             onChange={updatePreferenceExcercise}
-            checked={user.preferences.showWeeklyExcercise}
+            checked={user?.preferences?.showWeeklyExcercise}
           />
         </SPanel>
         <SPanel>
           Show weekly water
           <Toggle
             onChange={updatePreferenceWater}
-            checked={user.preferences.showWeeklyWater}
+            checked={user?.preferences?.showWeeklyWater}
           />
         </SPanel>
       </SPreferenceContainer>

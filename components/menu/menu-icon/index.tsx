@@ -1,7 +1,6 @@
 import { useTheme } from '@hooks/use-theme';
 import { useMenuContext } from '@store/menu-context';
-import { useUserContext } from '@store/user-context';
-import { COLOURS, MEDIA_MAX_DESKTOP, MEDIA_MOBILE } from '@utils/constants';
+import { MEDIA_MAX_DESKTOP, MEDIA_MOBILE } from '@utils/constants';
 import { FC } from 'react';
 import styled from 'styled-components';
 
@@ -10,10 +9,6 @@ import styled from 'styled-components';
 interface ISContainer {
   isOpen: boolean;
   transparentBG: boolean;
-  primary: string;
-  backgroundPrimary: string;
-  colourLeft: string;
-  colourRight: string;
 }
 
 interface ISLine {
@@ -34,13 +29,13 @@ const SContainer = styled.div<ISContainer>`
   flex: none;
   z-index: 2;
 
-  background: ${({ isOpen, transparentBG, backgroundPrimary, primary }) =>
-    !transparentBG && (isOpen ? backgroundPrimary : primary)};
+  background: ${({ isOpen, transparentBG }) =>
+    !transparentBG && (isOpen ? 'var(--bg-primary)' : 'var(--th-primary)')};
 
-  ${({ isOpen, transparentBG, colourLeft, colourRight }) =>
+  ${({ isOpen, transparentBG }) =>
     !isOpen &&
     !transparentBG &&
-    `background-image: linear-gradient(to right, ${colourLeft}, ${colourRight})`};
+    `background-image: linear-gradient(to right, var(--th-primary), var(--th-tertiary))`};
 
   .line1 {
     ${({ isOpen }) =>
@@ -82,7 +77,7 @@ const SLine = styled.span<ISLine>`
   display: block;
   height: 4px;
   width: ${({ isOpen }) => (isOpen ? '110%' : '100%')};
-  background: ${({ background }) => background};
+  background: var(${({ background }) => background});
 `;
 
 interface IMenuIconProps {
@@ -90,18 +85,15 @@ interface IMenuIconProps {
 }
 
 const MenuIcon: FC<IMenuIconProps> = ({ transparentBG = false }) => {
-  const theme = useTheme();
-  const {
-    user: { darkMode },
-  } = useUserContext();
+  const { darkMode } = useTheme();
   const { isOpen, toggleMenu } = useMenuContext();
 
   const onClickHandler = () => {
     toggleMenu();
   };
 
-  const darkModeColour = { open: COLOURS.white, closed: COLOURS.white };
-  const lightModeColour = { open: COLOURS.black, closed: COLOURS.white };
+  const darkModeColour = { open: '--text', closed: '--text' };
+  const lightModeColour = { open: '--text', closed: '--bg-secondary' };
   const lineColour = darkMode ? darkModeColour : lightModeColour;
 
   return (
@@ -109,10 +101,6 @@ const MenuIcon: FC<IMenuIconProps> = ({ transparentBG = false }) => {
       onClick={onClickHandler}
       isOpen={isOpen}
       transparentBG={transparentBG}
-      primary={theme.primary}
-      backgroundPrimary={theme.backgroundPrimary}
-      colourLeft={theme.primary}
-      colourRight={theme.tertiary}
     >
       <SHamburgerLines>
         <SLine

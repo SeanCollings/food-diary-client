@@ -1,7 +1,6 @@
 import { COLOURS, MEDIA_MOBILE, OPACITY_30 } from '@utils/constants';
 import { ChangeEvent } from 'react';
 import styled from 'styled-components';
-import { ThemeTextColor } from '@components/ui/style-themed';
 
 interface ISContainer {
   inputWidth: number;
@@ -29,25 +28,23 @@ const SSelect = styled.select<ISSelect>`
   cursor: pointer;
   font-family: inherit;
   line-height: 1.1;
+  color: var(--text);
 
   background-color: ${({ backgroundColour }) =>
-    backgroundColour ? `${backgroundColour}${OPACITY_30}` : 'inherit'};
+    backgroundColour ? `var(${backgroundColour}__40)` : 'inherit'};
   border: 2px solid
     ${({ backgroundColour }) =>
       backgroundColour ? `transparent` : `${COLOURS.black}${OPACITY_30}`};
 
-  ${ThemeTextColor};
-
   :focus {
     border: 2px solid
       ${({ backgroundColour }) =>
-        backgroundColour ? `${backgroundColour}` : `${COLOURS.black}`};
+        backgroundColour ? `var(${backgroundColour})` : `${COLOURS.black}`};
   }
 `;
 const SOption = styled.option<ISSelect>`
-  --background-colour: ${COLOURS.white_off};
-  background: var(--background-colour);
-  color: ${COLOURS.black};
+  background: var(--bg-secondary);
+  color: var(--text);
 `;
 
 export type TDefaultOption = { id: string; title: string };

@@ -1,5 +1,4 @@
 import { useTheme } from '@hooks/use-theme';
-import { OPACITY_40 } from '@utils/constants';
 import { FC } from 'react';
 import styled from 'styled-components';
 
@@ -20,10 +19,10 @@ const SContainer = styled.footer<ISContainer>`
 `;
 
 const Footer: FC = () => {
-  const theme = useTheme();
-  const borderTop = theme.darkMode
-    ? theme.backgroundSecondary
-    : `${theme.quaternary}${OPACITY_40}`;
+  const { darkMode } = useTheme();
+  const borderTop = darkMode
+    ? 'var(--bg-secondary)'
+    : `var(--th-quaternary__40)`;
 
   return (
     <SContainer borderTop={borderTop}>
