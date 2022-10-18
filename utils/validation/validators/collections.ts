@@ -24,8 +24,8 @@ type TLoginFormValitators = {
 };
 
 export const loginFormValidators: TLoginFormValitators = {
-  emailAddress: (args: TDynamicArgs<string>) => ({
-    id: 'emailAddress',
+  email: (args: TDynamicArgs<string>) => ({
+    id: 'email',
     validators: emailAddressValidators,
     ...args,
   }),

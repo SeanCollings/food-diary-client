@@ -1,12 +1,13 @@
 import { TErrors } from '@utils/validation/validation.types';
 
 export enum EInputTypes {
-  EMAIL_ADDRESS = 'emailAddress',
+  EMAIL_ADDRESS = 'email',
   PASSWORD = 'password',
   NAME = 'name',
 }
-
 export type TInputTypes = `${EInputTypes}`;
+
+export type TFormType = 'login' | 'create' | 'reset';
 
 export type TFormValues = {
   [key in TInputTypes]: string;
@@ -17,8 +18,7 @@ export type TFormErrors = {
 
 export interface ILoginFormState {
   hasSubmitted: boolean;
-  loginSelected: boolean;
-  isResetPassword: boolean;
+  formType: TFormType;
   formErrors: TFormErrors;
   formValues: TFormValues;
 }

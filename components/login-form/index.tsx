@@ -1,7 +1,8 @@
 import FormInput from '@components/ui/input/form-input';
-import { APP_THEME_DEFAULT, COLOURS, MEDIA_MOBILE } from '@utils/constants';
+import { MEDIA_MOBILE } from '@utils/constants';
 import { runValidations } from '@utils/validation';
 import { FC, FormEvent, useCallback, useReducer } from 'react';
+import { signIn } from 'next-auth/react';
 import styled from 'styled-components';
 import { PASSWORD_MIN_LENGTH } from '@utils/validation/validation.constants';
 import {
@@ -15,9 +16,10 @@ import {
 } from '@components/login-form/types';
 import { useMemoizeFunction } from '@hooks/use-memoize-function';
 import { loginFormValidators } from '@utils/validation/validators/collections';
+import { useRouter } from 'next/router';
 
 const SForm = styled.form`
-  background: ${COLOURS.white};
+  background: var(--bg-secondary);
   max-width: 400px;
   width: 100%;
   border-radius: 20px;
@@ -51,7 +53,7 @@ const SChangeButton = styled.button`
   background: transparent;
   border: transparent;
   cursor: pointer;
-  color: ${APP_THEME_DEFAULT.primary};
+  color: var(--th-primary);
 `;
 const SContentContainer = styled.div`
   display: flex;
@@ -68,10 +70,10 @@ const SLoginButtonContainer = styled.div`
   justify-content: center;
 `;
 const SLoginButton = styled.button`
-  background: ${APP_THEME_DEFAULT.primary};
+  background: var(--th-primary);
   border: transparent;
   font-size: 24px;
-  color: ${COLOURS.white};
+  color: var(--bg-secondary);
   padding: 10px;
   width: 150px;
   border-radius: 8px;
@@ -134,22 +136,54 @@ const InteractiveSubHeader: FC<IInteractiveSubHeaderProps> = ({
   </SSubHeader>
 );
 
+const createUser = async ({ email, password }: TFormValues) => {
+  const res = await fetch('/api/auth/signup', {
+    method: 'POST',
+    body: JSON.stringify({ email, password }),
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  });
+
+  const data = await res.json();
+
+  if (!res.ok) {
+    throw new Error(data.message || 'Something went wrong');
+  }
+
+  return data;
+};
+
 const LoginForm: FC = () => {
+  const router = useRouter();
   const [state, dispatch] = useReducer(loginFormReducer, INITIAL_STATE);
 
-  const isLogin = state.loginSelected && !state.isResetPassword;
-  const isCreate = !state.loginSelected && !state.isResetPassword;
-  const isReset = state.isResetPassword;
+  const isLogin = state.formType === 'login';
+  const isCreate = state.formType === 'create';
+  const isReset = state.formType === 'reset';
+
   const showNameInput = isCreate;
   const showPasswordInput = isLogin || isCreate;
   const formText = getFormText(isLogin, isReset);
 
+  const signInUser = async () => {
+    const result = await signIn('credentials', {
+      redirect: false,
+      email: state.formValues.email,
+      password: state.formValues.password,
+    });
+
+    if (!result?.error) {
+      router.replace('/');
+    }
+  };
+
   const runFormValidations = useCallback(() => {
-    const { emailAddress, password, name } = loginFormValidators;
+    const { email, password, name } = loginFormValidators;
 
     return runValidations([
-      emailAddress({
-        value: state.formValues.emailAddress,
+      email({
+        value: state.formValues.email,
       }),
       password({
         value: state.formValues.password,
@@ -161,14 +195,14 @@ const LoginForm: FC = () => {
       }),
     ]);
   }, [
-    state.formValues.emailAddress,
+    state.formValues.email,
     state.formValues.password,
     state.formValues.name,
     isCreate,
     isLogin,
   ]);
 
-  const submitHandler = (event: FormEvent<HTMLFormElement>) => {
+  const submitHandler = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const errors = runFormValidations();
 
@@ -180,10 +214,25 @@ const LoginForm: FC = () => {
       return;
     }
 
-    console.log(
-      'Sending request:',
-      isLogin ? 'LOGIN' : isCreate ? 'CREATE' : 'RESET'
-    );
+    try {
+      switch (state.formType) {
+        case 'login':
+          console.log('LOGIN');
+          await signInUser();
+          break;
+        case 'create':
+          console.log('CREATE');
+          const result = await createUser(state.formValues);
+          console.log('Result ::', result);
+          await signInUser();
+          break;
+        case 'reset':
+          console.log('RESET');
+          break;
+      }
+    } catch (err) {
+      console.error(err);
+    }
   };
 
   const handleToggleInteract = () => {
@@ -250,12 +299,12 @@ const LoginForm: FC = () => {
             />
           )}
           <FormInput<TInputTypes>
-            id="emailAddress"
+            id="email"
             name="Email address"
             type="email"
-            value={state.formValues.emailAddress}
+            value={state.formValues.email}
             required
-            isError={state.formErrors['emailAddress']}
+            isError={state.formErrors['email']}
             onChange={updateFormValuesMemoized}
             onBlur={handleOnBlurMemoized}
           />
@@ -280,7 +329,7 @@ const LoginForm: FC = () => {
             onClick={handleSelectResetPassword}
           />
         )}
-        {state.isResetPassword && (
+        {isReset && (
           <InteractiveSubHeader subHeaderText="Enter your email address and a reset code will be sent to you." />
         )}
       </SContentContainer>

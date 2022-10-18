@@ -6,11 +6,10 @@ import {
 
 export const INITIAL_STATE: ILoginFormState = {
   hasSubmitted: false,
-  loginSelected: true,
-  isResetPassword: false,
+  formType: 'login',
   formErrors: {},
   formValues: {
-    emailAddress: '',
+    email: '',
     password: '',
     name: '',
   },
@@ -24,21 +23,19 @@ export const loginFormReducer = (
     case ELoginFormType.SELECT_LOGIN:
       return {
         ...state,
-        isResetPassword: false,
-        loginSelected: true,
+        formType: 'login',
         formErrors: {},
       };
     case ELoginFormType.SELECT_CREATE_ACCOUNT:
       return {
         ...state,
-        loginSelected: false,
+        formType: 'create',
         formErrors: {},
       };
     case ELoginFormType.SELECT_RESET_PASSWORD:
       return {
         ...state,
-        isResetPassword: true,
-        loginSelected: false,
+        formType: 'reset',
         formErrors: {},
       };
     case ELoginFormType.SUBMIT:
