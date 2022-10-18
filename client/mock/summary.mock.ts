@@ -1,8 +1,8 @@
+import { IUserSummaryData } from '@client/interfaces/user-summary-data';
 import {
   getDaysAwayFromDate,
   setDateMidnightISOString,
 } from '@utils/date-utils';
-import { EMealType, EWellnessTypes } from '@utils/interfaces';
 
 const DATE_1 = setDateMidnightISOString(getDaysAwayFromDate(-6));
 const DATE_2 = setDateMidnightISOString(getDaysAwayFromDate(-5));
@@ -12,19 +12,7 @@ const DATE_5 = setDateMidnightISOString(getDaysAwayFromDate(-2));
 const DATE_6 = setDateMidnightISOString(getDaysAwayFromDate(-1));
 const DATE_7 = setDateMidnightISOString(getDaysAwayFromDate(0));
 
-type TMealContents = { [key in EMealType]: string[] };
-type TWellnessContents = { [key in EWellnessTypes]: number };
-
-export interface IUserData {
-  user: string;
-  totalDays: number;
-  dates: string[];
-  data: {
-    [key: string]: TMealContents & TWellnessContents;
-  };
-}
-
-export const MOCK_USER_DATA: IUserData = {
+export const summaryMockData: IUserSummaryData = {
   user: 'Firstname Lastname',
   totalDays: 27,
   dates: [

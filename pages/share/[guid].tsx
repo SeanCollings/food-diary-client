@@ -5,8 +5,9 @@ import {
   getDaysAwayFromDate,
   setDateMidnightISOString,
 } from '@utils/date-utils';
-import { IUserData, MOCK_USER_DATA } from '@components/summary/mock-data';
 import Summary from '@components/summary';
+import { summaryMockData } from '@client/mock';
+import { IUserSummaryData } from '@client/interfaces/user-summary-data';
 
 const DEFAULT_DAYS_SHOW = 7;
 
@@ -34,7 +35,7 @@ interface ISharePageProps {
 }
 
 const SharePage: NextPage<ISharePageProps> = ({ guid }) => {
-  const [userData, setUserData] = useState<IUserData | null>(null);
+  const [userData, setUserData] = useState<IUserSummaryData | null>(null);
   const [hasError, setHasError] = useState(false);
   const [fromDate, setFromDate] = useState(
     getDaysAwayFromDate(-(DEFAULT_DAYS_SHOW - 1))
@@ -45,7 +46,7 @@ const SharePage: NextPage<ISharePageProps> = ({ guid }) => {
     const getData = () => {
       setTimeout(async () => {
         try {
-          const { data } = await Promise.resolve({ data: MOCK_USER_DATA });
+          const { data } = await Promise.resolve({ data: summaryMockData });
           setUserData(data);
         } catch (err) {
           console.error(err);

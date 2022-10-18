@@ -1,3 +1,4 @@
+import { mealTrendMonthMockData, mealTrendWeekMockData } from '@client/mock';
 import { useTheme } from '@hooks/use-theme';
 import { ALL_MEAL_CARDS } from '@utils/constants';
 import { EMealType } from '@utils/interfaces';
@@ -119,134 +120,6 @@ const lastItem = <T extends unknown>(array: T[], index: number) => {
   return index === array.length - 1;
 };
 
-interface IFoodTrendData {
-  type: 'week' | 'month';
-  totalValues: number;
-  legend: string[];
-  data: { id: string; meals: (0 | 1)[] }[];
-  totals: { [key in EMealType]: number };
-}
-
-const MOCK_DATA_MONTH: IFoodTrendData = {
-  type: 'month',
-  totalValues: 31,
-  legend: [
-    '1',
-    '2',
-    '3',
-    '4',
-    '5',
-    '6',
-    '7',
-    '8',
-    '9',
-    '10',
-    '11',
-    '12',
-    '13',
-    '14',
-    '15',
-    '16',
-    '17',
-    '18',
-    '19',
-    '20',
-    '21',
-    '22',
-    '23',
-    '24',
-    '25',
-    '26',
-    '27',
-    '28',
-    '29',
-    '30',
-    '31',
-  ],
-  data: [
-    { id: 'month_1', meals: [1, 0, 1, 1, 0] },
-    { id: 'month_2', meals: [1, 0, 1, 1, 1] },
-    { id: 'month_3', meals: [1, 0, 0, 1, 1] },
-    { id: 'month_4', meals: [0, 1, 1, 0, 1] },
-    { id: 'month_5', meals: [0, 0, 1, 1, 0] },
-    { id: 'month_6', meals: [0, 1, 0, 1, 1] },
-    { id: 'month_7', meals: [1, 0, 1, 1, 1] },
-    { id: 'month_8', meals: [1, 0, 1, 1, 1] },
-    { id: 'month_9', meals: [1, 0, 1, 0, 1] },
-    { id: 'month_10', meals: [1, 0, 1, 1, 1] },
-    { id: 'month_11', meals: [1, 1, 1, 1, 1] },
-    { id: 'month_12', meals: [0, 0, 1, 0, 1] },
-    { id: 'month_13', meals: [1, 0, 1, 1, 1] },
-    { id: 'month_14', meals: [1, 0, 1, 1, 1] },
-    { id: 'month_15', meals: [1, 0, 1, 0, 0] },
-    { id: 'month_16', meals: [1, 1, 1, 1, 1] },
-    { id: 'month_17', meals: [1, 0, 0, 0, 1] },
-    { id: 'month_18', meals: [1, 1, 0, 1, 1] },
-    { id: 'month_19', meals: [1, 0, 1, 1, 1] },
-    { id: 'month_20', meals: [1, 0, 1, 1, 1] },
-    { id: 'month_21', meals: [1, 0, 1, 0, 0] },
-    { id: 'month_22', meals: [0, 0, 0, 1, 1] },
-    { id: 'month_23', meals: [1, 1, 1, 1, 1] },
-    { id: 'month_24', meals: [1, 1, 1, 1, 1] },
-    { id: 'month_25', meals: [1, 0, 1, 1, 1] },
-    { id: 'month_26', meals: [1, 0, 1, 1, 0] },
-    { id: 'month_27', meals: [0, 1, 0, 0, 1] },
-    { id: 'month_28', meals: [1, 1, 1, 1, 1] },
-    { id: 'month_29', meals: [1, 0, 1, 1, 1] },
-    { id: 'month_30', meals: [0, 0, 0, 1, 1] },
-    { id: 'month_31', meals: [1, 0, 1, 1, 0] },
-  ],
-  totals: {
-    breakfast: 23,
-    snack_1: 9,
-    lunch: 24,
-    snack_2: 23,
-    dinner: 26,
-  },
-};
-const MOCK_DATA_WEEK: IFoodTrendData = {
-  type: 'week',
-  totalValues: 7,
-  legend: ['M', 'T', 'W', 'T', 'F', 'S', 'S'],
-  data: [
-    {
-      id: 'mon',
-      meals: [1, 1, 1, 1, 1],
-    },
-    {
-      id: 'tue',
-      meals: [0, 1, 1, 0, 1],
-    },
-    {
-      id: 'wed',
-      meals: [1, 0, 1, 1, 1],
-    },
-    {
-      id: 'thu',
-      meals: [1, 1, 1, 1, 1],
-    },
-    {
-      id: 'fri',
-      meals: [0, 1, 1, 1, 1],
-    },
-    {
-      id: 'sat',
-      meals: [1, 1, 0, 1, 1],
-    },
-    {
-      id: 'sun',
-      meals: [1, 1, 1, 1, 1],
-    },
-  ],
-  totals: {
-    breakfast: 5,
-    snack_1: 6,
-    lunch: 6,
-    snack_2: 6,
-    dinner: 7,
-  },
-};
-
 interface IBinaryHeatMapProps {
   height: number;
   timePeriod: 'week' | 'month';
@@ -258,7 +131,8 @@ const BinaryHeatMap: React.FC<IBinaryHeatMapProps> = ({
 }) => {
   const { darkMode } = useTheme();
 
-  const mealData = timePeriod === 'week' ? MOCK_DATA_WEEK : MOCK_DATA_MONTH;
+  const mealData =
+    timePeriod === 'week' ? mealTrendWeekMockData : mealTrendMonthMockData;
   const boxWidth =
     mealData.type === 'week' ? COLUMN_WIDTH_MAX : COLUMN_WIDTH_MIN;
   const dataSize =

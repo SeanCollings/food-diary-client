@@ -1,3 +1,4 @@
+import { excerciseTrendMockData } from '@client/mock';
 import { COLOURS, OPACITY_40 } from '@utils/constants';
 import { formatMinutesToHoursMinutes } from '@utils/time-utils';
 import { getUniqueId } from '@utils/unique-id';
@@ -112,20 +113,6 @@ const SHAxisKey = styled.div`
   width: ${COLUMN_WIDTH}px;
 `;
 
-interface IExcerciseData {
-  type: 'week' | 'month';
-  highestValue: number;
-  legend: string[];
-  data: number[];
-}
-
-const MOCK_EXERCISE_DATA: IExcerciseData = {
-  type: 'week',
-  highestValue: 60,
-  legend: ['M', 'T', 'W', 'T', 'F', 'S', 'S'],
-  data: [60, 0, 42, 49, 0, 0, 30],
-};
-
 interface ILineGraphProps {
   height: number;
 }
@@ -157,9 +144,9 @@ const getMaxBound = (highestValue: number) => {
 const LineGraph: React.FC<ILineGraphProps> = ({ height }) => {
   const graphHeight = height - LEGEND_HEIGHT;
   const ptpLength = COLUMN_WIDTH + COLUMN_GAP;
-  const maxBound = getMaxBound(MOCK_EXERCISE_DATA.highestValue);
+  const maxBound = getMaxBound(excerciseTrendMockData.highestValue);
   const maxValue = Math.max(
-    Math.ceil(MOCK_EXERCISE_DATA.highestValue / maxBound) * maxBound,
+    Math.ceil(excerciseTrendMockData.highestValue / maxBound) * maxBound,
     maxBound
   );
 
@@ -189,9 +176,9 @@ const LineGraph: React.FC<ILineGraphProps> = ({ height }) => {
               ))}
           </STickContainer>
           <SLineContainer>
-            {MOCK_EXERCISE_DATA.data.map((value, index) => {
+            {excerciseTrendMockData.data.map((value, index) => {
               const isLastValue =
-                MOCK_EXERCISE_DATA.data[index + 1] === undefined;
+                excerciseTrendMockData.data[index + 1] === undefined;
 
               const currentPosition = 100 - percentage(value, maxValue);
               const percentageCurrentHeight =
@@ -200,7 +187,10 @@ const LineGraph: React.FC<ILineGraphProps> = ({ height }) => {
 
               const nextPosition =
                 100 -
-                percentage(MOCK_EXERCISE_DATA.data[index + 1] ?? 0, maxValue);
+                percentage(
+                  excerciseTrendMockData.data[index + 1] ?? 0,
+                  maxValue
+                );
               const percentageNextHeight = percentage(nextPosition, 100) / 100;
               const actualNextHeight = graphHeight * percentageNextHeight;
               const differenceHeight = Math.abs(
@@ -233,7 +223,7 @@ const LineGraph: React.FC<ILineGraphProps> = ({ height }) => {
             })}
           </SLineContainer>
           <SHAxisContainer>
-            {MOCK_EXERCISE_DATA.legend.map((key) => (
+            {excerciseTrendMockData.legend.map((key) => (
               <SHAxisKey key={getUniqueId()}>{key}</SHAxisKey>
             ))}
           </SHAxisContainer>

@@ -1,6 +1,6 @@
 import { IUserModel } from '@store/user-context';
 
-export const userMock: IUserModel = {
+export const userMockData: IUserModel = {
   id: '123456789',
   name: 'Test Username',
   email: 'test@address.com',

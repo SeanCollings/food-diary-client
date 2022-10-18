@@ -1,5 +1,4 @@
 import Summary from '@components/summary';
-import { IUserData, MOCK_USER_DATA } from '@components/summary/mock-data';
 import {
   getDaysAwayFromDate,
   setDateMidnightISOString,
@@ -9,6 +8,8 @@ import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { protectedSeverSideProps } from '@lib/server-props';
 import { Session } from 'next-auth';
+import { summaryMockData } from '@client/mock';
+import { IUserSummaryData } from '@client/interfaces/user-summary-data';
 
 const DEFAULT_DAYS_SHOW = 7;
 
@@ -23,7 +24,7 @@ interface ISummaryPageProps {
 }
 
 const SummaryPage: NextPage<ISummaryPageProps> = ({ session }) => {
-  const [userData, setUserData] = useState<IUserData | null>(null);
+  const [userData, setUserData] = useState<IUserSummaryData | null>(null);
   const [hasError, setHasError] = useState(false);
   const [fromDate, setFromDate] = useState(
     getDaysAwayFromDate(-(DEFAULT_DAYS_SHOW - 1))
@@ -34,7 +35,7 @@ const SummaryPage: NextPage<ISummaryPageProps> = ({ session }) => {
     const getData = () => {
       setTimeout(async () => {
         try {
-          const { data } = await Promise.resolve({ data: MOCK_USER_DATA });
+          const { data } = await Promise.resolve({ data: summaryMockData });
           setUserData(data);
         } catch (err) {
           console.error(err);

@@ -1,5 +1,5 @@
 import { IUserModel } from '@store/user-context';
-import { userMock } from 'client/mock';
+import { userMockData } from 'client/mock';
 import NextAuth from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
 
@@ -38,7 +38,7 @@ export default NextAuth({
       },
       authorize: async (credentials) => {
         const { data, error } = await Promise.resolve({
-          data: userMock,
+          data: userMockData,
           error: undefined,
         } as { data: IUserModel; error?: { message: string } });
 
