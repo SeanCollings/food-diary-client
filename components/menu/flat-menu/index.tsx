@@ -4,12 +4,7 @@ import { MENU_ITEMS } from '@utils/constants/menu.constants';
 import { useRouter } from 'next/router';
 import { MEDIA_MAX_DESKTOP } from '@utils/constants';
 import Link from 'next/link';
-import { useTheme } from '@hooks/use-theme';
-
-interface ISContent {
-  isCurrentPath: boolean;
-  primary: string;
-}
+import { signOut, useSession } from 'next-auth/react';
 
 const SContainer = styled.div`
   display: none;
@@ -20,33 +15,48 @@ const SContainer = styled.div`
     display: flex;
   }
 `;
-const SLink = styled.a<ISContent>`
+const SLink = styled.a`
   font-size: 20px;
   cursor: pointer;
   padding-bottom: 4px;
   border-bottom: 3px solid transparent;
 
-  ${({ isCurrentPath, primary }) =>
-    isCurrentPath && `border-bottom: 3px solid ${primary}`};
+  &.current-path {
+    border-bottom: 3px solid var(--th-primary);
+  }
 
-  :hover {
-    ${({ isCurrentPath }) => !isCurrentPath && `opacity: 0.6`};
+  :hover:not(&.current-path) {
+    opacity: 0.6;
   }
 `;
 
 const FlatMenu: FC = () => {
-  const theme = useTheme();
-  const { pathname } = useRouter();
+  const router = useRouter();
+  const { data: session, status } = useSession();
+
+  const onLogoutClick = async () => {
+    localStorage?.removeItem('theme');
+    await signOut();
+  };
 
   return (
     <SContainer>
-      {MENU_ITEMS.map(({ id, title, href }) => (
-        <Link key={id} href={href} passHref>
-          <SLink primary={theme.primary} isCurrentPath={pathname === href}>
-            {title}
-          </SLink>
-        </Link>
-      ))}
+      {MENU_ITEMS.map(({ id, title, href }) => {
+        if (session && id === 'login') {
+          return null;
+        } else if (!session && (id === 'my_profile' || id === 'summary')) {
+          return null;
+        }
+
+        return (
+          <Link key={id} href={href} passHref>
+            <SLink className={router.pathname === href ? 'current-path' : ''}>
+              {title}
+            </SLink>
+          </Link>
+        );
+      })}
+      {session && <SLink onClick={onLogoutClick}>{'Logout'}</SLink>}
     </SContainer>
   );
 };

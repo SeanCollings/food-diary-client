@@ -13,11 +13,9 @@ import { useRouter } from 'next/router';
 import Link from 'next/link';
 import MenuIcon from '@components/menu/menu-icon/index';
 import { useOnClickOutsideElementsArray } from '@hooks/use-onclick-outside-element';
-import {
-  ThemeBackgroundSecondary,
-  ThemeTextColor,
-} from '@components/ui/style-themed';
+import { ThemeTextColor } from '@components/ui/style-themed';
 import { useTheme } from '@hooks/use-theme';
+import { signOut, useSession } from 'next-auth/react';
 
 const MENU_WIDTH = 350;
 
@@ -25,7 +23,7 @@ type TAnimateStyle = 'open' | 'close' | 'idle';
 
 interface ISContainer {
   animateStyle: TAnimateStyle;
-  darkMode: boolean;
+  darkMode?: boolean;
 }
 interface ISContent {
   isCurrentPath: boolean;
@@ -41,8 +39,7 @@ const SContainer = styled.div<ISContainer>`
   height: 100%;
   z-index: 101;
   width: 0;
-  ${ThemeTextColor}
-  ${ThemeBackgroundSecondary}
+  background-color: var(--bg-secondary);
 
   animation-name: ${({ animateStyle }) => animateStyle};
   animation-duration: 0.2s;
@@ -127,6 +124,7 @@ const SLink = styled.a<ISContent>`
 
 const SideMenuDisplay: FC = () => {
   const theme = useTheme();
+  const { data: session } = useSession();
   const sideMenuRef = useRef<HTMLDivElement>(null);
   const { isOpen, toggleMenu } = useMenuContext();
   const { pathname } = useRouter();
@@ -167,6 +165,10 @@ const SideMenuDisplay: FC = () => {
   const handleMenuClick = () => {
     toggleMenu();
   };
+  const onLogoutClick = async () => {
+    localStorage?.removeItem('theme');
+    await signOut();
+  };
 
   return (
     <SContainer
@@ -179,17 +181,34 @@ const SideMenuDisplay: FC = () => {
       </SMenuIconContainer>
 
       <SContents>
-        {MENU_ITEMS.map(({ id, title, href }) => (
-          <Link key={id} href={href} passHref>
-            <SLink
-              primary={theme.primary}
-              isCurrentPath={pathname === href}
-              onClick={handleMenuClick}
-            >
-              {title}
-            </SLink>
-          </Link>
-        ))}
+        {MENU_ITEMS.map(({ id, title, href }) => {
+          if (session && id === 'login') {
+            return null;
+          } else if (!session && (id === 'my_profile' || id === 'summary')) {
+            return null;
+          }
+
+          return (
+            <Link key={id} href={href} passHref>
+              <SLink
+                primary={theme.primary}
+                isCurrentPath={pathname === href}
+                onClick={handleMenuClick}
+              >
+                {title}
+              </SLink>
+            </Link>
+          );
+        })}
+        {session && (
+          <SLink
+            primary={theme.primary}
+            isCurrentPath={false}
+            onClick={onLogoutClick}
+          >
+            {'Logout'}
+          </SLink>
+        )}
       </SContents>
     </SContainer>
   );

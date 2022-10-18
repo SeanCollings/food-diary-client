@@ -5,6 +5,7 @@ export enum EMenuItems {
   HOME = 'home',
   SUMMARY = 'summary',
 }
+export type TMenuItems = `${EMenuItems}`;
 
 export const pathnameMapper: { [key in EMenuItems]: string } = {
   [EMenuItems.MY_DIARY]: '/',
@@ -15,7 +16,7 @@ export const pathnameMapper: { [key in EMenuItems]: string } = {
 };
 
 interface IMenuItem {
-  id: EMenuItems;
+  id: TMenuItems;
   title: string;
   href: string;
 }
