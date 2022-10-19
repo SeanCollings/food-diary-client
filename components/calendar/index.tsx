@@ -249,11 +249,11 @@ const DateSelector: FC<IDateSelectorProps> = ({
       </STodayButtonContainer>
       <SMonthNavigatorContainer>
         <SButtonLeft onClick={onSelectPreviousMonth}>
-          <MdArrowLeft size={44} color={'var(--th-text)'} />
+          <MdArrowLeft size={44} color={'var(--text)'} />
         </SButtonLeft>
         <SDateTitle>{formatMonthSmallYear(selectedMonthDate)}</SDateTitle>
         <SButtonRight onClick={onSelectNextMonth}>
-          <MdArrowRight size={44} color={'var(--th-text)'} />
+          <MdArrowRight size={44} color={'var(--text)'} />
         </SButtonRight>
       </SMonthNavigatorContainer>
     </SDateSelectorContainer>

@@ -108,7 +108,7 @@ export const MEDIA_MOBILE_TABLET = '@media (max-width: 768px)';
 export const MEDIA_TABLET = '@media (min-width: 481px) and (max-width: 768px)';
 export const MEDIA_DESKTOP = '@media (min-width: 769px)';
 export const MEDIA_MAX_DESKTOP = '@media (min-width: 1420px)';
-export const MAX_PAGE_WIDTH = 1340;
+export const MAX_PAGE_WIDTH = 1440;
 
 export const MONTHS = [
   'January',

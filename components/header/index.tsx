@@ -34,6 +34,7 @@ const SContainer = styled.header`
   }
   ${MEDIA_MAX_DESKTOP} {
     height: ${HEADER_PROPS.desktopLarge.height}px;
+    padding: 0 2rem;
   }
 `;
 const SHeaderBanner = styled.div`
