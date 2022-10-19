@@ -2,6 +2,9 @@ import { createGlobalStyle } from 'styled-components';
 import { DARK_THEMES, LIGHT_THEMES } from '@utils/constants/theme.constants';
 
 const GlobalStyle = createGlobalStyle`
+  [data-theme="light"] {
+    ${LIGHT_THEMES.light_1.toThemeString()}
+  }
   [data-theme="light_1"] {
     ${LIGHT_THEMES.light_1.toThemeString()}
   }
@@ -18,6 +21,9 @@ const GlobalStyle = createGlobalStyle`
     ${LIGHT_THEMES.light_5.toThemeString()}
   }
 
+  [data-theme="dark"] {
+    ${DARK_THEMES.dark_1.toThemeString()}
+  }
   [data-theme="dark_1"] {
     ${DARK_THEMES.dark_1.toThemeString()}
   }

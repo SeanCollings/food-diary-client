@@ -40,7 +40,7 @@ const SInput = styled.input`
   border-radius: 8px;
   font-size: 18px;
   height: 58px;
-  background: ${COLOURS.gray_light};
+  background: var(--th-quaternary__40);
   border: 1px solid transparent;
 
   &.error {

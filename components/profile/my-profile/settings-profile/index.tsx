@@ -95,7 +95,7 @@ const SettingsProfile: FC<ISettingsProfile> = ({ onCancel }) => {
         </SHeader>
         <SPanel>
           Dark mode
-          <Toggle onChange={updateDarkMode} checked={theme?.includes('dark')} />
+          <Toggle onChange={updateDarkMode} checked={darkMode} />
         </SPanel>
         <SPanel>
           Theme

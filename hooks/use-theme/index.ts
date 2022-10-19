@@ -1,16 +1,24 @@
-import { useMemo } from 'react';
+import { useCallback, useMemo } from 'react';
 import { useTheme as useNextTheme } from 'next-themes';
 import { TThemeIds } from '@utils/constants/theme.interfaces';
 
 export const useTheme = () => {
   const { theme, setTheme } = useNextTheme();
 
-  return useMemo(
-    () => ({
-      darkMode: theme?.includes('dark') || false,
+  const isDarkMode = useCallback(() => {
+    const dataTheme = document.documentElement.getAttribute('data-theme');
+    return (
+      (dataTheme?.includes('dark') && theme === 'system') ||
+      theme?.includes('dark') ||
+      false
+    );
+  }, [theme]);
+
+  return useMemo(() => {
+    return {
+      darkMode: isDarkMode(),
       theme: theme as TThemeIds | undefined,
       setTheme: setTheme as (theme: TThemeIds) => void,
-    }),
-    [setTheme, theme]
-  );
+    };
+  }, [theme, setTheme, isDarkMode]);
 };

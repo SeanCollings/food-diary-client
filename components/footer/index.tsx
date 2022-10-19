@@ -8,9 +8,9 @@ interface ISContainer {
 
 const SContainer = styled.footer<ISContainer>`
   display: flex;
-  border-top: 1px solid ${({ borderTop }) => borderTop};
   justify-content: center;
   align-items: center;
+  border-top: 1px solid ${({ borderTop }) => borderTop};
 
   min-height: 5rem;
   left: 0;

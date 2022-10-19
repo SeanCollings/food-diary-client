@@ -30,9 +30,9 @@ function MyApp(props: AppProps) {
             <MenuContextProvider>
               <UserContextProvider>
                 <ThemeProvider
-                  enableSystem={false}
+                  enableSystem
                   themes={ALL_THEME_NAMES}
-                  defaultTheme={'light_1' as TThemeIds}
+                  defaultTheme={'system'}
                 >
                   <GlobalStyle />
                   {mounted && (

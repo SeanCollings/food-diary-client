@@ -73,7 +73,7 @@ const SLoginButton = styled.button`
   background: var(--th-primary);
   border: transparent;
   font-size: 24px;
-  color: var(--bg-secondary);
+  color: var(--text);
   padding: 10px;
   width: 150px;
   border-radius: 8px;

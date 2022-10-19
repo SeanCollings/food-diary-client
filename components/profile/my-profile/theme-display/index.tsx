@@ -1,7 +1,12 @@
 import { useOnClickOutsideElementsArray } from '@hooks/use-onclick-outside-element';
 import { useTheme } from '@hooks/use-theme';
 import { COLOURS } from '@utils/constants';
-import { DARK_THEMES, LIGHT_THEMES } from '@utils/constants/theme.constants';
+import {
+  DARK_THEMES,
+  LIGHT_THEMES,
+  THEME_DARK_1,
+  THEME_LIGHT_1,
+} from '@utils/constants/theme.constants';
 import {
   TApplicationTheme,
   TDarkThemeIds,
@@ -105,10 +110,9 @@ const ThemeDisplay: React.FC = () => {
     setThemeOpened(false)
   );
 
-  const currentTheme: TApplicationTheme =
-    darkMode && theme
-      ? DARK_THEMES[theme as TDarkThemeIds]
-      : LIGHT_THEMES[theme as TLightThemeIds];
+  const currentTheme: TApplicationTheme = darkMode
+    ? DARK_THEMES[theme as TDarkThemeIds] || THEME_DARK_1
+    : LIGHT_THEMES[theme as TLightThemeIds] || THEME_LIGHT_1;
   const currentMode = darkMode ? DARK_THEMES : LIGHT_THEMES;
 
   const openThemeSelection = () => {
@@ -146,7 +150,9 @@ const ThemeDisplay: React.FC = () => {
           {Object.values(currentMode).map((themeChoice) => (
             <SThemePickerRow
               key={themeChoice.id}
-              className={`${theme === themeChoice.id ? 'isSelected' : ''}`}
+              className={`${
+                currentTheme.id === themeChoice.id ? 'isSelected' : ''
+              }`}
               onClick={() => onClickHandler(themeChoice.id)}
             >
               {themeChoice.name}

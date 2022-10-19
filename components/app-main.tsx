@@ -14,33 +14,36 @@ import { useRouter } from 'next/router';
 import { pathnameMapper } from '@utils/constants/menu.constants';
 import { AppProps } from 'next/app';
 import { useUserContext } from '@store/user-context';
+import { getClassNames } from '@utils/string-utils';
+import { useTheme } from '@hooks/use-theme';
 
-interface ISAppContainer {
-  showBackgroundImage: boolean;
-  fullOpacity: boolean;
-}
-
-const SAppContainer = styled.div<ISAppContainer>`
+const SAppContainer = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   outline-style: none;
   min-height: calc(100vh + 5rem);
 
-  ${({ showBackgroundImage, fullOpacity }) =>
-    showBackgroundImage &&
-    `background-image:${
-      fullOpacity
-        ? ''
-        : `linear-gradient(
-      rgba(255, 255, 255, 0.5),
-      rgba(255, 255, 255, 0.5)
-    ),`
-    }
-    url('/static/images/background.webp');
-  background-size: cover;
-  background-repeat: no-repeat;
-  `}
+  &.bg-image-light-full {
+    background-image: url('/static/images/background.webp');
+  }
+  &.bg-image-light {
+    background-image: linear-gradient(
+        rgba(255, 255, 255, 0.5),
+        rgba(255, 255, 255, 0.5)
+      ),
+      url('/static/images/background.webp');
+  }
+
+  &.bg-image-dark {
+    background-image: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)),
+      url('/static/images/background.webp');
+  }
+
+  &.bg-image {
+    background-size: cover;
+    background-repeat: no-repeat;
+  }
 `;
 const SMain = styled.main`
   position: relative;
@@ -70,6 +73,7 @@ const SInnerMain = styled.div`
 `;
 
 const AppMain: React.FC<AppProps> = ({ Component, pageProps }) => {
+  const { darkMode } = useTheme();
   const { user, setInitialUser } = useUserContext();
   const { pathname } = useRouter();
 
@@ -82,12 +86,18 @@ const AppMain: React.FC<AppProps> = ({ Component, pageProps }) => {
   const showBackgroundImage =
     pathname === pathnameMapper.login || pathname === pathnameMapper.home;
   const fullOpacity = pathname !== pathnameMapper.login;
+  const bgShowLight = showBackgroundImage && !darkMode;
+  const bgShowDark = showBackgroundImage && darkMode;
+
+  const classNames = getClassNames({
+    'bg-image': showBackgroundImage,
+    'bg-image-light-full': bgShowLight && fullOpacity,
+    'bg-image-light': bgShowLight && !fullOpacity,
+    'bg-image-dark': bgShowDark,
+  });
 
   return (
-    <SAppContainer
-      showBackgroundImage={showBackgroundImage}
-      fullOpacity={fullOpacity}
-    >
+    <SAppContainer className={classNames}>
       <Header />
       <SMain>
         <SInnerMain>
