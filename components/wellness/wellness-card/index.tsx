@@ -38,7 +38,6 @@ const SCounterContainer = styled.div`
   user-select: none;
 `;
 const SCount = styled.div`
-  transition: 0.1s;
   text-align: center;
   min-width: 54px;
 

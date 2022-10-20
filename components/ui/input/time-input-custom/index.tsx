@@ -32,7 +32,7 @@ const SContainer = styled.div`
   }
 `;
 const SInput = styled.input<ISInput>`
-  transition: 0.5s;
+  transition: box-shadow 0.2s;
   text-align: center;
   outline: none;
   border-radius: 4px;

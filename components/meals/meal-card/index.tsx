@@ -43,19 +43,18 @@ const SContainer = styled.div<IScontainer>`
   max-width: 300px;
   min-width: 250px;
   height: 400px;
-  transition: scale 0.1s;
+  scale: 1;
+  backface-visibility: hidden;
 
-  ${({ hasContent, background }) =>
-    hasContent
-      ? `background-image: linear-gradient(225deg, var(${background}) 20%, var(${background}__80))`
-      : `background: var(${background})`};
+  background-color: var(${({ background }) => background});
 
   :hover {
     scale: 1.01;
-    ${({ hasContent, background }) =>
-      hasContent
-        ? `background-image: linear-gradient(225deg, var(${background}__80) 100%, var(${background}__80))`
-        : `background: var(${background}__80)`};
+
+    background-color: transparent;
+
+    ${({ background }) =>
+      `background-image: linear-gradient(45deg, var(${background}) 75%, var(${background}__80))`};
 
     ${({ boxShadow }) =>
       boxShadow && `box-shadow: 1px 1px 10px ${COLOURS.black}${OPACITY_70}`};
@@ -114,17 +113,16 @@ const SContentContainer = styled.div<IScroll>`
     width: 6px;
     left: 5px;
   }
-
   ::-webkit-scrollbar-button {
     display: none;
   }
   :hover::-webkit-scrollbar-thumb {
-    background-color: var(--bg-secondary);
+    background-color: var(--text);
     border-radius: 10px;
     max-height: 20px;
   }
-  :hover::-webkit-scrollbar-track {
-    background-color: ${({ background }) => `var(${background})`};
+  ::-webkit-scrollbar-track {
+    background-color: var(--text__40);
     border-radius: 10px;
   }
 `;

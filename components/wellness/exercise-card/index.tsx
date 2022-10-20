@@ -170,7 +170,7 @@ const ExcerciseCard: FC<IProps> = ({ title, imageSrc }) => {
             borderWidth={1}
             totalRows={3}
             placeholder="..."
-            title="add excercise details"
+            title="add excercise notes"
             onChange={handleDetailsChange}
             onBlur={handleOnBlur}
           />
