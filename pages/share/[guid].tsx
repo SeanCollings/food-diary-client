@@ -11,7 +11,6 @@ const DEFAULT_DAYS_SHOW = 7;
 const SContainer = styled.section`
   display: flex;
   flex-direction: column;
-  padding: 0 0 40px 0;
   min-height: 100%;
   width: 100%;
 `;
@@ -67,12 +66,16 @@ const SharePage: NextPage<ISharePageProps> = ({ guid }) => {
     );
   }
 
-  if (isLoading || !userData) {
+  if (isLoading && !userData) {
     return (
       <SContainer>
         <SUsernameContainer>Loading...</SUsernameContainer>
       </SContainer>
     );
+  }
+
+  if (!userData) {
+    return <SContainer></SContainer>;
   }
 
   return (
@@ -84,6 +87,7 @@ const SharePage: NextPage<ISharePageProps> = ({ guid }) => {
       )}
 
       <Summary
+        isLoading={isLoading}
         userData={userData}
         fromDate={fromDate}
         toDate={toDate}

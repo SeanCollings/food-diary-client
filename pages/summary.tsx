@@ -5,8 +5,8 @@ import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { protectedSeverSideProps } from '@lib/server-props';
 import { Session } from 'next-auth';
-import { IUserSummaryData } from '@client/interfaces/user-summary-data';
 import { useRequestSummary } from '@hooks/request/use-request-summary';
+import { ISummaryResponseBody } from '@client/interfaces/user-summary-data';
 
 const DEFAULT_DAYS_SHOW = 7;
 
@@ -22,7 +22,7 @@ interface ISummaryPageProps {
 
 const SummaryPage: NextPage<ISummaryPageProps> = ({ session }) => {
   const [mounted, setMounted] = useState(false);
-  const [userData, setUserData] = useState<IUserSummaryData | null>(null);
+  const [userData, setUserData] = useState<ISummaryResponseBody | null>(null);
   const [fromDate, setFromDate] = useState(
     getDaysAwayFromDate(-(DEFAULT_DAYS_SHOW - 1))
   );
@@ -48,19 +48,24 @@ const SummaryPage: NextPage<ISummaryPageProps> = ({ session }) => {
     setToDate(toDate);
   };
 
-  if (isLoading || !userData) {
-    return <SContainer>Loading...</SContainer>;
-  }
-
   if (isError) {
     return (
       <SContainer>An error occurred. Please try again later...</SContainer>
     );
   }
 
+  if (isLoading && !userData) {
+    return <SContainer>Loading...</SContainer>;
+  }
+
+  if (!userData) {
+    return <SContainer></SContainer>;
+  }
+
   return (
     <SContainer>
       <Summary
+        isLoading={isLoading}
         userData={userData}
         fromDate={fromDate}
         toDate={toDate}

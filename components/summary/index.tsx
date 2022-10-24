@@ -7,7 +7,7 @@ import {
   MEDIA_MOBILE_TABLET,
   MEDIA_TABLET,
 } from '@utils/constants';
-import { formatFullDateNoDay } from '@utils/date-utils';
+import { formatFullDateNoDay, getBothDatesEqual } from '@utils/date-utils';
 import styled from 'styled-components';
 import Pagination from '@components/summary/pagination';
 import { getPaddedNestedArray } from '@utils/array-utils';
@@ -177,15 +177,19 @@ const SRowContainer = styled.div<ISRowContainer>`
 `;
 const STopPaginationContainer = styled.div`
   width: 100%;
+  height: 35px;
+
   ${MEDIA_MOBILE_TABLET} {
     margin-top: 20px;
   }
 `;
 const SBottomPaginationContainer = styled.div`
+  height: 35px;
   margin-bottom: 20px;
 `;
 
 interface ISummaryProps {
+  isLoading: boolean;
   userData: ISummaryResponseBody;
   fromDate: Date;
   toDate: Date;
@@ -194,6 +198,7 @@ interface ISummaryProps {
 }
 
 const Summary: FC<ISummaryProps> = ({
+  isLoading,
   userData,
   fromDate,
   toDate,
@@ -204,7 +209,7 @@ const Summary: FC<ISummaryProps> = ({
   const [currentViewKeys, setCurrentViewKeys] = useState<string[][]>([]);
   const [dateRangeChanged, setDateRangeChanged] = useState(false);
   const [showToDateCalendar, setShowToDateCalendar] = useState(false);
-  const [showFromDateCalendar, setshowFromDateCalendar] = useState(false);
+  const [showFromDateCalendar, setShowFromDateCalendar] = useState(false);
   const [dateFrom, setDateFrom] = useState(fromDate);
   const [dateTo, setDateTo] = useState(toDate);
 
@@ -235,22 +240,26 @@ const Summary: FC<ISummaryProps> = ({
   );
 
   const onClickStartDate = () => {
-    setshowFromDateCalendar((curr) => !curr);
+    setShowFromDateCalendar((curr) => !curr);
     setShowToDateCalendar(false);
   };
   const onClickEndDate = () => {
     setShowToDateCalendar((curr) => !curr);
-    setshowFromDateCalendar(false);
+    setShowFromDateCalendar(false);
   };
   const onClickChangeDateFrom = (date: Date) => {
-    setDateFrom(date);
-    setshowFromDateCalendar(false);
-    setDateRangeChanged(true);
+    if (!getBothDatesEqual(date, dateFrom)) {
+      setDateFrom(date);
+      setDateRangeChanged(true);
+    }
+    setShowFromDateCalendar(false);
   };
   const onClickChangeDateTo = (date: Date) => {
-    setDateTo(date);
+    if (!getBothDatesEqual(date, dateTo)) {
+      setDateTo(date);
+      setDateRangeChanged(true);
+    }
     setShowToDateCalendar(false);
-    setDateRangeChanged(true);
   };
   const onClickApplyDateRange = () => {
     onApplyNewDateRange(dateFrom, dateTo);
@@ -276,7 +285,7 @@ const Summary: FC<ISummaryProps> = ({
                 topLevelDate={dateFrom}
                 calendarHeight={CALENDAR_HEIGHT}
                 restricDaysAfter={dateTo}
-                onClose={() => setshowFromDateCalendar(false)}
+                onClose={() => setShowFromDateCalendar(false)}
                 onClickNewDate={onClickChangeDateFrom}
               />
             </SCalendarContainer>
