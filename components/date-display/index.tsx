@@ -7,9 +7,11 @@ import {
   formatFullDate,
   getIsDateSelectedToday,
   getNewDay,
+  setDateMidnightISOString,
 } from '@utils/date-utils';
 import { useDateSelectedContext } from '@store/date-selected-context';
 import { useAllEntriesPerMonthContext } from '@store/all-entries-per-month-context';
+import { useRequestCalendarEntries } from '@hooks/request/use-request-calendar-entires';
 
 interface ISButtonCommon {
   calendarVisible: boolean;
@@ -115,9 +117,14 @@ const DateDisplay: FC = () => {
   const { allEntriesPerMonth } = useAllEntriesPerMonthContext();
   const { dateSelectedISO, updateSelectedDateISO } = useDateSelectedContext();
   const [showCalendar, setShowCalendar] = useState(false);
+  const [calendarDate, setCalendarDate] = useState<string | null>(null);
+  const {} = useRequestCalendarEntries(calendarDate);
 
   const isDateSelectedToday = getIsDateSelectedToday(dateSelectedISO);
 
+  const onDateMouseEnter = () => {
+    setCalendarDate(dateSelectedISO);
+  };
   const onDateClick = () => {
     setShowCalendar(!showCalendar);
   };
@@ -128,7 +135,6 @@ const DateDisplay: FC = () => {
     if (isDateSelectedToday) {
       return;
     }
-
     updateSelectedDateISO(getNewDay(dateSelectedISO, true));
   };
   const closeCalendarHandler = () => {
@@ -138,6 +144,12 @@ const DateDisplay: FC = () => {
     updateSelectedDateISO(newDate);
     setShowCalendar(false);
   };
+  const onClickPreviousMonth = (month: Date) => {
+    setCalendarDate(setDateMidnightISOString(month));
+  };
+  const onClickNextMonth = (month: Date) => {
+    setCalendarDate(setDateMidnightISOString(month));
+  };
 
   return (
     <SContainer>
@@ -145,7 +157,11 @@ const DateDisplay: FC = () => {
         <SButtonLeft onClick={onClickLeft} calendarVisible={showCalendar}>
           <MdArrowLeft size={46} color={'var(--th-quaternary)'} />
         </SButtonLeft>
-        <SDate onClick={onDateClick} isCalendarShown={showCalendar}>
+        <SDate
+          onMouseEnter={onDateMouseEnter}
+          onClick={onDateClick}
+          isCalendarShown={showCalendar}
+        >
           <SFullDateContainer>
             {formatFullDate(dateSelectedISO)}
           </SFullDateContainer>
@@ -157,6 +173,8 @@ const DateDisplay: FC = () => {
               allEntriesPerMonth={allEntriesPerMonth}
               onClose={closeCalendarHandler}
               onClickNewDate={onClickNewDateHandler}
+              onClickPreviousMonth={onClickPreviousMonth}
+              onClickNextMonth={onClickNextMonth}
             />
           </SCalendarContainer>
         )}
