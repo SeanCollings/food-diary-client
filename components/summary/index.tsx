@@ -14,17 +14,19 @@ import { getPaddedNestedArray } from '@utils/array-utils';
 import Calendar from '@components/calendar';
 import { MdCalendarToday } from 'react-icons/md';
 import { DateHeaderRow, MealDataRow, WellnessDataRow } from './content-rows';
-import { IUserData } from './mock-data';
+import { ISummaryResponseBody } from '@client/interfaces/user-summary-data';
 
 const CALENDAR_HEIGHT = 280;
 const MAX_DAYS_PER_ROW = 2;
-const MAX_ROWS_PER_PAGE = 4;
+const MAX_ROWS_PER_PAGE = 5;
 
 interface ISRowContainer {
   gridTemplateArea: string;
 }
 
-const SContainer = styled.div``;
+const SContainer = styled.div`
+  width: 100%;
+`;
 const STopContainer = styled.div`
   display: flex;
   justify-content: center;
@@ -168,6 +170,10 @@ const SRowContainer = styled.div<ISRowContainer>`
   ${MEDIA_MAX_DESKTOP} {
     gap: 0 50px;
   }
+
+  .empty {
+    opacity: 0.5;
+  }
 `;
 const STopPaginationContainer = styled.div`
   width: 100%;
@@ -180,21 +186,18 @@ const SBottomPaginationContainer = styled.div`
 `;
 
 interface ISummaryProps {
-  userData: IUserData;
+  userData: ISummaryResponseBody;
   fromDate: Date;
   toDate: Date;
-  updateFromDate: (date: Date) => void;
-  updateToDate: (date: Date) => void;
-  onDateRangeChanged: () => void;
+  defaultShowDays: number;
+  onApplyNewDateRange: (dateFrom: Date, dateTo: Date) => void;
 }
 
 const Summary: FC<ISummaryProps> = ({
   userData,
   fromDate,
   toDate,
-  updateFromDate,
-  updateToDate,
-  onDateRangeChanged,
+  onApplyNewDateRange,
 }) => {
   const [currentPage, setcurrentPage] = useState(1);
   const [allViewKeys, setAllViewKeys] = useState<string[][]>([]);
@@ -202,6 +205,8 @@ const Summary: FC<ISummaryProps> = ({
   const [dateRangeChanged, setDateRangeChanged] = useState(false);
   const [showToDateCalendar, setShowToDateCalendar] = useState(false);
   const [showFromDateCalendar, setshowFromDateCalendar] = useState(false);
+  const [dateFrom, setDateFrom] = useState(fromDate);
+  const [dateTo, setDateTo] = useState(toDate);
 
   useEffect(() => {
     const allNestedDates = getPaddedNestedArray(
@@ -238,17 +243,17 @@ const Summary: FC<ISummaryProps> = ({
     setshowFromDateCalendar(false);
   };
   const onClickChangeDateFrom = (date: Date) => {
-    updateFromDate(date);
+    setDateFrom(date);
     setshowFromDateCalendar(false);
     setDateRangeChanged(true);
   };
   const onClickChangeDateTo = (date: Date) => {
-    updateToDate(date);
+    setDateTo(date);
     setShowToDateCalendar(false);
     setDateRangeChanged(true);
   };
   const onClickApplyDateRange = () => {
-    onDateRangeChanged();
+    onApplyNewDateRange(dateFrom, dateTo);
     setDateRangeChanged(false);
   };
 
@@ -268,9 +273,9 @@ const Summary: FC<ISummaryProps> = ({
           {showFromDateCalendar && (
             <SCalendarContainer className="from-date">
               <Calendar
-                topLevelDate={fromDate}
+                topLevelDate={dateFrom}
                 calendarHeight={CALENDAR_HEIGHT}
-                restricDaysAfter={toDate}
+                restricDaysAfter={dateTo}
                 onClose={() => setshowFromDateCalendar(false)}
                 onClickNewDate={onClickChangeDateFrom}
               />
@@ -283,16 +288,16 @@ const Summary: FC<ISummaryProps> = ({
               showFromDateCalendar ? 'selected' : ''
             }`}
           >
-            {formatFullDateNoDay(fromDate)}
+            {formatFullDateNoDay(dateFrom)}
             <MdCalendarToday />
           </SRange>
           -
           {showToDateCalendar && (
             <SCalendarContainer className="to-date">
               <Calendar
-                topLevelDate={toDate}
+                topLevelDate={dateTo}
                 calendarHeight={CALENDAR_HEIGHT}
-                restrictDaysBefore={fromDate}
+                restrictDaysBefore={dateFrom}
                 onClose={() => setShowToDateCalendar(false)}
                 onClickNewDate={onClickChangeDateTo}
               />
@@ -305,7 +310,7 @@ const Summary: FC<ISummaryProps> = ({
               showToDateCalendar ? 'selected' : ''
             }`}
           >
-            {formatFullDateNoDay(toDate)}
+            {formatFullDateNoDay(dateTo)}
             <MdCalendarToday />
           </SRange>
         </SRangeContainer>

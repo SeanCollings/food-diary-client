@@ -1,13 +1,10 @@
 import { useEffect, useState } from 'react';
 import { GetServerSideProps, NextPage } from 'next';
 import styled from 'styled-components';
-import {
-  getDaysAwayFromDate,
-  setDateMidnightISOString,
-} from '@utils/date-utils';
+import { getDaysAwayFromDate } from '@utils/date-utils';
 import Summary from '@components/summary';
-import { summaryMockData } from '@client/mock';
-import { IUserSummaryData } from '@client/interfaces/user-summary-data';
+import { IShareResponseBody } from '@client/interfaces/user-summary-data';
+import { useRequestShare } from '@hooks/request/use-request-share';
 
 const DEFAULT_DAYS_SHOW = 7;
 
@@ -16,6 +13,7 @@ const SContainer = styled.section`
   flex-direction: column;
   padding: 0 0 40px 0;
   min-height: 100%;
+  width: 100%;
 `;
 const SUsernameContainer = styled.div`
   display: flex;
@@ -35,37 +33,41 @@ interface ISharePageProps {
 }
 
 const SharePage: NextPage<ISharePageProps> = ({ guid }) => {
-  const [userData, setUserData] = useState<IUserSummaryData | null>(null);
-  const [hasError, setHasError] = useState(false);
+  const [mounted, setMounted] = useState(false);
+  const [userData, setUserData] = useState<IShareResponseBody | undefined>();
   const [fromDate, setFromDate] = useState(
     getDaysAwayFromDate(-(DEFAULT_DAYS_SHOW - 1))
   );
   const [toDate, setToDate] = useState(new Date());
+  const { data, isLoading, isError } = useRequestShare(
+    mounted,
+    guid,
+    fromDate,
+    toDate
+  );
 
   useEffect(() => {
-    const getData = () => {
-      setTimeout(async () => {
-        try {
-          const { data } = await Promise.resolve({ data: summaryMockData });
-          setUserData(data);
-        } catch (err) {
-          console.error(err);
-          setHasError(true);
-        }
-      }, 1000);
-    };
+    setMounted(true);
+  }, []);
 
-    getData();
-  }, [guid]);
+  useEffect(() => {
+    if (data) {
+      setUserData(data);
+    }
+  }, [data]);
 
-  const updateFromDate = (date: Date) => setFromDate(date);
-  const updateToDate = (date: Date) => setToDate(date);
-  const onDateRangeChanged = () => {
-    console.log('DATE FROM :: ', setDateMidnightISOString(fromDate));
-    console.log('DATE TO :: ', setDateMidnightISOString(toDate));
+  const onApplyNewDateRange = (fromDate: Date, toDate: Date) => {
+    setFromDate(fromDate);
+    setToDate(toDate);
   };
 
-  if (!userData) {
+  if (isError) {
+    return (
+      <SContainer>An error occurred. Please try again later...</SContainer>
+    );
+  }
+
+  if (isLoading || !userData) {
     return (
       <SContainer>
         <SUsernameContainer>Loading...</SUsernameContainer>
@@ -73,25 +75,20 @@ const SharePage: NextPage<ISharePageProps> = ({ guid }) => {
     );
   }
 
-  if (hasError) {
-    return (
-      <SContainer>An error occurred. Please try again later...</SContainer>
-    );
-  }
-
   return (
     <SContainer>
-      <SUsernameContainer>
-        This profile belongs to:<SUsername>{userData.user}</SUsername>
-      </SUsernameContainer>
+      {userData.user && (
+        <SUsernameContainer>
+          This profile belongs to:<SUsername>{userData.user}</SUsername>
+        </SUsernameContainer>
+      )}
 
       <Summary
         userData={userData}
         fromDate={fromDate}
         toDate={toDate}
-        updateFromDate={updateFromDate}
-        updateToDate={updateToDate}
-        onDateRangeChanged={onDateRangeChanged}
+        defaultShowDays={DEFAULT_DAYS_SHOW}
+        onApplyNewDateRange={onApplyNewDateRange}
       />
     </SContainer>
   );

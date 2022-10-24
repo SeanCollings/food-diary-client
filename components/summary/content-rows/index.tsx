@@ -1,14 +1,11 @@
 import { FC, memo } from 'react';
-import {
-  EMealType,
-  EWellnessTypes,
-  TMealType,
-  TWellnessTypes,
-} from '@utils/interfaces';
+import { TMealType, TWellnessTypes } from '@utils/interfaces';
 import { getUniqueId } from '@utils/unique-id';
 import { formatFullDate } from '@utils/date-utils';
 import styled from 'styled-components';
 import { MEDIA_MOBILE_TABLET } from '@utils/constants';
+import { getClassNames } from '@utils/string-utils';
+import { TMealWellnessContents } from '@client/interfaces/user-summary-data';
 
 const MARGIN = 20;
 
@@ -86,28 +83,28 @@ const SEmptyDiv = styled.div`
   height: 0;
 `;
 
-type TMealContents = { [key in EMealType]: string[] };
-type TWellnessContents = { [key in EWellnessTypes]: number };
-
 interface IDateHeaderRowProps {
   dates: string[];
-  data: {
-    [key: string]: TMealContents | TWellnessContents;
-  };
+  data: TMealWellnessContents;
 }
 export const DateHeaderRow: FC<IDateHeaderRowProps> = memo(
   ({ dates, data }) => {
     return (
       <>
         {dates.map((date, index) => {
-          if (!date || !data[date]) {
+          if (!date) {
             return <SEmptyDiv key={`${getUniqueId()}-header`} />;
           }
+
+          const classNames = getClassNames({
+            'grid-area': index === 0,
+            empty: !data[date],
+          });
 
           return (
             <SDateHeader
               key={`${date}-${getUniqueId()}`}
-              className={index === 0 ? 'grid-area' : ''}
+              className={classNames}
             >
               {formatFullDate(date)}
             </SDateHeader>
@@ -123,18 +120,16 @@ interface IMealDataRowProps {
   id: TMealType;
   dates: string[];
   title: string;
-  data: {
-    [key: string]: TMealContents;
-  };
+  data: TMealWellnessContents;
 }
 export const MealDataRow: FC<IMealDataRowProps> = memo(
   ({ id, dates, title, data }) => {
     return (
       <>
         {dates.map((date, index) => {
-          const listItems = data[date]?.[id];
+          const listItems = data[date]?.[id] || [];
 
-          if (!date || !listItems) {
+          if (!date) {
             return <SEmptyDiv key={`${getUniqueId()}-meal`} />;
           }
 
@@ -142,10 +137,11 @@ export const MealDataRow: FC<IMealDataRowProps> = memo(
             <SContentRow
               key={`${date}-${id}-${getUniqueId()}`}
               gridArea={(index === 0 && id) || undefined}
+              className={!data[date] ? 'empty' : ''}
             >
               <SContentTypeHeader>{title}</SContentTypeHeader>
               <SMealValuesList>
-                {listItems.map((item) => (
+                {listItems?.map((item) => (
                   <SMealValue key={getUniqueId()}>{item}</SMealValue>
                 ))}
               </SMealValuesList>
@@ -164,9 +160,7 @@ interface IWellnessDataRowProps {
   title: string;
   firstIndex: boolean;
   lastIndex: boolean;
-  data: {
-    [key: string]: TWellnessContents;
-  };
+  data: TMealWellnessContents;
 }
 export const WellnessDataRow: FC<IWellnessDataRowProps> = memo(
   ({ id, dates, title, data, firstIndex, lastIndex }) => {
@@ -177,9 +171,9 @@ export const WellnessDataRow: FC<IWellnessDataRowProps> = memo(
     return (
       <>
         {dates.map((date, index) => {
-          const value = data[date]?.[id] ?? 0;
+          const value = data[date]?.[id] ?? '';
 
-          if (!date || !data[date]) {
+          if (!date) {
             return <SEmptyDiv key={`${getUniqueId()}-wellness`} />;
           }
 
@@ -193,9 +187,10 @@ export const WellnessDataRow: FC<IWellnessDataRowProps> = memo(
               hideBorderBottom={hideBorderBottom}
               padBottom={lastIndex}
               gridArea={gridArea}
+              className={!data[date] ? 'empty' : ''}
             >
               <SContentTypeHeader>{title}</SContentTypeHeader>
-              <SWellnessValue>{value}</SWellnessValue>
+              <SWellnessValue>{value || '-'}</SWellnessValue>
             </SContentRow>
           );
         })}

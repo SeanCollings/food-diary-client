@@ -4,6 +4,8 @@ import CardContainer from '@components/meals/meal-card-container';
 import WellnessContainer from '@components/wellness/wellness-container';
 import styled from 'styled-components';
 import { getSession } from 'next-auth/react';
+import { useEffect, useState } from 'react';
+import { useRequestDiaryEntry } from '@hooks/request/use-request-diary-entry';
 
 const SDiaryContainer = styled.section`
   display: flex;
@@ -11,7 +13,16 @@ const SDiaryContainer = styled.section`
   height: 100%;
 `;
 
+// https://swr.vercel.app/
+
 const Home: NextPage = () => {
+  const [mounted, setMounted] = useState(false);
+  const { data, isError, isLoading } = useRequestDiaryEntry(mounted);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
   return (
     <SDiaryContainer>
       <DateDisplay />
