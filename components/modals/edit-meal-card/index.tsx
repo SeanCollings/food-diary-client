@@ -268,10 +268,13 @@ const ModalEditMealCard: FC<IModalEditMealCardProps> = ({
               />
               {selectedItem === content.id.toString() && (
                 <SButtonContainer>
-                  <SButton onClick={() => onEditMeal(content.id)}>
+                  <SButton onClick={() => onEditMeal(content.id)} title="edit">
                     <MdEdit size={28} color={`var(${mealColour})`} />
                   </SButton>
-                  <SButton onClick={() => setIsRemoveItemId(content.id)}>
+                  <SButton
+                    onClick={() => setIsRemoveItemId(content.id)}
+                    title="delete"
+                  >
                     <MdDeleteForever size={28} color={COLOURS.gray_dark} />
                   </SButton>
                 </SButtonContainer>

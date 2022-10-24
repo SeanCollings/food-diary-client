@@ -19,7 +19,6 @@ import { useTheme } from '@hooks/use-theme';
 
 interface IScontainer {
   background: string;
-  hasContent: boolean;
   boxShadow: boolean;
 }
 interface ISIcon {
@@ -38,10 +37,10 @@ const SContainer = styled.div<IScontainer>`
   // background: ${({ background }) => `${background}`};
   // background-image: linear-gradient(to bottom, #50abdf, #1f78aa);
   border-radius: 8px;
-  padding: 20px;
-  flex: 0 0 19%;
+  padding: 16px;
+  flex: 1 0 19%;
   max-width: 300px;
-  min-width: 250px;
+  min-width: 270px;
   height: 400px;
   scale: 1;
   backface-visibility: hidden;
@@ -51,21 +50,23 @@ const SContainer = styled.div<IScontainer>`
   :hover {
     scale: 1.01;
 
-    background-color: transparent;
-
-    ${({ background }) =>
-      `background-image: linear-gradient(45deg, var(${background}) 75%, var(${background}__80))`};
-
     ${({ boxShadow }) =>
       boxShadow && `box-shadow: 1px 1px 10px ${COLOURS.black}${OPACITY_70}`};
 
     ${MEDIA_MOBILE} {
       scale: 1;
     }
+
+    &.has-content {
+      background-color: transparent;
+      ${({ background }) =>
+        `background-image: linear-gradient(45deg, var(${background}) 80%, var(${background}__80))`};
+    }
   }
 
   ${MEDIA_TABLET} {
-    min-width: calc(50% - 20px);
+    min-width: 250px;
+    max-width: 100%;
   }
 
   ${MEDIA_MOBILE} {
@@ -121,7 +122,7 @@ const SContentContainer = styled.div<IScroll>`
     border-radius: 10px;
     max-height: 20px;
   }
-  ::-webkit-scrollbar-track {
+  :hover::-webkit-scrollbar-track {
     background-color: var(--text__40);
     border-radius: 10px;
   }
@@ -238,12 +239,12 @@ const Card: FC<IProps> = ({ id, title }) => {
   return (
     <>
       <SContainer
-        hasContent={!!contents.length}
         background={colour}
         boxShadow={darkMode}
         onClick={onClickHandler}
         id="meal-card"
         title="Click to add"
+        className={!!contents.length ? 'has-content' : ''}
       >
         <SHeaderContainer>
           <SHeader>{title}</SHeader>
