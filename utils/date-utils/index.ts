@@ -1,4 +1,4 @@
-import { MONTHS } from '@utils/constants';
+import { MONTHS, ONE_DAY } from '@utils/constants';
 
 type TDate = string | Date;
 
@@ -67,6 +67,24 @@ export const formatMonthMediumYear = (date: TDate) => {
   return `${month} ${year}`;
 };
 
+/**
+ * Converts date to format `10-2022`
+ * @param date string | Date
+ * @returns string
+ */
+export const formatMonthNumberYear = (date: TDate | null) => {
+  const d = date || new Date();
+  return getMonthAndYearFromDate(d).join('-');
+};
+
+export const getMonthAndYearFromDate = (date: TDate) => {
+  const d = new Date(date || new Date());
+  const currentMonth = d.getMonth();
+  const currentYear = d.getFullYear();
+
+  return [currentMonth, currentYear];
+};
+
 export const getCurrentMonthAndYear = () => {
   const currentDate = new Date();
   const currentMonth = currentDate.getMonth() + 1;
@@ -75,12 +93,24 @@ export const getCurrentMonthAndYear = () => {
   return [currentMonth, currentYear];
 };
 
-export const isCurrentMonth = (compareDate: Date) => {
+export const getMidnightISODaysInMonth = (month: number, year: number) => {
+  const date = new Date(year, month, 1);
+  const days: string[] = [];
+
+  while (date.getMonth() === month) {
+    days.push(setDateMidnightISOString(date));
+    date.setDate(date.getDate() + 1);
+  }
+
+  return days;
+};
+
+export const isCurrentMonth = (compareDate: TDate) => {
+  const date = new Date(compareDate);
   const [currentMonth, currentYear] = getCurrentMonthAndYear();
 
   return (
-    compareDate.getMonth() + 1 === currentMonth &&
-    compareDate.getFullYear() === currentYear
+    date.getMonth() + 1 === currentMonth && date.getFullYear() === currentYear
   );
 };
 
@@ -189,4 +219,42 @@ export const isDayAfter = (thisDate: TDate, compareDate: TDate) => {
 
 export const isDayBefore = (thisDate: TDate, compareDate: TDate) => {
   return setDateToMidnight(thisDate) < setDateToMidnight(compareDate);
+};
+
+/**
+ * Return number of days between 2 dates
+ * @param start string | Date
+ * @param end string | Date
+ * @returns number
+ */
+export const getInclusiveDaysBetweenDates = (start: TDate, end: TDate) => {
+  const startDate = new Date(start);
+  const endDate = new Date(end);
+
+  return (
+    Math.round(Math.abs((startDate.valueOf() - endDate.valueOf()) / ONE_DAY)) +
+    1
+  );
+};
+
+/**
+ * Return array of dates between 2 dates
+ * @param start string | Date
+ * @param end string | Date
+ * @returns string[]
+ */
+export const getInclusiveDatesBetweenDates = (start: TDate, end: TDate) => {
+  const startDate = new Date(start);
+  const endDate = new Date(end);
+
+  const date = new Date(startDate.getTime());
+
+  const dates: string[] = [];
+
+  while (date <= endDate) {
+    dates.push(setDateMidnightISOString(new Date(date)));
+    date.setDate(date.getDate() + 1);
+  }
+
+  return dates;
 };

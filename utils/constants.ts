@@ -126,6 +126,7 @@ export const MONTHS = [
 ];
 export const WEEK_DAYS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 export const DAYS = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+export const ONE_DAY = 1000 * 60 * 60 * 24;
 
 // https://foodandwellnessdiary.my.canva.site/
 // https://react-icons.github.io/react-icons/icons?name=md

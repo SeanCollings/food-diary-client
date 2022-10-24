@@ -60,6 +60,7 @@ type IPartialPreference =
 
 export interface IUserContext {
   user: IUserModel | null;
+  userLoggedIn: boolean;
   setInitialUser: (user: IUserModel) => void;
   updateUser: (updated: IPartialUserUpdate) => void;
   updatePreferences: (preferences: IPartialPreference) => void;
@@ -67,23 +68,7 @@ export interface IUserContext {
 
 const initialState: IUserContext = {
   user: null,
-  // user: {
-  //   id: '',
-  //   name: '',
-  //   email: '',
-  //   avatar: '',
-  //   shareLink: '',
-  //   darkMode: false,
-  //   theme: {},
-  //   preferences: {
-  //     showDayStreak: true,
-  //   },
-  //   stats: {
-  //     dayStreak: 5,
-  //     weeklyExercise: '03:25',
-  //     weeklyWater: 32,
-  //   },
-  // },
+  userLoggedIn: false,
   setInitialUser: () => null,
   updateUser: () => null,
   updatePreferences: () => null,
@@ -95,7 +80,6 @@ export const UserContextProvider: FC<{
   children: ReactNode;
   initialState?: Partial<IUserContext>;
 }> = ({ children, initialState }) => {
-  // console.log('initialState ::', initialState?.user);
   const [user, setCurrentUser] = useState<IUserModel | null>(
     initialState?.user || null
   );
@@ -176,12 +160,14 @@ export const UserContextProvider: FC<{
         preferences: { ...getStructuredClone(curr.preferences), ...preference },
       };
     });
+
     setUpdatedPreferences((curr) => [...curr, preference]);
   }, []);
 
   const context = useMemo(
     () => ({
       user,
+      userLoggedIn: !!user,
       setInitialUser,
       updateUser,
       updatePreferences,

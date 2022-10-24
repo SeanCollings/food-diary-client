@@ -9,19 +9,18 @@ import {
 } from 'react';
 
 export type TEntriePerMonth = { [key: string]: number[] };
+interface IRequestSetAllEntries {
+  entries: TEntriePerMonth;
+}
 
 export interface IAllEntriesPerMonthContext {
   allEntriesPerMonth: TEntriePerMonth;
-  updateAllEntriesPerMonth: (newEntries: number[], date: string) => void;
+  requestSetAllEntriesPerMonth: (entries: IRequestSetAllEntries) => void;
 }
 
 const initialState: IAllEntriesPerMonthContext = {
-  allEntriesPerMonth: {
-    'Jul 2022': [17],
-    'Aug 2022': [18, 19, 20, 31],
-    'Oct 2022': [12, 11, 10],
-  },
-  updateAllEntriesPerMonth: () => null,
+  allEntriesPerMonth: {},
+  requestSetAllEntriesPerMonth: () => null,
 };
 
 const AllEntriesPerMonthContext = createContext(initialState);
@@ -33,18 +32,19 @@ export const AllEntriesPerMonthContextProvider: FC<{ children: ReactNode }> = ({
     {}
   );
 
-  const updateAllEntriesPerMonth = useCallback(
-    (newEntries: number[], date: string) => {
-      const updatedEntires: TEntriePerMonth = { ...allEntriesPerMonth };
-      updatedEntires[date] = newEntries;
-      setAllEntriesPerMonth(updatedEntires);
+  const requestSetAllEntriesPerMonth = useCallback(
+    ({ entries }: IRequestSetAllEntries) => {
+      setAllEntriesPerMonth((curr) => ({ ...curr, ...entries }));
     },
-    [allEntriesPerMonth]
+    []
   );
 
   const context = useMemo(
-    () => ({ allEntriesPerMonth, updateAllEntriesPerMonth }),
-    [allEntriesPerMonth, updateAllEntriesPerMonth]
+    () => ({
+      allEntriesPerMonth,
+      requestSetAllEntriesPerMonth,
+    }),
+    [allEntriesPerMonth, requestSetAllEntriesPerMonth]
   );
 
   return (

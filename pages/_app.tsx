@@ -13,7 +13,7 @@ import { SessionProvider } from 'next-auth/react';
 import { useState, useEffect } from 'react';
 import { ThemeProvider } from 'next-themes';
 import { ALL_THEME_NAMES } from '@utils/constants/theme.constants';
-import { TThemeIds } from '@utils/constants/theme.interfaces';
+import { AllEntriesPerMonthContextProvider } from '@store/all-entries-per-month-context';
 
 function MyApp(props: AppProps) {
   const [mounted, setMounted] = useState(false);
@@ -27,32 +27,34 @@ function MyApp(props: AppProps) {
       <DateSelectedContextProvider>
         <MealEntriesContextProvider>
           <WellnessEntriesContextProvider>
-            <MenuContextProvider>
-              <UserContextProvider>
-                <ThemeProvider
-                  enableSystem
-                  themes={ALL_THEME_NAMES}
-                  defaultTheme={'system'}
-                >
-                  <GlobalStyle />
-                  {mounted && (
-                    <>
-                      <Head>
-                        <title>{'Food & Wellness Diary'}</title>
-                        <meta
-                          name="description"
-                          content={'Food & Wellness Diary'}
-                        />
-                        <link rel="icon" href="/diary.ico" />
-                      </Head>
+            <AllEntriesPerMonthContextProvider>
+              <MenuContextProvider>
+                <UserContextProvider>
+                  <ThemeProvider
+                    enableSystem
+                    themes={ALL_THEME_NAMES}
+                    defaultTheme={'system'}
+                  >
+                    <GlobalStyle />
+                    {mounted && (
+                      <>
+                        <Head>
+                          <title>{'Food & Wellness Diary'}</title>
+                          <meta
+                            name="description"
+                            content={'Food & Wellness Diary'}
+                          />
+                          <link rel="icon" href="/diary.ico" />
+                        </Head>
 
-                      <SideMenuDisplay />
-                      <AppMain {...props} />
-                    </>
-                  )}
-                </ThemeProvider>
-              </UserContextProvider>
-            </MenuContextProvider>
+                        <SideMenuDisplay />
+                        <AppMain {...props} />
+                      </>
+                    )}
+                  </ThemeProvider>
+                </UserContextProvider>
+              </MenuContextProvider>
+            </AllEntriesPerMonthContextProvider>
           </WellnessEntriesContextProvider>
         </MealEntriesContextProvider>
       </DateSelectedContextProvider>

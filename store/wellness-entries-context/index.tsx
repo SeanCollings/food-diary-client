@@ -1,3 +1,8 @@
+import {
+  IWellnessEntries,
+  TWellnessEntry,
+  TWellnessValueTypes,
+} from '@lib/interfaces/wellness.interface';
 import { getStructuredClone } from '@utils/get-structured-clone';
 import { TWellnessTypes } from '@utils/interfaces';
 import {
@@ -8,67 +13,36 @@ import {
   useContext,
   useEffect,
   useMemo,
-  useRef,
   useState,
 } from 'react';
-
-const TEMP_DAY_DATA_1: TWellnessEntry<TValueTypes> = {
-  water: { value: 3 },
-  alcohol: { value: 2 },
-  tea_coffee: { value: 6 },
-  excercise: {
-    time: '01:25',
-    details: 'weights and rowing',
-  },
-};
-const TEMP_DAY_DATA_2: TWellnessEntry<TValueTypes> = {
-  water: { value: 5 },
-  alcohol: { value: 0 },
-  tea_coffee: { value: 0 },
-  excercise: {
-    time: '00:30',
-    details: 'treadmill running',
-  },
-};
-const TEMP_DAY_DATA_3: TWellnessEntry<TValueTypes> = {
-  water: { value: 2 },
-  tea_coffee: { value: 0 },
-  excercise: {
-    time: '01:12',
-  },
-};
 
 export type TAllWellnessType = TWellnessTypes | 'excercise';
 export type TDrink = { value: number };
 export type TExcercise = { time?: string; details?: string };
 
 type TValueTypes = TDrink | TExcercise;
-type TValue<K> = K;
-type TWellnessEntry<K> = {
-  [key in TAllWellnessType]?: TValue<K>;
-};
-interface IWellnessEntries {
-  [date: string]: TWellnessEntry<TValueTypes>;
-}
+
 interface IUpdateEntryByTypeProps<T> {
   date: string;
   type: TAllWellnessType;
   content: T;
 }
 
+interface IRequestSetWellnessEntries {
+  wellness: { [date: string]: TWellnessEntry<TWellnessValueTypes> };
+}
+
 export interface IWellnessEntriesContext {
   wellnessEntries: IWellnessEntries;
+  requestSetWellnessEntries: (args: IRequestSetWellnessEntries) => void;
   updateEntryByKey: <K extends TValueTypes>(
     args: IUpdateEntryByTypeProps<K>
   ) => void;
 }
 
 const initialState: IWellnessEntriesContext = {
-  wellnessEntries: {
-    '2022-08-19T22:00:00.000Z': TEMP_DAY_DATA_1,
-    '2022-08-18T22:00:00.000Z': TEMP_DAY_DATA_2,
-    '2022-08-17T22:00:00.000Z': TEMP_DAY_DATA_3,
-  },
+  wellnessEntries: {},
+  requestSetWellnessEntries: () => null,
   updateEntryByKey: () => null,
 };
 
@@ -104,6 +78,13 @@ export const WellnessEntriesContextProvider: FC<{
     };
   }, [wellnessEntries, updatedDates]);
 
+  const requestSetWellnessEntries = useCallback(
+    ({ wellness }: IRequestSetWellnessEntries) => {
+      setWellnessEntries((curr) => ({ ...curr, ...wellness }));
+    },
+    []
+  );
+
   const updateEntryByKey = useCallback(
     <K extends TValueTypes>({
       date,
@@ -129,8 +110,8 @@ export const WellnessEntriesContextProvider: FC<{
   );
 
   const context = useMemo(
-    () => ({ wellnessEntries, updateEntryByKey }),
-    [wellnessEntries, updateEntryByKey]
+    () => ({ wellnessEntries, requestSetWellnessEntries, updateEntryByKey }),
+    [wellnessEntries, requestSetWellnessEntries, updateEntryByKey]
   );
 
   return (
