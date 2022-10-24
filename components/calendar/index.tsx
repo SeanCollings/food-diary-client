@@ -1,6 +1,10 @@
 import { useOnClickOutsideElement } from '@hooks/use-onclick-outside-element';
 import { COLOURS, OPACITY_20, OPACITY_40 } from '@utils/constants';
-import { formatMonthSmallYear, getNewMonth } from '@utils/date-utils';
+import {
+  formatMonthNumberYear,
+  formatMonthSmallYear,
+  getNewMonth,
+} from '@utils/date-utils';
 import { IDayNumber, isDayNumberTypeGuard } from '@utils/type-guards';
 import { FC, useRef, useState } from 'react';
 import styled from 'styled-components';
@@ -228,6 +232,8 @@ interface ICalendarProps {
   restrictDaysBefore?: string | Date;
   onClickNewDate: (newDate: Date) => void;
   onClose: () => void;
+  onClickPreviousMonth?: (month: Date) => void;
+  onClickNextMonth?: (month: Date) => void;
 }
 interface IDateSelectorProps {
   selectedMonthDate: Date;
@@ -271,7 +277,7 @@ const CalendarContent: FC<ICalendarContentProps> = ({
 }) => {
   const { darkMode } = useTheme();
 
-  const currentMonthYear = formatMonthSmallYear(selectedMonthDate);
+  const currentMonthYear = formatMonthNumberYear(selectedMonthDate);
   const entriesPerMonth = allEntriesPerMonth?.[currentMonthYear];
   const matrix = generateMonthMatrix(selectedMonthDate);
   const maxRows = (matrix[6][0] as IDayNumber).otherMonthDay ? 5 : 6;
@@ -381,6 +387,8 @@ const Calendar: FC<ICalendarProps> = ({
   calendarHeight = CALENDAR_HEIGHT,
   onClose,
   onClickNewDate,
+  onClickPreviousMonth,
+  onClickNextMonth,
 }) => {
   const calendarRef = useRef<HTMLDivElement>(null);
   const [selectedMonthDate, setSelectedMonthDate] = useState(
@@ -393,10 +401,14 @@ const Calendar: FC<ICalendarProps> = ({
     onClickNewDate(newDate);
   };
   const previousMonthHandler = () => {
-    setSelectedMonthDate(getNewMonth(selectedMonthDate, 'previous'));
+    const month = getNewMonth(selectedMonthDate, 'previous');
+    setSelectedMonthDate(month);
+    onClickPreviousMonth?.(month);
   };
   const nextMonthHandler = () => {
-    setSelectedMonthDate(getNewMonth(selectedMonthDate, 'next'));
+    const month = getNewMonth(selectedMonthDate, 'next');
+    setSelectedMonthDate(month);
+    onClickNextMonth?.(month);
   };
   const onSelecteTodayHandler = () => {
     setSelectedMonthDate(new Date());
