@@ -1,4 +1,5 @@
-import { mealTrendMonthMockData, mealTrendWeekMockData } from '@client/mock';
+import { IMealTrendData } from '@client/interfaces/meal-trend-data';
+import { ITrendData } from '@hooks/request/trends/use-request-meal-trends';
 import { useTheme } from '@hooks/use-theme';
 import { ALL_MEAL_CARDS } from '@utils/constants';
 import { EMealType } from '@utils/interfaces';
@@ -12,6 +13,7 @@ const COLUMN_WIDTH_MIN = 24;
 const CIRCLE_WIDTH_MAX = 30;
 const CIRCLE_WIDTH_MIN = 14;
 const CIRCLE_HEIGHT_MIN = 20;
+const MIN_DATA_COLUMNS = 7;
 
 interface ISDataContainer {
   height: number;
@@ -35,6 +37,9 @@ interface ISHAxisContainer {
 interface ISCircleDisplay {
   colour: string;
   size: number;
+  dataHeight: number;
+}
+interface ISHiddenCircle {
   dataHeight: number;
 }
 interface ISHorizontalLine {
@@ -88,6 +93,9 @@ const SCircleDisplay = styled.span<ISCircleDisplay>`
   z-index: 2;
   background-color: ${({ colour }) => `var(--th-${colour})`};
 `;
+const SHiddenCircle = styled.div<ISHiddenCircle>`
+  height: ${({ dataHeight }) => dataHeight}px;
+`;
 const SHorizontalLine = styled.div<ISHorizontalLine>`
   position: absolute;
   height: 4px;
@@ -123,22 +131,21 @@ const lastItem = <T extends unknown>(array: T[], index: number) => {
 interface IBinaryHeatMapProps {
   height: number;
   timePeriod: 'week' | 'month';
+  data: ITrendData;
 }
 
 const BinaryHeatMap: React.FC<IBinaryHeatMapProps> = ({
   height,
   timePeriod,
+  data = {},
 }) => {
   const { darkMode } = useTheme();
 
-  const mealData =
-    timePeriod === 'week' ? mealTrendWeekMockData : mealTrendMonthMockData;
-  const boxWidth =
-    mealData.type === 'week' ? COLUMN_WIDTH_MAX : COLUMN_WIDTH_MIN;
-  const dataSize =
-    mealData.type === 'week' ? CIRCLE_WIDTH_MAX : CIRCLE_WIDTH_MIN;
+  const mealData = timePeriod === 'week' ? data.week : data.month;
+  const boxWidth = timePeriod === 'week' ? COLUMN_WIDTH_MAX : COLUMN_WIDTH_MIN;
+  const dataSize = timePeriod === 'week' ? CIRCLE_WIDTH_MAX : CIRCLE_WIDTH_MIN;
   const dataHeight =
-    mealData.type === 'week' ? CIRCLE_WIDTH_MAX : CIRCLE_HEIGHT_MIN;
+    timePeriod === 'week' ? CIRCLE_WIDTH_MAX : CIRCLE_HEIGHT_MIN;
 
   const MEAL_TYPE_COLOUR = {
     [EMealType.BREAKFAST]: 'secondary',
@@ -161,16 +168,21 @@ const BinaryHeatMap: React.FC<IBinaryHeatMapProps> = ({
           return (
             <SMealDetailContainer
               key={id}
-              totalValues={mealData.totalValues}
+              totalValues={mealData?.totalValues ?? MIN_DATA_COLUMNS}
               boxWidth={boxWidth}
               border={borderColour}
             >
               <SDataTitle className={className} border={borderColour}>
                 {title}
               </SDataTitle>
-              {mealData.data.map((data, index) => {
+              {[...Array(mealData?.totalValues)].map((_, index) => {
+                if (!mealData) {
+                  return null;
+                }
+
+                const data = mealData?.data[index];
                 const colour = MEAL_TYPE_COLOUR[id];
-                const hasValue = !!data.meals[mealIindex];
+                const hasValue = !!data?.meals[mealIindex];
                 const isLastValue = mealData.data[index + 1] === undefined;
                 const nextValueZero =
                   mealData.data[index + 1]?.meals[mealIindex] === 0;
@@ -178,17 +190,19 @@ const BinaryHeatMap: React.FC<IBinaryHeatMapProps> = ({
 
                 return (
                   <SData
-                    key={data.id}
+                    key={`data-${mealIindex}-${index}`}
                     className={className}
                     border={borderColour}
                   >
-                    {hasValue && (
+                    {hasValue ? (
                       <SCircleDisplay
                         colour={colour}
                         size={dataSize}
                         dataHeight={dataHeight}
                         title={`total: ${mealData.totals[id]}`}
                       />
+                    ) : (
+                      <SHiddenCircle dataHeight={dataHeight} />
                     )}
                     {showLine && (
                       <SHorizontalLine colour={colour} width={boxWidth} />
@@ -200,11 +214,11 @@ const BinaryHeatMap: React.FC<IBinaryHeatMapProps> = ({
           );
         })}
         <SHAxisContainer
-          totalValues={mealData.totalValues}
+          totalValues={mealData?.totalValues ?? MIN_DATA_COLUMNS}
           boxWidth={boxWidth}
           border={borderColour}
         >
-          {mealData.legend.map((key) => (
+          {mealData?.legend?.map((key) => (
             <SHAxisKey key={getUniqueId()} border={borderColour}>
               {key}
             </SHAxisKey>

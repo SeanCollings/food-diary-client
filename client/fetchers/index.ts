@@ -35,3 +35,8 @@ export const shareFetcher = async <T extends unknown>(
   await axios
     .get<T>(`${url}?guid=${guid}&dateFrom=${dateFrom}&dateTo=${dateTo}`)
     .then((res) => res.data);
+
+export const mealTrendFetcher = async <T extends unknown>(
+  url: string,
+  timePeriod: string
+) => await axios.get<T>(`${url}?type=${timePeriod}`).then((res) => res.data);

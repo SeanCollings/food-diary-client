@@ -1,3 +1,4 @@
+import { TTimePeriod } from '@client/interfaces/meal-trend-data';
 import BarGraph, { BarGraphLegend } from '@components/charts/bar-graph';
 import BinaryHeatMap from '@components/charts/binary-heat-map';
 import LineGraph from '@components/charts/line-graph';
@@ -6,6 +7,7 @@ import {
   ThemeBorderBottom,
   ThemeBorderRight,
 } from '@components/ui/style-themed';
+import { useRequestMealTrends } from '@hooks/request/trends/use-request-meal-trends';
 import {
   COLOURS,
   MEDIA_MOBILE,
@@ -193,7 +195,7 @@ interface ITrendMenu {
 }
 
 const TREND_MENU: ITrendMenu[] = [
-  { id: EProfileLifeTrends.FOOD_TRENDS, title: 'Food Trends' },
+  { id: EProfileLifeTrends.FOOD_TRENDS, title: 'Meal Trends' },
   { id: EProfileLifeTrends.WELLNESS_TRENDS, title: 'Wellness Trends' },
 ];
 
@@ -229,7 +231,6 @@ interface IWellnessOption {
   id: TWellnessOptions;
   label: string;
 }
-type TTimePeriod = 'week' | 'month';
 interface ITimePeriodOptions {
   id: TTimePeriod;
   label: string;
@@ -247,6 +248,7 @@ const TIME_PERIOD_OPTIONS: ITimePeriodOptions[] = [
 const ProfileLife: FC = () => {
   const containerRef = useRef<HTMLDivElement>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
+  const [mounted, setMounted] = useState(false);
   const [timePeriod, setTimePeriod] = useState<ITimePeriodOptions>(
     TIME_PERIOD_OPTIONS[0]
   );
@@ -258,6 +260,7 @@ const ProfileLife: FC = () => {
   const [scrollEnd, setScrollEnd] = useState(false);
   const [selectedMenu, setSelectedMenu] =
     useState<TProfileLifeTrends>('food_trends');
+  const { data } = useRequestMealTrends(mounted, timePeriod.id);
 
   useEffect(() => {
     const containerWidth =
@@ -267,6 +270,8 @@ const ProfileLife: FC = () => {
     if (scrollWidth > containerWidth - PADDING - PADDING) {
       setScrollVisible(true);
     }
+
+    setMounted(true);
   }, []);
 
   useEffect(() => {
@@ -396,7 +401,11 @@ const ProfileLife: FC = () => {
       >
         <SChartScroll ref={scrollRef}>
           {showFoodTrend && (
-            <BinaryHeatMap height={CHART_HEIGHT} timePeriod={timePeriod.id} />
+            <BinaryHeatMap
+              height={CHART_HEIGHT}
+              timePeriod={timePeriod.id}
+              data={data}
+            />
           )}
           {showBeverageTrend && <BarGraph height={CHART_HEIGHT} />}
           {showExcerciseTrend && <LineGraph height={CHART_HEIGHT} />}

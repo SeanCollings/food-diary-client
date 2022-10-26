@@ -243,7 +243,7 @@ export const diaryMealsMockData: { [date: string]: TMealCard } = {
       ],
     },
   },
-  '2022-10-1T22:00:00.000Z': {
+  '2022-10-01T22:00:00.000Z': {
     breakfast: {
       contents: [
         {
@@ -251,6 +251,42 @@ export const diaryMealsMockData: { [date: string]: TMealCard } = {
           food: 'mince-pie',
           emoji: { nativeSkin: '🍫', name: 'Cake' },
         },
+      ],
+    },
+    lunch: {
+      contents: [
+        { id: 11, food: 'cake', emoji: { nativeSkin: '🍰', name: 'Cake' } },
+      ],
+    },
+    snack_2: {
+      contents: [
+        { id: 11, food: 'cake', emoji: { nativeSkin: '🍰', name: 'Cake' } },
+      ],
+    },
+  },
+  '2022-10-02T22:00:00.000Z': {
+    lunch: {
+      contents: [
+        { id: 11, food: 'cake', emoji: { nativeSkin: '🍰', name: 'Cake' } },
+      ],
+    },
+    snack_2: {
+      contents: [
+        { id: 11, food: 'cake', emoji: { nativeSkin: '🍰', name: 'Cake' } },
+      ],
+    },
+  },
+  '2022-10-03T22:00:00.000Z': {
+    lunch: {
+      contents: [
+        { id: 11, food: 'cake', emoji: { nativeSkin: '🍰', name: 'Cake' } },
+      ],
+    },
+  },
+  '2022-10-04T22:00:00.000Z': {
+    breakfast: {
+      contents: [
+        { id: 11, food: 'cake', emoji: { nativeSkin: '🍰', name: 'Cake' } },
       ],
     },
   },
@@ -304,6 +340,20 @@ export const diaryMealsMockData: { [date: string]: TMealCard } = {
         {
           id: 11,
           food: 'mince-pie',
+          emoji: { nativeSkin: '🍫', name: 'Cake' },
+        },
+      ],
+    },
+  },
+  [setDateMidnightISOString(getDaysAwayFromDate(-1))]: {
+    dinner: {
+      contents: [
+        {
+          id: 11,
+          serving: '1',
+          measurement: 'plate',
+          food: 'mince and noodles',
+          description: 'with cheese',
           emoji: { nativeSkin: '🍫', name: 'Cake' },
         },
       ],
