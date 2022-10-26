@@ -44,7 +44,6 @@ export const useRequestCalendarEntries = (date: string | null) => {
   }, [data, shouldFetch, requestSetAllEntriesPerMonth]);
 
   return {
-    diaryEntry: data,
     isLoading: !error && shouldFetch,
     isError: error,
   };
