@@ -87,7 +87,7 @@ export const getMonthAndYearFromDate = (date: TDate) => {
 
 export const getCurrentMonthAndYear = () => {
   const currentDate = new Date();
-  const currentMonth = currentDate.getMonth() + 1;
+  const currentMonth = currentDate.getMonth();
   const currentYear = currentDate.getFullYear();
 
   return [currentMonth, currentYear];
@@ -109,16 +109,14 @@ export const isCurrentMonth = (compareDate: TDate) => {
   const date = new Date(compareDate);
   const [currentMonth, currentYear] = getCurrentMonthAndYear();
 
-  return (
-    date.getMonth() + 1 === currentMonth && date.getFullYear() === currentYear
-  );
+  return date.getMonth() === currentMonth && date.getFullYear() === currentYear;
 };
 
 export const isMonthInFuture = (compareDate: Date) => {
   const [currentMonth, currentYear] = getCurrentMonthAndYear();
 
   return (
-    (compareDate.getMonth() + 1 > currentMonth &&
+    (compareDate.getMonth() > currentMonth &&
       compareDate.getFullYear() === currentYear) ||
     compareDate.getFullYear() > currentYear
   );
@@ -243,9 +241,12 @@ export const getInclusiveDaysBetweenDates = (start: TDate, end: TDate) => {
  * @param end string | Date
  * @returns string[]
  */
-export const getInclusiveDatesBetweenDates = (start: TDate, end: TDate) => {
-  const startDate = new Date(start);
-  const endDate = new Date(end);
+export const getInclusiveDatesBetweenDates = (first: TDate, second: TDate) => {
+  const firstDate = new Date(first);
+  const secondDate = new Date(second);
+
+  const startDate = firstDate > secondDate ? secondDate : firstDate;
+  const endDate = firstDate > secondDate ? firstDate : secondDate;
 
   const date = new Date(startDate.getTime());
 
@@ -257,4 +258,46 @@ export const getInclusiveDatesBetweenDates = (start: TDate, end: TDate) => {
   }
 
   return dates;
+};
+
+export const getRangeOfDatesFromDate = (
+  date: TDate,
+  days: number,
+  direction: 'before' | 'after'
+) => {
+  const dir = direction === 'after' ? 1 : -1;
+  const pointDate = new Date(date);
+  const rangeDate = new Date(pointDate.getTime());
+  rangeDate.setDate(pointDate.getDate() + dir * (days - 1));
+
+  const range = getInclusiveDatesBetweenDates(pointDate, rangeDate);
+
+  return range;
+};
+
+export const getDateRangeBackTillDayOfWeek = (
+  date: TDate,
+  dayOfWeek: number
+) => {
+  const pointDate = new Date(date);
+  const dateRange: string[] = [setDateMidnightISOString(pointDate)];
+  let currentDay = pointDate.getDay();
+
+  while (currentDay !== dayOfWeek) {
+    pointDate.setDate(pointDate.getDate() - 1);
+    dateRange.push(setDateMidnightISOString(pointDate));
+    currentDay -= 1;
+  }
+
+  return dateRange;
+};
+
+export const sortDateArray = (
+  dateArray: string[],
+  direction: 'asc' | 'desc'
+) => {
+  const dir = direction === 'asc' ? 1 : -1;
+  return [...dateArray].sort(
+    (a, b) => new Date(a).valueOf() - dir * new Date(b).valueOf()
+  );
 };
