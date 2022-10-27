@@ -1,5 +1,5 @@
-import { IMealTrendData } from '@client/interfaces/meal-trend-data';
-import { ITrendData } from '@hooks/request/trends/use-request-meal-trends';
+import { TTimePeriod } from '@client/interfaces/meal-trend-data';
+import { IRequestTrendData } from '@hooks/request/trends/use-request-meal-trends';
 import { useTheme } from '@hooks/use-theme';
 import { ALL_MEAL_CARDS } from '@utils/constants';
 import { EMealType } from '@utils/interfaces';
@@ -130,8 +130,8 @@ const lastItem = <T extends unknown>(array: T[], index: number) => {
 
 interface IBinaryHeatMapProps {
   height: number;
-  timePeriod: 'week' | 'month';
-  data: ITrendData;
+  timePeriod: TTimePeriod;
+  data: IRequestTrendData;
 }
 
 const BinaryHeatMap: React.FC<IBinaryHeatMapProps> = ({

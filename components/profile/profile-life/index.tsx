@@ -9,6 +9,10 @@ import {
 } from '@components/ui/style-themed';
 import { useRequestMealTrends } from '@hooks/request/trends/use-request-meal-trends';
 import {
+  useRequestBeverageTrends,
+  useRequestExcerciseTrends,
+} from '@hooks/request/trends/use-request-wellness-trends';
+import {
   COLOURS,
   MEDIA_MOBILE,
   OPACITY_30,
@@ -184,7 +188,7 @@ const SLegendContainer = styled.div`
 `;
 
 enum EProfileLifeTrends {
-  FOOD_TRENDS = 'food_trends',
+  MEAL_TRENDS = 'meal_trends',
   WELLNESS_TRENDS = 'wellness_trends',
 }
 type TProfileLifeTrends = `${EProfileLifeTrends}`;
@@ -195,7 +199,7 @@ interface ITrendMenu {
 }
 
 const TREND_MENU: ITrendMenu[] = [
-  { id: EProfileLifeTrends.FOOD_TRENDS, title: 'Meal Trends' },
+  { id: EProfileLifeTrends.MEAL_TRENDS, title: 'Meal Trends' },
   { id: EProfileLifeTrends.WELLNESS_TRENDS, title: 'Wellness Trends' },
 ];
 
@@ -216,13 +220,13 @@ const TrendMenu: FC<ITrendMenuProps> = ({ selectedMenu, onClick }) => {
           {title}
         </SMenuItem>
       ))}
-      <SMenuUnderline setLeft={selectedMenu === 'food_trends' ? 0 : 50} />
+      <SMenuUnderline setLeft={selectedMenu === 'meal_trends' ? 0 : 50} />
     </STrendMenuContainer>
   );
 };
 
 const shadowHeightLookup: { [key in TProfileLifeTrends]: number } = {
-  food_trends: CHART_HEIGHT,
+  meal_trends: CHART_HEIGHT,
   wellness_trends: CHART_HEIGHT,
 };
 
@@ -259,8 +263,7 @@ const ProfileLife: FC = () => {
   const [scrollStart, setScrollStart] = useState(true);
   const [scrollEnd, setScrollEnd] = useState(false);
   const [selectedMenu, setSelectedMenu] =
-    useState<TProfileLifeTrends>('food_trends');
-  const { data } = useRequestMealTrends(mounted, timePeriod.id);
+    useState<TProfileLifeTrends>('meal_trends');
 
   useEffect(() => {
     const containerWidth =
@@ -361,11 +364,24 @@ const ProfileLife: FC = () => {
     }
   };
 
-  const showFoodTrend = selectedMenu === 'food_trends';
+  const showFoodTrend = selectedMenu === 'meal_trends';
   const showBeverageTrend =
     selectedMenu === 'wellness_trends' && wellnessOption.id === 'beverages';
   const showExcerciseTrend =
     selectedMenu === 'wellness_trends' && wellnessOption.id === 'excercise';
+
+  const { data: mealTrendData } = useRequestMealTrends(
+    showFoodTrend,
+    timePeriod.id
+  );
+  const { data: beverageTrendData } = useRequestBeverageTrends(
+    showBeverageTrend,
+    timePeriod.id
+  );
+  const { data: excerciseTrendData } = useRequestExcerciseTrends(
+    showExcerciseTrend,
+    timePeriod.id
+  );
 
   return (
     <SContainer ref={containerRef}>
@@ -380,7 +396,7 @@ const ProfileLife: FC = () => {
             value={wellnessOption}
             options={WELLNESS_OPTIONS}
             width={140}
-            hide={selectedMenu === 'food_trends'}
+            hide={selectedMenu === 'meal_trends'}
             onChange={handleWellnessDropdownChange}
           />
           <DropdownProfile
@@ -404,11 +420,23 @@ const ProfileLife: FC = () => {
             <BinaryHeatMap
               height={CHART_HEIGHT}
               timePeriod={timePeriod.id}
-              data={data}
+              data={mealTrendData}
             />
           )}
-          {showBeverageTrend && <BarGraph height={CHART_HEIGHT} />}
-          {showExcerciseTrend && <LineGraph height={CHART_HEIGHT} />}
+          {showBeverageTrend && (
+            <BarGraph
+              height={CHART_HEIGHT}
+              timePeriod={timePeriod.id}
+              data={beverageTrendData}
+            />
+          )}
+          {showExcerciseTrend && (
+            <LineGraph
+              height={CHART_HEIGHT}
+              timePeriod={timePeriod.id}
+              data={excerciseTrendData}
+            />
+          )}
         </SChartScroll>
         <SDescriptorContainer>
           {showFoodTrend && <SDescriptor>{INFO_FOOD_TREND}</SDescriptor>}

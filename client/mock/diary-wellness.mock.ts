@@ -38,6 +38,14 @@ const TEMP_DAY_DATA_4: TWellnessEntry<TWellnessValueTypes> = {
     time: '11:45',
   },
 };
+const TEMP_DAY_DATA_5: TWellnessEntry<TWellnessValueTypes> = {
+  water: { value: 3 },
+  tea_coffee: { value: 10 },
+  alcohol: { value: 2 },
+  excercise: {
+    time: '01:45',
+  },
+};
 
 export const diaryWellnessMockData: {
   [date: string]: TWellnessEntry<TWellnessValueTypes>;
@@ -50,5 +58,6 @@ export const diaryWellnessMockData: {
   '2022-10-17T22:00:00.000Z': TEMP_DAY_DATA_2,
   '2022-10-18T22:00:00.000Z': TEMP_DAY_DATA_3,
   '2022-10-19T22:00:00.000Z': TEMP_DAY_DATA_4,
+  '2022-10-24T22:00:00.000Z': TEMP_DAY_DATA_5,
   [setDateMidnightISOString(getDaysAwayFromDate(0))]: TEMP_DAY_DATA_3,
 };

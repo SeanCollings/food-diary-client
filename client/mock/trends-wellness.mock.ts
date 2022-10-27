@@ -1,7 +1,6 @@
-import { IWellnessTrendData } from '@client/interfaces/wellness-trend-data';
+import { IBeverageTrendData } from '@client/interfaces/wellness-trend-data';
 
-export const wellnessTrendMockdata: IWellnessTrendData = {
-  type: 'week',
+export const wellnessTrendMockdata: IBeverageTrendData = {
   legend: ['M', 'T', 'W', 'T', 'F', 'S', 'S'],
   data: [
     { water: 5, tea_coffee: 2, alcohol: 0 },

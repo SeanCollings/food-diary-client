@@ -40,3 +40,13 @@ export const mealTrendFetcher = async <T extends unknown>(
   url: string,
   timePeriod: string
 ) => await axios.get<T>(`${url}?type=${timePeriod}`).then((res) => res.data);
+
+export const beverageTrendFetcher = async <T extends unknown>(
+  url: string,
+  timePeriod: string
+) => await axios.get<T>(`${url}?type=${timePeriod}`).then((res) => res.data);
+
+export const excerciseTrendFetcher = async <T extends unknown>(
+  url: string,
+  timePeriod: string
+) => await axios.get<T>(`${url}?type=${timePeriod}`).then((res) => res.data);

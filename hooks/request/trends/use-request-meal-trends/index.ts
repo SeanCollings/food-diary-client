@@ -8,7 +8,7 @@ import {
 import useSWRImmutable from 'swr/immutable';
 import { useMemo, useState, useEffect } from 'react';
 
-export interface ITrendData {
+export interface IRequestTrendData {
   week?: IMealTrendData;
   month?: IMealTrendData;
 }
@@ -22,7 +22,7 @@ export const useRequestMealTrends = (
   mounted: boolean,
   timePeriod: TTimePeriod
 ) => {
-  const [trendData, setTrendData] = useState<ITrendData>({});
+  const [trendData, setTrendData] = useState<IRequestTrendData>({});
   const [hasRequested, setHasRequested] = useState<IRequested>({});
 
   const shouldFetch = useMemo(() => {
@@ -31,7 +31,6 @@ export const useRequestMealTrends = (
 
     return mounted && (getWeek || getMonth);
   }, [mounted, timePeriod, hasRequested]);
-
   const { data, error } = useSWRImmutable(
     shouldFetch ? [URI_MEAL_TRENDS, timePeriod] : null,
     mealTrendFetcher<IMealTrendResponseBody>
@@ -40,9 +39,11 @@ export const useRequestMealTrends = (
   useEffect(() => {
     if (timePeriod === 'week' && shouldFetch) {
       setTrendData((curr) => ({ ...curr, week: data }));
+      // setHasRequested((curr) => ({ ...curr, week: true }));
     }
     if (timePeriod === 'month' && shouldFetch) {
       setTrendData((curr) => ({ ...curr, month: data }));
+      // setHasRequested((curr) => ({ ...curr, month: true }));
     }
   }, [data, timePeriod, shouldFetch]);
 

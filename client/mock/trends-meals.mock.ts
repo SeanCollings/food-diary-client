@@ -1,7 +1,6 @@
 import { IMealTrendData } from '@client/interfaces/meal-trend-data';
 
 export const mealTrendMonthMockData: IMealTrendData = {
-  type: 'month',
   totalValues: 31,
   legend: [
     '1',
@@ -79,7 +78,6 @@ export const mealTrendMonthMockData: IMealTrendData = {
 };
 
 export const mealTrendWeekMockData: IMealTrendData = {
-  type: 'week',
   totalValues: 7,
   legend: ['M', 'T', 'W', 'T', 'F', 'S', 'S'],
   data: [

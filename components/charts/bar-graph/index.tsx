@@ -1,4 +1,5 @@
-import { wellnessTrendMockdata } from '@client/mock';
+import { TTimePeriod } from '@client/interfaces/meal-trend-data';
+import { IRequestBevarageTendData } from '@hooks/request/trends/use-request-wellness-trends';
 import { COLOURS, OPACITY_40 } from '@utils/constants';
 import { EWellnessTypes } from '@utils/interfaces';
 import { getUniqueId } from '@utils/unique-id';
@@ -122,6 +123,8 @@ const SLegendCircle = styled.div<ISLegendCircle>`
 
 interface IBarGraphProps {
   height: number;
+  timePeriod: TTimePeriod;
+  data: IRequestBevarageTendData;
 }
 
 const percentage = (value: number, maxValue: number) =>
@@ -156,9 +159,11 @@ export const BarGraphLegend: FC<IBarGraphLegendProps> = ({ show }) => {
   );
 };
 
-const BarGraph: React.FC<IBarGraphProps> = ({ height }) => {
+const BarGraph: React.FC<IBarGraphProps> = ({ height, data, timePeriod }) => {
+  const beverageData = data.week;
+
   const maxValue = Math.max(
-    Math.ceil(wellnessTrendMockdata.highestValue / MIN_TICK_VALUE) *
+    Math.ceil((beverageData?.highestValue ?? 0) / MIN_TICK_VALUE) *
       MIN_TICK_VALUE,
     MIN_TICK_VALUE
   );
@@ -193,43 +198,41 @@ const BarGraph: React.FC<IBarGraphProps> = ({ height }) => {
               ))}
           </STickContainer>
           <SBarGroupContainer>
-            {wellnessTrendMockdata.data.map(
-              ({ water, tea_coffee, alcohol }) => {
-                return (
-                  <SBarGroup key={getUniqueId()}>
-                    <SBar
-                      className="water"
-                      barHeight={water ? percentage(water, maxValue) : 1}
-                      backgroundColour={BEVERAGE_COLOUR['water']}
-                      id={EWellnessTypes.WATER}
-                      borderRadius={BORDER_RADIUS}
-                      title={`water (${water})`}
-                    />
-                    <SBar
-                      className="tea_coffee"
-                      barHeight={
-                        tea_coffee ? percentage(tea_coffee, maxValue) : 1
-                      }
-                      backgroundColour={BEVERAGE_COLOUR['tea_coffee']}
-                      id={EWellnessTypes.TEA_COFFEE}
-                      borderRadius={BORDER_RADIUS}
-                      title={`tea/coffee (${tea_coffee})`}
-                    />
-                    <SBar
-                      className="alcohol"
-                      barHeight={alcohol ? percentage(alcohol, maxValue) : 1}
-                      backgroundColour={BEVERAGE_COLOUR['alcohol']}
-                      id={EWellnessTypes.ALCOHOL}
-                      borderRadius={BORDER_RADIUS}
-                      title={`alcohol (${alcohol})`}
-                    />
-                  </SBarGroup>
-                );
-              }
-            )}{' '}
+            {beverageData?.data.map(({ water, tea_coffee, alcohol }) => {
+              return (
+                <SBarGroup key={getUniqueId()}>
+                  <SBar
+                    className="water"
+                    barHeight={water ? percentage(water, maxValue) : 1}
+                    backgroundColour={BEVERAGE_COLOUR['water']}
+                    id={EWellnessTypes.WATER}
+                    borderRadius={BORDER_RADIUS}
+                    title={`water (${water})`}
+                  />
+                  <SBar
+                    className="tea_coffee"
+                    barHeight={
+                      tea_coffee ? percentage(tea_coffee, maxValue) : 1
+                    }
+                    backgroundColour={BEVERAGE_COLOUR['tea_coffee']}
+                    id={EWellnessTypes.TEA_COFFEE}
+                    borderRadius={BORDER_RADIUS}
+                    title={`tea/coffee (${tea_coffee})`}
+                  />
+                  <SBar
+                    className="alcohol"
+                    barHeight={alcohol ? percentage(alcohol, maxValue) : 1}
+                    backgroundColour={BEVERAGE_COLOUR['alcohol']}
+                    id={EWellnessTypes.ALCOHOL}
+                    borderRadius={BORDER_RADIUS}
+                    title={`alcohol (${alcohol})`}
+                  />
+                </SBarGroup>
+              );
+            })}
           </SBarGroupContainer>
           <SHAxisContainer>
-            {wellnessTrendMockdata.legend.map((key) => (
+            {beverageData?.legend.map((key) => (
               <SHAxisKey key={getUniqueId()}>{key}</SHAxisKey>
             ))}
           </SHAxisContainer>

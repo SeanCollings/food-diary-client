@@ -9,6 +9,7 @@ import {
   getDateRangeBackTillDayOfWeek,
   getMidnightISODaysInMonth,
   isDayAfter,
+  setDateMidnightISOString,
   sortDateArray,
 } from '@utils/date-utils';
 import { diaryMealsMockData } from '@client/mock';
@@ -74,7 +75,7 @@ const getMonthTrendData = async () => {
   });
 };
 const getWeekTrendData = async () => {
-  const today = new Date();
+  const today = setDateMidnightISOString(new Date());
   const dateRangeFromToday = getDateRangeBackTillDayOfWeek(today, 1);
   const sortedDates = sortDateArray(dateRangeFromToday, 'asc');
   const totals: { [key in EMealType]: number } = {
