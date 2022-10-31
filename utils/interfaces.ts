@@ -28,7 +28,7 @@ export interface IAppTheme {
 }
 
 export interface IMealContent {
-  id: number;
+  id: string;
   emoji?: TSelectedEmoji;
   serving?: string;
   measurement?: string;

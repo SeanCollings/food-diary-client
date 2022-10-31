@@ -208,10 +208,10 @@ const Card: FC<IProps> = ({ id, title }) => {
     setShowEditModal(false);
     setEditMealContent(null);
   };
-  const removeMealHandler = (contentId: number) => {
+  const removeMealHandler = (contentId: string) => {
     removeMealEntryById({ date: dateSelectedISO, mealId: id, contentId });
   };
-  const editMealHandler = (contentId: number) => {
+  const editMealHandler = (contentId: string) => {
     const editContent = contents?.find(({ id }) => id === contentId);
     setShowEditModal(false);
 

@@ -81,7 +81,7 @@ const ModalAddToMealCard: FC<IModalAddMealProps> = ({
     }
 
     const mealContent: IMealContent = {
-      id: isEditing ? content.id : Date.now(),
+      id: isEditing ? content.id : Date.now().toString(),
       emoji: state.emojiPicker,
       serving: trim(state.inputValues.servingSize),
       measurement: trim(state.inputValues.unitOfMeasurement),

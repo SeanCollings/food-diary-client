@@ -8,7 +8,7 @@ const TEMP_DATA_DAY_1: TMealCard = {
   breakfast: {
     contents: [
       {
-        id: 11,
+        id: '11',
         emoji: { name: 'Bowl with Spoon', nativeSkin: '🥣' },
         serving: '½',
         measurement: 'cup',
@@ -16,21 +16,21 @@ const TEMP_DATA_DAY_1: TMealCard = {
         description: 'With chocolate and mini marshmellows',
       },
       {
-        id: 12,
+        id: '12',
         emoji: { name: 'Glass of Milk', nativeSkin: '🥛' },
         serving: '1',
         measurement: 'serving',
         food: 'milk for cereal',
       },
       {
-        id: 13,
+        id: '13',
         emoji: { name: 'Hot Beverage', nativeSkin: '☕️' },
         serving: '1',
         measurement: 'serving',
         food: 'milk with espresso coffee',
       },
       {
-        id: 14,
+        id: '14',
         emoji: { name: 'Carrot', nativeSkin: '🥕' },
         serving: '1',
         food: 'carrot',
@@ -40,7 +40,7 @@ const TEMP_DATA_DAY_1: TMealCard = {
   lunch: {
     contents: [
       {
-        id: 21,
+        id: '21',
         emoji: { name: 'Bowl with Spoon', nativeSkin: '🥣' },
         serving: '½',
         measurement: 'cup',
@@ -48,14 +48,14 @@ const TEMP_DATA_DAY_1: TMealCard = {
         description: 'With chocolate and mini marshmellows',
       },
       {
-        id: 22,
+        id: '22',
         emoji: { name: 'Glass of Milk', nativeSkin: '🥛' },
         serving: '1',
         measurement: 'serving',
         food: 'milk for cereal',
       },
       {
-        id: 23,
+        id: '23',
         emoji: { name: 'Green Salad', nativeSkin: '🥗' },
         serving: '0.5',
         measurement: 'plate',
@@ -68,7 +68,7 @@ const TEMP_DATA_DAY_1: TMealCard = {
   snack_2: {
     contents: [
       {
-        id: 31,
+        id: '31',
         emoji: { name: 'Banana', nativeSkin: '🍌' },
         serving: '1',
         food: 'banana',
@@ -78,54 +78,54 @@ const TEMP_DATA_DAY_1: TMealCard = {
   dinner: {
     contents: [
       {
-        id: 41,
+        id: '41',
         serving: '1',
         measurement: 'serving',
         food: 'milk with espresso coffee',
       },
       {
-        id: 42,
+        id: '42',
         emoji: { name: 'Banana', nativeSkin: '🍌' },
         serving: '1',
         food: 'banana',
       },
       {
-        id: 43,
+        id: '43',
         emoji: { name: 'Carrot', nativeSkin: '🥕' },
         serving: '1',
         food: 'carrot',
       },
       {
-        id: 44,
+        id: '44',
         emoji: { name: 'Carrot', nativeSkin: '🥓' },
         serving: '3',
         food: 'streaky bacon',
       },
       {
-        id: 45,
+        id: '45',
         emoji: { name: 'Sushi', nativeSkin: '🍣' },
         serving: '1',
         food: 'sushi platter',
       },
       {
-        id: 46,
+        id: '46',
         emoji: { name: 'Soft Ice Cream', nativeSkin: '🍦' },
         food: 'ice cream - dessert',
       },
       {
-        id: 47,
+        id: '47',
         emoji: { name: 'Wine Glass', nativeSkin: '🍷' },
         serving: '3',
         food: 'glasses wine',
       },
       {
-        id: 48,
+        id: '48',
         emoji: { name: 'Grapes', nativeSkin: '🍇' },
         serving: '14',
         food: 'grapes',
       },
       {
-        id: 49,
+        id: '49',
         emoji: { name: 'Avocado', nativeSkin: '🥑' },
         serving: '1',
         food: 'avocado',
@@ -143,7 +143,7 @@ const TEMP_DATA_DAY_2: TMealCard = {
   lunch: {
     contents: [
       {
-        id: 11,
+        id: '11',
         emoji: { name: 'Poultry Leg', nativeSkin: '🍗' },
         serving: '4',
         measurement: '',
@@ -155,21 +155,21 @@ const TEMP_DATA_DAY_2: TMealCard = {
   snack_2: {
     contents: [
       {
-        id: 21,
+        id: '21',
         emoji: { name: 'Chocolate Bar', nativeSkin: '🍫' },
         serving: '1',
         food: 'protein bar',
         description: 'USN',
       },
       {
-        id: 22,
+        id: '22',
         emoji: { name: 'Strawberry', nativeSkin: '🍓' },
         serving: '1',
         food: 'protein shake',
         description: 'USN',
       },
       {
-        id: 23,
+        id: '23',
         emoji: { name: 'Peanuts', nativeSkin: '🥜' },
         serving: '2',
         measurement: 'tablespoons',
@@ -180,7 +180,7 @@ const TEMP_DATA_DAY_2: TMealCard = {
   dinner: {
     contents: [
       {
-        id: 31,
+        id: '31',
         emoji: { name: 'Pizza', nativeSkin: '🍕' },
         serving: '1',
         measurement: '',
@@ -196,7 +196,7 @@ export const diaryMealsMockData: { [date: string]: TMealCard } = {
     breakfast: {
       contents: [
         {
-          id: 11,
+          id: '11',
           food: 'DECEMBER CAKE',
           emoji: { nativeSkin: '🍰', name: 'Cake' },
         },
@@ -207,7 +207,7 @@ export const diaryMealsMockData: { [date: string]: TMealCard } = {
     breakfast: {
       contents: [
         {
-          id: 11,
+          id: '11',
           food: 'JANUARY 1 CAKE',
           emoji: { nativeSkin: '🍰', name: 'Cake' },
         },
@@ -217,7 +217,7 @@ export const diaryMealsMockData: { [date: string]: TMealCard } = {
   '2022-08-30T22:00:00.000Z': {
     breakfast: {
       contents: [
-        { id: 11, food: 'cake', emoji: { nativeSkin: '🍰', name: 'Cake' } },
+        { id: '11', food: 'cake', emoji: { nativeSkin: '🍰', name: 'Cake' } },
       ],
     },
   },
@@ -226,7 +226,7 @@ export const diaryMealsMockData: { [date: string]: TMealCard } = {
   '2022-08-17T22:00:00.000Z': {
     breakfast: {
       contents: [
-        { id: 11, food: 'cake', emoji: { nativeSkin: '🍰', name: 'Cake' } },
+        { id: '11', food: 'cake', emoji: { nativeSkin: '🍰', name: 'Cake' } },
       ],
     },
   },
@@ -234,12 +234,12 @@ export const diaryMealsMockData: { [date: string]: TMealCard } = {
   '2022-09-30T22:00:00.000Z': {
     lunch: {
       contents: [
-        { id: 11, food: 'cake', emoji: { nativeSkin: '🍰', name: 'Cake' } },
+        { id: '11', food: 'cake', emoji: { nativeSkin: '🍰', name: 'Cake' } },
       ],
     },
     snack_2: {
       contents: [
-        { id: 11, food: 'cake', emoji: { nativeSkin: '🍰', name: 'Cake' } },
+        { id: '11', food: 'cake', emoji: { nativeSkin: '🍰', name: 'Cake' } },
       ],
     },
   },
@@ -247,7 +247,7 @@ export const diaryMealsMockData: { [date: string]: TMealCard } = {
     breakfast: {
       contents: [
         {
-          id: 11,
+          id: '11',
           food: 'mince-pie',
           emoji: { nativeSkin: '🍫', name: 'Cake' },
         },
@@ -255,38 +255,38 @@ export const diaryMealsMockData: { [date: string]: TMealCard } = {
     },
     lunch: {
       contents: [
-        { id: 11, food: 'cake', emoji: { nativeSkin: '🍰', name: 'Cake' } },
+        { id: '11', food: 'cake', emoji: { nativeSkin: '🍰', name: 'Cake' } },
       ],
     },
     snack_2: {
       contents: [
-        { id: 11, food: 'cake', emoji: { nativeSkin: '🍰', name: 'Cake' } },
+        { id: '11', food: 'cake', emoji: { nativeSkin: '🍰', name: 'Cake' } },
       ],
     },
   },
   '2022-10-02T22:00:00.000Z': {
     lunch: {
       contents: [
-        { id: 11, food: 'cake', emoji: { nativeSkin: '🍰', name: 'Cake' } },
+        { id: '11', food: 'cake', emoji: { nativeSkin: '🍰', name: 'Cake' } },
       ],
     },
     snack_2: {
       contents: [
-        { id: 11, food: 'cake', emoji: { nativeSkin: '🍰', name: 'Cake' } },
+        { id: '11', food: 'cake', emoji: { nativeSkin: '🍰', name: 'Cake' } },
       ],
     },
   },
   '2022-10-03T22:00:00.000Z': {
     lunch: {
       contents: [
-        { id: 11, food: 'cake', emoji: { nativeSkin: '🍰', name: 'Cake' } },
+        { id: '11', food: 'cake', emoji: { nativeSkin: '🍰', name: 'Cake' } },
       ],
     },
   },
   '2022-10-04T22:00:00.000Z': {
     breakfast: {
       contents: [
-        { id: 11, food: 'cake', emoji: { nativeSkin: '🍰', name: 'Cake' } },
+        { id: '11', food: 'cake', emoji: { nativeSkin: '🍰', name: 'Cake' } },
       ],
     },
   },
@@ -294,7 +294,7 @@ export const diaryMealsMockData: { [date: string]: TMealCard } = {
     breakfast: {
       contents: [
         {
-          id: 11,
+          id: '11',
           food: 'mince-pie',
           emoji: { nativeSkin: '🍫', name: 'Cake' },
         },
@@ -305,7 +305,7 @@ export const diaryMealsMockData: { [date: string]: TMealCard } = {
     snack_1: {
       contents: [
         {
-          id: 11,
+          id: '11',
           food: 'mince-pie',
           emoji: { nativeSkin: '🍰', name: 'Cake' },
         },
@@ -316,7 +316,7 @@ export const diaryMealsMockData: { [date: string]: TMealCard } = {
     lunch: {
       contents: [
         {
-          id: 11,
+          id: '11',
           food: 'mince-pie',
           emoji: { nativeSkin: '🍫', name: 'Cake' },
         },
@@ -327,7 +327,7 @@ export const diaryMealsMockData: { [date: string]: TMealCard } = {
     snack_2: {
       contents: [
         {
-          id: 11,
+          id: '11',
           food: 'Fruit salad',
           emoji: { nativeSkin: '🍰', name: 'Cake' },
         },
@@ -338,7 +338,7 @@ export const diaryMealsMockData: { [date: string]: TMealCard } = {
     dinner: {
       contents: [
         {
-          id: 11,
+          id: '11',
           food: 'mince-pie',
           emoji: { nativeSkin: '🍫', name: 'Cake' },
         },
@@ -349,7 +349,7 @@ export const diaryMealsMockData: { [date: string]: TMealCard } = {
     dinner: {
       contents: [
         {
-          id: 11,
+          id: '11',
           serving: '1',
           measurement: 'plate',
           food: 'mince and noodles',
@@ -363,7 +363,7 @@ export const diaryMealsMockData: { [date: string]: TMealCard } = {
     breakfast: {
       contents: [
         {
-          id: 10,
+          id: '10',
           food: 'Breakfast mince-pies',
           measurement: '44',
           emoji: { nativeSkin: '🍫', name: 'Cake' },
@@ -373,7 +373,7 @@ export const diaryMealsMockData: { [date: string]: TMealCard } = {
     lunch: {
       contents: [
         {
-          id: 11,
+          id: '11',
           food: 'Today I have mince-pie',
           measurement: '1',
           serving: 'plate',

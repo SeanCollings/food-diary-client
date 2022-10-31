@@ -165,8 +165,8 @@ interface IModalEditMealCardProps {
   contents: IMealContent[];
   onClose: () => void;
   onSubmit: () => void;
-  onRemoveMeal: (id: number) => void;
-  onEditMeal: (id: number) => void;
+  onRemoveMeal: (id: string) => void;
+  onEditMeal: (id: string) => void;
 }
 interface IContentDisplayProps {
   content: IMealContent;
@@ -207,7 +207,7 @@ const ModalEditMealCard: FC<IModalEditMealCardProps> = ({
   onRemoveMeal,
   onEditMeal,
 }) => {
-  const [isRemoveItemId, setIsRemoveItemId] = useState<number | null>(null);
+  const [isRemoveItemId, setIsRemoveItemId] = useState<string | null>(null);
   const [selectedItem, setSelectedItem] = useState('');
 
   const mealColour = getThemeColoursFromMealId(mealId);
