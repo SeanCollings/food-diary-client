@@ -157,19 +157,19 @@ const UserProfile: FC<IUserProfile> = ({ settingsClick }) => {
       {!!user?.stats && (
         <SStatsContainer>
           {user.preferences?.showDayStreak && (
-            <SStatWrapper>
+            <SStatWrapper title="Latest streak where each day in a row an entry was added">
               <SStatValue>{user.stats.dayStreak}</SStatValue>
               <SStatLabel>day streak</SStatLabel>
             </SStatWrapper>
           )}
           {user?.preferences?.showWeeklyExcercise && (
-            <SStatWrapper>
+            <SStatWrapper title="Shows total excercise for the past 7 days">
               <SStatValue>{user.stats.weeklyExercise}</SStatValue>
               <SStatLabel>weekly excercise</SStatLabel>
             </SStatWrapper>
           )}
           {user?.preferences?.showWeeklyWater && (
-            <SStatWrapper>
+            <SStatWrapper title="Shows total water for the past 7 days">
               <SStatValue>{user.stats.weeklyWater}</SStatValue>
               <SStatLabel>weekly water</SStatLabel>
             </SStatWrapper>
