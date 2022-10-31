@@ -1,3 +1,4 @@
+import { diaryService } from '@client/services/diary.service';
 import {
   IWellnessEntries,
   TWellnessEntry,
@@ -71,6 +72,14 @@ export const WellnessEntriesContextProvider: FC<{
       console.log('WELLNESS POST:', payload);
 
       setUpdatedDates([]);
+
+      const { error } = await diaryService.updateWellnessEntries({
+        body: payload,
+      });
+
+      if (error) {
+        console.log('Error:', error);
+      }
     }, 1000);
 
     return () => {

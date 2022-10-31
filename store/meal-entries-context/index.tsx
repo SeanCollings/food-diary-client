@@ -1,3 +1,4 @@
+import { diaryService } from '@client/services/diary.service';
 import { getStructuredClone } from '@utils/get-structured-clone';
 import { IMealContent, TMealCard, TMealType } from '@utils/interfaces';
 import {
@@ -27,7 +28,7 @@ interface IUpdateMealProps {
 interface IRemoveMealProps {
   date: string;
   mealId: TMealType;
-  contentId: number;
+  contentId: string;
 }
 interface IMealEntries {
   [date: string]: TMealCard;
@@ -67,7 +68,7 @@ export const MealEntriesContextProvider: FC<{
   );
 
   const addMealEntry = useCallback(
-    ({ date, mealId, newValues }: IAddMealProps) => {
+    async ({ date, mealId, newValues }: IAddMealProps) => {
       const updatedEntries = getStructuredClone(mealEntries);
 
       if (!updatedEntries[date]) {
@@ -80,10 +81,14 @@ export const MealEntriesContextProvider: FC<{
         contents: [...updatedContentsForId, newValues],
       };
 
-      console.log('MEAL POST:', {
+      const { error } = await diaryService.createMealEntry({
         date,
-        [mealId]: newValues,
+        body: { meal: { mealId, content: newValues } },
       });
+
+      if (error) {
+        return console.log('Error:', error);
+      }
 
       setMealEntries(updatedEntries);
     },
@@ -91,7 +96,12 @@ export const MealEntriesContextProvider: FC<{
   );
 
   const updateMealEntry = useCallback(
-    ({ date, mealId, updatedContent, updatedMealId }: IUpdateMealProps) => {
+    async ({
+      date,
+      mealId,
+      updatedContent,
+      updatedMealId,
+    }: IUpdateMealProps) => {
       const updatedEntries = getStructuredClone(mealEntries);
       const isNewMealId = mealId !== updatedMealId;
       const targetMealId = isNewMealId ? updatedMealId : mealId;
@@ -125,19 +135,26 @@ export const MealEntriesContextProvider: FC<{
         }
       }
 
-      setMealEntries(updatedEntries);
-      console.log('MEAL PUT:', {
+      const { error } = await diaryService.updateMealEntry({
         date,
-        oldMealId: mealId,
-        newMealId: updatedMealId,
-        content: updatedContent,
+        body: {
+          content: updatedContent,
+          newMealId: updatedMealId,
+          oldMealId: mealId,
+        },
       });
+
+      if (error) {
+        return console.log('Error:', error);
+      }
+
+      setMealEntries(updatedEntries);
     },
     [mealEntries]
   );
 
   const removeMealEntryById = useCallback(
-    ({ date, mealId, contentId }: IRemoveMealProps) => {
+    async ({ date, mealId, contentId }: IRemoveMealProps) => {
       const updatedEntries = getStructuredClone(mealEntries);
       const targetMealContents = [
         ...(updatedEntries[date][mealId]?.contents || []),
@@ -151,12 +168,19 @@ export const MealEntriesContextProvider: FC<{
           contents: filtered,
         };
 
-        setMealEntries(updatedEntries);
-
-        console.log('MEAL DELETE:', {
+        const { error } = await diaryService.deleteMealEntry({
           date,
-          [mealId]: contentId,
+          body: {
+            mealId,
+            id: contentId,
+          },
         });
+
+        if (error) {
+          return console.log('Error:', error);
+        }
+
+        setMealEntries(updatedEntries);
       }
     },
     [mealEntries]

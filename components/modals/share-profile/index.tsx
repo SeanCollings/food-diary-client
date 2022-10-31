@@ -1,3 +1,4 @@
+import { userService } from '@client/services/user.service';
 import Toggle from '@components/ui/toggle';
 import { useUserContext } from '@store/user-context';
 import { COLOURS, MEDIA_MOBILE, OPACITY_40 } from '@utils/constants';
@@ -5,8 +6,8 @@ import {
   SHARE_INFORMATION,
   SHARE_PRE_GENERATE,
 } from '@utils/constants/profile.constants';
-import { createGuid } from '@utils/string-utils';
-import { useRef } from 'react';
+import { getClassNames } from '@utils/string-utils';
+import { useEffect, useRef, useState } from 'react';
 import { MdClose } from 'react-icons/md';
 import styled from 'styled-components';
 
@@ -159,16 +160,32 @@ const getShareLink = (shareLink?: string) => {
 
 const ModalShareProfile: React.FC<IModalShareProfileProps> = ({ onClose }) => {
   const linkRef = useRef<HTMLInputElement>(null);
-  const { user, updatePreferences, updateUser } = useUserContext();
+  const { user, updatePreferences, updateShareLink } = useUserContext();
+  const [isFetching, setIsFetching] = useState(false);
+
+  useEffect(() => {
+    const generateLink = async () => {
+      const { shareLink, error } = await userService.generateLink();
+
+      const toggleShare = !user?.shareLink;
+
+      if (!error && shareLink) {
+        updateShareLink({ shareLink, toggleShare });
+      }
+
+      setIsFetching(false);
+    };
+
+    if (isFetching) {
+      generateLink();
+    }
+  }, [isFetching, updateShareLink, user?.shareLink]);
 
   const onToggleChange = () => {
     updatePreferences({ isProfileShared: !user?.preferences?.isProfileShared });
   };
-  const onCreateLinkHandler = () => {
-    updatePreferences({ isProfileShared: true });
-    updateUser({
-      shareLink: createGuid(),
-    });
+  const onCreateLinkHandler = async () => {
+    setIsFetching(true);
   };
   const copyLinkClicked = () => {
     if (navigator.clipboard) {
@@ -195,6 +212,11 @@ const ModalShareProfile: React.FC<IModalShareProfileProps> = ({ onClose }) => {
   const generateButtonText = !user?.shareLink
     ? 'Generate link'
     : 'Generate new link';
+
+  const generateButtonClassNames = getClassNames({
+    subtle: !!user?.shareLink,
+    disabled: isFetching,
+  });
 
   return (
     <SContainer>
@@ -244,7 +266,8 @@ const ModalShareProfile: React.FC<IModalShareProfileProps> = ({ onClose }) => {
       <SGenerateButtonContainer>
         <SButton
           onClick={onCreateLinkHandler}
-          className={user?.shareLink ? 'subtle' : ''}
+          className={generateButtonClassNames}
+          disabled={isFetching}
         >
           {generateButtonText}
         </SButton>

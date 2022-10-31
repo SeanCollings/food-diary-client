@@ -1,3 +1,4 @@
+import { userService } from '@client/services/user.service';
 import { getStructuredClone } from '@utils/get-structured-clone';
 import {
   createContext,
@@ -46,24 +47,27 @@ export interface IUserModel {
 }
 export interface IPreferenceModel {}
 
-type IPartialUserUpdate =
+export type IPartialUserUpdate =
   | { [EUser.NAME]: string }
-  | { [EUser.EMAIL]: string }
-  | { [EUser.AVATAR]: string }
-  | { [EUser.SHARE_LINK]: string };
+  | { [EUser.AVATAR]: string };
 
-type IPartialPreference =
-  | { [EPrefences.SHOW_DAY_STREAK]?: boolean }
+export type IPartialPreference =
+  | { [EPrefences.SHOW_DAY_STREAK]: boolean }
   | { [EPrefences.SHOW_WEEKLY_EXERCISE]: boolean }
   | { [EPrefences.SHOW_WEEKLY_WATER]: boolean }
   | { [EPrefences.IS_PROFILE_SHARED]: boolean };
 
+interface IUpdateShareLinkArgs {
+  shareLink: string;
+  toggleShare: boolean;
+}
 export interface IUserContext {
   user: IUserModel | null;
   userLoggedIn: boolean;
   setInitialUser: (user: IUserModel) => void;
   updateUser: (updated: IPartialUserUpdate) => void;
   updatePreferences: (preferences: IPartialPreference) => void;
+  updateShareLink: (args: IUpdateShareLinkArgs) => void;
 }
 
 const initialState: IUserContext = {
@@ -72,6 +76,7 @@ const initialState: IUserContext = {
   setInitialUser: () => null,
   updateUser: () => null,
   updatePreferences: () => null,
+  updateShareLink: () => null,
 };
 
 const UserContext = createContext(initialState);
@@ -100,9 +105,15 @@ export const UserContextProvider: FC<{
         return { ...curr, ...update };
       }, {} as IPartialUserUpdate);
 
-      console.log('USER PATCH:', payload);
-
       setUpdatedUserFields([]);
+
+      const { error } = await userService.updateUser({
+        ...payload,
+      });
+
+      if (error) {
+        console.log('Error:', error);
+      }
     }, 500);
 
     return () => {
@@ -120,9 +131,15 @@ export const UserContextProvider: FC<{
         return { ...curr, ...preference };
       }, {} as IPartialPreference);
 
-      console.log('PREFERENCES PATCH:', payload);
-
       setUpdatedPreferences([]);
+
+      const { error } = await userService.updatePreferences({
+        ...payload,
+      });
+
+      if (error) {
+        console.log('Error:', error);
+      }
     }, 500);
 
     return () => {
@@ -164,6 +181,26 @@ export const UserContextProvider: FC<{
     setUpdatedPreferences((curr) => [...curr, preference]);
   }, []);
 
+  const updateShareLink = useCallback(
+    ({ shareLink, toggleShare }: IUpdateShareLinkArgs) => {
+      setCurrentUser((curr) => {
+        if (!curr) {
+          return null;
+        }
+
+        return {
+          ...getStructuredClone(curr),
+          shareLink,
+          preferences: {
+            ...getStructuredClone(curr.preferences),
+            ...(toggleShare ? { isProfileShared: true } : {}),
+          },
+        };
+      });
+    },
+    []
+  );
+
   const context = useMemo(
     () => ({
       user,
@@ -171,8 +208,9 @@ export const UserContextProvider: FC<{
       setInitialUser,
       updateUser,
       updatePreferences,
+      updateShareLink,
     }),
-    [user, setInitialUser, updateUser, updatePreferences]
+    [user, setInitialUser, updateUser, updatePreferences, updateShareLink]
   );
 
   return (
