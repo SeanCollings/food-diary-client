@@ -13,6 +13,7 @@ export const INITIAL_STATE: ILoginFormState = {
     password: '',
     name: '',
   },
+  loginError: '',
 };
 
 export const loginFormReducer = (
@@ -48,6 +49,8 @@ export const loginFormReducer = (
       return { ...state, formValues: action.payload.values };
     case ELoginFormType.UPDATE_ERRORS:
       return { ...state, formErrors: action.payload.errors };
+    case ELoginFormType.LOGIN_ERROR:
+      return { ...state, loginError: action.payload };
     default:
       return state;
   }

@@ -36,7 +36,7 @@ const FlatMenu: FC = () => {
 
   const onLogoutClick = async () => {
     localStorage?.removeItem('theme');
-    await signOut();
+    await signOut({ redirect: true, callbackUrl: '/login' });
   };
 
   return (

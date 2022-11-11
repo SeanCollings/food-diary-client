@@ -136,10 +136,10 @@ const InteractiveSubHeader: FC<IInteractiveSubHeaderProps> = ({
   </SSubHeader>
 );
 
-const createUser = async ({ email, password }: TFormValues) => {
+const createUser = async ({ email, password, name }: TFormValues) => {
   const res = await fetch('/api/auth/signup', {
     method: 'POST',
-    body: JSON.stringify({ email, password }),
+    body: JSON.stringify({ email, password, name }),
     headers: {
       'Content-Type': 'application/json',
     },
@@ -173,9 +173,14 @@ const LoginForm: FC = () => {
       password: state.formValues.password,
     });
 
-    if (!result?.error) {
-      router.replace('/');
+    if (result?.error) {
+      return dispatch({
+        type: ELoginFormType.LOGIN_ERROR,
+        payload: result.error,
+      });
     }
+
+    router.replace('/');
   };
 
   const runFormValidations = useCallback(() => {

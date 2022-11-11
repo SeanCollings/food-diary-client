@@ -21,6 +21,7 @@ export interface ILoginFormState {
   formType: TFormType;
   formErrors: TFormErrors;
   formValues: TFormValues;
+  loginError: string;
 }
 
 export enum ELoginFormType {
@@ -30,6 +31,7 @@ export enum ELoginFormType {
   SUBMIT = 'submit',
   UPDATE_VALUES = 'update_values',
   UPDATE_ERRORS = 'update_errors',
+  LOGIN_ERROR = 'login_error',
 }
 
 export type ILoginFormAction =
@@ -53,4 +55,8 @@ export type ILoginFormAction =
   | {
       type: ELoginFormType.UPDATE_ERRORS;
       payload: { errors: TErrors };
+    }
+  | {
+      type: ELoginFormType.LOGIN_ERROR;
+      payload: string;
     };
