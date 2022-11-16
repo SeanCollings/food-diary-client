@@ -83,7 +83,7 @@ export const MealEntriesContextProvider: FC<{
 
       const { error } = await diaryService.createMealEntry({
         date,
-        body: { meal: { mealId, content: newValues } },
+        body: { mealId, content: newValues },
       });
 
       if (error) {

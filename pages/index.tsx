@@ -6,6 +6,7 @@ import styled from 'styled-components';
 import { getSession } from 'next-auth/react';
 import { useEffect, useState } from 'react';
 import { useRequestDiaryEntry } from '@hooks/request/use-request-diary-entry';
+import { IUserModel } from '@store/user-context';
 
 const SDiaryContainer = styled.section`
   display: flex;
@@ -15,9 +16,15 @@ const SDiaryContainer = styled.section`
 
 // https://swr.vercel.app/
 
-const Home: NextPage = () => {
+interface IDiaryPageProps {
+  session: { user: IUserModel | null };
+}
+
+const Home: NextPage<IDiaryPageProps> = ({ session }) => {
   const [mounted, setMounted] = useState(false);
-  const { data, isError, isLoading } = useRequestDiaryEntry(mounted);
+  const { data, isError, isLoading } = useRequestDiaryEntry(
+    !!session && mounted
+  );
 
   useEffect(() => {
     setMounted(true);

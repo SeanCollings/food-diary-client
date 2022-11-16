@@ -16,6 +16,10 @@ export interface IWellnessEntries {
   [date: string]: TWellnessEntry<TWellnessValueTypes>;
 }
 
+export interface IWellnessEntriesDto {
+  [date: string]: TWellnessEntry<TWellnessValueTypes> & { date: string };
+}
+
 interface IUpdateEntryByTypeProps<T> {
   date: string;
   type: TAllWellnessType;

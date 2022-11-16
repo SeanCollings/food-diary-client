@@ -32,7 +32,7 @@ export const useRequestDiaryEntry = (mounted: boolean) => {
   );
 
   useEffect(() => {
-    if (!monthRequestedData && data?.entry.date === dateSelectedISO) {
+    if (!monthRequestedData && data?.entry) {
       requestSetMealEntries({ meals: data.entry.meals });
       requestSetWellnessEntries({ wellness: data.entry.wellness });
       setHasRequested((curr) => ({ ...curr, [monthAndYear]: true }));

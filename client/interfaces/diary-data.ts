@@ -5,11 +5,12 @@ import {
 import { TMealCard } from '@utils/interfaces';
 
 export interface IDiaryReponseData {
-  entry: {
-    date: string;
+  entry?: {
     meals: { [date: string]: TMealCard };
     wellness: { [date: string]: TWellnessEntry<TWellnessValueTypes> };
   };
+  ok: boolean;
+  message?: string;
 }
 
 export interface ICalendarEntriesResponseBody {

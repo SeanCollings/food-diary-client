@@ -1,6 +1,7 @@
 import { diaryService } from '@client/services/diary.service';
 import {
   IWellnessEntries,
+  IWellnessEntriesDto,
   TWellnessEntry,
   TWellnessValueTypes,
 } from '@lib/interfaces/wellness.interface';
@@ -65,11 +66,9 @@ export const WellnessEntriesContextProvider: FC<{
 
     const timer = setTimeout(async () => {
       const payload = updatedDates.reduce((curr, date) => {
-        curr[date] = { ...wellnessEntries[date] };
+        curr[date] = { ...wellnessEntries[date], date };
         return curr;
-      }, {} as IWellnessEntries);
-
-      console.log('WELLNESS POST:', payload);
+      }, {} as IWellnessEntriesDto);
 
       setUpdatedDates([]);
 

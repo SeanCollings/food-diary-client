@@ -11,7 +11,8 @@ interface IResponse {
 interface ICreateMealArgs {
   date: string;
   body: {
-    meal: { mealId: TMealType; content: IMealContent };
+    mealId: TMealType;
+    content: IMealContent;
   };
 }
 interface IUpdateMealArgs {
@@ -100,9 +101,7 @@ const createService = () => {
     body,
   }: IUpdateWellnessArgs): Promise<IResponse> => {
     try {
-      const { data } = await axios.post<IResponse>(`${URI_WELLNESS}`, {
-        data: body,
-      });
+      const { data } = await axios.post<IResponse>(`${URI_WELLNESS}`, body);
 
       return {};
     } catch (err) {
