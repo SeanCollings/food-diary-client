@@ -7,7 +7,6 @@ interface IResponse {
   ok?: boolean;
   error?: string;
 }
-
 interface ICreateMealArgs {
   date: string;
   body: {
@@ -30,7 +29,6 @@ interface IDeleteMealArgs {
     id: string;
   };
 }
-
 interface IUpdateWellnessArgs {
   body: IWellnessEntries;
 }
@@ -41,14 +39,10 @@ const createService = () => {
     body,
   }: ICreateMealArgs): Promise<IResponse> => {
     try {
-      console.log('createMealEntry ::', date, body);
-
       const { data } = await axios.post<IResponse>(
         `${URI_MEAL}?date=${date}`,
         body
       );
-
-      console.log('DATA ::', data);
 
       return {};
     } catch (err) {
@@ -101,7 +95,7 @@ const createService = () => {
     body,
   }: IUpdateWellnessArgs): Promise<IResponse> => {
     try {
-      const { data } = await axios.post<IResponse>(`${URI_WELLNESS}`, body);
+      const { data } = await axios.put<IResponse>(`${URI_WELLNESS}`, body);
 
       return {};
     } catch (err) {
