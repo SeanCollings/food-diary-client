@@ -38,11 +38,11 @@ export const useRequestMealTrends = (
 
   useEffect(() => {
     if (timePeriod === 'week' && shouldFetch) {
-      setTrendData((curr) => ({ ...curr, week: data }));
+      setTrendData((curr) => ({ ...curr, week: data as IMealTrendData }));
       // setHasRequested((curr) => ({ ...curr, week: true }));
     }
     if (timePeriod === 'month' && shouldFetch) {
-      setTrendData((curr) => ({ ...curr, month: data }));
+      setTrendData((curr) => ({ ...curr, month: data as IMealTrendData }));
       // setHasRequested((curr) => ({ ...curr, month: true }));
     }
   }, [data, timePeriod, shouldFetch]);
