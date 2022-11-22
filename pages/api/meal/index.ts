@@ -1,5 +1,12 @@
+import { IMealContent, TMealType } from '@utils/interfaces';
+import axios, { AxiosError } from 'axios';
 import { NextApiRequest, NextApiResponse } from 'next';
+import { getSession } from 'next-auth/react';
 
+interface IMealEntryDto {
+  mealId: TMealType;
+  content: IMealContent;
+}
 interface IRequest<T extends unknown> extends NextApiRequest {
   query: {
     date: string;
@@ -12,35 +19,66 @@ interface IResponse {
 }
 
 const handler = async (
-  req: NextApiRequest,
+  req: IRequest<IMealEntryDto>,
   res: NextApiResponse<IResponse>
 ) => {
+  const session = await getSession({ req });
+  const { date } = req.query;
+
   try {
     if (req.method === 'POST') {
-      const { date } = req.query;
-      console.log('POST MEAL:', date, req.body);
+      const { data } = await axios.post(
+        `${process.env.SERVER_HOST}/meals?date=${date}`,
+        req.body,
+        {
+          headers: {
+            Authorization: `Bearer ${session?.accessToken}`,
+          },
+        }
+      );
 
       return res.status(201).json({ ok: true });
     }
 
     if (req.method === 'PUT') {
-      const { date } = req.query;
-      console.log('PUT MEAL:', date, req.body);
+      const { data } = await axios.put(
+        `${process.env.SERVER_HOST}/meals?date=${date}`,
+        req.body,
+        {
+          headers: {
+            Authorization: `Bearer ${session?.accessToken}`,
+          },
+        }
+      );
 
       return res.status(200).json({ ok: true });
     }
 
     if (req.method === 'DELETE') {
-      const { date } = req.query;
-      console.log('DELETE MEAL:', date, req.body);
+      const { data } = await axios.delete(
+        `${process.env.SERVER_HOST}/meals?date=${date}`,
+        {
+          data: req.body,
+          headers: {
+            Authorization: `Bearer ${session?.accessToken}`,
+          },
+        }
+      );
 
       return res.status(200).json({ ok: true });
     }
   } catch (err) {
-    return res.status(500).json({ ok: false, message: (err as Error).message });
+    return res.status(500).json({
+      ok: false,
+      message: (
+        err as AxiosError<{
+          statusCode: number;
+          message: string;
+          error: string;
+        }>
+      ).response?.data.message,
+    });
   }
-
-  return;
 };
 
 export default handler;
