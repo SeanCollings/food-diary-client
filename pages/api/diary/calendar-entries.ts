@@ -1,15 +1,8 @@
-import {
-  formatMonthNumberYear,
-  getDayFromDate,
-  getMidnightISODaysInMonth,
-  getMonthAndYearFromDate,
-  getNewMonth,
-  setDateMidnightISOString,
-} from '@utils/date-utils';
 import { NextApiRequest, NextApiResponse } from 'next';
-import { diaryMealsMockData, diaryWellnessMockData } from '@client/mock';
 import { URI_DIARY_CALENDAR_ENTRIES } from '@client/constants';
 import { ICalendarEntriesResponseBody } from '@client/interfaces/diary-data';
+import axios, { AxiosError } from 'axios';
+import { getSession } from 'next-auth/react';
 
 interface IRequest extends NextApiRequest {
   query: {
@@ -18,98 +11,37 @@ interface IRequest extends NextApiRequest {
   };
 }
 
-interface IEntriesPerMonth {
-  [date: string]: number[];
-}
-
-const getDatesOfEntriesInDateRange = <T extends unknown>(
-  dateRange: string[],
-  entries: { [date: string]: T }
-) => {
-  const entryDates = dateRange.reduce((acc, date) => {
-    if (entries[date]) {
-      acc.push(getDayFromDate(date));
-    }
-
-    return acc;
-  }, [] as number[]);
-
-  return entryDates;
-};
-
-const getEntriesPerMonth = (monthRange: {
-  [date: string]: boolean;
-}): IEntriesPerMonth => {
-  const entries = Object.keys(monthRange).reduce((acc, date) => {
-    const [month, year] = getMonthAndYearFromDate(date);
-    const datesInMonth = getMidnightISODaysInMonth(month, year);
-
-    const mealEntryDays = getDatesOfEntriesInDateRange(
-      datesInMonth,
-      diaryMealsMockData
-    );
-    const wellnessEntryDays = getDatesOfEntriesInDateRange(
-      datesInMonth,
-      diaryWellnessMockData
-    );
-
-    const combinedEntryDays = mealEntryDays.concat(wellnessEntryDays);
-    const uniqueDays = [...new Set(combinedEntryDays)];
-
-    if (uniqueDays.length) {
-      acc[formatMonthNumberYear(date)] = uniqueDays;
-    }
-
-    return acc;
-  }, {} as IEntriesPerMonth);
-
-  return entries;
-};
-
-const getPreviousMonthsRange = (date: string, months: number) => {
-  let previousMonth = new Date(date);
-  let monthRange = months;
-  const formattedMonthRange: { [date: string]: boolean } = {
-    [formatMonthNumberYear(date)]: true,
-  };
-  const monthRangeISO: { [date: string]: boolean } = {
-    [setDateMidnightISOString(date)]: true,
-  };
-
-  while (monthRange > 1) {
-    previousMonth = getNewMonth(previousMonth, 'previous');
-    formattedMonthRange[formatMonthNumberYear(previousMonth)] = true;
-    monthRangeISO[setDateMidnightISOString(previousMonth)] = true;
-    monthRange -= 1;
-  }
-
-  return [formattedMonthRange, monthRangeISO];
-};
-
-const getDataFromAPI = async (date: string, months: string) => {
-  const [monthRange, monthRangeISO] = getPreviousMonthsRange(
-    date,
-    parseInt(months)
-  );
-  const entries = getEntriesPerMonth(monthRangeISO);
-
-  return Promise.resolve({ monthRange, entries });
-};
-
 const handler = async (
   req: IRequest,
   res: NextApiResponse<ICalendarEntriesResponseBody>
 ) => {
+  const session = await getSession({ req });
   const { date, months } = req.query;
   console.log(`-------- ${URI_DIARY_CALENDAR_ENTRIES} :`, date, months);
 
   if (req.method !== 'GET') {
-    return;
+    return res.status(500).json({ ok: false });
   }
 
-  const { monthRange, entries } = await getDataFromAPI(date, months);
+  try {
+    const { data } = await axios.get(
+      `${process.env.SERVER_HOST}/diary/calendar-entries?date=${date}&months=${months}`,
+      {
+        headers: {
+          Authorization: `Bearer ${session?.accessToken}`,
+        },
+      }
+    );
 
-  return res.status(200).json({ months: monthRange, entries });
+    const { monthRange, entries } = data;
+
+    return res.status(200).json({ ok: true, months: monthRange, entries });
+  } catch (err) {
+    console.log('ERR::', (err as AxiosError).message);
+    return res
+      .status(401)
+      .json({ ok: false, message: (err as AxiosError).message });
+  }
 };
 
 export default handler;
