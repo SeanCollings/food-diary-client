@@ -14,8 +14,10 @@ export interface IDiaryReponseData {
 }
 
 export interface ICalendarEntriesResponseBody {
-  months: { [date: string]: boolean };
-  entries: {
+  months?: { [date: string]: boolean };
+  entries?: {
     [date: string]: number[];
   };
+  ok: boolean;
+  message?: string;
 }

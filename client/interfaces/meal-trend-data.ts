@@ -9,4 +9,6 @@ export interface IMealTrendData {
   totals: { [key in EMealType]: number };
 }
 
-export interface IMealTrendResponseBody extends IMealTrendData {}
+export interface IMealTrendResponseBody extends Partial<IMealTrendData> {
+  ok?: boolean;
+}
