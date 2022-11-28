@@ -1,4 +1,6 @@
 /*********** GET ************/
+export const URI_USER_PROFILE = '/api/user';
+
 export const URI_DIARY = '/api/diary';
 export const URI_DIARY_CALENDAR_ENTRIES = '/api/diary/calendar-entries';
 
@@ -17,3 +19,4 @@ export const URI_WELLNESS = '/api/wellness';
 export const URI_USER = '/api/user';
 export const URI_PREFERENCES = '/api/user/preferences';
 export const URI_GENERATE_LINK = '/api/user/generate-link';
+export const URI_LINK_SHAREABLE = '/api/user/link-shareable';

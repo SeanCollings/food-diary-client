@@ -3,6 +3,11 @@ import axios from 'axios';
 export const fetcher = async <T extends unknown>(url: string) =>
   await axios.get<T>(url).then((res) => res.data);
 
+/********************** User *********************/
+
+export const userProfileFetcher = async <T extends unknown>(url: string) =>
+  await axios.get<T>(`${url}`).then((res) => res.data);
+
 /********************** Diary *********************/
 
 export const diaryEntryFetcher = async <T extends unknown>(
@@ -41,7 +46,7 @@ export const shareFetcher = async <T extends unknown>(
   dateTo: number
 ) =>
   await axios
-    .get<T>(`${url}?guid=${guid}&dateFrom=${dateFrom}&dateTo=${dateTo}`)
+    .get<T>(`${url}?link=${guid}&dateFrom=${dateFrom}&dateTo=${dateTo}`)
     .then((res) => res.data);
 
 /********************** Trends *********************/
