@@ -1,9 +1,14 @@
 import {
   URI_GENERATE_LINK,
+  URI_LINK_SHAREABLE,
   URI_PREFERENCES,
   URI_USER,
 } from '@client/constants';
-import { IPartialPreference, IPartialUserUpdate } from '@store/user-context';
+import {
+  IPartialPreference,
+  IPartialUserUpdate,
+  IShareLinkPreference,
+} from '@store/user-context';
 import axios, { AxiosError } from 'axios';
 
 interface IResponse {
@@ -15,13 +20,9 @@ interface IShareLinkResponse {
 }
 
 const createService = () => {
-  const updateUser = async (update: IPartialUserUpdate) => {
+  const updateUser = async (body: IPartialUserUpdate) => {
     try {
-      console.log('updateUser ::', update);
-
-      const { data } = await axios.patch<IResponse>(URI_USER, update);
-
-      console.log('DATA ::', data);
+      const { data } = await axios.patch<IResponse>(URI_USER, body);
 
       return {};
     } catch (err) {
@@ -34,11 +35,22 @@ const createService = () => {
 
   const updatePreferences = async (update: IPartialPreference) => {
     try {
-      console.log('updatePreferences ::', update);
-
       const { data } = await axios.patch<IResponse>(URI_PREFERENCES, update);
 
-      console.log('DATA ::', data);
+      return {};
+    } catch (err) {
+      console.log('err ::', err);
+      return {
+        error: (err as AxiosError).message,
+      };
+    }
+  };
+
+  const updateSharePreference = async (update: IShareLinkPreference) => {
+    try {
+      const { data } = await axios.put<IResponse>(`${URI_LINK_SHAREABLE}`, {
+        isShared: update['isProfileShared'],
+      });
 
       return {};
     } catch (err) {
@@ -51,11 +63,8 @@ const createService = () => {
 
   const generateLink = async () => {
     try {
-      console.log('generateLink ::');
-
       const { data } = await axios.post<IShareLinkResponse>(URI_GENERATE_LINK);
 
-      console.log('DATA ::', data);
       return {
         shareLink: data.shareLink,
       };
@@ -67,7 +76,7 @@ const createService = () => {
     }
   };
 
-  return { updateUser, updatePreferences, generateLink };
+  return { updateUser, updatePreferences, updateSharePreference, generateLink };
 };
 
 export const userService = createService();

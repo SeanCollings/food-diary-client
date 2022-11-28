@@ -160,7 +160,7 @@ const getShareLink = (shareLink?: string) => {
 
 const ModalShareProfile: React.FC<IModalShareProfileProps> = ({ onClose }) => {
   const linkRef = useRef<HTMLInputElement>(null);
-  const { user, updatePreferences, updateShareLink } = useUserContext();
+  const { user, updateShareLinkPreference, updateShareLink } = useUserContext();
   const [isFetching, setIsFetching] = useState(false);
 
   useEffect(() => {
@@ -182,7 +182,9 @@ const ModalShareProfile: React.FC<IModalShareProfileProps> = ({ onClose }) => {
   }, [isFetching, updateShareLink, user?.shareLink]);
 
   const onToggleChange = () => {
-    updatePreferences({ isProfileShared: !user?.preferences?.isProfileShared });
+    updateShareLinkPreference({
+      isProfileShared: !user?.preferences?.isProfileShared,
+    });
   };
   const onCreateLinkHandler = async () => {
     setIsFetching(true);

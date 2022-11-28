@@ -54,8 +54,10 @@ export type IPartialUserUpdate =
 export type IPartialPreference =
   | { [EPrefences.SHOW_DAY_STREAK]: boolean }
   | { [EPrefences.SHOW_WEEKLY_EXERCISE]: boolean }
-  | { [EPrefences.SHOW_WEEKLY_WATER]: boolean }
-  | { [EPrefences.IS_PROFILE_SHARED]: boolean };
+  | { [EPrefences.SHOW_WEEKLY_WATER]: boolean };
+export type IShareLinkPreference = {
+  [EPrefences.IS_PROFILE_SHARED]: boolean;
+};
 
 interface IUpdateShareLinkArgs {
   shareLink: string;
@@ -67,6 +69,7 @@ export interface IUserContext {
   setInitialUser: (user: IUserModel) => void;
   updateUser: (updated: IPartialUserUpdate) => void;
   updatePreferences: (preferences: IPartialPreference) => void;
+  updateShareLinkPreference: (args: IShareLinkPreference) => void;
   updateShareLink: (args: IUpdateShareLinkArgs) => void;
 }
 
@@ -76,6 +79,7 @@ const initialState: IUserContext = {
   setInitialUser: () => null,
   updateUser: () => null,
   updatePreferences: () => null,
+  updateShareLinkPreference: () => null,
   updateShareLink: () => null,
 };
 
@@ -85,7 +89,7 @@ export const UserContextProvider: FC<{
   children: ReactNode;
   initialState?: Partial<IUserContext>;
 }> = ({ children, initialState }) => {
-  const [user, setCurrentUser] = useState<IUserModel | null>(
+  const [user, setUser] = useState<IUserModel | null>(
     initialState?.user || null
   );
   const [updatedUserFields, setUpdatedUserFields] = useState<
@@ -93,6 +97,9 @@ export const UserContextProvider: FC<{
   >([]);
   const [updatedPreferences, setUpdatedPreferences] = useState<
     IPartialPreference[]
+  >([]);
+  const [updatedSharePreference, setUpdatedSharePreferences] = useState<
+    IShareLinkPreference[]
   >([]);
 
   useEffect(() => {
@@ -147,12 +154,38 @@ export const UserContextProvider: FC<{
     };
   }, [updatedPreferences]);
 
+  useEffect(() => {
+    if (!updatedSharePreference.length) {
+      return;
+    }
+
+    const timer = setTimeout(async () => {
+      const payload = updatedSharePreference.reduce((curr, preference) => {
+        return { ...curr, ...preference };
+      }, {} as IShareLinkPreference);
+
+      setUpdatedPreferences([]);
+
+      const { error } = await userService.updateSharePreference({
+        ...payload,
+      });
+
+      if (error) {
+        console.log('Error:', error);
+      }
+    }, 500);
+
+    return () => {
+      clearTimeout(timer);
+    };
+  }, [updatedSharePreference]);
+
   const setInitialUser = useCallback((unitialUser: IUserModel) => {
-    setCurrentUser(unitialUser);
+    setUser(unitialUser);
   }, []);
 
   const updateUser = useCallback((update: IPartialUserUpdate) => {
-    setCurrentUser((curr) => {
+    setUser((curr) => {
       if (!curr) {
         return null;
       }
@@ -167,7 +200,7 @@ export const UserContextProvider: FC<{
   }, []);
 
   const updatePreferences = useCallback((preference: IPartialPreference) => {
-    setCurrentUser((curr) => {
+    setUser((curr) => {
       if (!curr) {
         return null;
       }
@@ -181,9 +214,30 @@ export const UserContextProvider: FC<{
     setUpdatedPreferences((curr) => [...curr, preference]);
   }, []);
 
+  const updateShareLinkPreference = useCallback(
+    (preference: IShareLinkPreference) => {
+      setUser((curr) => {
+        if (!curr) {
+          return null;
+        }
+
+        return {
+          ...getStructuredClone(curr),
+          preferences: {
+            ...getStructuredClone(curr.preferences),
+            ...preference,
+          },
+        };
+      });
+
+      setUpdatedSharePreferences((curr) => [...curr, preference]);
+    },
+    []
+  );
+
   const updateShareLink = useCallback(
     ({ shareLink, toggleShare }: IUpdateShareLinkArgs) => {
-      setCurrentUser((curr) => {
+      setUser((curr) => {
         if (!curr) {
           return null;
         }
@@ -209,8 +263,16 @@ export const UserContextProvider: FC<{
       updateUser,
       updatePreferences,
       updateShareLink,
+      updateShareLinkPreference,
     }),
-    [user, setInitialUser, updateUser, updatePreferences, updateShareLink]
+    [
+      user,
+      setInitialUser,
+      updateUser,
+      updatePreferences,
+      updateShareLink,
+      updateShareLinkPreference,
+    ]
   );
 
   return (
