@@ -198,41 +198,43 @@ const BarGraph: React.FC<IBarGraphProps> = ({ height, data, timePeriod }) => {
               ))}
           </STickContainer>
           <SBarGroupContainer>
-            {beverageData?.data.map(({ water, tea_coffee, alcohol }) => {
-              return (
-                <SBarGroup key={getUniqueId()}>
-                  <SBar
-                    className="water"
-                    barHeight={water ? percentage(water, maxValue) : 1}
-                    backgroundColour={BEVERAGE_COLOUR['water']}
-                    id={EWellnessTypes.WATER}
-                    borderRadius={BORDER_RADIUS}
-                    title={`water (${water})`}
-                  />
-                  <SBar
-                    className="tea_coffee"
-                    barHeight={
-                      tea_coffee ? percentage(tea_coffee, maxValue) : 1
-                    }
-                    backgroundColour={BEVERAGE_COLOUR['tea_coffee']}
-                    id={EWellnessTypes.TEA_COFFEE}
-                    borderRadius={BORDER_RADIUS}
-                    title={`tea/coffee (${tea_coffee})`}
-                  />
-                  <SBar
-                    className="alcohol"
-                    barHeight={alcohol ? percentage(alcohol, maxValue) : 1}
-                    backgroundColour={BEVERAGE_COLOUR['alcohol']}
-                    id={EWellnessTypes.ALCOHOL}
-                    borderRadius={BORDER_RADIUS}
-                    title={`alcohol (${alcohol})`}
-                  />
-                </SBarGroup>
-              );
-            })}
+            {(beverageData?.beveragesPerDay || []).map(
+              ({ water, tea_coffee, alcohol }) => {
+                return (
+                  <SBarGroup key={getUniqueId()}>
+                    <SBar
+                      className="water"
+                      barHeight={water ? percentage(water, maxValue) : 1}
+                      backgroundColour={BEVERAGE_COLOUR['water']}
+                      id={EWellnessTypes.WATER}
+                      borderRadius={BORDER_RADIUS}
+                      title={`water (${water})`}
+                    />
+                    <SBar
+                      className="tea_coffee"
+                      barHeight={
+                        tea_coffee ? percentage(tea_coffee, maxValue) : 1
+                      }
+                      backgroundColour={BEVERAGE_COLOUR['tea_coffee']}
+                      id={EWellnessTypes.TEA_COFFEE}
+                      borderRadius={BORDER_RADIUS}
+                      title={`tea/coffee (${tea_coffee})`}
+                    />
+                    <SBar
+                      className="alcohol"
+                      barHeight={alcohol ? percentage(alcohol, maxValue) : 1}
+                      backgroundColour={BEVERAGE_COLOUR['alcohol']}
+                      id={EWellnessTypes.ALCOHOL}
+                      borderRadius={BORDER_RADIUS}
+                      title={`alcohol (${alcohol})`}
+                    />
+                  </SBarGroup>
+                );
+              }
+            )}
           </SBarGroupContainer>
           <SHAxisContainer>
-            {beverageData?.legend.map((key) => (
+            {(beverageData?.legend || []).map((key) => (
               <SHAxisKey key={getUniqueId()}>{key}</SHAxisKey>
             ))}
           </SHAxisContainer>

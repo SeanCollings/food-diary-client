@@ -127,7 +127,10 @@ const SContentContainer = styled.div<IScroll>`
     border-radius: 10px;
   }
 `;
-const SContentWrapper = styled.div``;
+const SContentWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
 const SContent = styled.span`
   font-size: 17px;
 `;

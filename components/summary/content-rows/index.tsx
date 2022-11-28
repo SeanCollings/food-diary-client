@@ -95,10 +95,9 @@ export const DateHeaderRow: FC<IDateHeaderRowProps> = memo(
           if (!date) {
             return <SEmptyDiv key={`${getUniqueId()}-header`} />;
           }
-
           const classNames = getClassNames({
             'grid-area': index === 0,
-            empty: !data[date],
+            empty: !Object.keys(data[date] || {}).length,
           });
 
           return (
@@ -137,7 +136,7 @@ export const MealDataRow: FC<IMealDataRowProps> = memo(
             <SContentRow
               key={`${date}-${id}-${getUniqueId()}`}
               gridArea={(index === 0 && id) || undefined}
-              className={!data[date] ? 'empty' : ''}
+              className={!Object.keys(data[date] || {}).length ? 'empty' : ''}
             >
               <SContentTypeHeader>{title}</SContentTypeHeader>
               <SMealValuesList>
@@ -187,7 +186,7 @@ export const WellnessDataRow: FC<IWellnessDataRowProps> = memo(
               hideBorderBottom={hideBorderBottom}
               padBottom={lastIndex}
               gridArea={gridArea}
-              className={!data[date] ? 'empty' : ''}
+              className={!Object.keys(data[date] || {}).length ? 'empty' : ''}
             >
               <SContentTypeHeader>{title}</SContentTypeHeader>
               <SWellnessValue>{value || '-'}</SWellnessValue>

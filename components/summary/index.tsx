@@ -14,7 +14,7 @@ import { getPaddedNestedArray } from '@utils/array-utils';
 import Calendar from '@components/calendar';
 import { MdCalendarToday } from 'react-icons/md';
 import { DateHeaderRow, MealDataRow, WellnessDataRow } from './content-rows';
-import { ISummaryResponseBody } from '@client/interfaces/user-summary-data';
+import { ISummaryResponseData } from '@client/interfaces/user-summary-data';
 
 const CALENDAR_HEIGHT = 280;
 const MAX_DAYS_PER_ROW = 2;
@@ -190,7 +190,7 @@ const SBottomPaginationContainer = styled.div`
 
 interface ISummaryProps {
   isLoading: boolean;
-  userData: ISummaryResponseBody;
+  userData: ISummaryResponseData;
   fromDate: Date;
   toDate: Date;
   defaultShowDays: number;

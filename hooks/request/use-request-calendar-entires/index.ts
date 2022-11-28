@@ -37,7 +37,7 @@ export const useRequestCalendarEntries = (date: string | null) => {
   );
 
   useEffect(() => {
-    if (shouldFetch && data?.months) {
+    if (shouldFetch && data?.months && data.entries) {
       setHasRequested((curr) => ({ ...curr, ...data.months }));
       requestSetAllEntriesPerMonth({ entries: data.entries });
     }

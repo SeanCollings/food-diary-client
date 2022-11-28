@@ -6,7 +6,7 @@ import styled from 'styled-components';
 import { protectedSeverSideProps } from '@lib/server-props';
 import { Session } from 'next-auth';
 import { useRequestSummary } from '@hooks/request/use-request-summary';
-import { ISummaryResponseBody } from '@client/interfaces/user-summary-data';
+import { ISummaryResponseData } from '@client/interfaces/user-summary-data';
 
 const DEFAULT_DAYS_SHOW = 7;
 
@@ -22,7 +22,7 @@ interface ISummaryPageProps {
 
 const SummaryPage: NextPage<ISummaryPageProps> = ({ session }) => {
   const [mounted, setMounted] = useState(false);
-  const [userData, setUserData] = useState<ISummaryResponseBody | null>(null);
+  const [userData, setUserData] = useState<ISummaryResponseData | null>(null);
   const [fromDate, setFromDate] = useState(
     getDaysAwayFromDate(-(DEFAULT_DAYS_SHOW - 1))
   );
@@ -38,8 +38,8 @@ const SummaryPage: NextPage<ISummaryPageProps> = ({ session }) => {
   }, []);
 
   useEffect(() => {
-    if (data) {
-      setUserData(data);
+    if (data?.data) {
+      setUserData(data.data);
     }
   }, [data]);
 

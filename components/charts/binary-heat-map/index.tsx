@@ -11,8 +11,8 @@ const TITLE_WIDTH = 80;
 const COLUMN_WIDTH_MAX = 100;
 const COLUMN_WIDTH_MIN = 24;
 const CIRCLE_WIDTH_MAX = 30;
-const CIRCLE_WIDTH_MIN = 14;
-const CIRCLE_HEIGHT_MIN = 20;
+const CIRCLE_WIDTH_MIN = 16;
+const CIRCLE_HEIGHT_MIN = 16;
 const MIN_DATA_COLUMNS = 7;
 
 interface ISDataContainer {
@@ -180,12 +180,13 @@ const BinaryHeatMap: React.FC<IBinaryHeatMapProps> = ({
                   return null;
                 }
 
-                const data = mealData?.data[index];
+                const data = mealData?.mealsPerDay[index];
                 const colour = MEAL_TYPE_COLOUR[id];
                 const hasValue = !!data?.meals[mealIindex];
-                const isLastValue = mealData.data[index + 1] === undefined;
+                const isLastValue =
+                  mealData.mealsPerDay[index + 1] === undefined;
                 const nextValueZero =
-                  mealData.data[index + 1]?.meals[mealIindex] === 0;
+                  mealData.mealsPerDay[index + 1]?.meals[mealIindex] === 0;
                 const showLine = hasValue && !isLastValue && !nextValueZero;
 
                 return (
@@ -199,7 +200,7 @@ const BinaryHeatMap: React.FC<IBinaryHeatMapProps> = ({
                         colour={colour}
                         size={dataSize}
                         dataHeight={dataHeight}
-                        title={`total: ${mealData.totals[id]}`}
+                        title={`total: ${mealData.mealTotals[id]}`}
                       />
                     ) : (
                       <SHiddenCircle dataHeight={dataHeight} />

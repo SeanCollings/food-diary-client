@@ -183,8 +183,9 @@ const LineGraph: React.FC<ILineGraphProps> = ({ height, data }) => {
               ))}
           </STickContainer>
           <SLineContainer>
-            {excerciseData?.data.map((value, index) => {
-              const isLastValue = excerciseData?.data[index + 1] === undefined;
+            {(excerciseData?.excercisePerDay || []).map((value, index) => {
+              const isLastValue =
+                excerciseData?.excercisePerDay![index + 1] === undefined;
 
               const currentPosition = 100 - percentage(value, maxValue);
               const percentageCurrentHeight =
@@ -192,7 +193,11 @@ const LineGraph: React.FC<ILineGraphProps> = ({ height, data }) => {
               const actualCurrentHeight = graphHeight * percentageCurrentHeight;
 
               const nextPosition =
-                100 - percentage(excerciseData?.data[index + 1] ?? 0, maxValue);
+                100 -
+                percentage(
+                  excerciseData?.excercisePerDay![index + 1] ?? 0,
+                  maxValue
+                );
               const percentageNextHeight = percentage(nextPosition, 100) / 100;
               const actualNextHeight = graphHeight * percentageNextHeight;
               const differenceHeight = Math.abs(
@@ -225,7 +230,7 @@ const LineGraph: React.FC<ILineGraphProps> = ({ height, data }) => {
             })}
           </SLineContainer>
           <SHAxisContainer>
-            {excerciseData?.legend.map((key) => (
+            {(excerciseData?.legend || []).map((key) => (
               <SHAxisKey key={getUniqueId()}>{key}</SHAxisKey>
             ))}
           </SHAxisContainer>

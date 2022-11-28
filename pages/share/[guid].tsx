@@ -3,7 +3,7 @@ import { GetServerSideProps, NextPage } from 'next';
 import styled from 'styled-components';
 import { getDaysAwayFromDate } from '@utils/date-utils';
 import Summary from '@components/summary';
-import { IShareResponseBody } from '@client/interfaces/user-summary-data';
+import { IShareResponseData } from '@client/interfaces/user-summary-data';
 import { useRequestShare } from '@hooks/request/use-request-share';
 
 const DEFAULT_DAYS_SHOW = 7;
@@ -33,7 +33,7 @@ interface ISharePageProps {
 
 const SharePage: NextPage<ISharePageProps> = ({ guid }) => {
   const [mounted, setMounted] = useState(false);
-  const [userData, setUserData] = useState<IShareResponseBody | undefined>();
+  const [userData, setUserData] = useState<IShareResponseData | undefined>();
   const [fromDate, setFromDate] = useState(
     getDaysAwayFromDate(-(DEFAULT_DAYS_SHOW - 1))
   );
@@ -50,8 +50,8 @@ const SharePage: NextPage<ISharePageProps> = ({ guid }) => {
   }, []);
 
   useEffect(() => {
-    if (data) {
-      setUserData(data);
+    if (data?.summary) {
+      setUserData(data.summary);
     }
   }, [data]);
 
