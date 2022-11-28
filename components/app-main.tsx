@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import {
   HEADER_PROPS,
   MAX_PAGE_WIDTH,
@@ -16,6 +16,7 @@ import { AppProps } from 'next/app';
 import { useUserContext } from '@store/user-context';
 import { getClassNames } from '@utils/string-utils';
 import { useTheme } from '@hooks/use-theme';
+import { useRequestUser } from '@hooks/request/use-request-user';
 
 const SAppContainer = styled.div`
   display: flex;
@@ -73,15 +74,16 @@ const SInnerMain = styled.div`
 `;
 
 const AppMain: React.FC<AppProps> = ({ Component, pageProps }) => {
+  const [fetchUser, setFetchUser] = useState(false);
   const { darkMode } = useTheme();
-  const { user, setInitialUser } = useUserContext();
   const { pathname } = useRouter();
+  useRequestUser(fetchUser);
 
   useEffect(() => {
-    if (pageProps.session?.user && !user) {
-      setInitialUser(pageProps.session?.user);
+    if (!!pageProps.session && !fetchUser) {
+      setFetchUser(true);
     }
-  }, [pageProps.session?.user, user, setInitialUser]);
+  }, [fetchUser, pageProps]);
 
   const showBackgroundImage =
     pathname === pathnameMapper.login || pathname === pathnameMapper.home;
