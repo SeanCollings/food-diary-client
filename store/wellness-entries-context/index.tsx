@@ -5,6 +5,7 @@ import {
   TWellnessEntry,
   TWellnessValueTypes,
 } from '@lib/interfaces/wellness.interface';
+import { useUserContext } from '@store/user-context';
 import { getStructuredClone } from '@utils/get-structured-clone';
 import { TWellnessTypes } from '@utils/interfaces';
 import {
@@ -54,6 +55,7 @@ export const WellnessEntriesContextProvider: FC<{
   children: ReactNode;
   initialState?: IWellnessEntries;
 }> = ({ children }) => {
+  const { userLoggedIn } = useUserContext();
   const [updatedDates, setUpdatedDates] = useState<string[]>([]);
   const [wellnessEntries, setWellnessEntries] = useState<IWellnessEntries>(
     initialState?.wellnessEntries || {}
@@ -84,7 +86,7 @@ export const WellnessEntriesContextProvider: FC<{
     return () => {
       clearTimeout(timer);
     };
-  }, [wellnessEntries, updatedDates]);
+  }, [wellnessEntries, updatedDates, userLoggedIn]);
 
   const requestSetWellnessEntries = useCallback(
     ({ wellness }: IRequestSetWellnessEntries) => {
@@ -112,9 +114,12 @@ export const WellnessEntriesContextProvider: FC<{
       }
 
       setWellnessEntries(updatedEntries);
-      setUpdatedDates(dates);
+
+      if (userLoggedIn) {
+        setUpdatedDates(dates);
+      }
     },
-    [wellnessEntries, updatedDates]
+    [wellnessEntries, updatedDates, userLoggedIn]
   );
 
   const context = useMemo(

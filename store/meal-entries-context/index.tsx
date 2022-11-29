@@ -1,4 +1,5 @@
 import { diaryService } from '@client/services/diary.service';
+import { useUserContext } from '@store/user-context';
 import { getStructuredClone } from '@utils/get-structured-clone';
 import { IMealContent, TMealCard, TMealType } from '@utils/interfaces';
 import {
@@ -56,6 +57,7 @@ export const MealEntriesContextProvider: FC<{
   children: ReactNode;
   initialState?: IMealEntries;
 }> = ({ children }) => {
+  const { userLoggedIn } = useUserContext();
   const [mealEntries, setMealEntries] = useState<IMealEntries>(
     initialState?.mealEntries || {}
   );
@@ -81,18 +83,20 @@ export const MealEntriesContextProvider: FC<{
         contents: [...updatedContentsForId, newValues],
       };
 
-      const { error } = await diaryService.createMealEntry({
-        date,
-        body: { mealId, content: newValues },
-      });
+      if (userLoggedIn) {
+        const { error } = await diaryService.createMealEntry({
+          date,
+          body: { mealId, content: newValues },
+        });
 
-      if (error) {
-        return console.log('Error:', error);
+        if (error) {
+          return console.log('Error:', error);
+        }
       }
 
       setMealEntries(updatedEntries);
     },
-    [mealEntries, setMealEntries]
+    [mealEntries, setMealEntries, userLoggedIn]
   );
 
   const updateMealEntry = useCallback(
@@ -135,22 +139,23 @@ export const MealEntriesContextProvider: FC<{
         }
       }
 
-      const { error } = await diaryService.updateMealEntry({
-        date,
-        body: {
-          content: updatedContent,
-          newMealId: updatedMealId,
-          oldMealId: mealId,
-        },
-      });
+      if (userLoggedIn) {
+        const { error } = await diaryService.updateMealEntry({
+          date,
+          body: {
+            content: updatedContent,
+            newMealId: updatedMealId,
+            oldMealId: mealId,
+          },
+        });
 
-      if (error) {
-        return console.log('Error:', error);
+        if (error) {
+          return console.log('Error:', error);
+        }
       }
-
       setMealEntries(updatedEntries);
     },
-    [mealEntries]
+    [mealEntries, userLoggedIn]
   );
 
   const removeMealEntryById = useCallback(
@@ -168,22 +173,24 @@ export const MealEntriesContextProvider: FC<{
           contents: filtered,
         };
 
-        const { error } = await diaryService.deleteMealEntry({
-          date,
-          body: {
-            mealId,
-            id: contentId,
-          },
-        });
+        if (userLoggedIn) {
+          const { error } = await diaryService.deleteMealEntry({
+            date,
+            body: {
+              mealId,
+              id: contentId,
+            },
+          });
 
-        if (error) {
-          return console.log('Error:', error);
+          if (error) {
+            return console.log('Error:', error);
+          }
         }
 
         setMealEntries(updatedEntries);
       }
     },
-    [mealEntries]
+    [mealEntries, userLoggedIn]
   );
 
   const context = useMemo(
