@@ -26,12 +26,12 @@ function MyApp(props: AppProps) {
 
   return (
     <SessionProvider session={props.pageProps.session}>
-      <DateSelectedContextProvider>
-        <MealEntriesContextProvider>
-          <WellnessEntriesContextProvider>
-            <AllEntriesPerMonthContextProvider>
-              <MenuContextProvider>
-                <UserContextProvider>
+      <UserContextProvider>
+        <DateSelectedContextProvider>
+          <MealEntriesContextProvider>
+            <WellnessEntriesContextProvider>
+              <AllEntriesPerMonthContextProvider>
+                <MenuContextProvider>
                   <ThemeProvider
                     enableSystem
                     themes={ALL_THEME_NAMES}
@@ -54,12 +54,12 @@ function MyApp(props: AppProps) {
                       </>
                     )}
                   </ThemeProvider>
-                </UserContextProvider>
-              </MenuContextProvider>
-            </AllEntriesPerMonthContextProvider>
-          </WellnessEntriesContextProvider>
-        </MealEntriesContextProvider>
-      </DateSelectedContextProvider>
+                </MenuContextProvider>
+              </AllEntriesPerMonthContextProvider>
+            </WellnessEntriesContextProvider>
+          </MealEntriesContextProvider>
+        </DateSelectedContextProvider>
+      </UserContextProvider>
     </SessionProvider>
   );
 }
