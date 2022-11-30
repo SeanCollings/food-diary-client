@@ -1,25 +1,28 @@
-import { IUserModel } from '@store/user-context';
-import { userMockData } from 'client/mock';
-import NextAuth from 'next-auth';
+import axios, { AxiosError } from 'axios';
+import NextAuth, { Session } from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
+
+interface UserResponse {
+  access_token: string;
+}
 
 export default NextAuth({
   session: {
     strategy: 'jwt',
   },
   callbacks: {
-    async jwt({ token, account, user }) {
+    async jwt({ token, user }) {
       if (user) {
-        token.user = user;
+        token.accessToken = (user as unknown as UserResponse).access_token;
       }
 
       return token;
     },
-    async session({ session, token, user }) {
-      session.user = {
-        ...session.user,
-        ...(token.user as IUserModel),
-      };
+    async session({ session, token }) {
+      session = {
+        ...session,
+        accessToken: token.accessToken,
+      } as Session;
 
       return session;
     },
@@ -37,16 +40,20 @@ export default NextAuth({
         },
       },
       authorize: async (credentials) => {
-        const { data, error } = await Promise.resolve({
-          data: userMockData,
-          error: undefined,
-        } as { data: IUserModel; error?: { message: string } });
+        try {
+          const { data } = await axios.post(
+            `${process.env.SERVER_HOST}/auth/login`,
+            {
+              email: credentials?.email,
+              password: credentials?.password,
+            }
+          );
 
-        if (error) {
-          throw new Error(error.message || 'Could not log in');
+          return data;
+        } catch (err) {
+          console.error('[authorize error]:', (err as AxiosError).message);
+          throw new Error('Unauthorized');
         }
-
-        return data;
       },
     }),
   ],
