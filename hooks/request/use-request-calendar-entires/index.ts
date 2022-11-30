@@ -6,8 +6,7 @@ import { calendarEntriesFetcher } from '@client/fetchers';
 import { useAllEntriesPerMonthContext } from '@store/all-entries-per-month-context';
 import { URI_DIARY_CALENDAR_ENTRIES } from '@client/constants';
 import { ICalendarEntriesResponseBody } from '@client/interfaces/diary-data';
-
-const MONTHS_TO_RETURN = 6;
+import { MAX_CALENDAR_ENTRIES_RANGE } from '@utils/validation/validation.constants';
 
 interface IRequested {
   [date: string]: boolean;
@@ -25,7 +24,9 @@ export const useRequestCalendarEntries = (date: string | null) => {
   }, [date, userLoggedIn, hasRequested]);
 
   const { data, error } = useSWR(
-    shouldFetch ? [URI_DIARY_CALENDAR_ENTRIES, date, MONTHS_TO_RETURN] : null,
+    shouldFetch
+      ? [URI_DIARY_CALENDAR_ENTRIES, date, MAX_CALENDAR_ENTRIES_RANGE]
+      : null,
     calendarEntriesFetcher<ICalendarEntriesResponseBody>,
     {
       onErrorRetry: (error, key, config, revalidate, { retryCount }) => {
