@@ -342,7 +342,10 @@ const CalendarContent: FC<ICalendarContentProps> = ({
               'restrict-before': isRestrictBeforeDay,
               'restrict-after': isRestrictAfterDay,
               'selected-from-date': isSelectedDay && !!restricDaysAfter,
-              'selected-to-date': isSelectedDay && !!restrictDaysBefore,
+              'selected-to-date':
+                isSelectedDay &&
+                !!restrictDaysBefore &&
+                !(restrictDaysBefore && restricDaysAfter),
             });
 
             return (
