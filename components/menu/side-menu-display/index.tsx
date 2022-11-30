@@ -162,7 +162,6 @@ const SideMenuDisplay: FC = () => {
     toggleMenu();
   };
   const onLogoutClick = async () => {
-    localStorage?.removeItem('theme');
     await signOut({ redirect: true, callbackUrl: '/login' });
   };
 
