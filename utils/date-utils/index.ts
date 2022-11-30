@@ -220,6 +220,19 @@ export const isDayBefore = (thisDate: TDate, compareDate: TDate) => {
 };
 
 /**
+ * Get a date that is n number of months ago
+ * @param date string | Date
+ * @param monthsAgo number
+ * @returns Date
+ */
+export const getDateMonthsAgo = (date: TDate, monthsAgo: number) => {
+  const monthsAgoDate = new Date(date);
+  monthsAgoDate.setMonth(monthsAgoDate.getMonth() - monthsAgo);
+
+  return monthsAgoDate;
+};
+
+/**
  * Return number of days between 2 dates
  * @param start string | Date
  * @param end string | Date
@@ -237,8 +250,8 @@ export const getInclusiveDaysBetweenDates = (start: TDate, end: TDate) => {
 
 /**
  * Return array of dates between 2 dates
- * @param start string | Date
- * @param end string | Date
+ * @param first string | Date
+ * @param second string | Date
  * @returns string[]
  */
 export const getInclusiveDatesBetweenDates = (first: TDate, second: TDate) => {

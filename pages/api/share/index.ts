@@ -1,47 +1,43 @@
 import { URI_SHARE } from '@client/constants';
 import { IShareResponseBody } from '@client/interfaces/user-summary-data';
-import { getInclusiveDatesBetweenDates } from '@utils/date-utils';
+import axios, { AxiosError } from 'axios';
 import { NextApiRequest, NextApiResponse } from 'next';
-import { getEntriesForDateRange } from '../summary';
-
 interface IRequest extends NextApiRequest {
-  query: { guid: string; dateFrom: string; dateTo: string };
+  query: { link: string; dateFrom: string; dateTo: string };
 }
-
-const getDataFromAPI = async (
-  guid: string,
-  dateFrom: string,
-  dateTo: string
-) => {
-  const datesInRange = getInclusiveDatesBetweenDates(dateFrom, dateTo);
-  const entries = getEntriesForDateRange(datesInRange);
-
-  return Promise.resolve({
-    user: 'Firstname Surname',
-    totalDays: datesInRange.length,
-    dates: datesInRange,
-    data: entries,
-  });
-};
 
 const handler = async (
   req: IRequest,
   res: NextApiResponse<IShareResponseBody>
 ) => {
-  const { guid, dateFrom, dateTo } = req.query;
-  console.log(`-------- ${URI_SHARE} :`, guid, ':', dateFrom, '-', dateTo);
+  const { link, dateFrom, dateTo } = req.query;
+  console.log(`-------- ${URI_SHARE} :`, link, ':', dateFrom, '-', dateTo);
 
   if (req.method !== 'GET') {
-    return;
+    return res.status(500).json({ ok: false });
   }
 
-  const { user, data, dates, totalDays } = await getDataFromAPI(
-    guid,
-    dateFrom,
-    dateTo
-  );
+  try {
+    const { data } = await axios.get(
+      `${process.env.SERVER_HOST}/share?link=${link}&dateFrom=${dateFrom}&dateTo=${dateTo}`
+    );
 
-  return res.status(200).json({ user, data, dates, totalDays });
+    return res.status(200).json({
+      ok: true,
+      summary: data,
+    });
+  } catch (err) {
+    return res.status(500).json({
+      ok: false,
+      message: (
+        err as AxiosError<{
+          statusCode: number;
+          message: string;
+          error: string;
+        }>
+      ).response?.data.message,
+    });
+  }
 };
 
 export default handler;

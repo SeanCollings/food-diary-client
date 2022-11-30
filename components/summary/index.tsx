@@ -7,7 +7,11 @@ import {
   MEDIA_MOBILE_TABLET,
   MEDIA_TABLET,
 } from '@utils/constants';
-import { formatFullDateNoDay, getBothDatesEqual } from '@utils/date-utils';
+import {
+  formatFullDateNoDay,
+  getBothDatesEqual,
+  getDateMonthsAgo,
+} from '@utils/date-utils';
 import styled from 'styled-components';
 import Pagination from '@components/summary/pagination';
 import { getPaddedNestedArray } from '@utils/array-utils';
@@ -15,6 +19,7 @@ import Calendar from '@components/calendar';
 import { MdCalendarToday } from 'react-icons/md';
 import { DateHeaderRow, MealDataRow, WellnessDataRow } from './content-rows';
 import { ISummaryResponseData } from '@client/interfaces/user-summary-data';
+import { MAX_SUMMARY_MONTH_RANGE } from '@utils/validation/validation.constants';
 
 const CALENDAR_HEIGHT = 280;
 const MAX_DAYS_PER_ROW = 2;
@@ -266,6 +271,7 @@ const Summary: FC<ISummaryProps> = ({
     setDateRangeChanged(false);
   };
 
+  const restricDateRange = getDateMonthsAgo(dateTo, MAX_SUMMARY_MONTH_RANGE);
   const gridTemplateArea = useMemo(
     () =>
       `'date' '${ALL_MEAL_CARDS.map((meal) => meal.id).join(
@@ -284,6 +290,7 @@ const Summary: FC<ISummaryProps> = ({
               <Calendar
                 topLevelDate={dateFrom}
                 calendarHeight={CALENDAR_HEIGHT}
+                restrictDaysBefore={restricDateRange}
                 restricDaysAfter={dateTo}
                 onClose={() => setShowFromDateCalendar(false)}
                 onClickNewDate={onClickChangeDateFrom}
