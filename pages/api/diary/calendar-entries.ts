@@ -37,10 +37,16 @@ const handler = async (
 
     return res.status(200).json({ ok: true, months: monthRange, entries });
   } catch (err) {
-    console.log('ERR::', (err as AxiosError).message);
-    return res
-      .status(401)
-      .json({ ok: false, message: (err as AxiosError).message });
+    return res.status(401).json({
+      ok: false,
+      message: (
+        err as AxiosError<{
+          statusCode: number;
+          message: string;
+          error: string;
+        }>
+      ).response?.data.message,
+    });
   }
 };
 
