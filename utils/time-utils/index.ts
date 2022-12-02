@@ -114,7 +114,11 @@ export const getNewMinuteValue = (minuteValue: string) => {
  * @param time number
  * @returns string
  */
-export const formatMinutesToHoursMinutes = (time: number) => {
+export const formatMinutesToHoursMinutes = (time?: number) => {
+  if (!time) {
+    return '00:00';
+  }
+
   const minutes = time % 60;
   const hours = (time - minutes) / 60;
 
