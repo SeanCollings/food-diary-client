@@ -2,6 +2,7 @@ import Modal from '@components/modals';
 import ModalShareProfile from '@components/modals/share-profile';
 import { useUserContext } from '@store/user-context';
 import { COLOURS, OPACITY_40 } from '@utils/constants';
+import { formatMinutesToHoursMinutes } from '@utils/time-utils';
 import { FC, useState } from 'react';
 import { MdAccountCircle, MdPhotoCamera, MdSettings } from 'react-icons/md';
 import styled from 'styled-components';
@@ -157,14 +158,16 @@ const UserProfile: FC<IUserProfile> = ({ settingsClick }) => {
       {!!user?.stats && (
         <SStatsContainer>
           {user.preferences?.showDayStreak && (
-            <SStatWrapper title="Latest streak where each day in a row an entry was added">
+            <SStatWrapper title="Latest streak where each day in a row an entry has been added">
               <SStatValue>{user.stats.dayStreak}</SStatValue>
               <SStatLabel>day streak</SStatLabel>
             </SStatWrapper>
           )}
           {user?.preferences?.showWeeklyExcercise && (
             <SStatWrapper title="Shows total excercise for the past 7 days">
-              <SStatValue>{user.stats.weeklyExercise}</SStatValue>
+              <SStatValue>
+                {formatMinutesToHoursMinutes(user.stats.weeklyExercise)}
+              </SStatValue>
               <SStatLabel>weekly excercise</SStatLabel>
             </SStatWrapper>
           )}

@@ -41,7 +41,7 @@ export interface IUserModel {
   };
   [EUser.STATS]?: {
     dayStreak?: number;
-    weeklyExercise?: string;
+    weeklyExercise?: number;
     weeklyWater?: number;
   };
 }
