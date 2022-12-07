@@ -42,6 +42,7 @@ const SInput = styled.input`
   height: 58px;
   background: var(--th-quaternary__40);
   border: 1px solid transparent;
+  color: var(--text);
 
   &.error {
     border-color: var(--error);

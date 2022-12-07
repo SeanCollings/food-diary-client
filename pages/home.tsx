@@ -54,7 +54,7 @@ const SParagraphContent = styled.div`
 const SExploreButtonContainer = styled.div``;
 const SExploreButton = styled.button`
   outline: none;
-  color: var(--bg-secondary);
+  color: var(--text);
   background: var(--th-primary);
   border: 1px solid transparent;
   border-radius: 8px;

@@ -5,11 +5,12 @@ import { getSession } from 'next-auth/react';
 
 const SLoginContainer = styled.section`
   display: flex;
+  flex-direction: column;
   align-items: center;
-  justify-content: center;
+  height: 100%;
+  padding: 20px 0;
+  min-height: 600px;
 `;
-
-//https://nextjs.org/docs/authentication
 
 const LoginPage: NextPage = () => {
   return (
