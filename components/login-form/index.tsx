@@ -1,7 +1,7 @@
 import FormInput from '@components/ui/input/form-input';
 import { MEDIA_MOBILE } from '@utils/constants';
 import { runValidations } from '@utils/validation';
-import { FC, FormEvent, useCallback, useReducer } from 'react';
+import { FC, FormEvent, useCallback, useEffect, useReducer } from 'react';
 import { signIn } from 'next-auth/react';
 import styled from 'styled-components';
 import { PASSWORD_MIN_LENGTH } from '@utils/validation/validation.constants';
@@ -18,11 +18,13 @@ import { useMemoizeFunction } from '@hooks/use-memoize-function';
 import { loginFormValidators } from '@utils/validation/validators/collections';
 import { useRouter } from 'next/router';
 
+const RECAPTCHA_KEY = 'recaptcha_key';
+
 const SForm = styled.form`
   background: var(--bg-secondary);
   max-width: 400px;
   width: 100%;
-  border-radius: 20px;
+  border-radius: 12px;
   min-height: 500px;
   padding: 40px 50px;
   display: flex;
@@ -49,11 +51,14 @@ const SSubHeader = styled.div`
 `;
 const SChangeButton = styled.button`
   font-size: 17px;
-  font-weight: 200;
   background: transparent;
   border: transparent;
   cursor: pointer;
   color: var(--th-primary);
+
+  :hover {
+    text-decoration: underline;
+  }
 `;
 const SContentContainer = styled.div`
   display: flex;
@@ -85,6 +90,21 @@ const SLoginButton = styled.button`
   :active {
     opacity: 0.7;
     width: 152px;
+  }
+`;
+const SRecaptchaContainer = styled.span`
+  margin-top: 12px;
+  font-size: 12px;
+  text-align: center;
+  max-width: 400px;
+  background-color: var(--bg-secondary);
+  border-radius: 4px;
+  padding: 4px;
+`;
+const SGoogleLink = styled.a`
+  color: var(--th-primary);
+  :hover {
+    text-decoration: underline;
   }
 `;
 
@@ -136,23 +156,55 @@ const InteractiveSubHeader: FC<IInteractiveSubHeaderProps> = ({
   </SSubHeader>
 );
 
-const createUser = async ({ email, password, name }: TFormValues) => {
-  const res = await fetch('/api/auth/signup', {
-    method: 'POST',
-    body: JSON.stringify({ email, password, name }),
-    headers: {
-      'Content-Type': 'application/json',
-    },
-  });
+const createUser = async ({
+  email,
+  password,
+  name,
+}: TFormValues): Promise<{ error?: string; data?: { message: string } }> => {
+  try {
+    const token = await new Promise((resolve) =>
+      window.grecaptcha.ready(() =>
+        resolve(
+          window.grecaptcha.execute(process.env.RECAPTCHA_SITE_KEY as string, {
+            action: 'create-user',
+          })
+        )
+      )
+    );
 
-  const data = await res.json();
+    const res = await fetch('/api/auth/signup', {
+      method: 'POST',
+      body: JSON.stringify({ email, password, name, token }),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
 
-  if (!res.ok) {
-    throw new Error(data.message || 'Something went wrong');
+    const data = await res.json();
+
+    if (!res.ok) {
+      return { error: data.message || 'Something went wrong' };
+    }
+
+    return { data };
+  } catch (err) {
+    return { error: (err as any).message };
   }
-
-  return data;
 };
+
+interface IGoogleLinkProps {
+  link: string;
+  label: string;
+}
+
+const GoogleLink: FC<IGoogleLinkProps> = ({ link, label }) => (
+  <SGoogleLink href={link} target={'_blank'} rel="noreferrer noopener">
+    {label}
+  </SGoogleLink>
+);
+
+// https://www.cluemediator.com/how-to-implement-recaptcha-v3-in-react#agric
+// https://stackoverflow.com/questions/53832882/react-and-recaptcha-v3
 
 const LoginForm: FC = () => {
   const router = useRouter();
@@ -166,6 +218,18 @@ const LoginForm: FC = () => {
   const showPasswordInput = isLogin || isCreate;
   const formText = getFormText(isLogin, isReset);
 
+  useEffect(() => {
+    const scriptExist = document.getElementById(RECAPTCHA_KEY);
+
+    if (!scriptExist) {
+      // Add reCaptcha
+      const script = document.createElement('script');
+      script.id = RECAPTCHA_KEY;
+      script.src = `https://www.google.com/recaptcha/api.js?render=${process.env.RECAPTCHA_SITE_KEY}`;
+      document.body.appendChild(script);
+    }
+  }, []);
+
   const signInUser = async () => {
     const result = await signIn('credentials', {
       redirect: false,
@@ -178,6 +242,13 @@ const LoginForm: FC = () => {
         type: ELoginFormType.LOGIN_ERROR,
         payload: result.error,
       });
+    }
+
+    const grecaptchaBadgeEl = document.querySelector(
+      '.grecaptcha-badge'
+    ) as HTMLElement;
+    if (grecaptchaBadgeEl) {
+      grecaptchaBadgeEl.style.display = 'none';
     }
 
     router.replace('/');
@@ -210,7 +281,7 @@ const LoginForm: FC = () => {
   const submitHandler = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const errors = runFormValidations();
-
+    // set loading true
     dispatch({ type: ELoginFormType.SUBMIT, payload: { errors } });
 
     const hasErrors = !!Object.keys(errors).length;
@@ -227,9 +298,11 @@ const LoginForm: FC = () => {
           break;
         case 'create':
           console.log('CREATE');
-          const result = await createUser(state.formValues);
-          console.log('Result ::', result);
-          await signInUser();
+          const { error } = await createUser(state.formValues);
+
+          if (!error) {
+            await signInUser();
+          }
           break;
         case 'reset':
           console.log('RESET');
@@ -280,68 +353,85 @@ const LoginForm: FC = () => {
   const handleOnBlurMemoized = useMemoizeFunction(handleOnBlur);
 
   return (
-    <SForm onSubmit={submitHandler}>
-      <SHeaderContainer>
-        <SHeader>{formText.headerText}</SHeader>
-        <InteractiveSubHeader
-          subHeaderText={formText.subHeaderText}
-          buttonText={formText.typeChangeText}
-          onClick={handleToggleInteract}
-        />
-      </SHeaderContainer>
-      <SContentContainer>
-        <SInputsContainer>
-          {showNameInput && (
-            <FormInput<TInputTypes>
-              id="name"
-              name="Name"
-              type="text"
-              value={state.formValues.name}
-              required
-              isError={state.formErrors['name']}
-              onChange={updateFormValuesMemoized}
-              onBlur={handleOnBlurMemoized}
-            />
-          )}
-          <FormInput<TInputTypes>
-            id="email"
-            name="Email address"
-            type="email"
-            value={state.formValues.email}
-            required
-            isError={state.formErrors['email']}
-            onChange={updateFormValuesMemoized}
-            onBlur={handleOnBlurMemoized}
-          />
-          {showPasswordInput && (
-            <FormInput<TInputTypes>
-              id="password"
-              name="Password"
-              type="password"
-              value={state.formValues.password}
-              required
-              title={`Minimum of ${PASSWORD_MIN_LENGTH} characters.`}
-              isError={state.formErrors['password']}
-              onChange={updateFormValuesMemoized}
-              onBlur={handleOnBlurMemoized}
-            />
-          )}
-        </SInputsContainer>
-        {isLogin && (
+    <>
+      <SForm onSubmit={submitHandler}>
+        <SHeaderContainer>
+          <SHeader>{formText.headerText}</SHeader>
           <InteractiveSubHeader
-            subHeaderText="Forgot password?"
-            buttonText="Reset here."
-            onClick={handleSelectResetPassword}
+            subHeaderText={formText.subHeaderText}
+            buttonText={formText.typeChangeText}
+            onClick={handleToggleInteract}
           />
-        )}
-        {isReset && (
-          <InteractiveSubHeader subHeaderText="Enter your email address and a reset code will be sent to you." />
-        )}
-      </SContentContainer>
-      <SLoginButtonContainer>
-        <SLoginButton type="submit">{formText.loginButtonText}</SLoginButton>
-      </SLoginButtonContainer>
-    </SForm>
+        </SHeaderContainer>
+        <SContentContainer>
+          <SInputsContainer>
+            {showNameInput && (
+              <FormInput<TInputTypes>
+                id="name"
+                name="Name"
+                type="text"
+                value={state.formValues.name}
+                required
+                isError={state.formErrors['name']}
+                onChange={updateFormValuesMemoized}
+                onBlur={handleOnBlurMemoized}
+              />
+            )}
+            <FormInput<TInputTypes>
+              id="email"
+              name="Email address"
+              type="email"
+              value={state.formValues.email}
+              required
+              isError={state.formErrors['email']}
+              onChange={updateFormValuesMemoized}
+              onBlur={handleOnBlurMemoized}
+            />
+            {showPasswordInput && (
+              <FormInput<TInputTypes>
+                id="password"
+                name="Password"
+                type="password"
+                value={state.formValues.password}
+                required
+                title={`Minimum of ${PASSWORD_MIN_LENGTH} characters.`}
+                isError={state.formErrors['password']}
+                onChange={updateFormValuesMemoized}
+                onBlur={handleOnBlurMemoized}
+              />
+            )}
+          </SInputsContainer>
+          {isLogin && (
+            <InteractiveSubHeader
+              subHeaderText="Forgot password?"
+              buttonText="Reset here."
+              onClick={handleSelectResetPassword}
+            />
+          )}
+          {isReset && (
+            <InteractiveSubHeader subHeaderText="Enter your email address and a reset code will be sent to you." />
+          )}
+        </SContentContainer>
+        <SLoginButtonContainer>
+          <SLoginButton type="submit">{formText.loginButtonText}</SLoginButton>
+        </SLoginButtonContainer>
+      </SForm>
+      {isCreate && (
+        <SRecaptchaContainer>
+          This page is protected by reCAPTCHA and the Google{' '}
+          <GoogleLink
+            link="https://policies.google.com/privacy"
+            label="Privacy Policy"
+          />{' '}
+          and{' '}
+          <GoogleLink
+            link="https://policies.google.com/terms"
+            label="Terms of Service"
+          />{' '}
+          apply
+        </SRecaptchaContainer>
+      )}
+    </>
   );
 };
 

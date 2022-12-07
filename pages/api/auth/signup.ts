@@ -6,6 +6,7 @@ interface IRequest extends NextApiRequest {
     email: string;
     password: string;
     name: string;
+    token: string;
   };
 }
 
