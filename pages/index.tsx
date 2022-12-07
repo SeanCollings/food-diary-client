@@ -6,12 +6,30 @@ import styled from 'styled-components';
 import { getSession } from 'next-auth/react';
 import { useEffect, useState } from 'react';
 import { useRequestDiaryEntry } from '@hooks/request/use-request-diary-entry';
-import { IUserModel } from '@store/user-context';
+import { IUserModel, useUserContext } from '@store/user-context';
+import { MEDIA_MOBILE } from '@utils/constants';
 
 const SDiaryContainer = styled.section`
   display: flex;
   flex-direction: column;
   height: 100%;
+`;
+const STopContainer = styled.div`
+  display: flex;
+  align-items: center;
+`;
+const SNameContainer = styled.div`
+  display: flex;
+  column-gap: 4px;
+  width: 100%;
+  flex-wrap: wrap;
+
+  ${MEDIA_MOBILE} {
+    display: none;
+  }
+`;
+const SName = styled.span`
+  font-weight: 600;
 `;
 
 // https://swr.vercel.app/
@@ -21,6 +39,7 @@ interface IDiaryPageProps {
 }
 
 const Home: NextPage<IDiaryPageProps> = ({ session }) => {
+  const { user } = useUserContext();
   const [mounted, setMounted] = useState(false);
   const { data, isError, isLoading } = useRequestDiaryEntry(
     !!session && mounted
@@ -32,7 +51,15 @@ const Home: NextPage<IDiaryPageProps> = ({ session }) => {
 
   return (
     <SDiaryContainer>
-      <DateDisplay />
+      <STopContainer>
+        {!!session && (
+          <SNameContainer>
+            <span>Welcome:</span>
+            <SName>{user?.name}</SName>
+          </SNameContainer>
+        )}
+        <DateDisplay />
+      </STopContainer>
       <WellnessContainer />
       <CardContainer />
     </SDiaryContainer>
