@@ -1,7 +1,14 @@
 import { COLOURS } from '@utils/constants';
 import { detectAutofill } from '@utils/document-utils';
 import { INPUT_MAX_LENGTH } from '@utils/validation/validation.constants';
-import { ChangeEvent, memo, useEffect, useRef, useState } from 'react';
+import {
+  ChangeEvent,
+  memo,
+  useEffect,
+  useRef,
+  useState,
+  InputHTMLAttributes,
+} from 'react';
 import styled from 'styled-components';
 
 interface ISLabel {
@@ -61,7 +68,8 @@ const SError = styled.div`
 
 type TInputType = 'text' | 'email' | 'password';
 
-interface IFormInputProps<T> {
+interface IFormInputProps<T extends string>
+  extends Omit<InputHTMLAttributes<HTMLInputElement>, 'onChange'> {
   id: T;
   value: string;
   type: TInputType;
@@ -85,6 +93,7 @@ const FormInput = <T extends string>({
   isError,
   onChange,
   onBlur,
+  ...rest
 }: IFormInputProps<T>) => {
   const inputRef = useRef<HTMLInputElement>(null);
   const [labelTop, setlabelTop] = useState(false);
@@ -142,6 +151,7 @@ const FormInput = <T extends string>({
         onFocus={() => setIsFocus(true)}
         onBlur={onBlurHandler}
         className={!!isError ? 'error' : ''}
+        {...rest}
       />
       {isError && <SError>{isError}</SError>}
     </SContainer>
