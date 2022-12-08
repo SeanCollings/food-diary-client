@@ -1,3 +1,5 @@
+import { DEFAULT_AXIOS_ERROR_MSG } from '@client/constants';
+import { CustomAxiosError } from '@client/interfaces/axios.types';
 import axios from 'axios';
 import { NextApiRequest, NextApiResponse } from 'next';
 
@@ -16,14 +18,15 @@ const handler = async (req: IRequest, res: NextApiResponse) => {
       return;
     }
 
-    const { data } = await axios.post(
-      `${process.env.SERVER_HOST}/auth/signup`,
-      req.body
-    );
+    await axios.post(`${process.env.SERVER_HOST}/auth/signup`, req.body);
 
-    res.status(201).json({ message: 'User created' });
+    return res.status(201).json({ message: 'User created' });
   } catch (err) {
-    res.status(500).json({ error: 'Something went wrong' });
+    return res.status(500).json({
+      error:
+        (err as CustomAxiosError).response?.data.message ||
+        DEFAULT_AXIOS_ERROR_MSG,
+    });
   }
 };
 

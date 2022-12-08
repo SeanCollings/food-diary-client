@@ -1,4 +1,5 @@
 import { TErrors } from '@utils/validation/validation.types';
+import { SignInResponse } from 'next-auth/react';
 
 export enum EInputTypes {
   EMAIL_ADDRESS = 'email',
@@ -60,3 +61,16 @@ export type ILoginFormAction =
       type: ELoginFormType.LOGIN_ERROR;
       payload: string;
     };
+
+export interface ICreateUserResponse {
+  error?: string;
+  message?: string;
+}
+
+export interface ISignInUserParams extends Omit<TFormValues, 'name'> {}
+
+export interface ISignInUserResponse extends Partial<SignInResponse> {}
+
+export interface IResetPasswordParams {
+  email: string;
+}

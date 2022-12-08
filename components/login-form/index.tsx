@@ -2,7 +2,6 @@ import FormInput from '@components/ui/input/form-input';
 import { MEDIA_MOBILE } from '@utils/constants';
 import { runValidations } from '@utils/validation';
 import { FC, FormEvent, useCallback, useEffect, useReducer } from 'react';
-import { signIn } from 'next-auth/react';
 import styled from 'styled-components';
 import { PASSWORD_MIN_LENGTH } from '@utils/validation/validation.constants';
 import {
@@ -17,8 +16,11 @@ import {
 import { useMemoizeFunction } from '@hooks/use-memoize-function';
 import { loginFormValidators } from '@utils/validation/validators/collections';
 import { useRouter } from 'next/router';
-
-const RECAPTCHA_KEY = 'recaptcha_key';
+import {
+  createRecaptchaScript,
+  hideRecaptchaBadge,
+} from '@utils/grecaptcha-utils';
+import { createUser, resetPassword, signInUser } from '@utils/login-utils';
 
 const SForm = styled.form`
   background: var(--bg-secondary);
@@ -156,42 +158,6 @@ const InteractiveSubHeader: FC<IInteractiveSubHeaderProps> = ({
   </SSubHeader>
 );
 
-const createUser = async ({
-  email,
-  password,
-  name,
-}: TFormValues): Promise<{ error?: string; data?: { message: string } }> => {
-  try {
-    const token = await new Promise((resolve) =>
-      window.grecaptcha.ready(() =>
-        resolve(
-          window.grecaptcha.execute(process.env.RECAPTCHA_SITE_KEY as string, {
-            action: 'create-user',
-          })
-        )
-      )
-    );
-
-    const res = await fetch('/api/auth/signup', {
-      method: 'POST',
-      body: JSON.stringify({ email, password, name, token }),
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    });
-
-    const data = await res.json();
-
-    if (!res.ok) {
-      return { error: data.message || 'Something went wrong' };
-    }
-
-    return { data };
-  } catch (err) {
-    return { error: (err as any).message };
-  }
-};
-
 interface IGoogleLinkProps {
   link: string;
   label: string;
@@ -202,9 +168,6 @@ const GoogleLink: FC<IGoogleLinkProps> = ({ link, label }) => (
     {label}
   </SGoogleLink>
 );
-
-// https://www.cluemediator.com/how-to-implement-recaptcha-v3-in-react#agric
-// https://stackoverflow.com/questions/53832882/react-and-recaptcha-v3
 
 const LoginForm: FC = () => {
   const router = useRouter();
@@ -219,38 +182,23 @@ const LoginForm: FC = () => {
   const formText = getFormText(isLogin, isReset);
 
   useEffect(() => {
-    const scriptExist = document.getElementById(RECAPTCHA_KEY);
-
-    if (!scriptExist) {
-      // Add reCaptcha
-      const script = document.createElement('script');
-      script.id = RECAPTCHA_KEY;
-      script.src = `https://www.google.com/recaptcha/api.js?render=${process.env.RECAPTCHA_SITE_KEY}`;
-      document.body.appendChild(script);
-    }
+    createRecaptchaScript();
   }, []);
 
-  const signInUser = async () => {
-    const result = await signIn('credentials', {
-      redirect: false,
+  const signIn = async () => {
+    const result = await signInUser({
       email: state.formValues.email,
       password: state.formValues.password,
     });
 
-    if (result?.error) {
+    if (!result || result?.error) {
       return dispatch({
         type: ELoginFormType.LOGIN_ERROR,
-        payload: result.error,
+        payload: result?.error || 'Something went wrong',
       });
     }
 
-    const grecaptchaBadgeEl = document.querySelector(
-      '.grecaptcha-badge'
-    ) as HTMLElement;
-    if (grecaptchaBadgeEl) {
-      grecaptchaBadgeEl.style.display = 'none';
-    }
-
+    hideRecaptchaBadge();
     router.replace('/');
   };
 
@@ -293,19 +241,17 @@ const LoginForm: FC = () => {
     try {
       switch (state.formType) {
         case 'login':
-          console.log('LOGIN');
-          await signInUser();
+          await signIn();
           break;
         case 'create':
-          console.log('CREATE');
           const { error } = await createUser(state.formValues);
 
           if (!error) {
-            await signInUser();
+            await signIn();
           }
           break;
         case 'reset':
-          console.log('RESET');
+          await resetPassword({ email: state.formValues.email });
           break;
       }
     } catch (err) {
@@ -416,21 +362,19 @@ const LoginForm: FC = () => {
           <SLoginButton type="submit">{formText.loginButtonText}</SLoginButton>
         </SLoginButtonContainer>
       </SForm>
-      {isCreate && (
-        <SRecaptchaContainer>
-          This page is protected by reCAPTCHA and the Google{' '}
-          <GoogleLink
-            link="https://policies.google.com/privacy"
-            label="Privacy Policy"
-          />{' '}
-          and{' '}
-          <GoogleLink
-            link="https://policies.google.com/terms"
-            label="Terms of Service"
-          />{' '}
-          apply
-        </SRecaptchaContainer>
-      )}
+      <SRecaptchaContainer>
+        This page is protected by reCAPTCHA and the Google{' '}
+        <GoogleLink
+          link="https://policies.google.com/privacy"
+          label="Privacy Policy"
+        />{' '}
+        and{' '}
+        <GoogleLink
+          link="https://policies.google.com/terms"
+          label="Terms of Service"
+        />{' '}
+        apply
+      </SRecaptchaContainer>
     </>
   );
 };
