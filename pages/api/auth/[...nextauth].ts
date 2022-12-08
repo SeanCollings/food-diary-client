@@ -38,14 +38,20 @@ export default NextAuth({
         password: {
           type: 'password',
         },
+        token: {
+          type: 'token',
+        },
       },
       authorize: async (credentials) => {
         try {
+          const { email, password, token } = credentials || {};
+
           const { data } = await axios.post(
             `${process.env.SERVER_HOST}/auth/login`,
             {
-              email: credentials?.email,
-              password: credentials?.password,
+              email,
+              password,
+              token,
             }
           );
 
