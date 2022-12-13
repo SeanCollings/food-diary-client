@@ -400,7 +400,7 @@ export const foodEmojis: IFoodEmojis = {
     cut_of_meat: {
       id: 'cut_of_meat',
       name: 'Cut of Meat',
-      keywords: ['food', 'cow', 'chop', 'lambchop', 'porkchop'],
+      keywords: ['food', 'cow', 'chop', 'lambchop', 'porkchop', 'steak'],
       skins: [{ unified: '1f969', native: '🥩' }],
     },
     bacon: {
@@ -457,13 +457,13 @@ export const foodEmojis: IFoodEmojis = {
     burrito: {
       id: 'burrito',
       name: 'Burrito',
-      keywords: ['food', 'mexican'],
+      keywords: ['food', 'mexican', 'wrap'],
       skins: [{ unified: '1f32f', native: '🌯' }],
     },
     stuffed_flatbread: {
       id: 'stuffed_flatbread',
       name: 'Stuffed Flatbread',
-      keywords: ['food', 'gyro'],
+      keywords: ['food', 'gyro', 'pita'],
       skins: [{ unified: '1f959', native: '🥙' }],
     },
     falafel: {
@@ -517,7 +517,7 @@ export const foodEmojis: IFoodEmojis = {
     butter: {
       id: 'butter',
       name: 'Butter',
-      keywords: ['food', 'cook'],
+      keywords: ['food', 'cook', 'margarine'],
       skins: [{ unified: '1f9c8', native: '🧈' }],
     },
     salt: {
