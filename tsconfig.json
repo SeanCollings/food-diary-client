@@ -23,6 +23,7 @@
       "@store/*": ["store/*"],
       "@client/*": ["client/*"],
       "@lib/*": ["lib/*"],
+      "@server/*": ["server/*"],
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
