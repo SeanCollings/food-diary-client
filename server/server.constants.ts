@@ -1,3 +1,7 @@
+export const API_AUTH_SIGNUP = '/auth/signup';
+export const API_AUTH_LOGIN = '/auth/login';
+export const API_AUTH_RESET = '/auth/reset';
+
 export const API_DIARY = '/diary';
 export const API_DIARY_CALENDAR_ENTRIES = '/diary/calendar-entries';
 

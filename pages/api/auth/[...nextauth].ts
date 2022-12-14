@@ -1,4 +1,6 @@
-import axios, { AxiosError } from 'axios';
+import { CustomAxiosError } from '@client/interfaces/axios.types';
+import { apiClient } from '@server/api-client';
+import { API_AUTH_LOGIN } from '@server/server.constants';
 import NextAuth, { Session } from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
 
@@ -46,18 +48,18 @@ export default NextAuth({
         try {
           const { email, password, token } = credentials || {};
 
-          const { data } = await axios.post(
-            `${process.env.SERVER_HOST}/auth/login`,
-            {
-              email,
-              password,
-              token,
-            }
-          );
+          const { data } = await apiClient.post(API_AUTH_LOGIN, {
+            email,
+            password,
+            token,
+          });
 
           return data;
         } catch (err) {
-          console.error('[authorize error]:', (err as AxiosError).message);
+          console.error(
+            '[authorize error]:',
+            (err as CustomAxiosError).message
+          );
           throw new Error('Unauthorized');
         }
       },

@@ -1,6 +1,7 @@
 import { DEFAULT_AXIOS_ERROR_MSG } from '@client/constants';
 import { CustomAxiosError } from '@client/interfaces/axios.types';
-import axios from 'axios';
+import { apiClient } from '@server/api-client';
+import { API_AUTH_SIGNUP } from '@server/server.constants';
 import { NextApiRequest, NextApiResponse } from 'next';
 
 interface IRequest extends NextApiRequest {
@@ -18,7 +19,7 @@ const handler = async (req: IRequest, res: NextApiResponse) => {
       return;
     }
 
-    await axios.post(`${process.env.SERVER_HOST}/auth/signup`, req.body);
+    await apiClient.post(API_AUTH_SIGNUP, req.body);
 
     return res.status(201).json({ message: 'User created' });
   } catch (err) {
