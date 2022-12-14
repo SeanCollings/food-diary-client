@@ -81,7 +81,7 @@ const STrendMenuContainer = styled.div`
   position: relative;
   max-width: fit-content;
 `;
-const SMenuItem = styled.span<any>`
+const SMenuItem = styled.span`
   cursor: pointer;
   padding-bottom: 4px;
   width: 142px;
