@@ -1,7 +1,11 @@
-import { IWellnessEntriesDto } from '@lib/interfaces/wellness.interface';
-import axios, { AxiosError } from 'axios';
+import {
+  IWellnessEntriesDto,
+  TWellnessEntryAndDate,
+} from '@lib/interfaces/wellness.interface';
+import { createApiClientSecure } from '@server/api-client';
+import { API_WELLNESS } from '@server/server.constants';
+import { AxiosError } from 'axios';
 import { NextApiRequest, NextApiResponse } from 'next';
-import { getSession } from 'next-auth/react';
 
 interface IRequest<T extends unknown> extends NextApiRequest {
   body: T;
@@ -15,25 +19,19 @@ const handler = async (
   req: IRequest<IWellnessEntriesDto>,
   res: NextApiResponse<IResponse>
 ) => {
-  const session = await getSession({ req });
-
   try {
+    const apiClientSecure = await createApiClientSecure(req);
+
     if (req.method === 'PUT') {
       const transformedBody = Object.values(req.body).reduce((acc, entry) => {
         acc.push(entry);
 
         return acc;
-      }, [] as any);
+      }, [] as TWellnessEntryAndDate[]);
 
-      const { data } = await axios.put(
-        `${process.env.SERVER_HOST}/wellness`,
-        { data: transformedBody },
-        {
-          headers: {
-            Authorization: `Bearer ${session?.accessToken}`,
-          },
-        }
-      );
+      const { data } = await apiClientSecure.put(API_WELLNESS, {
+        data: transformedBody,
+      });
 
       return res.status(201).json({ ok: true });
     }

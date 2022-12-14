@@ -16,12 +16,10 @@ export interface IWellnessEntries {
   [date: string]: TWellnessEntry<TWellnessValueTypes>;
 }
 
-export interface IWellnessEntriesDto {
-  [date: string]: TWellnessEntry<TWellnessValueTypes> & { date: string };
-}
-
-interface IUpdateEntryByTypeProps<T> {
+export type TWellnessEntryAndDate = TWellnessEntry<TWellnessValueTypes> & {
   date: string;
-  type: TAllWellnessType;
-  content: T;
+};
+
+export interface IWellnessEntriesDto {
+  [date: string]: TWellnessEntryAndDate;
 }

@@ -1,6 +1,7 @@
-import axios, { AxiosError } from 'axios';
+import { createApiClientSecure } from '@server/api-client';
+import { API_SHARE_GENERATE_LINK } from '@server/server.constants';
+import { AxiosError } from 'axios';
 import { NextApiRequest, NextApiResponse } from 'next';
-import { getSession } from 'next-auth/react';
 
 interface IResponse {
   shareLink?: string;
@@ -12,21 +13,13 @@ const handler = async (
   req: NextApiRequest,
   res: NextApiResponse<IResponse>
 ) => {
-  const session = await getSession({ req });
-
-  if (req.method === 'POST') {
-    console.log('GENERATE LINK POST:');
+  if (req.method === 'PUT') {
+    console.log('GENERATE LINK PUT:');
 
     try {
-      const { data } = await axios.put(
-        `${process.env.SERVER_HOST}/share/generate-link`,
-        {},
-        {
-          headers: {
-            Authorization: `Bearer ${session?.accessToken}`,
-          },
-        }
-      );
+      const apiClientSecure = await createApiClientSecure(req);
+
+      const { data } = await apiClientSecure.put(API_SHARE_GENERATE_LINK);
 
       return res.status(201).json({ ok: true, shareLink: data.shareLink });
     } catch (err) {

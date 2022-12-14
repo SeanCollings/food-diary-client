@@ -1,8 +1,9 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { URI_DIARY_CALENDAR_ENTRIES } from '@client/constants';
 import { ICalendarEntriesResponseBody } from '@client/interfaces/diary-data';
-import axios, { AxiosError } from 'axios';
-import { getSession } from 'next-auth/react';
+import { AxiosError } from 'axios';
+import { createApiClientSecure } from '@server/api-client';
+import { API_DIARY_CALENDAR_ENTRIES } from '@server/server.constants';
 
 interface IRequest extends NextApiRequest {
   query: {
@@ -15,7 +16,6 @@ const handler = async (
   req: IRequest,
   res: NextApiResponse<ICalendarEntriesResponseBody>
 ) => {
-  const session = await getSession({ req });
   const { date, months } = req.query;
   console.log(`-------- ${URI_DIARY_CALENDAR_ENTRIES} :`, date, months);
 
@@ -24,13 +24,10 @@ const handler = async (
   }
 
   try {
-    const { data } = await axios.get(
-      `${process.env.SERVER_HOST}/diary/calendar-entries?date=${date}&months=${months}`,
-      {
-        headers: {
-          Authorization: `Bearer ${session?.accessToken}`,
-        },
-      }
+    const apiClientSecure = await createApiClientSecure(req);
+
+    const { data } = await apiClientSecure.get(
+      `${API_DIARY_CALENDAR_ENTRIES}?date=${date}&months=${months}`
     );
 
     const { monthRange, entries } = data;

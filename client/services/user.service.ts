@@ -63,7 +63,7 @@ const createService = () => {
 
   const generateLink = async () => {
     try {
-      const { data } = await axios.post<IShareLinkResponse>(URI_GENERATE_LINK);
+      const { data } = await axios.put<IShareLinkResponse>(URI_GENERATE_LINK);
 
       return {
         shareLink: data.shareLink,

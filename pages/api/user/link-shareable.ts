@@ -1,6 +1,7 @@
-import axios, { AxiosError } from 'axios';
+import { createApiClientSecure } from '@server/api-client';
+import { API_SHARE_LINK_SHAREABLE } from '@server/server.constants';
+import { AxiosError } from 'axios';
 import { NextApiRequest, NextApiResponse } from 'next';
-import { getSession } from 'next-auth/react';
 
 interface IResponse {
   shareLink?: string;
@@ -12,18 +13,13 @@ interface IRequest extends NextApiRequest {
 }
 
 const handler = async (req: IRequest, res: NextApiResponse<IResponse>) => {
-  const session = await getSession({ req });
-
   if (req.method === 'PUT') {
     try {
-      const { data } = await axios.put(
-        `${process.env.SERVER_HOST}/share/link-shareable`,
-        req.body,
-        {
-          headers: {
-            Authorization: `Bearer ${session?.accessToken}`,
-          },
-        }
+      const apiClientSecure = await createApiClientSecure(req);
+
+      const { data } = await apiClientSecure.put(
+        API_SHARE_LINK_SHAREABLE,
+        req.body
       );
 
       return res.status(201).json({ ok: true, shareLink: data.shareLink });

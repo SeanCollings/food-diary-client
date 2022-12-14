@@ -1,8 +1,9 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { URI_DIARY } from '@client/constants';
 import { IDiaryReponseData } from '@client/interfaces/diary-data';
-import axios, { AxiosError } from 'axios';
-import { getSession } from 'next-auth/react';
+import { AxiosError } from 'axios';
+import { createApiClientSecure } from '@server/api-client';
+import { API_DIARY } from '@server/server.constants';
 
 interface IRequest extends NextApiRequest {
   query: {
@@ -14,7 +15,6 @@ const handler = async (
   req: IRequest,
   res: NextApiResponse<IDiaryReponseData>
 ) => {
-  const session = await getSession({ req });
   const { date } = req.query;
   console.log(`-------- ${URI_DIARY} :`, date);
 
@@ -23,14 +23,9 @@ const handler = async (
   }
 
   try {
-    const { data } = await axios.get(
-      `${process.env.SERVER_HOST}/diary?date=${date}`,
-      {
-        headers: {
-          Authorization: `Bearer ${session?.accessToken}`,
-        },
-      }
-    );
+    const apiClientSecure = await createApiClientSecure(req);
+
+    const { data } = await apiClientSecure.get(`${API_DIARY}?date=${date}`);
 
     return res.status(200).json({
       ok: true,

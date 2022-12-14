@@ -1,6 +1,8 @@
 import { URI_SHARE } from '@client/constants';
 import { IShareResponseBody } from '@client/interfaces/user-summary-data';
-import axios, { AxiosError } from 'axios';
+import { apiClient } from '@server/api-client';
+import { API_SHARE } from '@server/server.constants';
+import { AxiosError } from 'axios';
 import { NextApiRequest, NextApiResponse } from 'next';
 interface IRequest extends NextApiRequest {
   query: { link: string; dateFrom: string; dateTo: string };
@@ -18,8 +20,8 @@ const handler = async (
   }
 
   try {
-    const { data } = await axios.get(
-      `${process.env.SERVER_HOST}/share?link=${link}&dateFrom=${dateFrom}&dateTo=${dateTo}`
+    const { data } = await apiClient.get(
+      `${API_SHARE}?link=${link}&dateFrom=${dateFrom}&dateTo=${dateTo}`
     );
 
     return res.status(200).json({

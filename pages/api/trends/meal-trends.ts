@@ -4,8 +4,9 @@ import {
   TTimePeriod,
 } from '@client/interfaces/meal-trend-data';
 import { URI_MEAL_TRENDS } from '@client/constants';
-import { getSession } from 'next-auth/react';
-import axios, { AxiosError } from 'axios';
+import { AxiosError } from 'axios';
+import { createApiClientSecure } from '@server/api-client';
+import { API_TRENDS_MEAL } from '@server/server.constants';
 
 interface IRequest extends NextApiRequest {
   query: { type: TTimePeriod };
@@ -15,7 +16,6 @@ const handler = async (
   req: IRequest,
   res: NextApiResponse<IMealTrendResponseBody>
 ) => {
-  const session = await getSession({ req });
   const { type } = req.query;
   console.log(`-------- ${URI_MEAL_TRENDS} :`, type);
 
@@ -24,13 +24,10 @@ const handler = async (
   }
 
   try {
-    const { data } = await axios.get(
-      `${process.env.SERVER_HOST}/trends/meal-trends?type=${type}`,
-      {
-        headers: {
-          Authorization: `Bearer ${session?.accessToken}`,
-        },
-      }
+    const apiClientSecure = await createApiClientSecure(req);
+
+    const { data } = await apiClientSecure.get(
+      `${API_TRENDS_MEAL}?type=${type}`
     );
 
     const { totalValues, legend, mealTotals, mealsPerDay } = data;

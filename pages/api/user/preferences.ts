@@ -1,6 +1,7 @@
-import axios, { AxiosError } from 'axios';
+import { createApiClientSecure } from '@server/api-client';
+import { API_USER_PREFERENCES } from '@server/server.constants';
+import { AxiosError } from 'axios';
 import { NextApiRequest, NextApiResponse } from 'next';
-import { getSession } from 'next-auth/react';
 
 interface IResponse {
   ok: boolean;
@@ -11,20 +12,15 @@ const handler = async (
   req: NextApiRequest,
   res: NextApiResponse<IResponse>
 ) => {
-  const session = await getSession({ req });
-
   try {
+    const apiClientSecure = await createApiClientSecure(req);
+
     if (req.method === 'PATCH') {
       console.log('PREFERENCES PATCH:', req.body);
 
-      const { data } = await axios.patch(
-        `${process.env.SERVER_HOST}/user/preferences`,
-        req.body,
-        {
-          headers: {
-            Authorization: `Bearer ${session?.accessToken}`,
-          },
-        }
+      const { data } = await apiClientSecure.patch(
+        API_USER_PREFERENCES,
+        req.body
       );
 
       return res.status(201).json({ ok: true });

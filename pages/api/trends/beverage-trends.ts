@@ -1,9 +1,10 @@
 import { URI_BEVERAGE_TRENDS } from '@client/constants';
 import { TTimePeriod } from '@client/interfaces/meal-trend-data';
 import { IBeverageTrendData } from '@client/interfaces/wellness-trend-data';
-import axios, { AxiosError } from 'axios';
+import { createApiClientSecure } from '@server/api-client';
+import { API_TRENDS_BEVERAGE } from '@server/server.constants';
+import { AxiosError } from 'axios';
 import { NextApiRequest, NextApiResponse } from 'next';
-import { getSession } from 'next-auth/react';
 
 interface IRequest extends NextApiRequest {
   query: { type: TTimePeriod };
@@ -13,7 +14,6 @@ const handler = async (
   req: IRequest,
   res: NextApiResponse<IBeverageTrendData>
 ) => {
-  const session = await getSession({ req });
   const { type } = req.query;
   console.log(`-------- ${URI_BEVERAGE_TRENDS} :`);
 
@@ -22,13 +22,10 @@ const handler = async (
   }
 
   try {
-    const { data } = await axios.get(
-      `${process.env.SERVER_HOST}/trends/beverage-trends?type=${type}`,
-      {
-        headers: {
-          Authorization: `Bearer ${session?.accessToken}`,
-        },
-      }
+    const apiClientSecure = await createApiClientSecure(req);
+
+    const { data } = await apiClientSecure.get(
+      `${API_TRENDS_BEVERAGE}?type=${type}`
     );
 
     const { highestValue, legend, beveragesPerDay } = data;

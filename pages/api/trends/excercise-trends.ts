@@ -2,8 +2,9 @@ import { URI_EXCERCISE_TRENDS } from '@client/constants';
 import { TTimePeriod } from '@client/interfaces/meal-trend-data';
 import { IExcerciseTrendData } from '@client/interfaces/wellness-trend-data';
 import { NextApiRequest, NextApiResponse } from 'next';
-import axios, { AxiosError } from 'axios';
-import { getSession } from 'next-auth/react';
+import { AxiosError } from 'axios';
+import { createApiClientSecure } from '@server/api-client';
+import { API_TRENDS_EXCERCISE } from '@server/server.constants';
 
 interface IRequest extends NextApiRequest {
   query: { type: TTimePeriod };
@@ -13,7 +14,6 @@ const handler = async (
   req: IRequest,
   res: NextApiResponse<IExcerciseTrendData>
 ) => {
-  const session = await getSession({ req });
   const { type } = req.query;
   console.log(`-------- ${URI_EXCERCISE_TRENDS} :`);
 
@@ -22,13 +22,10 @@ const handler = async (
   }
 
   try {
-    const { data } = await axios.get(
-      `${process.env.SERVER_HOST}/trends/excercise-trends?type=${type}`,
-      {
-        headers: {
-          Authorization: `Bearer ${session?.accessToken}`,
-        },
-      }
+    const apiClientSecure = await createApiClientSecure(req);
+
+    const { data } = await apiClientSecure.get(
+      `${API_TRENDS_EXCERCISE}?type=${type}`
     );
 
     const { highestValue, legend, excercisePerDay } = data;

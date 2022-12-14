@@ -1,7 +1,8 @@
 import { IUserResponse } from '@client/interfaces/user-data.type';
-import axios, { AxiosError } from 'axios';
+import { createApiClientSecure } from '@server/api-client';
+import { API_USER_PROFILE } from '@server/server.constants';
+import { AxiosError } from 'axios';
 import { NextApiRequest, NextApiResponse } from 'next';
-import { getSession } from 'next-auth/react';
 
 interface IResponse {
   ok: boolean;
@@ -17,33 +18,23 @@ const handler = async (
   req: NextApiRequest,
   res: NextApiResponse<IResponse | IGetUserProfileResponse>
 ) => {
-  const session = await getSession({ req });
-
   try {
+    const apiClientSecure = await createApiClientSecure(req);
+
     if (req.method === 'GET') {
       console.log('-------- /user/profile');
 
-      const { data } = await axios.get<IUserResponse>(
-        `${process.env.SERVER_HOST}/user/profile`,
-        {
-          headers: {
-            Authorization: `Bearer ${session?.accessToken}`,
-          },
-        }
+      const { data } = await apiClientSecure.get<IUserResponse>(
+        API_USER_PROFILE
       );
 
       return res.status(201).json({ ok: true, user: data });
     }
 
     if (req.method === 'PATCH') {
-      const { data } = await axios.patch(
+      const { data } = await apiClientSecure.patch(
         `${process.env.SERVER_HOST}/user`,
-        req.body,
-        {
-          headers: {
-            Authorization: `Bearer ${session?.accessToken}`,
-          },
-        }
+        req.body
       );
 
       return res.status(201).json({ ok: true });
