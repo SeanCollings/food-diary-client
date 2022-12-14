@@ -1,9 +1,9 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { URI_DIARY } from '@client/constants';
 import { IDiaryReponseData } from '@client/interfaces/diary-data';
-import { AxiosError } from 'axios';
 import { createApiClientSecure } from '@server/api-client';
 import { API_DIARY } from '@server/server.constants';
+import { CustomAxiosError } from '@client/interfaces/axios.types';
 
 interface IRequest extends NextApiRequest {
   query: {
@@ -37,13 +37,7 @@ const handler = async (
   } catch (err) {
     return res.status(500).json({
       ok: false,
-      message: (
-        err as AxiosError<{
-          statusCode: number;
-          message: string;
-          error: string;
-        }>
-      ).response?.data.message,
+      message: (err as CustomAxiosError).response?.data.message,
     });
   }
 };

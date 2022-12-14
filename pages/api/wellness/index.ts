@@ -1,10 +1,10 @@
+import { CustomAxiosError } from '@client/interfaces/axios.types';
 import {
   IWellnessEntriesDto,
   TWellnessEntryAndDate,
 } from '@lib/interfaces/wellness.interface';
 import { createApiClientSecure } from '@server/api-client';
 import { API_WELLNESS } from '@server/server.constants';
-import { AxiosError } from 'axios';
 import { NextApiRequest, NextApiResponse } from 'next';
 
 interface IRequest<T extends unknown> extends NextApiRequest {
@@ -38,13 +38,7 @@ const handler = async (
   } catch (err) {
     return res.status(500).json({
       ok: false,
-      message: (
-        err as AxiosError<{
-          statusCode: number;
-          message: string;
-          error: string;
-        }>
-      ).response?.data.message,
+      message: (err as CustomAxiosError).response?.data.message,
     });
   }
 

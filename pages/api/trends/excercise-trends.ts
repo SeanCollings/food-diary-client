@@ -2,9 +2,9 @@ import { URI_EXCERCISE_TRENDS } from '@client/constants';
 import { TTimePeriod } from '@client/interfaces/meal-trend-data';
 import { IExcerciseTrendData } from '@client/interfaces/wellness-trend-data';
 import { NextApiRequest, NextApiResponse } from 'next';
-import { AxiosError } from 'axios';
 import { createApiClientSecure } from '@server/api-client';
 import { API_TRENDS_EXCERCISE } from '@server/server.constants';
+import { CustomAxiosError } from '@client/interfaces/axios.types';
 
 interface IRequest extends NextApiRequest {
   query: { type: TTimePeriod };
@@ -34,13 +34,7 @@ const handler = async (
   } catch (err) {
     return res.status(500).json({
       ok: false,
-      message: (
-        err as AxiosError<{
-          statusCode: number;
-          message: string;
-          error: string;
-        }>
-      ).response?.data.message,
+      message: (err as CustomAxiosError).response?.data.message,
     });
   }
 };

@@ -1,7 +1,6 @@
 import { DEFAULT_AXIOS_ERROR_MSG } from '@client/constants';
 import { authService } from '@client/services/auth.service';
 import { getRecaptchaToken } from '@utils/grecaptcha-utils';
-import { AxiosError } from 'axios';
 import {
   ICreateUserResponse,
   IResetPasswordParams,
@@ -9,6 +8,7 @@ import {
   ISignInUserResponse,
   TFormValues,
 } from '@components/login-form/types';
+import { CustomAxiosError } from '@client/interfaces/axios.types';
 
 export const createUser = async ({
   email,
@@ -30,7 +30,7 @@ export const createUser = async ({
 
     return { message };
   } catch (err) {
-    return { error: (err as AxiosError).message };
+    return { error: (err as CustomAxiosError).message };
   }
 };
 
@@ -43,7 +43,7 @@ export const signInUser = async ({
 
     return await authService.signin({ email, password, token });
   } catch (err) {
-    return { error: (err as AxiosError).message };
+    return { error: (err as CustomAxiosError).message };
   }
 };
 
@@ -53,6 +53,6 @@ export const resetPassword = async ({ email }: IResetPasswordParams) => {
 
     return await authService.resetPassword({ email, token });
   } catch (err) {
-    return { error: (err as AxiosError).message };
+    return { error: (err as CustomAxiosError).message };
   }
 };

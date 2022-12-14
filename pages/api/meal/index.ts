@@ -1,7 +1,7 @@
+import { CustomAxiosError } from '@client/interfaces/axios.types';
 import { createApiClientSecure } from '@server/api-client';
 import { API_MEALS } from '@server/server.constants';
 import { IMealContent, TMealType } from '@utils/interfaces';
-import { AxiosError } from 'axios';
 import { NextApiRequest, NextApiResponse } from 'next';
 
 interface IMealEntryDto {
@@ -51,13 +51,7 @@ const handler = async (
   } catch (err) {
     return res.status(500).json({
       ok: false,
-      message: (
-        err as AxiosError<{
-          statusCode: number;
-          message: string;
-          error: string;
-        }>
-      ).response?.data.message,
+      message: (err as CustomAxiosError).response?.data.message,
     });
   }
 };

@@ -1,6 +1,6 @@
+import { CustomAxiosError } from '@client/interfaces/axios.types';
 import { createApiClientSecure } from '@server/api-client';
 import { API_SHARE_LINK_SHAREABLE } from '@server/server.constants';
-import { AxiosError } from 'axios';
 import { NextApiRequest, NextApiResponse } from 'next';
 
 interface IResponse {
@@ -26,13 +26,7 @@ const handler = async (req: IRequest, res: NextApiResponse<IResponse>) => {
     } catch (err) {
       return res.status(500).json({
         ok: false,
-        message: (
-          err as AxiosError<{
-            statusCode: number;
-            message: string;
-            error: string;
-          }>
-        ).response?.data.message,
+        message: (err as CustomAxiosError).response?.data.message,
       });
     }
   }
