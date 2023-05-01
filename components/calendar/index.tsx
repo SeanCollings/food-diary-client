@@ -1,6 +1,7 @@
 import { useOnClickOutsideElement } from '@hooks/use-onclick-outside-element';
 import { COLOURS, OPACITY_20, OPACITY_40 } from '@utils/constants';
 import {
+  dateNow,
   formatMonthNumberYear,
   formatMonthSmallYear,
   getNewMonth,
@@ -414,7 +415,7 @@ const Calendar: FC<ICalendarProps> = ({
     onClickNextMonth?.(month);
   };
   const onSelecteTodayHandler = () => {
-    setSelectedMonthDate(new Date());
+    setSelectedMonthDate(new Date(dateNow()));
   };
 
   return (

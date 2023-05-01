@@ -1,5 +1,5 @@
 import Summary from '@components/summary';
-import { getDaysAwayFromDate } from '@utils/date-utils';
+import { dateNow, getDaysAwayFromDate } from '@utils/date-utils';
 import { NextPage } from 'next';
 import { useEffect, useState } from 'react';
 import styled from 'styled-components';
@@ -26,7 +26,7 @@ const SummaryPage: NextPage<ISummaryPageProps> = ({ session }) => {
   const [fromDate, setFromDate] = useState(
     getDaysAwayFromDate(-(DEFAULT_DAYS_SHOW - 1))
   );
-  const [toDate, setToDate] = useState(new Date());
+  const [toDate, setToDate] = useState(new Date(dateNow()));
   const { data, isLoading, isError } = useRequestSummary(
     mounted,
     fromDate,

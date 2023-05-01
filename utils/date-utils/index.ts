@@ -2,8 +2,19 @@ import { MONTHS, ONE_DAY } from '@utils/constants';
 
 type TDate = string | Date;
 
+/**
+ * Get the current date using Date.now() to more easily mock date
+ * @returns Date
+ */
+export const dateNow = () => new Date(Date.now());
+
+/**
+ * Get todays date in format `Monday, 1 May 2023`
+ * @param date string | Date
+ * @returns string
+ */
 export const getTodaysDate = () =>
-  new Date().toLocaleDateString('en-GB', {
+  new Date(dateNow()).toLocaleDateString('en-GB', {
     weekday: 'long',
     year: 'numeric',
     month: 'short',
@@ -73,12 +84,12 @@ export const formatMonthMediumYear = (date: TDate) => {
  * @returns string
  */
 export const formatMonthNumberYear = (date: TDate | null) => {
-  const d = date || new Date();
+  const d = date || new Date(dateNow());
   return getMonthAndYearFromDate(d).join('-');
 };
 
 export const getMonthAndYearFromDate = (date: TDate) => {
-  const d = new Date(date || new Date());
+  const d = new Date(date || new Date(dateNow()));
   const currentMonth = d.getMonth();
   const currentYear = d.getFullYear();
 
@@ -86,7 +97,7 @@ export const getMonthAndYearFromDate = (date: TDate) => {
 };
 
 export const getCurrentMonthAndYear = () => {
-  const currentDate = new Date();
+  const currentDate = new Date(dateNow());
   const currentMonth = currentDate.getMonth();
   const currentYear = currentDate.getFullYear();
 
@@ -126,7 +137,7 @@ export const getCurrentDayInDate = (date: TDate, day: number) =>
   new Date(new Date(date).setDate(day));
 
 export const getTodaysDateFromDay = (day: number) =>
-  getCurrentDayInDate(new Date(), day);
+  getCurrentDayInDate(new Date(dateNow()), day);
 
 export const isDayInMonthInFuture = (compareDay: number) => {
   const d = new Date(Date.now()).setDate(compareDay);
@@ -186,7 +197,7 @@ export const getNewMonth = (
 export const getIsDateSelectedToday = (compareDate: TDate) => {
   return (
     new Date(compareDate).setHours(0, 0, 0, 0) ===
-    new Date().setHours(0, 0, 0, 0)
+    new Date(dateNow()).setHours(0, 0, 0, 0)
   );
 };
 
@@ -205,7 +216,7 @@ export const setDateMidnightISOString = (date: TDate) => {
 };
 
 export const getDaysAwayFromDate = (days: number, date?: TDate) => {
-  const d = date ? new Date(date) : new Date();
+  const d = date ? new Date(date) : new Date(dateNow());
   d.setDate(d.getDate() + days);
 
   return d;

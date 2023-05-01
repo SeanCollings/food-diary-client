@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { GetServerSideProps, NextPage } from 'next';
 import styled from 'styled-components';
-import { getDaysAwayFromDate } from '@utils/date-utils';
+import { dateNow, getDaysAwayFromDate } from '@utils/date-utils';
 import Summary from '@components/summary';
 import { IShareResponseData } from '@client/interfaces/user-summary-data';
 import { useRequestShare } from '@hooks/request/use-request-share';
@@ -37,7 +37,7 @@ const SharePage: NextPage<ISharePageProps> = ({ guid }) => {
   const [fromDate, setFromDate] = useState(
     getDaysAwayFromDate(-(DEFAULT_DAYS_SHOW - 1))
   );
-  const [toDate, setToDate] = useState(new Date());
+  const [toDate, setToDate] = useState(new Date(dateNow()));
   const { data, isLoading, isError } = useRequestShare(
     mounted,
     guid,
