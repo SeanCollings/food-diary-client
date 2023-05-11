@@ -26,7 +26,7 @@ const Footer: FC = () => {
 
   return (
     <SContainer borderTop={borderTop}>
-      © 2022 Sean Collings. All rights reserved.
+      © 2023 Sean Collings. All rights reserved.
     </SContainer>
   );
 };

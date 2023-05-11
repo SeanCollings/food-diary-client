@@ -173,8 +173,11 @@ const SChartScroll = styled.div`
   }
 `;
 
-const SDescriptorContainer = styled.div``;
+const SDescriptorContainer = styled.div`
+  margin-bottom: 12px;
+`;
 const SDescriptor = styled.div`
+  text-align: center;
   font-size: 12px;
 `;
 const SLegendContainer = styled.div`

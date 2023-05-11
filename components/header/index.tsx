@@ -34,7 +34,6 @@ const SContainer = styled.header`
   }
   ${MEDIA_MAX_DESKTOP} {
     height: ${HEADER_PROPS.desktopLarge.height}px;
-    padding: 0 2rem;
   }
 `;
 const SHeaderBanner = styled.div`
@@ -84,7 +83,6 @@ const SHeaderWrapper = styled.div`
     height: calc(100% - ${HEADER_PROPS.desktopMedium.padding * 2}px);
   }
   ${MEDIA_MAX_DESKTOP} {
-    padding: 0;
     top: ${HEADER_PROPS.desktopLarge.padding}px;
     height: calc(100% - ${HEADER_PROPS.desktopLarge.padding * 2}px);
   }

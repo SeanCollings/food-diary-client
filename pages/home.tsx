@@ -84,12 +84,12 @@ const HomePage: NextPage = () => {
       <SParagraphContainer>
         <SParagraphBackGround />
         <SParagraphWrapper>
-          <SParagraphHeader>Gasoline is not enough.</SParagraphHeader>
+          <SParagraphHeader>
+            One step at a time towards wellness.
+          </SParagraphHeader>
           <SParagraphContent>
-            {`Sixty-four bathes in sunlight. The light at the end of the tunnel
-          stands upon somebody else's legs. Camouflage paint doesn't like paying
-          taxes. A kickingly prodigious profile could please even the most
-          demanding follower of Freud.`}
+            {`Designed to help you track your daily food intake without the pressure of calorie counting.
+            Log meals, snacks, beverages and exercise routine to gain insights into your nutritional habits.`}
           </SParagraphContent>
         </SParagraphWrapper>
       </SParagraphContainer>
