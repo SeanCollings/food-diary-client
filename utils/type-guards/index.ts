@@ -8,3 +8,7 @@ export const isDayNumberTypeGuard = (
 ): day is IDayNumber => {
   return (day as IDayNumber).day !== undefined;
 };
+
+export const isNumber = (value: unknown): value is Number => {
+  return typeof value === 'number';
+};

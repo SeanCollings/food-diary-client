@@ -11,5 +11,5 @@ export function getStructuredClone<T>(input: T) {
     return JSON.parse(JSON.stringify(input)) as T;
   }
 
-  return structuredClone(input);
+  return window.structuredClone(input);
 }
