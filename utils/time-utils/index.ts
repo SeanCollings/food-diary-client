@@ -9,7 +9,7 @@ const MAX_NUMBER = 99;
  */
 export const getSplitTime = (value: string) => {
   const [hours, minutes] = value.split(':');
-  return [hours ?? '00', minutes ?? '00'];
+  return [hours || '00', minutes || '00'];
 };
 
 /**
@@ -65,7 +65,7 @@ export const getFormatMinutesWithHours = (hours: string, minutes: string) => {
       updatedMinutes = MAX_MINUTES.toString();
     } else {
       updatedMinutes = `${+updatedMinutes - 60}`;
-      updatedHours = !isNaN(+updatedHours) ? `${+updatedHours + 1}` : '0';
+      updatedHours = !isNaN(+updatedHours) ? `${+updatedHours + 1}` : '1';
     }
   }
   if (+updatedHours > MAX_HOURS) {
@@ -75,6 +75,11 @@ export const getFormatMinutesWithHours = (hours: string, minutes: string) => {
   return [frontPadNumber(updatedHours), frontPadNumber(updatedMinutes)];
 };
 
+/**
+ * Cap a time value to a maximum of 2 integrers
+ * @param timeValue string
+ * @returns string
+ */
 export const truncateTimeValue = (timeValue: string) => {
   let updatedTime = timeValue;
 
@@ -85,6 +90,11 @@ export const truncateTimeValue = (timeValue: string) => {
   return updatedTime;
 };
 
+/**
+ * Check if hour value falls in range of 0 - 23 and cycle back if not
+ * @param hourValue string
+ * @returns string
+ */
 export const getNewHourValue = (hourValue: string) => {
   let updatedHour = hourValue;
 
@@ -97,10 +107,15 @@ export const getNewHourValue = (hourValue: string) => {
   return updatedHour;
 };
 
+/**
+ * Check if minute value falls in range of 0 - 59 and cycle back if not
+ * @param minuteValue string
+ * @returns string
+ */
 export const getNewMinuteValue = (minuteValue: string) => {
   let updatedMinute = minuteValue;
 
-  if (!minuteValue || +minuteValue === MAX_NUMBER + 1) {
+  if (!minuteValue || +minuteValue === MAX_MINUTES + 1) {
     updatedMinute = '0';
   } else if (+minuteValue === -1) {
     updatedMinute = MAX_MINUTES.toString();
