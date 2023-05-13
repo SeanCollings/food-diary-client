@@ -20,7 +20,11 @@ import {
   createRecaptchaScript,
   hideRecaptchaBadge,
 } from '@utils/grecaptcha-utils';
-import { createUser, resetPassword, signInUser } from '@utils/login-utils';
+import {
+  createUser,
+  resetPassword,
+  signInUser,
+} from '@client/utils/login-utils';
 
 const SForm = styled.form`
   background: var(--bg-secondary);
