@@ -26,11 +26,15 @@ export const getRange = (start: number, end: number) => {
 export const getPaddedNestedArray = (
   values: string[],
   maxItems: number,
-  maxItemsPerRow: number
+  maxItemsPerRow: number,
 ) => {
   const nestedArray: string[][] = [];
   let temp: string[] = [];
   let lastFullSet = 0;
+
+  if (maxItemsPerRow === 0) {
+    return [[]];
+  }
 
   for (let i = 1; i < maxItems + 1; i++) {
     const lessThanMaxElements = maxItems < maxItemsPerRow;
@@ -48,9 +52,12 @@ export const getPaddedNestedArray = (
       temp = [];
       lastFullSet = i;
     } else if (lastElement) {
+      const length = Math.max(maxItemsPerRow - (maxItems - lastFullSet), 0);
+      const totalValues = Math.min(length, values.length);
+
       nestedArray.push([
         ...values.slice(lastFullSet, maxItems),
-        ...Array(maxItemsPerRow - (maxItems - lastFullSet)).fill(''),
+        ...Array(totalValues).fill(''),
       ]);
     }
   }

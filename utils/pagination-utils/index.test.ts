@@ -1,4 +1,4 @@
-import { getPaginationRange } from './get-pagination-range';
+import { DOTS, getPaginationRange } from './get-pagination-range';
 
 describe('pagination - utils', () => {
   describe('getPaginationRange', () => {
@@ -129,6 +129,10 @@ describe('pagination - utils', () => {
         siblingCount: 1,
       });
       expect(result).toMatchInlineSnapshot(`[]`);
+    });
+
+    it('should display dots', () => {
+      expect(DOTS).toMatchInlineSnapshot(`"dots"`);
     });
   });
 });
