@@ -28,6 +28,7 @@ const customJestConfig = {
     '^@lib/(.*)$': '<rootDir>/lib/$1',
     '^@server/(.*)$': '<rootDir>/server/$1',
   },
+  globalSetup: './global-setup.ts',
 };
 
 export default createJestConfig(customJestConfig);
