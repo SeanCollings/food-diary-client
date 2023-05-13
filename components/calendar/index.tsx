@@ -325,8 +325,6 @@ const CalendarContent: FC<ICalendarContentProps> = ({
               entriesPerMonth,
               selectedDay: selectedMonthDate,
               topLevelDate,
-              restricDaysAfter,
-              restrictDaysBefore,
             });
             const { isDayRestricted, isRestrictAfterDay, isRestrictBeforeDay } =
               getCalendarRestrictions({
@@ -359,7 +357,7 @@ const CalendarContent: FC<ICalendarContentProps> = ({
                 onClick={() =>
                   daySelectedHandler(
                     item.day,
-                    isPeripheralMonth || isDayRestricted
+                    isPeripheralMonth || isDayRestricted,
                   )
                 }
                 bottomLeft={rowIndex === maxRows && colIndex === 0}
@@ -396,7 +394,7 @@ const Calendar: FC<ICalendarProps> = ({
 }) => {
   const calendarRef = useRef<HTMLDivElement>(null);
   const [selectedMonthDate, setSelectedMonthDate] = useState(
-    new Date(topLevelDate)
+    new Date(topLevelDate),
   );
   useOnClickOutsideElement(calendarRef, onClose);
 

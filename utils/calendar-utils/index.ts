@@ -13,7 +13,7 @@ import { IDayNumber } from '@utils/type-guards';
 
 type TMonthMatrix = (string | IDayNumber)[][];
 
-export const monthMatrix = () => {
+const monthMatrix = () => {
   const cache = {} as { [date: string]: TMonthMatrix };
 
   return (selectedMonth: Date) => {
@@ -71,8 +71,6 @@ export interface ICalendarDayProperties {
   selectedDay: Date;
   entriesPerMonth: number[] | undefined;
   topLevelDate: TDate;
-  restrictDaysBefore: TDate | undefined;
-  restricDaysAfter: TDate | undefined;
 }
 
 export const getCalendarDayProperties = ({

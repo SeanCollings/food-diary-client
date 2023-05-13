@@ -1,6 +1,6 @@
 export const detectAutofill = (id: string, callback: () => void) => {
   const inputElement = document.getElementById(
-    `${id}_form_input`
+    `${id}_form_input`,
   ) as HTMLInputElement;
 
   if (!inputElement) {
