@@ -16,6 +16,10 @@ export const getPaginationRange = ({
   totalItems,
   itemsPerPage,
 }: IPaginitaionRangeProps): (number | typeof DOTS)[] => {
+  if (itemsPerPage === 0) {
+    return [];
+  }
+
   const totalPageCount = Math.ceil(totalItems / itemsPerPage);
   const totalPageNumbers = siblingCount + MIN_PAGES_NUMBER;
 
@@ -26,7 +30,7 @@ export const getPaginationRange = ({
   const leftSiblingIndex = Math.max(currentPage - siblingCount, 1);
   const rightSiblingIndex = Math.min(
     currentPage + siblingCount,
-    totalPageCount
+    totalPageCount,
   );
 
   const shouldShowLeftDots = leftSiblingIndex > 2;
@@ -45,15 +49,12 @@ export const getPaginationRange = ({
     const rightItemCount = 3 + 2 * siblingCount;
     const rightRange = getRange(
       totalPageCount - rightItemCount + 1,
-      totalPageCount
+      totalPageCount,
     );
     return [FIRST_PAGE_INDEX, DOTS, ...rightRange];
   }
 
-  if (shouldShowLeftDots && shouldShowRightDots) {
-    const middleRange = getRange(leftSiblingIndex, rightSiblingIndex);
-    return [FIRST_PAGE_INDEX, DOTS, ...middleRange, DOTS, lastPageIndex];
-  }
+  const middleRange = getRange(leftSiblingIndex, rightSiblingIndex);
 
-  return [];
+  return [FIRST_PAGE_INDEX, DOTS, ...middleRange, DOTS, lastPageIndex];
 };

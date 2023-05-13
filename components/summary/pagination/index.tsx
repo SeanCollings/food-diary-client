@@ -1,4 +1,7 @@
-import { DOTS, getPaginationRange } from '@utils/get-pagination-range';
+import {
+  DOTS,
+  getPaginationRange,
+} from '@utils/pagination-utils/get-pagination-range';
 import { memo } from 'react';
 import { MdNavigateBefore, MdNavigateNext } from 'react-icons/md';
 import styled from 'styled-components';
@@ -63,7 +66,7 @@ const Pagination: React.FC<IPaginationProps> = memo(
       totalItems,
       itemsPerPage,
     });
-    const lastPage = paginationRange[paginationRange.length - 1];
+    const lastPage = paginationRange[paginationRange.length - 1] as number;
 
     const onPreviousHandler = () => {
       if (currentPage > 1) {
@@ -116,7 +119,7 @@ const Pagination: React.FC<IPaginationProps> = memo(
         </SButton>
       </SContainer>
     );
-  }
+  },
 );
 Pagination.displayName = 'Pagination';
 
