@@ -16,7 +16,7 @@ export const validateLengthMax =
     const updatedErrors = { ...errors };
 
     if (!validator(value, maxLength)) {
-      updatedErrors[id] = `${ERROR_INPUT_LENGTH_MAX} ${maxLength} characters.`;
+      updatedErrors[id] = `${ERROR_INPUT_LENGTH_MAX} ${maxLength} characters`;
     }
 
     return {

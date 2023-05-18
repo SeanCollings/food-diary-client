@@ -5,7 +5,7 @@ export const validator = (value: string) => {
     return false;
   }
 
-  const [hours, minutes] = getSplitTime(value);
+  const [hours, minutes] = value.split(':');
 
   return (
     !!hours.length &&

@@ -12,7 +12,7 @@ export interface TSingleInputValidator extends IInputsValidator {
   errors: TErrors;
 }
 
-export function validationCompose<T>(x: T) {
+function validationCompose<T>(x: T) {
   return (fns: ((args: T) => T)[]) => fns.reduceRight((v, f) => f(v), x);
 }
 
@@ -23,7 +23,7 @@ export const runValidations = (inputs: IInputsValidator[]) =>
         errors: acc,
         ...input,
       }),
-    {} as TErrors
+    {} as TErrors,
   );
 
 export const runSingleValidation = ({

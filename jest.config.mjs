@@ -17,6 +17,7 @@ const customJestConfig = {
     'server/**/*.{js,jsx,ts,tsx}',
     'store/**/*.{js,jsx,ts,tsx}',
     'utils/**/*.{js,jsx,ts,tsx}',
+    '!utils/**/food-emojis.ts',
   ],
   moduleNameMapper: {
     '^@components/(.*)$': '<rootDir>/components/$1',
