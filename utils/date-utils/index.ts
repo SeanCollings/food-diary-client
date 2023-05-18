@@ -88,6 +88,11 @@ export const formatMonthNumberYear = (date: TDate | null) => {
   return getMonthAndYearFromDate(d).join('-');
 };
 
+/**
+ * Splits date into array `[3, 2023]`
+ * @param date string | Date
+ * @returns number[]
+ */
 export const getMonthAndYearFromDate = (date: TDate) => {
   const d = new Date(date || new Date(dateNow()));
   const currentMonth = d.getMonth();
@@ -96,6 +101,10 @@ export const getMonthAndYearFromDate = (date: TDate) => {
   return [currentMonth, currentYear];
 };
 
+/**
+ * Splits date into array `[3, 2023]` for current month and year
+ * @returns number[]
+ */
 export const getCurrentMonthAndYear = () => {
   const currentDate = new Date(dateNow());
   const currentMonth = currentDate.getMonth();
@@ -104,6 +113,12 @@ export const getCurrentMonthAndYear = () => {
   return [currentMonth, currentYear];
 };
 
+/**
+ * Get all ISO midnight adjusted dates in month eg: `['2023-02-28T22:00:00.000Z']`
+ * @param month number
+ * @param year number
+ * @returns string[]
+ */
 export const getMidnightISODaysInMonth = (month: number, year: number) => {
   const date = new Date(year, month, 1);
   const days: string[] = [];
@@ -116,6 +131,11 @@ export const getMidnightISODaysInMonth = (month: number, year: number) => {
   return days;
 };
 
+/**
+ * Check if date is in current month
+ * @param compareDate string | Date
+ * @returns boolean
+ */
 export const isCurrentMonth = (compareDate: TDate) => {
   const date = new Date(compareDate);
   const [currentMonth, currentYear] = getCurrentMonthAndYear();
@@ -123,6 +143,11 @@ export const isCurrentMonth = (compareDate: TDate) => {
   return date.getMonth() === currentMonth && date.getFullYear() === currentYear;
 };
 
+/**
+ * Checks if date is month in future
+ * @param compareDate string | Date
+ * @returns boolean
+ */
 export const isMonthInFuture = (compareDate: Date) => {
   const [currentMonth, currentYear] = getCurrentMonthAndYear();
 
@@ -133,21 +158,41 @@ export const isMonthInFuture = (compareDate: Date) => {
   );
 };
 
+/**
+ * Gets date for day input in month input of date
+ * @param date string | Date
+ * @param day number
+ * @returns Date
+ */
 export const getCurrentDayInDate = (date: TDate, day: number) =>
   new Date(new Date(date).setDate(day));
 
-export const getTodaysDateFromDay = (day: number) =>
-  getCurrentDayInDate(new Date(dateNow()), day);
-
+/**
+ * Checks if day in current month is in the future
+ * @param compareDay number
+ * @returns boolean
+ */
 export const isDayInMonthInFuture = (compareDay: number) => {
   const d = new Date(Date.now()).setDate(compareDay);
   return setDateToMidnight(d) > setDateToMidnight();
 };
 
+/**
+ * Checks if day in month or month in future
+ * @param compareDate Date
+ * @param compareDay number
+ * @returns boolean
+ */
 export const getIsDayInTheFuture = (compareDate: Date, compareDay: number) =>
   isMonthInFuture(compareDate) ||
   (isCurrentMonth(compareDate) && isDayInMonthInFuture(compareDay));
 
+/**
+ * Checks if both dates are the same
+ * @param firstDate string | Date
+ * @param secondDate string | Date
+ * @returns boolean
+ */
 export const getBothDatesEqual = (firstDate: TDate, secondDate: Date) => {
   return (
     setDateToMidnight(firstDate).getTime() ===
@@ -155,12 +200,23 @@ export const getBothDatesEqual = (firstDate: TDate, secondDate: Date) => {
   );
 };
 
+/**
+ * Gets day value from date
+ * @param date string | Date
+ * @returns number
+ */
 export const getDayFromDate = (date: TDate) => new Date(date).getDate();
 
+/**
+ * Checks if one date is between 2 other dates
+ */
 export const isBetweenDates = (compare: TDate, from: TDate, to: TDate) =>
   new Date(compare).valueOf() > new Date(from).valueOf() &&
   new Date(compare).valueOf() < new Date(to).valueOf();
 
+/**
+ * Checks if month in year is a leap year
+ */
 export const isLeapYear = (month: number, year: number) => {
   if (month === 1) {
     if ((year % 4 === 0 && year % 100 != 0) || year % 400 === 0) {
@@ -170,30 +226,36 @@ export const isLeapYear = (month: number, year: number) => {
   return 0;
 };
 
-export const getNewDay = (selectedDate: TDate, getNextDay: boolean) => {
+type TDateDirection = 'prev' | 'next';
+
+/**
+ * Gets next day from date else previous day
+ */
+export const getNewDay = (selectedDate: TDate, getNextDay: TDateDirection) => {
   const date = new Date(selectedDate);
-  date.setDate(date.getDate() + (getNextDay ? 1 : -1));
+  date.setDate(date.getDate() + (getNextDay === 'next' ? 1 : -1));
   return date;
 };
 
-type TMonthDirection = 'previous' | 'next';
-
-export const getNewMonth = (
-  selectedMonth: Date,
-  direction: TMonthDirection
-) => {
+/**
+ * Gets next month from date else previous month
+ */
+export const getNewMonth = (selectedMonth: Date, direction: TDateDirection) => {
   const firstDayOfMonth = new Date(
     selectedMonth.getFullYear(),
     selectedMonth.getMonth(),
-    1
+    1,
   );
 
   firstDayOfMonth.setMonth(
-    firstDayOfMonth.getMonth() + (direction === 'next' ? 1 : -1)
+    firstDayOfMonth.getMonth() + (direction === 'next' ? 1 : -1),
   );
   return firstDayOfMonth;
 };
 
+/**
+ * Checks if date is today
+ */
 export const getIsDateSelectedToday = (compareDate: TDate) => {
   return (
     new Date(compareDate).setHours(0, 0, 0, 0) ===
@@ -201,6 +263,9 @@ export const getIsDateSelectedToday = (compareDate: TDate) => {
   );
 };
 
+/**
+ * Converts date to midnight in format `2022-10-04T22:00:00.000Z`
+ */
 export const setDateToMidnight = (date?: string | number | Date) => {
   const d = date || Date.now();
   return new Date(new Date(d).setHours(0, 0, 0, 0));
@@ -215,6 +280,9 @@ export const setDateMidnightISOString = (date: TDate) => {
   return setDateToMidnight(date).toISOString();
 };
 
+/**
+ * Gets a number of days away from date, else from `today` as default
+ */
 export const getDaysAwayFromDate = (days: number, date?: TDate) => {
   const d = date ? new Date(date) : new Date(dateNow());
   d.setDate(d.getDate() + days);
@@ -222,10 +290,22 @@ export const getDaysAwayFromDate = (days: number, date?: TDate) => {
   return d;
 };
 
+/**
+ * Checks if a date is after another date, time excluded
+ * @param thisDate string | Date - date of interest
+ * @param compareDate string | Date - date to compare agains
+ * @returns boolean
+ */
 export const isDayAfter = (thisDate: TDate, compareDate: TDate) => {
   return setDateToMidnight(thisDate) > setDateToMidnight(compareDate);
 };
 
+/**
+ * Checks if a date is after before date, time excluded
+ * @param thisDate string | Date - date of interest
+ * @param compareDate string | Date - date to compare agains
+ * @returns boolean
+ */
 export const isDayBefore = (thisDate: TDate, compareDate: TDate) => {
   return setDateToMidnight(thisDate) < setDateToMidnight(compareDate);
 };
@@ -284,10 +364,13 @@ export const getInclusiveDatesBetweenDates = (first: TDate, second: TDate) => {
   return dates;
 };
 
+/**
+ * Gets a number of dates after or before date
+ */
 export const getRangeOfDatesFromDate = (
   date: TDate,
   days: number,
-  direction: 'before' | 'after'
+  direction: 'before' | 'after',
 ) => {
   const dir = direction === 'after' ? 1 : -1;
   const pointDate = new Date(date);
@@ -299,29 +382,42 @@ export const getRangeOfDatesFromDate = (
   return range;
 };
 
+/**
+ * Gets all day-range to start of week. 1 = Monday
+ */
 export const getDateRangeBackTillDayOfWeek = (
   date: TDate,
-  dayOfWeek: number
+  dayOfWeek: 1 | 2 | 3 | 4 | 5 | 6 | 7,
 ) => {
-  const pointDate = new Date(date);
-  const dateRange: string[] = [setDateMidnightISOString(pointDate)];
-  let currentDay = pointDate.getDay();
+  const d = new Date(date);
+  const dateRange: string[] = [setDateMidnightISOString(d)];
+  let currentDay = d.getDay();
+
+  if (dayOfWeek > currentDay) {
+    return [];
+  }
 
   while (currentDay !== dayOfWeek) {
-    pointDate.setDate(pointDate.getDate() - 1);
-    dateRange.push(setDateMidnightISOString(pointDate));
+    d.setDate(d.getDate() - 1);
+    dateRange.push(setDateMidnightISOString(d));
     currentDay -= 1;
   }
 
   return dateRange;
 };
 
+/**
+ * Sort a date array ascending or descending
+ * @param dateArray string[] | Date[]
+ * @param direction `asc` | `desc`
+ * @returns TDate[]
+ */
 export const sortDateArray = (
   dateArray: string[],
-  direction: 'asc' | 'desc'
+  direction: 'asc' | 'desc',
 ) => {
   const dir = direction === 'asc' ? 1 : -1;
   return [...dateArray].sort(
-    (a, b) => new Date(a).valueOf() - dir * new Date(b).valueOf()
+    (a, b) => dir * new Date(a).valueOf() - dir * new Date(b).valueOf(),
   );
 };
