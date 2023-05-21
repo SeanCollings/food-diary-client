@@ -1,18 +1,15 @@
 import axios from 'axios';
 
-export const fetcher = async <T extends unknown>(url: string) =>
-  await axios.get<T>(url).then((res) => res.data);
-
 /********************** User *********************/
 
 export const userProfileFetcher = async <T extends unknown>(url: string) =>
-  await axios.get<T>(`${url}`).then((res) => res.data);
+  await axios.get<T>(url).then((res) => res.data);
 
 /********************** Diary *********************/
 
 export const diaryEntryFetcher = async <T extends unknown>(
   url: string,
-  date: string
+  date: string,
 ) => await axios.get<T>(`${url}?date=${date}`).then((res) => res.data);
 
 /********************** Calendar *********************/
@@ -20,7 +17,7 @@ export const diaryEntryFetcher = async <T extends unknown>(
 export const calendarEntriesFetcher = async <T extends unknown>(
   url: string,
   date: string,
-  monthsToReturn: number
+  monthsToReturn: number,
 ) =>
   await axios
     .get<T>(`${url}?date=${date}&months=${monthsToReturn}`)
@@ -31,7 +28,7 @@ export const calendarEntriesFetcher = async <T extends unknown>(
 export const summaryFetcher = async <T extends unknown>(
   url: string,
   dateFrom: string,
-  dateTo: number
+  dateTo: number,
 ) =>
   await axios
     .get<T>(`${url}?dateFrom=${dateFrom}&dateTo=${dateTo}`)
@@ -43,7 +40,7 @@ export const shareFetcher = async <T extends unknown>(
   url: string,
   guid: string,
   dateFrom: string,
-  dateTo: number
+  dateTo: number,
 ) =>
   await axios
     .get<T>(`${url}?link=${guid}&dateFrom=${dateFrom}&dateTo=${dateTo}`)
@@ -51,17 +48,7 @@ export const shareFetcher = async <T extends unknown>(
 
 /********************** Trends *********************/
 
-export const mealTrendFetcher = async <T extends unknown>(
+export const trendFetcher = async <T extends unknown>(
   url: string,
-  timePeriod: string
-) => await axios.get<T>(`${url}?type=${timePeriod}`).then((res) => res.data);
-
-export const beverageTrendFetcher = async <T extends unknown>(
-  url: string,
-  timePeriod: string
-) => await axios.get<T>(`${url}?type=${timePeriod}`).then((res) => res.data);
-
-export const excerciseTrendFetcher = async <T extends unknown>(
-  url: string,
-  timePeriod: string
+  timePeriod: string,
 ) => await axios.get<T>(`${url}?type=${timePeriod}`).then((res) => res.data);

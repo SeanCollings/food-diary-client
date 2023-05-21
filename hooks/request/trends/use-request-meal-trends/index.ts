@@ -1,5 +1,5 @@
 import { URI_MEAL_TRENDS } from '@client/constants';
-import { mealTrendFetcher } from '@client/fetchers';
+import { trendFetcher } from '@client/fetchers';
 import {
   IMealTrendData,
   IMealTrendResponseBody,
@@ -20,7 +20,7 @@ interface IRequested {
 
 export const useRequestMealTrends = (
   mounted: boolean,
-  timePeriod: TTimePeriod
+  timePeriod: TTimePeriod,
 ) => {
   const [trendData, setTrendData] = useState<IRequestTrendData>({});
   const [hasRequested, setHasRequested] = useState<IRequested>({});
@@ -33,7 +33,7 @@ export const useRequestMealTrends = (
   }, [mounted, timePeriod, hasRequested]);
   const { data, error } = useSWRImmutable(
     shouldFetch ? [URI_MEAL_TRENDS, timePeriod] : null,
-    mealTrendFetcher<IMealTrendResponseBody>
+    trendFetcher<IMealTrendResponseBody>,
   );
 
   useEffect(() => {

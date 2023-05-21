@@ -1,5 +1,5 @@
 import { URI_BEVERAGE_TRENDS, URI_EXCERCISE_TRENDS } from '@client/constants';
-import { beverageTrendFetcher, excerciseTrendFetcher } from '@client/fetchers';
+import { trendFetcher } from '@client/fetchers';
 import { TTimePeriod } from '@client/interfaces/meal-trend-data';
 import {
   IBeverageTrendData,
@@ -18,7 +18,7 @@ interface IRequestedBeverage {
 
 export const useRequestBeverageTrends = (
   mounted: boolean,
-  timePeriod: TTimePeriod
+  timePeriod: TTimePeriod,
 ) => {
   const [trendData, setTrendData] = useState<IRequestBevarageTendData>({});
   const [hasRequested, setHasRequested] = useState<IRequestedBeverage>({});
@@ -31,7 +31,7 @@ export const useRequestBeverageTrends = (
 
   const { data, error } = useSWRImmutable(
     shouldFetch ? [URI_BEVERAGE_TRENDS, timePeriod] : null,
-    beverageTrendFetcher<IBeverageTrendData>
+    trendFetcher<IBeverageTrendData>,
   );
 
   useEffect(() => {
@@ -58,7 +58,7 @@ interface IRequestedExcercise {
 
 export const useRequestExcerciseTrends = (
   mounted: boolean,
-  timePeriod: TTimePeriod
+  timePeriod: TTimePeriod,
 ) => {
   const [trendData, setTrendData] = useState<IRequestExcerciseTendData>({});
   const [hasRequested, setHasRequested] = useState<IRequestedExcercise>({});
@@ -71,7 +71,7 @@ export const useRequestExcerciseTrends = (
 
   const { data, error } = useSWRImmutable(
     shouldFetch ? [URI_EXCERCISE_TRENDS, timePeriod] : null,
-    excerciseTrendFetcher<IExcerciseTrendData>
+    trendFetcher<IExcerciseTrendData>,
   );
 
   useEffect(() => {
