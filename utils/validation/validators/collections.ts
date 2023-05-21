@@ -19,7 +19,7 @@ type TStaticFields<T> = {
 
 type TLoginFormValitators = {
   [key in TInputTypes]: (
-    args: TDynamicArgs<string>
+    args: TDynamicArgs<string>,
   ) => TDynamicArgs<string> & TStaticFields<TInputTypes>;
 };
 
@@ -44,7 +44,7 @@ export const loginFormValidators: TLoginFormValitators = {
 type TExerciseTypes = 'details' | 'time';
 type TExerciseValidators = {
   [key in TExerciseTypes]: (
-    args: TDynamicArgs<string>
+    args: TDynamicArgs<string>,
   ) => TDynamicArgs<string> & TStaticFields<TExerciseTypes>;
 };
 
@@ -62,7 +62,7 @@ export const excerciseValidators: TExerciseValidators = {
 };
 
 type TAddMealValidatorCommon<T> = (
-  args: TDynamicArgs<T>
+  args: TDynamicArgs<T>,
 ) => TDynamicArgs<T> & TStaticFields<TAddMealOptions>;
 
 type TAddMealValidators = {
