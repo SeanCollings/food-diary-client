@@ -8,9 +8,9 @@ type AxiosHeaders =
   | Partial<RawAxiosRequestHeaders>
   | { Authorization?: string };
 
-const createInstance = (
+export const createInstance = (
   requiresAuthorization: boolean,
-  session?: Session | null
+  session?: Session | null,
 ) => {
   const headers: AxiosHeaders = { Authorization: '' };
 
