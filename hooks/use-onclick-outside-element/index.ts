@@ -2,13 +2,13 @@ import { RefObject, useEffect, useRef } from 'react';
 
 export const useOnClickOutsideElementsArray = (
   elementRefs: RefObject<HTMLDivElement>[],
-  handler: (event: MouseEvent) => void
+  handler: (event: MouseEvent) => void,
 ) => {
   useEffect(() => {
     const listener = (event: MouseEvent) => {
-      if (elementRefs.length) {
+      if (elementRefs?.length) {
         const someClicked = elementRefs.some((ref) =>
-          ref?.current?.contains(event.target as Node)
+          ref?.current?.contains(event.target as Node),
         );
         if (someClicked) {
           return;
@@ -27,7 +27,7 @@ export const useOnClickOutsideElementsArray = (
 
 export const useOnClickOutsideElement = (
   elementRef: RefObject<HTMLDivElement> | null,
-  handler: (event: MouseEvent) => void
+  handler: (event: MouseEvent) => void,
 ) => {
   const firstUseRef = useRef(true);
 
