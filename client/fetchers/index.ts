@@ -1,3 +1,4 @@
+import { TTimePeriod } from '@client/interfaces/meal-trend-data';
 import axios from 'axios';
 
 /********************** User *********************/
@@ -8,7 +9,7 @@ export const userProfileFetcher = async <T extends unknown>(url: string) =>
 /********************** Diary *********************/
 
 export const diaryEntryFetcher = async <T extends unknown>(
-  url: string,
+  url: string | Date,
   date: string,
 ) => await axios.get<T>(`${url}?date=${date}`).then((res) => res.data);
 
@@ -16,7 +17,7 @@ export const diaryEntryFetcher = async <T extends unknown>(
 
 export const calendarEntriesFetcher = async <T extends unknown>(
   url: string,
-  date: string,
+  date: string | Date,
   monthsToReturn: number,
 ) =>
   await axios
@@ -27,8 +28,8 @@ export const calendarEntriesFetcher = async <T extends unknown>(
 
 export const summaryFetcher = async <T extends unknown>(
   url: string,
-  dateFrom: string,
-  dateTo: number,
+  dateFrom: string | Date,
+  dateTo: string | Date,
 ) =>
   await axios
     .get<T>(`${url}?dateFrom=${dateFrom}&dateTo=${dateTo}`)
@@ -39,8 +40,8 @@ export const summaryFetcher = async <T extends unknown>(
 export const shareFetcher = async <T extends unknown>(
   url: string,
   guid: string,
-  dateFrom: string,
-  dateTo: number,
+  dateFrom: string | Date,
+  dateTo: string | Date,
 ) =>
   await axios
     .get<T>(`${url}?link=${guid}&dateFrom=${dateFrom}&dateTo=${dateTo}`)
@@ -50,5 +51,5 @@ export const shareFetcher = async <T extends unknown>(
 
 export const trendFetcher = async <T extends unknown>(
   url: string,
-  timePeriod: string,
+  timePeriod: TTimePeriod,
 ) => await axios.get<T>(`${url}?type=${timePeriod}`).then((res) => res.data);

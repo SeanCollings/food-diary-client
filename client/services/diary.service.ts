@@ -1,4 +1,9 @@
-import { URI_MEAL, URI_WELLNESS } from '@client/constants';
+import {
+  DEFAULT_AXIOS_ERROR_MSG,
+  URI_MEAL,
+  URI_WELLNESS,
+} from '@client/constants';
+import { CustomAxiosError } from '@client/interfaces/axios.types';
 import { IWellnessEntries } from '@lib/interfaces/wellness.interface';
 import { IMealContent, TMealType } from '@utils/interfaces';
 import axios, { AxiosError } from 'axios';
@@ -8,7 +13,7 @@ interface IResponse {
   error?: string;
 }
 interface ICreateMealArgs {
-  date: string;
+  date: string | Date;
   body: {
     mealId: TMealType;
     content: IMealContent;
@@ -41,14 +46,13 @@ const createService = () => {
     try {
       const { data } = await axios.post<IResponse>(
         `${URI_MEAL}?date=${date}`,
-        body
+        body,
       );
 
-      return {};
+      return { ok: true };
     } catch (err) {
-      console.log('err ::', err);
       return {
-        error: (err as AxiosError).message,
+        error: (err as CustomAxiosError).message || DEFAULT_AXIOS_ERROR_MSG,
       };
     }
   };
@@ -60,13 +64,13 @@ const createService = () => {
     try {
       const { data } = await axios.put<IResponse>(
         `${URI_MEAL}?date=${date}`,
-        body
+        body,
       );
 
-      return {};
+      return { ok: true };
     } catch (err) {
       return {
-        error: (err as AxiosError).message,
+        error: (err as CustomAxiosError).message || DEFAULT_AXIOS_ERROR_MSG,
       };
     }
   };
@@ -80,13 +84,13 @@ const createService = () => {
         `${URI_MEAL}?date=${date}`,
         {
           data: body,
-        }
+        },
       );
 
-      return {};
+      return { ok: true };
     } catch (err) {
       return {
-        error: (err as AxiosError).message,
+        error: (err as CustomAxiosError).message || DEFAULT_AXIOS_ERROR_MSG,
       };
     }
   };
@@ -97,10 +101,10 @@ const createService = () => {
     try {
       const { data } = await axios.put<IResponse>(`${URI_WELLNESS}`, body);
 
-      return {};
+      return { ok: true };
     } catch (err) {
       return {
-        error: (err as AxiosError).message,
+        error: (err as CustomAxiosError).message || DEFAULT_AXIOS_ERROR_MSG,
       };
     }
   };

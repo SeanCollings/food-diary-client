@@ -53,7 +53,7 @@ const createService = () => {
   };
 
   const resetPassword = async (
-    body: IResetPasswordArgs
+    body: IResetPasswordArgs,
   ): Promise<IResponse> => {
     try {
       const { data } = await axios.post<IResponse>(URI_RESET_PASSWORD, body);

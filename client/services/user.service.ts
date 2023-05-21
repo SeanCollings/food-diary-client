@@ -1,9 +1,11 @@
 import {
+  DEFAULT_AXIOS_ERROR_MSG,
   URI_GENERATE_LINK,
   URI_LINK_SHAREABLE,
   URI_PREFERENCES,
   URI_USER,
 } from '@client/constants';
+import { CustomAxiosError } from '@client/interfaces/axios.types';
 import {
   IPartialPreference,
   IPartialUserUpdate,
@@ -18,17 +20,19 @@ interface IResponse {
 interface IShareLinkResponse {
   shareLink: string;
 }
+interface IGenerateReponse extends IResponse {
+  shareLink?: string;
+}
 
 const createService = () => {
   const updateUser = async (body: IPartialUserUpdate) => {
     try {
       const { data } = await axios.patch<IResponse>(URI_USER, body);
 
-      return {};
+      return { ok: true };
     } catch (err) {
-      console.log('err ::', err);
       return {
-        error: (err as AxiosError).message,
+        error: (err as CustomAxiosError).message || DEFAULT_AXIOS_ERROR_MSG,
       };
     }
   };
@@ -37,11 +41,10 @@ const createService = () => {
     try {
       const { data } = await axios.patch<IResponse>(URI_PREFERENCES, update);
 
-      return {};
+      return { ok: true };
     } catch (err) {
-      console.log('err ::', err);
       return {
-        error: (err as AxiosError).message,
+        error: (err as CustomAxiosError).message || DEFAULT_AXIOS_ERROR_MSG,
       };
     }
   };
@@ -52,26 +55,25 @@ const createService = () => {
         isShared: update['isProfileShared'],
       });
 
-      return {};
+      return { ok: true };
     } catch (err) {
-      console.log('err ::', err);
       return {
-        error: (err as AxiosError).message,
+        error: (err as CustomAxiosError).message || DEFAULT_AXIOS_ERROR_MSG,
       };
     }
   };
 
-  const generateLink = async () => {
+  const generateLink = async (): Promise<IGenerateReponse> => {
     try {
       const { data } = await axios.put<IShareLinkResponse>(URI_GENERATE_LINK);
 
       return {
+        ok: true,
         shareLink: data.shareLink,
       };
     } catch (err) {
-      console.log('err ::', err);
       return {
-        error: (err as AxiosError).message || 'An error occurred',
+        error: (err as CustomAxiosError).message || DEFAULT_AXIOS_ERROR_MSG,
       };
     }
   };
