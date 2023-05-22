@@ -56,13 +56,13 @@ const SButtonCommon = styled.button<ISButtonCommon>`
   ${({ calendarVisible }) =>
     calendarVisible && `transform: rotateX(90deg); cursor: initial;`}
 `;
-const SButtonLeft = styled(SButtonCommon)`
+const SButtonPrev = styled(SButtonCommon)`
   :hover {
     opacity: 0.7;
     scale: 1;
   }
 `;
-const SButtonRight = styled(SButtonCommon)<ISButton>`
+const SButtonNext = styled(SButtonCommon)<ISButton>`
   ${({ isDisabled }) =>
     isDisabled
       ? `opacity: 0.2; cursor: initial;`
@@ -128,14 +128,14 @@ const DateDisplay: FC = () => {
   const onDateClick = () => {
     setShowCalendar(!showCalendar);
   };
-  const onClickLeft = () => {
-    updateSelectedDateISO(getNewDay(dateSelectedISO, false));
+  const onClickPrev = () => {
+    updateSelectedDateISO(getNewDay(dateSelectedISO, 'prev'));
   };
-  const onClickRight = () => {
+  const onClickNext = () => {
     if (isDateSelectedToday) {
       return;
     }
-    updateSelectedDateISO(getNewDay(dateSelectedISO, true));
+    updateSelectedDateISO(getNewDay(dateSelectedISO, 'next'));
   };
   const closeCalendarHandler = () => {
     setShowCalendar(false);
@@ -154,9 +154,9 @@ const DateDisplay: FC = () => {
   return (
     <SContainer>
       <SContentWrapper>
-        <SButtonLeft onClick={onClickLeft} calendarVisible={showCalendar}>
+        <SButtonPrev onClick={onClickPrev} calendarVisible={showCalendar}>
           <MdArrowLeft size={46} color={'var(--th-quaternary)'} />
-        </SButtonLeft>
+        </SButtonPrev>
         <SDate
           onMouseEnter={onDateMouseEnter}
           onClick={onDateClick}
@@ -178,14 +178,14 @@ const DateDisplay: FC = () => {
             />
           </SCalendarContainer>
         )}
-        <SButtonRight
-          onClick={onClickRight}
+        <SButtonNext
+          onClick={onClickNext}
           isDisabled={isDateSelectedToday}
           disabled={isDateSelectedToday}
           calendarVisible={showCalendar}
         >
           <MdArrowRight size={46} color={'var(--th-quaternary)'} />
-        </SButtonRight>
+        </SButtonNext>
       </SContentWrapper>
     </SContainer>
   );
