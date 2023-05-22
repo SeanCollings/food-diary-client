@@ -28,7 +28,7 @@ export const useRequestDiaryEntry = (mounted: boolean) => {
   const { data, error } = useSWR(
     shouldFetch ? [URI_DIARY, dateSelectedISO] : null,
     diaryEntryFetcher<IDiaryReponseData>,
-    {}
+    {},
   );
 
   useEffect(() => {
@@ -49,8 +49,7 @@ export const useRequestDiaryEntry = (mounted: boolean) => {
   ]);
 
   return {
-    data,
-    isLoading: !error && !monthRequestedData,
+    isLoading: !error && shouldFetch && !data,
     isError: error,
   };
 };

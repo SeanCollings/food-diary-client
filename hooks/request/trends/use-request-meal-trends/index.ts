@@ -31,6 +31,7 @@ export const useRequestMealTrends = (
 
     return mounted && (getWeek || getMonth);
   }, [mounted, timePeriod, hasRequested]);
+
   const { data, error } = useSWRImmutable(
     shouldFetch ? [URI_MEAL_TRENDS, timePeriod] : null,
     trendFetcher<IMealTrendResponseBody>,
@@ -49,7 +50,7 @@ export const useRequestMealTrends = (
 
   return {
     data: trendData,
-    isLoading: !error && shouldFetch,
+    isLoading: !error && shouldFetch && !data,
     isError: error,
   };
 };

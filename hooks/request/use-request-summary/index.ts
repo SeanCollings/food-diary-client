@@ -8,7 +8,7 @@ import { ISummaryResponseBody } from '@client/interfaces/user-summary-data';
 export const useRequestSummary = (
   mounted: boolean,
   dateFrom: Date,
-  dateTo: Date
+  dateTo: Date,
 ) => {
   const { userLoggedIn } = useUserContext();
 
@@ -19,12 +19,12 @@ export const useRequestSummary = (
   const { data, error } = useSWRImmutable(
     shouldFetch ? [URI_SUMMARY, dateFromISO, dateToISO] : null,
     summaryFetcher<ISummaryResponseBody>,
-    {}
+    {},
   );
 
   return {
     data,
-    isLoading: !error && !data,
+    isLoading: !error && shouldFetch && !data,
     isError: error,
   };
 };

@@ -12,7 +12,7 @@ interface IRequested {
   [date: string]: boolean;
 }
 
-export const useRequestCalendarEntries = (date: string | null) => {
+export const useRequestCalendarEntries = (date: string | Date | null) => {
   const { userLoggedIn } = useUserContext();
   const { requestSetAllEntriesPerMonth } = useAllEntriesPerMonthContext();
   const [hasRequested, setHasRequested] = useState<IRequested>({});
@@ -29,12 +29,8 @@ export const useRequestCalendarEntries = (date: string | null) => {
       : null,
     calendarEntriesFetcher<ICalendarEntriesResponseBody>,
     {
-      onErrorRetry: (error, key, config, revalidate, { retryCount }) => {
-        if (retryCount >= 4) {
-          return;
-        }
-      },
-    }
+      errorRetryCount: 4,
+    },
   );
 
   useEffect(() => {
@@ -45,7 +41,7 @@ export const useRequestCalendarEntries = (date: string | null) => {
   }, [data, shouldFetch, requestSetAllEntriesPerMonth]);
 
   return {
-    isLoading: !error && shouldFetch,
+    isLoading: !error && shouldFetch && !data,
     isError: error,
   };
 };

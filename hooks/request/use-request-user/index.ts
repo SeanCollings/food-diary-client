@@ -13,7 +13,7 @@ export const useRequestUser = (mounted: boolean) => {
   const { data, error } = useSWRImmutable(
     shouldFetch ? [URI_USER_PROFILE] : null,
     userProfileFetcher<IUserResponse>,
-    {}
+    {},
   );
 
   useEffect(() => {
@@ -24,7 +24,7 @@ export const useRequestUser = (mounted: boolean) => {
 
   return {
     data: data?.user,
-    isLoading: !error && !data,
+    isLoading: !error && shouldFetch && !data,
     isError: error,
   };
 };

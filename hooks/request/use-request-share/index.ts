@@ -8,9 +8,9 @@ export const useRequestShare = (
   mounted: boolean,
   guid: string,
   dateFrom: Date,
-  dateTo: Date
+  dateTo: Date,
 ) => {
-  const shouldFetch = mounted && !!guid;
+  const shouldFetch = mounted;
   const dateFromISO = setDateMidnightISOString(dateFrom);
   const dateToISO = setDateMidnightISOString(dateTo);
 
@@ -18,17 +18,13 @@ export const useRequestShare = (
     shouldFetch ? [URI_SHARE, guid, dateFromISO, dateToISO] : null,
     shareFetcher<IShareResponseBody>,
     {
-      onErrorRetry: (error, key, config, revalidate, { retryCount }) => {
-        if (retryCount >= 4) {
-          return;
-        }
-      },
-    }
+      errorRetryCount: 4,
+    },
   );
 
   return {
     data,
-    isLoading: !error && !data,
+    isLoading: !error && shouldFetch && !data,
     isError: error,
   };
 };
