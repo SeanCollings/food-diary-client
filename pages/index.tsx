@@ -41,9 +41,7 @@ interface IDiaryPageProps {
 const Home: NextPage<IDiaryPageProps> = ({ session }) => {
   const { user } = useUserContext();
   const [mounted, setMounted] = useState(false);
-  const { data, isError, isLoading } = useRequestDiaryEntry(
-    !!session && mounted
-  );
+  const { isError, isLoading } = useRequestDiaryEntry(!!session && mounted);
 
   useEffect(() => {
     setMounted(true);

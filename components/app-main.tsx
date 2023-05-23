@@ -13,7 +13,6 @@ import Footer from '@components/footer';
 import { useRouter } from 'next/router';
 import { pathnameMapper } from '@utils/constants/menu.constants';
 import { AppProps } from 'next/app';
-import { useUserContext } from '@store/user-context';
 import { getClassNames } from '@utils/string-utils';
 import { useTheme } from '@hooks/use-theme';
 import { useRequestUser } from '@hooks/request/use-request-user';
