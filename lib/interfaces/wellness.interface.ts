@@ -12,11 +12,17 @@ export type TWellnessEntry<K> = {
   [key in TAllWellnessType]?: TValue<K>;
 };
 
+export type TWellnessEntries =
+  | {
+      [key in TWellnessTypes]?: TDrink;
+    }
+  | { excercise?: TExcercise };
+
 export interface IWellnessEntries {
-  [date: string]: TWellnessEntry<TWellnessValueTypes>;
+  [date: string]: TWellnessEntries;
 }
 
-export type TWellnessEntryAndDate = TWellnessEntry<TWellnessValueTypes> & {
+export type TWellnessEntryAndDate = TWellnessEntries & {
   date: string;
 };
 

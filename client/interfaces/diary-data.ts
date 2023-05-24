@@ -1,13 +1,10 @@
-import {
-  TWellnessEntry,
-  TWellnessValueTypes,
-} from '@lib/interfaces/wellness.interface';
+import { TWellnessEntries } from '@lib/interfaces/wellness.interface';
 import { TMealCard } from '@utils/interfaces';
 
 export interface IDiaryReponseData {
   entry?: {
     meals: { [date: string]: TMealCard };
-    wellness: { [date: string]: TWellnessEntry<TWellnessValueTypes> };
+    wellness: { [date: string]: TWellnessEntries };
   };
   ok: boolean;
   message?: string;

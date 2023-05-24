@@ -2,8 +2,7 @@ import { diaryService } from '@client/services/diary.service';
 import {
   IWellnessEntries,
   IWellnessEntriesDto,
-  TWellnessEntry,
-  TWellnessValueTypes,
+  TWellnessEntries,
 } from '@lib/interfaces/wellness.interface';
 import { useUserContext } from '@store/user-context';
 import { getStructuredClone } from '@utils/get-structured-clone';
@@ -32,18 +31,18 @@ interface IUpdateEntryByTypeProps<T> {
 }
 
 interface IRequestSetWellnessEntries {
-  wellness: { [date: string]: TWellnessEntry<TWellnessValueTypes> };
+  wellness: { [date: string]: TWellnessEntries };
 }
 
 export interface IWellnessEntriesContext {
   wellnessEntries: IWellnessEntries;
   requestSetWellnessEntries: (args: IRequestSetWellnessEntries) => void;
   updateEntryByKey: <K extends TValueTypes>(
-    args: IUpdateEntryByTypeProps<K>
+    args: IUpdateEntryByTypeProps<K>,
   ) => void;
 }
 
-const initialState: IWellnessEntriesContext = {
+export const initialState: IWellnessEntriesContext = {
   wellnessEntries: {},
   requestSetWellnessEntries: () => null,
   updateEntryByKey: () => null,
@@ -58,7 +57,7 @@ export const WellnessEntriesContextProvider: FC<{
   const { userLoggedIn } = useUserContext();
   const [updatedDates, setUpdatedDates] = useState<string[]>([]);
   const [wellnessEntries, setWellnessEntries] = useState<IWellnessEntries>(
-    initialState?.wellnessEntries || {}
+    initialState?.wellnessEntries || {},
   );
 
   useEffect(() => {
@@ -79,7 +78,7 @@ export const WellnessEntriesContextProvider: FC<{
       });
 
       if (error) {
-        console.log('Error:', error);
+        console.log('Error updating wellness entries:', error);
       }
     }, 1000);
 
@@ -92,7 +91,7 @@ export const WellnessEntriesContextProvider: FC<{
     ({ wellness }: IRequestSetWellnessEntries) => {
       setWellnessEntries((curr) => ({ ...curr, ...wellness }));
     },
-    []
+    [],
   );
 
   const updateEntryByKey = useCallback(
@@ -119,12 +118,12 @@ export const WellnessEntriesContextProvider: FC<{
         setUpdatedDates(dates);
       }
     },
-    [wellnessEntries, updatedDates, userLoggedIn]
+    [wellnessEntries, updatedDates, userLoggedIn],
   );
 
   const context = useMemo(
     () => ({ wellnessEntries, requestSetWellnessEntries, updateEntryByKey }),
-    [wellnessEntries, requestSetWellnessEntries, updateEntryByKey]
+    [wellnessEntries, requestSetWellnessEntries, updateEntryByKey],
   );
 
   return (
