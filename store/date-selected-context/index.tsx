@@ -1,4 +1,4 @@
-import { dateNow, setDateMidnightISOString } from '@utils/date-utils';
+import { setDateMidnightISOString } from '@utils/date-utils';
 import {
   createContext,
   FC,
@@ -13,7 +13,7 @@ export interface IDateSelectedContext {
   updateSelectedDateISO: (date: string | Date) => void;
 }
 
-const initialState: IDateSelectedContext = {
+export const initialState: IDateSelectedContext = {
   dateSelectedISO: '',
   updateSelectedDateISO: () => null,
 };
@@ -24,7 +24,7 @@ export const DateSelectedContextProvider: FC<{ children: ReactNode }> = ({
   children,
 }) => {
   const [dateSelectedISO, setDateSelectedISO] = useState(
-    new Date(new Date(dateNow()).setHours(0, 0, 0, 0)).toISOString()
+    setDateMidnightISOString(),
   );
 
   const updateSelectedDateISO = (newDate: string | Date) => {
@@ -34,7 +34,7 @@ export const DateSelectedContextProvider: FC<{ children: ReactNode }> = ({
 
   const context = useMemo(
     () => ({ dateSelectedISO, updateSelectedDateISO }),
-    [dateSelectedISO]
+    [dateSelectedISO],
   );
 
   return (

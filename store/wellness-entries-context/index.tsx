@@ -2,11 +2,12 @@ import { diaryService } from '@client/services/diary.service';
 import {
   IWellnessEntries,
   IWellnessEntriesDto,
+  TAllWellnessType,
   TWellnessEntries,
+  TWellnessValueTypes,
 } from '@lib/interfaces/wellness.interface';
 import { useUserContext } from '@store/user-context';
 import { getStructuredClone } from '@utils/get-structured-clone';
-import { TWellnessTypes } from '@utils/interfaces';
 import {
   createContext,
   FC,
@@ -18,11 +19,8 @@ import {
   useState,
 } from 'react';
 
-export type TAllWellnessType = TWellnessTypes | 'excercise';
 export type TDrink = { value: number };
 export type TExcercise = { time?: string; details?: string };
-
-type TValueTypes = TDrink | TExcercise;
 
 interface IUpdateEntryByTypeProps<T> {
   date: string;
@@ -37,7 +35,7 @@ interface IRequestSetWellnessEntries {
 export interface IWellnessEntriesContext {
   wellnessEntries: IWellnessEntries;
   requestSetWellnessEntries: (args: IRequestSetWellnessEntries) => void;
-  updateEntryByKey: <K extends TValueTypes>(
+  updateEntryByKey: <K extends TWellnessValueTypes>(
     args: IUpdateEntryByTypeProps<K>,
   ) => void;
 }
@@ -53,11 +51,11 @@ const WellnessEntriesContext = createContext(initialState);
 export const WellnessEntriesContextProvider: FC<{
   children: ReactNode;
   initialState?: IWellnessEntries;
-}> = ({ children }) => {
+}> = ({ initialState, children }) => {
   const { userLoggedIn } = useUserContext();
   const [updatedDates, setUpdatedDates] = useState<string[]>([]);
   const [wellnessEntries, setWellnessEntries] = useState<IWellnessEntries>(
-    initialState?.wellnessEntries || {},
+    initialState || {},
   );
 
   useEffect(() => {
@@ -78,9 +76,9 @@ export const WellnessEntriesContextProvider: FC<{
       });
 
       if (error) {
-        console.log('Error updating wellness entries:', error);
+        console.error('Error updating wellness entries:', error);
       }
-    }, 1000);
+    }, 0);
 
     return () => {
       clearTimeout(timer);
@@ -95,30 +93,27 @@ export const WellnessEntriesContextProvider: FC<{
   );
 
   const updateEntryByKey = useCallback(
-    <K extends TValueTypes>({
+    <K extends TWellnessValueTypes>({
       date,
       type,
       content,
     }: IUpdateEntryByTypeProps<K>) => {
-      const updatedEntries = getStructuredClone(wellnessEntries);
-      const dates = [...updatedDates];
-
-      if (!updatedEntries[date]) {
-        updatedEntries[date] = {};
-      }
-      updatedEntries[date][type] = content;
-
-      if (!updatedDates.includes(date)) {
-        dates.push(date);
-      }
-
-      setWellnessEntries(updatedEntries);
+      setWellnessEntries((curr) => {
+        const updatedCurr: IWellnessEntries = getStructuredClone(curr);
+        updatedCurr[date] = { [type]: content };
+        return updatedCurr;
+      });
 
       if (userLoggedIn) {
-        setUpdatedDates(dates);
+        setUpdatedDates((curr) => {
+          if (curr.includes(date)) {
+            return [...curr];
+          }
+          return [...curr, date];
+        });
       }
     },
-    [wellnessEntries, updatedDates, userLoggedIn],
+    [userLoggedIn],
   );
 
   const context = useMemo(

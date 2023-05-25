@@ -31,7 +31,7 @@ interface IRemoveMealProps {
   mealId: TMealType;
   contentId: string;
 }
-interface IMealEntries {
+export interface IMealEntries {
   [date: string]: TMealCard;
 }
 
@@ -43,7 +43,7 @@ export interface IMealEntriesContext {
   removeMealEntryById: (args: IRemoveMealProps) => void;
 }
 
-const initialState: IMealEntriesContext = {
+export const initialState: IMealEntriesContext = {
   mealEntries: {},
   requestSetMealEntries: () => null,
   addMealEntry: () => null,
@@ -56,28 +56,28 @@ const MealEntriesContext = createContext(initialState);
 export const MealEntriesContextProvider: FC<{
   children: ReactNode;
   initialState?: IMealEntries;
-}> = ({ children }) => {
+}> = ({ children, initialState }) => {
   const { userLoggedIn } = useUserContext();
   const [mealEntries, setMealEntries] = useState<IMealEntries>(
-    initialState?.mealEntries || {}
+    initialState || {},
   );
 
   const requestSetMealEntries = useCallback(
     ({ meals }: IRequestSetMealEntries) => {
       setMealEntries((curr) => ({ ...curr, ...meals }));
     },
-    []
+    [],
   );
 
   const addMealEntry = useCallback(
     async ({ date, mealId, newValues }: IAddMealProps) => {
-      const updatedEntries = getStructuredClone(mealEntries);
+      const updatedEntries: IMealEntries = getStructuredClone(mealEntries);
 
       if (!updatedEntries[date]) {
         updatedEntries[date] = {};
       }
-      const updatedContentsForId = getStructuredClone(
-        updatedEntries[date][mealId]?.contents || []
+      const updatedContentsForId: IMealContent[] = getStructuredClone(
+        updatedEntries[date][mealId]?.contents || [],
       );
       updatedEntries[date][mealId] = {
         contents: [...updatedContentsForId, newValues],
@@ -90,13 +90,13 @@ export const MealEntriesContextProvider: FC<{
         });
 
         if (error) {
-          return console.log('Error:', error);
+          return console.error('Error creating entry:', error);
         }
       }
 
       setMealEntries(updatedEntries);
     },
-    [mealEntries, setMealEntries, userLoggedIn]
+    [mealEntries, userLoggedIn],
   );
 
   const updateMealEntry = useCallback(
@@ -106,11 +106,11 @@ export const MealEntriesContextProvider: FC<{
       updatedContent,
       updatedMealId,
     }: IUpdateMealProps) => {
-      const updatedEntries = getStructuredClone(mealEntries);
+      const updatedEntries: IMealEntries = getStructuredClone(mealEntries);
       const isNewMealId = mealId !== updatedMealId;
       const targetMealId = isNewMealId ? updatedMealId : mealId;
 
-      const targetMealContents = [
+      const targetMealContents: IMealContent[] = [
         ...(updatedEntries[date][targetMealId]?.contents || []),
       ];
 
@@ -120,15 +120,17 @@ export const MealEntriesContextProvider: FC<{
         ];
 
         const filteredCurrentContent = currentMealContents.filter(
-          (content) => content.id !== updatedContent.id
+          (content) => content.id !== updatedContent.id,
         );
         targetMealContents.push(updatedContent);
 
         updatedEntries[date][mealId] = { contents: filteredCurrentContent };
-        updatedEntries[date][updatedMealId] = { contents: targetMealContents };
+        updatedEntries[date][updatedMealId] = {
+          contents: targetMealContents,
+        };
       } else {
         const foundIndex = targetMealContents.findIndex(
-          (content) => content.id === updatedContent.id
+          (content) => content.id === updatedContent.id,
         );
 
         if (foundIndex !== -1) {
@@ -150,24 +152,24 @@ export const MealEntriesContextProvider: FC<{
         });
 
         if (error) {
-          return console.log('Error:', error);
+          return console.error('Error updating entry:', error);
         }
       }
       setMealEntries(updatedEntries);
     },
-    [mealEntries, userLoggedIn]
+    [mealEntries, userLoggedIn],
   );
 
   const removeMealEntryById = useCallback(
     async ({ date, mealId, contentId }: IRemoveMealProps) => {
-      const updatedEntries = getStructuredClone(mealEntries);
-      const targetMealContents = [
+      const updatedEntries: IMealEntries = getStructuredClone(mealEntries);
+      const targetMealContents: IMealContent[] = [
         ...(updatedEntries[date][mealId]?.contents || []),
       ];
 
       if (!!targetMealContents.length) {
         const filtered = targetMealContents.filter(
-          (content) => content.id !== contentId
+          (content) => content.id !== contentId,
         );
         updatedEntries[date][mealId] = {
           contents: filtered,
@@ -183,14 +185,14 @@ export const MealEntriesContextProvider: FC<{
           });
 
           if (error) {
-            return console.log('Error:', error);
+            return console.error('Error removing entry:', error);
           }
         }
 
         setMealEntries(updatedEntries);
       }
     },
-    [mealEntries, userLoggedIn]
+    [mealEntries, userLoggedIn],
   );
 
   const context = useMemo(
@@ -207,7 +209,7 @@ export const MealEntriesContextProvider: FC<{
       addMealEntry,
       updateMealEntry,
       removeMealEntryById,
-    ]
+    ],
   );
 
   return (

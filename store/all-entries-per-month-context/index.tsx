@@ -18,7 +18,7 @@ export interface IAllEntriesPerMonthContext {
   requestSetAllEntriesPerMonth: (entries: IRequestSetAllEntries) => void;
 }
 
-const initialState: IAllEntriesPerMonthContext = {
+export const initialState: IAllEntriesPerMonthContext = {
   allEntriesPerMonth: {},
   requestSetAllEntriesPerMonth: () => null,
 };
@@ -29,14 +29,14 @@ export const AllEntriesPerMonthContextProvider: FC<{ children: ReactNode }> = ({
   children,
 }) => {
   const [allEntriesPerMonth, setAllEntriesPerMonth] = useState<TEntriePerMonth>(
-    {}
+    {},
   );
 
   const requestSetAllEntriesPerMonth = useCallback(
     ({ entries }: IRequestSetAllEntries) => {
       setAllEntriesPerMonth((curr) => ({ ...curr, ...entries }));
     },
-    []
+    [],
   );
 
   const context = useMemo(
@@ -44,7 +44,7 @@ export const AllEntriesPerMonthContextProvider: FC<{ children: ReactNode }> = ({
       allEntriesPerMonth,
       requestSetAllEntriesPerMonth,
     }),
-    [allEntriesPerMonth, requestSetAllEntriesPerMonth]
+    [allEntriesPerMonth, requestSetAllEntriesPerMonth],
   );
 
   return (

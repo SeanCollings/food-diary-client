@@ -1,0 +1,25 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`store - menu-context should render provider with children 1`] = `
+<DocumentFragment>
+  <div>
+    Test component
+  </div>
+</DocumentFragment>
+`;
+
+exports[`store - menu-context should toggle menu closed after being opened 1`] = `
+<DocumentFragment>
+  <div>
+    Open: false
+  </div>
+</DocumentFragment>
+`;
+
+exports[`store - menu-context should toggle menu open 1`] = `
+<DocumentFragment>
+  <div>
+    Open: true
+  </div>
+</DocumentFragment>
+`;

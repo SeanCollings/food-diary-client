@@ -1,0 +1,79 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`store - meal-entries-context Add-a-meal should add a meal entry for a logged-in user 1`] = `
+<DocumentFragment>
+  <div>
+    Key: 02-02-2023
+    <div>
+      {"lunch":{"contents":[{"id":"new_id","food":"new_food"}]}}
+    </div>
+  </div>
+</DocumentFragment>
+`;
+
+exports[`store - meal-entries-context Delete-meal-entry should remove entry for a logged in user 1`] = `
+<DocumentFragment>
+  <div>
+    Key: 03-03-2023
+    <div>
+      {"dinner":{"contents":[{"id":"delete_id","food":"remove_food"},{"id":"other_id","food":"d_stay_food"}]},"breakfast":{"contents":[{"id":"b_other_id","food":"b_stay_food"}]}}
+    </div>
+  </div>
+</DocumentFragment>
+`;
+
+exports[`store - meal-entries-context Update-a-meal should update a meal entry for a logged-in user for same types 1`] = `
+<DocumentFragment>
+  <div>
+    Key: 03-03-2023
+    <div>
+      {"breakfast":{"contents":[{"id":"update_id","food":"update_food"}]}}
+    </div>
+  </div>
+</DocumentFragment>
+`;
+
+exports[`store - meal-entries-context Update-a-meal should update a meal entry for a logged-in user from one type to another 1`] = `
+<DocumentFragment>
+  <div>
+    Key: 03-03-2023
+    <div>
+      {"breakfast":{"contents":[]},"snack_2":{"contents":[{"id":"update_id","food":"update_food"}]}}
+    </div>
+  </div>
+</DocumentFragment>
+`;
+
+exports[`store - meal-entries-context should handle null initial-state 1`] = `<DocumentFragment />`;
+
+exports[`store - meal-entries-context should render initial entries with no initial-state 1`] = `<DocumentFragment />`;
+
+exports[`store - meal-entries-context should render provider with children 1`] = `
+<DocumentFragment>
+  <div>
+    Test component
+  </div>
+</DocumentFragment>
+`;
+
+exports[`store - meal-entries-context should render with initial-state 1`] = `
+<DocumentFragment>
+  <div>
+    Key: 02-02-2023
+    <div>
+      {"breakfast":{"contents":[{"id":"b_1","food":"b_food","description":"b_description"}]},"lunch":{"contents":[{"id":"l_1","food":"l_food","serving":"l_serving","measurement":"l_measurement"}]}}
+    </div>
+  </div>
+</DocumentFragment>
+`;
+
+exports[`store - meal-entries-context should set requested entries 1`] = `
+<DocumentFragment>
+  <div>
+    Key: 01-02-2023
+    <div>
+      {"snack_1":{"contents":[{"id":"s1_id_1","food":"s1_food_1"},{"id":"s1_id_2","food":"s1_food_2"}]},"dinner":{"contents":[{"id":"d_id","food":"d_food"}]}}
+    </div>
+  </div>
+</DocumentFragment>
+`;

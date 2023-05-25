@@ -18,6 +18,7 @@ const customJestConfig = {
     'store/**/*.{js,jsx,ts,tsx}',
     'utils/**/*.{js,jsx,ts,tsx}',
     'lib/**/*.{js,jsx,ts,tsx}',
+    'pages/**/*.{js,jsx,ts,tsx}',
     '!utils/**/food-emojis.ts',
     '!**/*constants*.ts',
   ],

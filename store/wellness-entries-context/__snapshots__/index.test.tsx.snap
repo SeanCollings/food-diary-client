@@ -1,0 +1,57 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`store - wellness-entries-context should handle null initial state 1`] = `<DocumentFragment />`;
+
+exports[`store - wellness-entries-context should render initial entries 1`] = `<DocumentFragment />`;
+
+exports[`store - wellness-entries-context should render provider with children 1`] = `
+<DocumentFragment>
+  <div>
+    Test component
+  </div>
+</DocumentFragment>
+`;
+
+exports[`store - wellness-entries-context should render with initial-state 1`] = `
+<DocumentFragment>
+  <div>
+    Key: 02-02-2023
+    <div>
+      {"water":{"value":5},"excercise":{"time":"00:35"}}
+    </div>
+  </div>
+</DocumentFragment>
+`;
+
+exports[`store - wellness-entries-context should set entries 1`] = `
+<DocumentFragment>
+  <div>
+    Key: 01-02-2023
+    <div>
+      {"water":{"value":5},"tea_coffee":{"value":2},"alcohol":{"value":1},"excercise":{"time":"00:15","details":"Run and walk"}}
+    </div>
+  </div>
+</DocumentFragment>
+`;
+
+exports[`store - wellness-entries-context should update entry for logged in user 1`] = `
+<DocumentFragment>
+  <div>
+    Key: 01-02-2023
+    <div>
+      {"water":{"value":4}}
+    </div>
+  </div>
+</DocumentFragment>
+`;
+
+exports[`store - wellness-entries-context should update entry for non-logged in user 1`] = `
+<DocumentFragment>
+  <div>
+    Key: 01-02-2023
+    <div>
+      {"water":{"value":4}}
+    </div>
+  </div>
+</DocumentFragment>
+`;

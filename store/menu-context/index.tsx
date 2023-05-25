@@ -13,7 +13,7 @@ export interface IMenuContext {
   toggleMenu: () => void;
 }
 
-const initialState: IMenuContext = {
+export const initialState: IMenuContext = {
   isOpen: false,
   toggleMenu: () => null,
 };

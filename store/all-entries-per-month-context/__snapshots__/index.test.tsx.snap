@@ -1,0 +1,25 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`store - all-entries-per-month-context should render provider with children 1`] = `
+<DocumentFragment>
+  <div>
+    Test component
+  </div>
+</DocumentFragment>
+`;
+
+exports[`store - all-entries-per-month-context should return default date 1`] = `
+<DocumentFragment>
+  <div>
+    All entries: {}
+  </div>
+</DocumentFragment>
+`;
+
+exports[`store - all-entries-per-month-context should return default date 2`] = `
+<DocumentFragment>
+  <div>
+    All entries: {"09-2022":[3],"10-2022":[1,6,9,12,16,29],"11-2022":[1,2,3,4,5,6],"12-2022":[15,22,23,26]}
+  </div>
+</DocumentFragment>
+`;

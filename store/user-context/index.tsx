@@ -73,7 +73,7 @@ export interface IUserContext {
   updateShareLink: (args: IUpdateShareLinkArgs) => void;
 }
 
-const initialState: IUserContext = {
+export const initialState: IUserContext = {
   user: null,
   userLoggedIn: false,
   setInitialUser: () => null,
@@ -90,7 +90,7 @@ export const UserContextProvider: FC<{
   initialState?: Partial<IUserContext>;
 }> = ({ children, initialState }) => {
   const [user, setUser] = useState<IUserModel | null>(
-    initialState?.user || null
+    initialState?.user || null,
   );
   const [updatedUserFields, setUpdatedUserFields] = useState<
     IPartialUserUpdate[]
@@ -119,7 +119,7 @@ export const UserContextProvider: FC<{
       });
 
       if (error) {
-        console.log('Error:', error);
+        console.error('Error updating user:', error);
       }
     }, 500);
 
@@ -145,7 +145,7 @@ export const UserContextProvider: FC<{
       });
 
       if (error) {
-        console.log('Error:', error);
+        console.error('Error updating preferences:', error);
       }
     }, 500);
 
@@ -171,7 +171,7 @@ export const UserContextProvider: FC<{
       });
 
       if (error) {
-        console.log('Error:', error);
+        console.error('Error updating preferences:', error);
       }
     }, 500);
 
@@ -180,23 +180,23 @@ export const UserContextProvider: FC<{
     };
   }, [updatedSharePreference]);
 
-  const setInitialUser = useCallback((unitialUser: IUserModel) => {
-    setUser(unitialUser);
+  const setInitialUser = useCallback((initialUser: IUserModel) => {
+    setUser(initialUser);
   }, []);
 
-  const updateUser = useCallback((update: IPartialUserUpdate) => {
+  const updateUser = useCallback((updatedUser: IPartialUserUpdate) => {
     setUser((curr) => {
       if (!curr) {
         return null;
       }
 
       return {
-        ...(getStructuredClone(curr || {}) || {}),
-        ...(curr ? update : {}),
+        ...getStructuredClone(curr),
+        ...updatedUser,
       };
     });
 
-    setUpdatedUserFields((curr) => [...curr, update]);
+    setUpdatedUserFields((curr) => [...curr, updatedUser]);
   }, []);
 
   const updatePreferences = useCallback((preference: IPartialPreference) => {
@@ -232,7 +232,7 @@ export const UserContextProvider: FC<{
 
       setUpdatedSharePreferences((curr) => [...curr, preference]);
     },
-    []
+    [],
   );
 
   const updateShareLink = useCallback(
@@ -252,7 +252,7 @@ export const UserContextProvider: FC<{
         };
       });
     },
-    []
+    [],
   );
 
   const context = useMemo(
@@ -272,7 +272,7 @@ export const UserContextProvider: FC<{
       updatePreferences,
       updateShareLink,
       updateShareLinkPreference,
-    ]
+    ],
   );
 
   return (

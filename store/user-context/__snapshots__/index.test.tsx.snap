@@ -1,0 +1,205 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`store - user-context should not update sharelink if user is null 1`] = `
+<DocumentFragment>
+  <div>
+    <div>
+      User id: 
+    </div>
+    <div>
+      User name: 
+    </div>
+    <div>
+      User email: 
+    </div>
+    <div>
+      User sharelink: 
+    </div>
+    <div>
+      User preferences: 
+    </div>
+    <div>
+      User stats: 
+    </div>
+    <div>
+      User logged in: false
+    </div>
+  </div>
+</DocumentFragment>
+`;
+
+exports[`store - user-context should not update user if user is null 1`] = `
+<DocumentFragment>
+  <div>
+    <div>
+      User id: 
+    </div>
+    <div>
+      User name: 
+    </div>
+    <div>
+      User email: 
+    </div>
+    <div>
+      User sharelink: 
+    </div>
+    <div>
+      User preferences: 
+    </div>
+    <div>
+      User stats: 
+    </div>
+    <div>
+      User logged in: false
+    </div>
+  </div>
+</DocumentFragment>
+`;
+
+exports[`store - user-context should render provider with children 1`] = `
+<DocumentFragment>
+  <div>
+    Test component
+  </div>
+</DocumentFragment>
+`;
+
+exports[`store - user-context should render with initial-state 1`] = `
+<DocumentFragment>
+  <div>
+    <div>
+      User id: mock_id
+    </div>
+    <div>
+      User name: Mock User
+    </div>
+    <div>
+      User email: test@emal.com
+    </div>
+    <div>
+      User sharelink: 
+    </div>
+    <div>
+      User preferences: {"isProfileShared":true,"showDayStreak":true,"showWeeklyExcercise":true,"showWeeklyWater":true}
+    </div>
+    <div>
+      User stats: {"dayStreak":2,"weeklyWater":12}
+    </div>
+    <div>
+      User logged in: true
+    </div>
+  </div>
+</DocumentFragment>
+`;
+
+exports[`store - user-context should set initial user 1`] = `
+<DocumentFragment>
+  <div>
+    <div>
+      User id: initial_id
+    </div>
+    <div>
+      User name: Initial Name
+    </div>
+    <div>
+      User email: initial@email.com
+    </div>
+    <div>
+      User sharelink: mock_sharelink
+    </div>
+    <div>
+      User preferences: {"showDayStreak":true,"isProfileShared":false,"showWeeklyExcercise":true}
+    </div>
+    <div>
+      User stats: {"dayStreak":5,"weeklyExercise":12,"weeklyWater":2}
+    </div>
+    <div>
+      User logged in: true
+    </div>
+  </div>
+</DocumentFragment>
+`;
+
+exports[`store - user-context should update share-link if toggleShare is false and not set isProfileShared 1`] = `
+<DocumentFragment>
+  <div>
+    <div>
+      User id: mock_id
+    </div>
+    <div>
+      User name: Mock User
+    </div>
+    <div>
+      User email: test@emal.com
+    </div>
+    <div>
+      User sharelink: updated_share_link
+    </div>
+    <div>
+      User preferences: {"showDayStreak":true,"showWeeklyExcercise":true,"showWeeklyWater":true}
+    </div>
+    <div>
+      User stats: {"dayStreak":2,"weeklyWater":12}
+    </div>
+    <div>
+      User logged in: true
+    </div>
+  </div>
+</DocumentFragment>
+`;
+
+exports[`store - user-context should update share-link with toggleShare true and set isProfileShared true 1`] = `
+<DocumentFragment>
+  <div>
+    <div>
+      User id: mock_id
+    </div>
+    <div>
+      User name: Mock User
+    </div>
+    <div>
+      User email: test@emal.com
+    </div>
+    <div>
+      User sharelink: updated_share_link
+    </div>
+    <div>
+      User preferences: {"isProfileShared":true}
+    </div>
+    <div>
+      User stats: {"dayStreak":2,"weeklyWater":12}
+    </div>
+    <div>
+      User logged in: true
+    </div>
+  </div>
+</DocumentFragment>
+`;
+
+exports[`store - user-context should update user 1`] = `
+<DocumentFragment>
+  <div>
+    <div>
+      User id: mock_id
+    </div>
+    <div>
+      User name: New Mock Name
+    </div>
+    <div>
+      User email: test@emal.com
+    </div>
+    <div>
+      User sharelink: 
+    </div>
+    <div>
+      User preferences: {"isProfileShared":false,"showDayStreak":false,"showWeeklyExcercise":false,"showWeeklyWater":false}
+    </div>
+    <div>
+      User stats: {"dayStreak":2,"weeklyWater":12}
+    </div>
+    <div>
+      User logged in: true
+    </div>
+  </div>
+</DocumentFragment>
+`;
