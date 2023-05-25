@@ -17,17 +17,16 @@ interface IResponse {
 
 const handler = async (
   req: IRequest<IWellnessEntriesDto>,
-  res: NextApiResponse<IResponse>
+  res: NextApiResponse<IResponse>,
 ) => {
   try {
     const apiClientSecure = await createApiClientSecure(req);
 
     if (req.method === 'PUT') {
-      const transformedBody = Object.values(req.body).reduce((acc, entry) => {
-        acc.push(entry);
-
-        return acc;
-      }, [] as TWellnessEntryAndDate[]);
+      const transformedBody = Object.values(req.body).reduce(
+        (acc, entry) => [...acc, entry],
+        [] as TWellnessEntryAndDate[],
+      );
 
       const { data } = await apiClientSecure.put(API_WELLNESS, {
         data: transformedBody,
