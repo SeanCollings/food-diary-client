@@ -276,7 +276,7 @@ export const setDateToMidnight = (date?: string | number | Date) => {
  * @param date string | Date
  * @returns string
  */
-export const setDateMidnightISOString = (date: TDate) => {
+export const setDateMidnightISOString = (date?: TDate) => {
   return setDateToMidnight(date).toISOString();
 };
 
