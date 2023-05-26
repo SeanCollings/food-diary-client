@@ -11,11 +11,9 @@ interface IResponse {
 
 const handler = async (
   req: NextApiRequest,
-  res: NextApiResponse<IResponse>
+  res: NextApiResponse<IResponse>,
 ) => {
   if (req.method === 'PUT') {
-    console.log('GENERATE LINK PUT:');
-
     try {
       const apiClientSecure = await createApiClientSecure(req);
 
@@ -23,9 +21,11 @@ const handler = async (
 
       return res.status(201).json({ ok: true, shareLink: data.shareLink });
     } catch (err) {
-      return res.status(500).json({
+      const typedError = err as CustomAxiosError;
+
+      return res.status(typedError.status || 500).json({
         ok: false,
-        message: (err as CustomAxiosError).response?.data.message,
+        message: typedError.response?.data.message,
       });
     }
   }

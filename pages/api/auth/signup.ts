@@ -1,4 +1,3 @@
-import { DEFAULT_AXIOS_ERROR_MSG } from '@client/constants';
 import { CustomAxiosError } from '@client/interfaces/axios.types';
 import { apiClient } from '@server/api-client';
 import { API_AUTH_SIGNUP } from '@server/server.constants';
@@ -23,10 +22,11 @@ const handler = async (req: IRequest, res: NextApiResponse) => {
 
     return res.status(201).json({ message: 'User created' });
   } catch (err) {
-    return res.status(500).json({
-      error:
-        (err as CustomAxiosError).response?.data.message ||
-        DEFAULT_AXIOS_ERROR_MSG,
+    const typedError = err as CustomAxiosError;
+
+    return res.status(typedError.status || 500).json({
+      ok: false,
+      message: typedError.response?.data.message,
     });
   }
 };

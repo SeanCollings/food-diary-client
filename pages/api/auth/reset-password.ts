@@ -1,4 +1,3 @@
-import { DEFAULT_AXIOS_ERROR_MSG } from '@client/constants';
 import { CustomAxiosError } from '@client/interfaces/axios.types';
 import { apiClient } from '@server/api-client';
 import { API_AUTH_RESET } from '@server/server.constants';
@@ -21,10 +20,11 @@ const handler = async (req: IRequest, res: NextApiResponse) => {
 
     return res.status(209).json({ ok: true, message: 'Email sent' });
   } catch (err) {
-    return res.status(500).json({
-      error:
-        (err as CustomAxiosError).response?.data.message ||
-        DEFAULT_AXIOS_ERROR_MSG,
+    const typedError = err as CustomAxiosError;
+
+    return res.status(typedError.status || 500).json({
+      ok: false,
+      message: typedError.response?.data.message,
     });
   }
 };

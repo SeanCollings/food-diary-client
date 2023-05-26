@@ -1,5 +1,4 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import { URI_DIARY } from '@client/constants';
 import { IDiaryReponseData } from '@client/interfaces/diary-data';
 import { createApiClientSecure } from '@server/api-client';
 import { API_DIARY } from '@server/server.constants';
@@ -13,10 +12,9 @@ interface IRequest extends NextApiRequest {
 
 const handler = async (
   req: IRequest,
-  res: NextApiResponse<IDiaryReponseData>
+  res: NextApiResponse<IDiaryReponseData>,
 ) => {
   const { date } = req.query;
-  console.log(`-------- ${URI_DIARY} :`, date);
 
   if (req.method !== 'GET') {
     return res.status(500).json({ ok: false });
@@ -35,9 +33,11 @@ const handler = async (
       },
     });
   } catch (err) {
-    return res.status(500).json({
+    const typedError = err as CustomAxiosError;
+
+    return res.status(typedError.status || 500).json({
       ok: false,
-      message: (err as CustomAxiosError).response?.data.message,
+      message: typedError.response?.data.message,
     });
   }
 };

@@ -1,8 +1,7 @@
-import { URI_SHARE } from '@client/constants';
+import { CustomAxiosError } from '@client/interfaces/axios.types';
 import { IShareResponseBody } from '@client/interfaces/user-summary-data';
 import { apiClient } from '@server/api-client';
 import { API_SHARE } from '@server/server.constants';
-import { AxiosError } from 'axios';
 import { NextApiRequest, NextApiResponse } from 'next';
 interface IRequest extends NextApiRequest {
   query: { link: string; dateFrom: string; dateTo: string };
@@ -10,10 +9,9 @@ interface IRequest extends NextApiRequest {
 
 const handler = async (
   req: IRequest,
-  res: NextApiResponse<IShareResponseBody>
+  res: NextApiResponse<IShareResponseBody>,
 ) => {
   const { link, dateFrom, dateTo } = req.query;
-  console.log(`-------- ${URI_SHARE} :`, link, ':', dateFrom, '-', dateTo);
 
   if (req.method !== 'GET') {
     return res.status(500).json({ ok: false });
@@ -21,7 +19,7 @@ const handler = async (
 
   try {
     const { data } = await apiClient.get(
-      `${API_SHARE}?link=${link}&dateFrom=${dateFrom}&dateTo=${dateTo}`
+      `${API_SHARE}?link=${link}&dateFrom=${dateFrom}&dateTo=${dateTo}`,
     );
 
     return res.status(200).json({
@@ -29,15 +27,11 @@ const handler = async (
       summary: data,
     });
   } catch (err) {
-    return res.status(500).json({
+    const typedError = err as CustomAxiosError;
+
+    return res.status(typedError.status || 500).json({
       ok: false,
-      message: (
-        err as AxiosError<{
-          statusCode: number;
-          message: string;
-          error: string;
-        }>
-      ).response?.data.message,
+      message: typedError.response?.data.message,
     });
   }
 };

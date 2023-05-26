@@ -21,7 +21,7 @@ interface IResponse {
 
 const handler = async (
   req: IRequest<IMealEntryDto>,
-  res: NextApiResponse<IResponse>
+  res: NextApiResponse<IResponse>,
 ) => {
   const { date } = req.query;
   const mealsUrl = `${API_MEALS}?date=${date}`;
@@ -49,9 +49,11 @@ const handler = async (
       return res.status(200).json({ ok: true });
     }
   } catch (err) {
-    return res.status(500).json({
+    const typedError = err as CustomAxiosError;
+
+    return res.status(typedError.status || 500).json({
       ok: false,
-      message: (err as CustomAxiosError).response?.data.message,
+      message: typedError.response?.data.message,
     });
   }
 };

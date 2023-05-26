@@ -1,5 +1,4 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import { URI_DIARY_CALENDAR_ENTRIES } from '@client/constants';
 import { ICalendarEntriesResponseBody } from '@client/interfaces/diary-data';
 import { createApiClientSecure } from '@server/api-client';
 import { API_DIARY_CALENDAR_ENTRIES } from '@server/server.constants';
@@ -14,10 +13,9 @@ interface IRequest extends NextApiRequest {
 
 const handler = async (
   req: IRequest,
-  res: NextApiResponse<ICalendarEntriesResponseBody>
+  res: NextApiResponse<ICalendarEntriesResponseBody>,
 ) => {
   const { date, months } = req.query;
-  console.log(`-------- ${URI_DIARY_CALENDAR_ENTRIES} :`, date, months);
 
   if (req.method !== 'GET') {
     return res.status(500).json({ ok: false });
@@ -27,16 +25,18 @@ const handler = async (
     const apiClientSecure = await createApiClientSecure(req);
 
     const { data } = await apiClientSecure.get(
-      `${API_DIARY_CALENDAR_ENTRIES}?date=${date}&months=${months}`
+      `${API_DIARY_CALENDAR_ENTRIES}?date=${date}&months=${months}`,
     );
 
-    const { monthRange, entries } = data;
+    const { monthRange, entries } = data || {};
 
     return res.status(200).json({ ok: true, months: monthRange, entries });
   } catch (err) {
-    return res.status(401).json({
+    const typedError = err as CustomAxiosError;
+
+    return res.status(typedError.status || 500).json({
       ok: false,
-      message: (err as CustomAxiosError).response?.data.message,
+      message: typedError.response?.data.message,
     });
   }
 };

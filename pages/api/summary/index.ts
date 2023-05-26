@@ -1,4 +1,3 @@
-import { URI_SUMMARY } from '@client/constants';
 import { CustomAxiosError } from '@client/interfaces/axios.types';
 import { ISummaryResponseBody } from '@client/interfaces/user-summary-data';
 import { createApiClientSecure } from '@server/api-client';
@@ -11,10 +10,9 @@ interface IRequest extends NextApiRequest {
 
 const handler = async (
   req: IRequest,
-  res: NextApiResponse<ISummaryResponseBody>
+  res: NextApiResponse<ISummaryResponseBody>,
 ) => {
   const { dateFrom, dateTo } = req.query;
-  console.log(`-------- ${URI_SUMMARY} :`, dateFrom, '-', dateTo);
 
   if (req.method !== 'GET') {
     return res.status(500).json({ ok: false });
@@ -24,7 +22,7 @@ const handler = async (
     const apiClientSecure = await createApiClientSecure(req);
 
     const { data } = await apiClientSecure.get(
-      `${API_SUMMARY}?dateFrom=${dateFrom}&dateTo=${dateTo}`
+      `${API_SUMMARY}?dateFrom=${dateFrom}&dateTo=${dateTo}`,
     );
 
     return res.status(200).json({
@@ -32,9 +30,11 @@ const handler = async (
       data,
     });
   } catch (err) {
-    return res.status(500).json({
+    const typedError = err as CustomAxiosError;
+
+    return res.status(typedError.status || 500).json({
       ok: false,
-      message: (err as CustomAxiosError).response?.data.message,
+      message: typedError.response?.data.message,
     });
   }
 };

@@ -3,10 +3,9 @@ import {
   IMealTrendResponseBody,
   TTimePeriod,
 } from '@client/interfaces/meal-trend-data';
-import { URI_MEAL_TRENDS } from '@client/constants';
-import { AxiosError } from 'axios';
 import { createApiClientSecure } from '@server/api-client';
 import { API_TRENDS_MEAL } from '@server/server.constants';
+import { CustomAxiosError } from '@client/interfaces/axios.types';
 
 interface IRequest extends NextApiRequest {
   query: { type: TTimePeriod };
@@ -14,10 +13,9 @@ interface IRequest extends NextApiRequest {
 
 const handler = async (
   req: IRequest,
-  res: NextApiResponse<IMealTrendResponseBody>
+  res: NextApiResponse<IMealTrendResponseBody>,
 ) => {
   const { type } = req.query;
-  console.log(`-------- ${URI_MEAL_TRENDS} :`, type);
 
   if (req.method !== 'GET') {
     return res.status(500).json({ ok: false });
@@ -27,7 +25,7 @@ const handler = async (
     const apiClientSecure = await createApiClientSecure(req);
 
     const { data } = await apiClientSecure.get(
-      `${API_TRENDS_MEAL}?type=${type}`
+      `${API_TRENDS_MEAL}?type=${type}`,
     );
 
     const { totalValues, legend, mealTotals, mealsPerDay } = data;
@@ -36,15 +34,11 @@ const handler = async (
       .status(200)
       .json({ totalValues, legend, mealTotals, mealsPerDay });
   } catch (err) {
-    return res.status(500).json({
+    const typedError = err as CustomAxiosError;
+
+    return res.status(typedError.status || 500).json({
       ok: false,
-      message: (
-        err as AxiosError<{
-          statusCode: number;
-          message: string;
-          error: string;
-        }>
-      ).response?.data.message,
+      message: typedError.response?.data.message,
     });
   }
 };
