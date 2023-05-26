@@ -1,9 +1,9 @@
 import { createApiClientSecure } from '@server/api-client';
-import handler from '../../../../pages/api/diary/calendar-entries';
+import handler from '../../../../pages/api/trends/meal-trends';
 
 jest.mock('@server/api-client');
 
-describe('/api - diary/calendar-entries', () => {
+describe('/api - trends/meal-trends', () => {
   const mockJson = jest.fn();
   const mockStatus = jest.fn().mockReturnValue({ json: mockJson });
   const mockRes = { status: mockStatus };
@@ -14,8 +14,10 @@ describe('/api - diary/calendar-entries', () => {
   beforeEach(() => {
     mockGet.mockResolvedValue({
       data: {
-        entries: { '02-2023': [1, 4, 7] },
-        monthRange: { '02-2023': true },
+        totalValues: 4,
+        legend: ['WED'],
+        mealTotals: { breakfast: 1 },
+        mealsPerDay: [{ id: '123', meals: [3] }],
       },
     });
     mockApiClientSecure.mockReturnValue({ get: mockGet } as any);
@@ -26,10 +28,7 @@ describe('/api - diary/calendar-entries', () => {
   });
 
   describe('/GET', () => {
-    const mockQuery = {
-      date: '01-02-2023',
-      months: '4',
-    };
+    const mockQuery = { type: 'week' };
 
     it('should send request', async () => {
       await handler(
@@ -40,18 +39,14 @@ describe('/api - diary/calendar-entries', () => {
         mockRes as any,
       );
 
-      expect(mockGet).toHaveBeenCalledWith(
-        '/diary/calendar-entries?date=01-02-2023&months=4',
-      );
+      expect(mockGet).toHaveBeenCalledWith('/trends/meal-trends?type=week');
       expect(mockStatus).toHaveBeenCalledWith(200);
       expect(mockJson).toHaveBeenCalledWith({
+        legend: ['WED'],
+        mealTotals: { breakfast: 1 },
+        mealsPerDay: [{ id: '123', meals: [3] }],
         ok: true,
-        entries: {
-          '02-2023': [1, 4, 7],
-        },
-        months: {
-          '02-2023': true,
-        },
+        totalValues: 4,
       });
     });
 
@@ -71,9 +66,11 @@ describe('/api - diary/calendar-entries', () => {
       expect(mockGet).toHaveBeenCalled();
       expect(mockStatus).toHaveBeenCalledWith(200);
       expect(mockJson).toHaveBeenCalledWith({
-        entries: undefined,
-        months: undefined,
+        legend: undefined,
+        mealTotals: undefined,
+        mealsPerDay: undefined,
         ok: true,
+        totalValues: undefined,
       });
     });
 

@@ -26,9 +26,11 @@ const handler = async (
       `${API_TRENDS_BEVERAGE}?type=${type}`,
     );
 
-    const { highestValue, legend, beveragesPerDay } = data;
+    const { highestValue, legend, beveragesPerDay } = data || {};
 
-    return res.status(200).json({ highestValue, legend, beveragesPerDay });
+    return res
+      .status(200)
+      .json({ highestValue, legend, beveragesPerDay, ok: true });
   } catch (err) {
     const typedError = err as CustomAxiosError;
 

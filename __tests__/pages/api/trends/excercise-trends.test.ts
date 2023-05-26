@@ -1,9 +1,9 @@
 import { createApiClientSecure } from '@server/api-client';
-import handler from '../../../../pages/api/diary/calendar-entries';
+import handler from '../../../../pages/api/trends/excercise-trends';
 
 jest.mock('@server/api-client');
 
-describe('/api - diary/calendar-entries', () => {
+describe('/api - trends/excercise-trends', () => {
   const mockJson = jest.fn();
   const mockStatus = jest.fn().mockReturnValue({ json: mockJson });
   const mockRes = { status: mockStatus };
@@ -14,8 +14,9 @@ describe('/api - diary/calendar-entries', () => {
   beforeEach(() => {
     mockGet.mockResolvedValue({
       data: {
-        entries: { '02-2023': [1, 4, 7] },
-        monthRange: { '02-2023': true },
+        highestValue: 4,
+        legend: ['WED'],
+        excercisePerDay: [3],
       },
     });
     mockApiClientSecure.mockReturnValue({ get: mockGet } as any);
@@ -26,10 +27,7 @@ describe('/api - diary/calendar-entries', () => {
   });
 
   describe('/GET', () => {
-    const mockQuery = {
-      date: '01-02-2023',
-      months: '4',
-    };
+    const mockQuery = { type: 'week' };
 
     it('should send request', async () => {
       await handler(
@@ -41,17 +39,14 @@ describe('/api - diary/calendar-entries', () => {
       );
 
       expect(mockGet).toHaveBeenCalledWith(
-        '/diary/calendar-entries?date=01-02-2023&months=4',
+        '/trends/excercise-trends?type=week',
       );
       expect(mockStatus).toHaveBeenCalledWith(200);
       expect(mockJson).toHaveBeenCalledWith({
+        excercisePerDay: [3],
+        highestValue: 4,
+        legend: ['WED'],
         ok: true,
-        entries: {
-          '02-2023': [1, 4, 7],
-        },
-        months: {
-          '02-2023': true,
-        },
       });
     });
 
@@ -71,8 +66,9 @@ describe('/api - diary/calendar-entries', () => {
       expect(mockGet).toHaveBeenCalled();
       expect(mockStatus).toHaveBeenCalledWith(200);
       expect(mockJson).toHaveBeenCalledWith({
-        entries: undefined,
-        months: undefined,
+        excercisePerDay: undefined,
+        highestValue: undefined,
+        legend: undefined,
         ok: true,
       });
     });

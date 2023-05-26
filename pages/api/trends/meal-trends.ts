@@ -28,11 +28,11 @@ const handler = async (
       `${API_TRENDS_MEAL}?type=${type}`,
     );
 
-    const { totalValues, legend, mealTotals, mealsPerDay } = data;
+    const { totalValues, legend, mealTotals, mealsPerDay } = data || {};
 
     return res
       .status(200)
-      .json({ totalValues, legend, mealTotals, mealsPerDay });
+      .json({ totalValues, legend, mealTotals, mealsPerDay, ok: true });
   } catch (err) {
     const typedError = err as CustomAxiosError;
 

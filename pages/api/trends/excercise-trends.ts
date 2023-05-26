@@ -16,7 +16,7 @@ const handler = async (
   const { type } = req.query;
 
   if (req.method !== 'GET') {
-    return;
+    return res.status(500).json({ ok: false });
   }
 
   try {
@@ -26,9 +26,11 @@ const handler = async (
       `${API_TRENDS_EXCERCISE}?type=${type}`,
     );
 
-    const { highestValue, legend, excercisePerDay } = data;
+    const { highestValue, legend, excercisePerDay } = data || {};
 
-    return res.status(200).json({ highestValue, legend, excercisePerDay });
+    return res
+      .status(200)
+      .json({ highestValue, legend, excercisePerDay, ok: true });
   } catch (err) {
     const typedError = err as CustomAxiosError;
 
