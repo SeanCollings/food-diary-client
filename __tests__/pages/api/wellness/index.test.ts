@@ -1,6 +1,6 @@
 import { createApiClientSecure } from '@server/api-client';
 import { IWellnessEntriesDto } from '@lib/interfaces/wellness.interface';
-import handler from './';
+import handler from '../../../../pages/api/wellness';
 
 jest.mock('@server/api-client');
 
