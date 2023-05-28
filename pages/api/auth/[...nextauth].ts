@@ -58,7 +58,7 @@ export default NextAuth({
         } catch (err) {
           console.error(
             '[authorize error]:',
-            (err as CustomAxiosError).message
+            (err as CustomAxiosError).message,
           );
           throw new Error('Unauthorized');
         }
