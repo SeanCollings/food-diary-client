@@ -43,7 +43,7 @@ const monthMatrix = () => {
         } else if (row > 1) {
           matrix[row][col] = { day: nextMonthCounter++, otherMonthDay: true };
         } else {
-          const previous = getNewMonth(selectedMonth, 'previous');
+          const previous = getNewMonth(selectedMonth, 'prev');
           const previousMonth = previous.getMonth();
 
           const daysInPreviousMonth =
