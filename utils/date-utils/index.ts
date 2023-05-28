@@ -14,7 +14,8 @@ export const dateNow = () => new Date(Date.now());
  * @returns string
  */
 export const getTodaysDate = () =>
-  new Date(dateNow()).toLocaleDateString('en-GB', {
+  new Date(dateNow()).toLocaleString('en-GB', {
+    timeZone: process.env.TZ,
     weekday: 'long',
     year: 'numeric',
     month: 'short',
@@ -32,7 +33,8 @@ export const formatFullDate = (date: TDate | null) => {
   }
 
   const d = new Date(date);
-  return d.toLocaleDateString('en-GB', {
+  return d.toLocaleString('en-GB', {
+    timeZone: process.env.TZ,
     weekday: 'long',
     year: 'numeric',
     month: 'short',
@@ -47,7 +49,8 @@ export const formatFullDate = (date: TDate | null) => {
  */
 export const formatFullDateNoDay = (date: TDate) => {
   const d = new Date(date);
-  return d.toLocaleDateString('en-GB', {
+  return d.toLocaleString('en-GB', {
+    timeZone: process.env.TZ,
     year: 'numeric',
     month: 'short',
     day: 'numeric',
@@ -62,7 +65,10 @@ export const formatFullDateNoDay = (date: TDate) => {
 export const formatMonthSmallYear = (date: TDate) => {
   const newDate = new Date(date);
   const year = newDate.getFullYear().toString();
-  const month = newDate.toLocaleString('en-US', { month: 'short' });
+  const month = newDate.toLocaleString('en-US', {
+    timeZone: process.env.TZ,
+    month: 'short',
+  });
   return `${month} ${year}`;
 };
 

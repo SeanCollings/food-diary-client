@@ -54,6 +54,7 @@ describe('date-utils', () => {
       console.log('------------ TZ ::', process.env.TZ);
 
       const result = getTodaysDate();
+      console.log('------------ result ::', result);
       expect(result).toMatchInlineSnapshot(`"Friday, 28 Apr 2023"`);
     });
   });
