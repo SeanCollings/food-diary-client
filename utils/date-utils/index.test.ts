@@ -49,6 +49,10 @@ describe('date-utils', () => {
 
   describe('getTodaysDate', () => {
     it('should return current date in format', () => {
+      console.log('------------------- Date.now() ::', Date.now());
+      console.log('------------------- today ::', today);
+      console.log('------------ TZ ::', process.env.TZ);
+
       const result = getTodaysDate();
       expect(result).toMatchInlineSnapshot(`"Friday, 28 Apr 2023"`);
     });
