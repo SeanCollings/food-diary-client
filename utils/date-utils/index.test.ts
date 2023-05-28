@@ -37,7 +37,7 @@ import {
 describe('date-utils', () => {
   let today: Date;
 
-  beforeAll(() => {
+  beforeEach(() => {
     today = new Date(Date.now());
   });
 
@@ -181,7 +181,7 @@ describe('date-utils', () => {
     });
 
     it('should return falsy if date not in current month', () => {
-      const previousMonth = new Date(Date.now());
+      const previousMonth = new Date(today);
       previousMonth.setMonth(previousMonth.getMonth() - 3);
       const result = isCurrentMonth(previousMonth);
       expect(result).toBeFalsy();
@@ -190,7 +190,7 @@ describe('date-utils', () => {
 
   describe('isMonthInFuture', () => {
     it('should check if month-date is in future', () => {
-      const nextMonth = new Date(Date.now());
+      const nextMonth = new Date(today);
       nextMonth.setMonth(nextMonth.getMonth() + 3);
       const result = isMonthInFuture(nextMonth);
       expect(result).toBeTruthy();
@@ -228,7 +228,7 @@ describe('date-utils', () => {
     });
 
     it('should truthy if month in future', () => {
-      const nextMonth = new Date(Date.now());
+      const nextMonth = new Date(today);
       nextMonth.setMonth(nextMonth.getMonth() + 3);
       const result = getIsDayInTheFuture(nextMonth, 3);
       expect(result).toBeTruthy();
@@ -247,7 +247,7 @@ describe('date-utils', () => {
     });
 
     it('should be falsy if both dates not equal', () => {
-      const nextMonth = new Date(Date.now());
+      const nextMonth = new Date(today);
       nextMonth.setMonth(nextMonth.getMonth() + 3);
       const result = getBothDatesEqual(today, nextMonth);
       expect(result).toBeFalsy();
@@ -262,24 +262,30 @@ describe('date-utils', () => {
   });
 
   describe('isBetweenDates', () => {
-    const nextMonth1 = new Date(Date.now());
-    nextMonth1.setMonth(nextMonth1.getMonth() + 1);
-    const nextMonth2 = new Date(Date.now());
-    nextMonth2.setMonth(nextMonth2.getMonth() + 2);
-    const prevMonth = new Date(Date.now());
-    prevMonth.setMonth(prevMonth.getMonth() - 1);
-
     it('should be truthy if between 2 dates', () => {
-      const result = isBetweenDates(today, prevMonth, nextMonth1);
+      const prevMonth = new Date(today);
+      prevMonth.setMonth(prevMonth.getMonth() - 1);
+      const nextMonth = new Date(today);
+      nextMonth.setMonth(nextMonth.getMonth() + 1);
+
+      const result = isBetweenDates(today, prevMonth, nextMonth);
       expect(result).toBeTruthy();
     });
 
     it('should be falsy if after 2 dates', () => {
+      const nextMonth1 = new Date(today);
+      nextMonth1.setMonth(nextMonth1.getMonth() + 1);
+      const nextMonth2 = new Date(today);
+      nextMonth2.setMonth(nextMonth2.getMonth() + 2);
+
       const result = isBetweenDates(today, nextMonth1, nextMonth2);
       expect(result).toBeFalsy();
     });
 
     it('should be falsy if before 2 dates', () => {
+      const prevMonth = new Date(today);
+      prevMonth.setMonth(prevMonth.getMonth() - 1);
+
       const result = isBetweenDates(today, prevMonth, prevMonth);
       expect(result).toBeFalsy();
     });
@@ -322,7 +328,7 @@ describe('date-utils', () => {
   });
 
   describe('getIsDateSelectedToday', () => {
-    const nextMonth = new Date(Date.now());
+    const nextMonth = new Date(today);
     nextMonth.setMonth(nextMonth.getMonth() + 1);
 
     it('should be truthy if date is today', () => {
@@ -378,34 +384,36 @@ describe('date-utils', () => {
   });
 
   describe('isDayAfter', () => {
-    const nextMonth = new Date(Date.now());
-    nextMonth.setMonth(nextMonth.getMonth() + 1);
-    const prevMonth = new Date(Date.now());
-    prevMonth.setMonth(prevMonth.getMonth() - 1);
-
     it('should be truthy if date after another date', () => {
+      const nextMonth = new Date(today);
+      nextMonth.setMonth(nextMonth.getMonth() + 1);
+
       const result = isDayAfter(nextMonth, today);
       expect(result).toBeTruthy();
     });
 
     it('should be falsy if date before another date', () => {
+      const prevMonth = new Date(today);
+      prevMonth.setMonth(prevMonth.getMonth() - 1);
+
       const result = isDayAfter(prevMonth, today);
       expect(result).toBeFalsy();
     });
   });
 
   describe('isDayBefore', () => {
-    const nextMonth = new Date(Date.now());
-    nextMonth.setMonth(nextMonth.getMonth() + 1);
-    const prevMonth = new Date(Date.now());
-    prevMonth.setMonth(prevMonth.getMonth() - 1);
-
     it('should be truthy if date after another date', () => {
+      const nextMonth = new Date(today);
+      nextMonth.setMonth(nextMonth.getMonth() + 1);
+
       const result = isDayBefore(nextMonth, today);
       expect(result).toBeFalsy();
     });
 
     it('should be falsy if date before another date', () => {
+      const prevMonth = new Date(today);
+      prevMonth.setMonth(prevMonth.getMonth() - 1);
+
       const result = isDayBefore(prevMonth, today);
       expect(result).toBeTruthy();
     });
