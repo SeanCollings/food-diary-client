@@ -17,6 +17,7 @@ export const API_TRENDS_BEVERAGE = '/trends/beverage-trends';
 export const API_TRENDS_EXCERCISE = '/trends/excercise-trends';
 export const API_TRENDS_MEAL = '/trends/meal-trends';
 
+export const API_USER = '/user';
 export const API_USER_PROFILE = '/user/profile';
 export const API_USER_PREFERENCES = '/user/preferences';
 

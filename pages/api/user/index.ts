@@ -1,7 +1,8 @@
 import { CustomAxiosError } from '@client/interfaces/axios.types';
 import { IUserResponse } from '@client/interfaces/user-data.type';
 import { createApiClientSecure } from '@server/api-client';
-import { API_USER_PROFILE } from '@server/server.constants';
+import { API_USER, API_USER_PROFILE } from '@server/server.constants';
+import { IPartialUserUpdate } from '@store/user-context';
 import { NextApiRequest, NextApiResponse } from 'next';
 
 interface IResponse {
@@ -13,9 +14,12 @@ interface IGetUserProfileResponse {
   message?: string;
   user: IUserResponse;
 }
+interface IPatchRequest extends NextApiRequest {
+  body: IPartialUserUpdate;
+}
 
 const handler = async (
-  req: NextApiRequest,
+  req: IPatchRequest,
   res: NextApiResponse<IResponse | IGetUserProfileResponse>,
 ) => {
   try {
@@ -26,14 +30,11 @@ const handler = async (
         API_USER_PROFILE,
       );
 
-      return res.status(201).json({ ok: true, user: data });
+      return res.status(200).json({ ok: true, user: data });
     }
 
     if (req.method === 'PATCH') {
-      const { data } = await apiClientSecure.patch(
-        `${process.env.SERVER_HOST}/user`,
-        req.body,
-      );
+      const { data } = await apiClientSecure.patch(API_USER, req.body);
 
       return res.status(201).json({ ok: true });
     }

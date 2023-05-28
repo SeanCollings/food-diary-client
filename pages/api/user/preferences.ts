@@ -1,17 +1,18 @@
 import { CustomAxiosError } from '@client/interfaces/axios.types';
 import { createApiClientSecure } from '@server/api-client';
 import { API_USER_PREFERENCES } from '@server/server.constants';
+import { IPartialPreference } from '@store/user-context';
 import { NextApiRequest, NextApiResponse } from 'next';
 
 interface IResponse {
   ok: boolean;
   message?: string;
 }
+interface IPatchRequest extends NextApiRequest {
+  body: IPartialPreference;
+}
 
-const handler = async (
-  req: NextApiRequest,
-  res: NextApiResponse<IResponse>,
-) => {
+const handler = async (req: IPatchRequest, res: NextApiResponse<IResponse>) => {
   try {
     const apiClientSecure = await createApiClientSecure(req);
 
