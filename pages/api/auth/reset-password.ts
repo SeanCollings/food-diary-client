@@ -11,14 +11,14 @@ interface IRequest extends NextApiRequest {
 }
 
 const handler = async (req: IRequest, res: NextApiResponse) => {
-  try {
-    if (req.method !== 'POST') {
-      return;
-    }
+  if (req.method !== 'POST') {
+    return res.status(500).json({ ok: false });
+  }
 
+  try {
     await apiClient.post(API_AUTH_RESET, req.body);
 
-    return res.status(209).json({ ok: true, message: 'Email sent' });
+    return res.status(202).json({ ok: true, message: 'Email sent' });
   } catch (err) {
     const typedError = err as CustomAxiosError;
 
