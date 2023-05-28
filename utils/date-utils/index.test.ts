@@ -37,6 +37,10 @@ import {
 describe('date-utils', () => {
   let today: Date;
 
+  beforeAll(() => {
+    jest.spyOn(Date, 'now').mockImplementation(() => 1682632800000); // '2023-04-28'
+  });
+
   beforeEach(() => {
     today = new Date(Date.now());
   });
@@ -209,7 +213,11 @@ describe('date-utils', () => {
 
   describe('getCurrentDayInDate', () => {
     it('should get day in month of input date', () => {
+      console.log('2 ------------------- Date.now() ::', Date.now());
+      console.log('2 ------------------- today ::', today);
+
       const result = getCurrentDayInDate(today, 3);
+      console.log('2 ------------ result ::', result);
       expect(result).toMatchInlineSnapshot(`2023-04-02T22:00:00.000Z`);
     });
   });
