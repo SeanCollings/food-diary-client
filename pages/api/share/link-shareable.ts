@@ -9,7 +9,9 @@ interface IResponse {
   message?: string;
 }
 interface IRequest extends NextApiRequest {
-  isShared: boolean;
+  body: {
+    isShared: boolean;
+  };
 }
 
 const handler = async (req: IRequest, res: NextApiResponse<IResponse>) => {

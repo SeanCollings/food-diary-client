@@ -72,8 +72,10 @@ describe('user-service', () => {
       const result = await userService.updateSharePreference(mockBody);
 
       expect(result).toEqual({ ok: true });
-      expect(mockAxios.put).toHaveBeenCalledWith('/api/user/link-shareable', {
-        isShared: true,
+      expect(mockAxios.put).toHaveBeenCalledWith('/api/share/link-shareable', {
+        body: {
+          isShared: true,
+        },
       });
     });
 

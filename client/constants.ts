@@ -23,4 +23,4 @@ export const URI_RESET_PASSWORD = '/api/auth/reset-password';
 export const URI_USER = '/api/user';
 export const URI_PREFERENCES = '/api/user/preferences';
 export const URI_GENERATE_LINK = '/api/user/generate-link';
-export const URI_LINK_SHAREABLE = '/api/user/link-shareable';
+export const URI_SHARE_LINK_SHAREABLE = '/api/share/link-shareable';

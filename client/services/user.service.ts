@@ -1,7 +1,7 @@
 import {
   DEFAULT_AXIOS_ERROR_MSG,
   URI_GENERATE_LINK,
-  URI_LINK_SHAREABLE,
+  URI_SHARE_LINK_SHAREABLE,
   URI_PREFERENCES,
   URI_USER,
 } from '@client/constants';
@@ -27,7 +27,7 @@ interface IGenerateReponse extends IResponse {
 const createService = () => {
   const updateUser = async (body: IPartialUserUpdate) => {
     try {
-      const { data } = await axios.patch<IResponse>(URI_USER, body);
+      await axios.patch<IResponse>(URI_USER, body);
 
       return { ok: true };
     } catch (err) {
@@ -37,9 +37,9 @@ const createService = () => {
     }
   };
 
-  const updatePreferences = async (update: IPartialPreference) => {
+  const updatePreferences = async (body: IPartialPreference) => {
     try {
-      const { data } = await axios.patch<IResponse>(URI_PREFERENCES, update);
+      await axios.patch<IResponse>(URI_PREFERENCES, body);
 
       return { ok: true };
     } catch (err) {
@@ -51,8 +51,10 @@ const createService = () => {
 
   const updateSharePreference = async (update: IShareLinkPreference) => {
     try {
-      const { data } = await axios.put<IResponse>(`${URI_LINK_SHAREABLE}`, {
-        isShared: update['isProfileShared'],
+      await axios.put<IResponse>(`${URI_SHARE_LINK_SHAREABLE}`, {
+        body: {
+          isShared: update['isProfileShared'],
+        },
       });
 
       return { ok: true };
