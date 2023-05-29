@@ -1,5 +1,10 @@
 import '@testing-library/jest-dom/extend-expect';
+import MockDate from 'mockdate';
 
 global.beforeAll(async () => {
-  jest.spyOn(Date, 'now').mockImplementation(() => 1682632800000); // '2023-04-28'
+  MockDate.set('2023-04-28');
+});
+
+global.afterAll(() => {
+  MockDate.reset();
 });
