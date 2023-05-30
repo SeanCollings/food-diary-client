@@ -36,7 +36,7 @@ describe('hooks - use-request-share', () => {
     await act(() => Promise.resolve());
 
     expect(mockAxios.get).toHaveBeenCalledWith(
-      '/api/share?link=mock_guid&dateFrom=2023-01-01T22:00:00.000Z&dateTo=2023-02-01T22:00:00.000Z',
+      '/api/share?link=mock_guid&dateFrom=2023-01-02&dateTo=2023-02-02',
     );
     expect(result.current).toMatchInlineSnapshot(`
       {

@@ -5,16 +5,11 @@ import {
 } from '.';
 
 describe('calendar-utils', () => {
-  let now: number;
-
-  beforeEach(() => {
-    now = Date.now();
-  });
-
   describe('generateMonthMatrix', () => {
     it('should generate a month matrix and cache the selected month', () => {
-      const monthMatrix = generateMonthMatrix(new Date(now));
-      const sameMonthMatrix = generateMonthMatrix(new Date(now));
+      const today = new Date(Date.now());
+      const monthMatrix = generateMonthMatrix(today);
+      const sameMonthMatrix = generateMonthMatrix(today);
       expect(sameMonthMatrix).toEqual(monthMatrix);
       expect(monthMatrix).toMatchInlineSnapshot(`
         [
@@ -184,16 +179,17 @@ describe('calendar-utils', () => {
 
   describe('getCalendarDayProperties', () => {
     it('should get properties for particular day in calendar that does not have entry', () => {
+      const today = new Date(Date.now());
       const result = getCalendarDayProperties({
         day: 3,
-        selectedDay: new Date(now),
-        topLevelDate: new Date(now),
+        selectedDay: today,
+        topLevelDate: today,
         otherMonthDay: false,
         entriesPerMonth: [1],
       });
       expect(result).toMatchInlineSnapshot(`
         {
-          "calendarDay": 2023-04-02T22:00:00.000Z,
+          "calendarDay": "2023-04-03",
           "dayHasEntry": false,
           "isDayInTheFuture": false,
           "isPeripheralMonth": false,
@@ -204,16 +200,17 @@ describe('calendar-utils', () => {
     });
 
     it('should get properties for particular day in calendar that does have entry', () => {
+      const today = new Date(Date.now());
       const result = getCalendarDayProperties({
         day: 3,
-        selectedDay: new Date(now),
-        topLevelDate: new Date(now),
+        selectedDay: today,
+        topLevelDate: today,
         otherMonthDay: false,
         entriesPerMonth: [1, 3],
       });
       expect(result).toMatchInlineSnapshot(`
         {
-          "calendarDay": 2023-04-02T22:00:00.000Z,
+          "calendarDay": "2023-04-03",
           "dayHasEntry": true,
           "isDayInTheFuture": false,
           "isPeripheralMonth": false,
@@ -224,16 +221,17 @@ describe('calendar-utils', () => {
     });
 
     it('should get properties for particular day in calendar that is the seleted day', () => {
+      const today = new Date(Date.now());
       const result = getCalendarDayProperties({
-        day: new Date(now).getDate(),
-        selectedDay: new Date(now),
-        topLevelDate: new Date(now),
+        day: today.getDate(),
+        selectedDay: today,
+        topLevelDate: today,
         otherMonthDay: false,
         entriesPerMonth: [1, 3],
       });
       expect(result).toMatchInlineSnapshot(`
         {
-          "calendarDay": 2023-04-27T22:00:00.000Z,
+          "calendarDay": "2023-04-28",
           "dayHasEntry": false,
           "isDayInTheFuture": false,
           "isPeripheralMonth": false,
@@ -244,21 +242,22 @@ describe('calendar-utils', () => {
     });
 
     it('should get properties for particular day in calendar that is the seleted day but not other month', () => {
+      const today = new Date(Date.now());
       const result = getCalendarDayProperties({
         day: 28,
-        selectedDay: new Date(now),
-        topLevelDate: new Date(now),
+        selectedDay: today,
+        topLevelDate: today,
         otherMonthDay: true,
         entriesPerMonth: [1, 3],
       });
       expect(result).toMatchInlineSnapshot(`
         {
-          "calendarDay": 2023-04-27T22:00:00.000Z,
+          "calendarDay": "2023-04-28",
           "dayHasEntry": false,
           "isDayInTheFuture": false,
           "isPeripheralMonth": true,
           "isSelectedDay": false,
-          "isToday": true,
+          "isToday": false,
         }
       `);
     });
@@ -266,7 +265,7 @@ describe('calendar-utils', () => {
 
   describe('getCalendarRestrictions', () => {
     it('should return no restrictions if none passed in', () => {
-      const today = new Date(now);
+      const today = new Date(Date.now());
 
       const result = getCalendarRestrictions({
         calendarDay: today,
@@ -281,6 +280,7 @@ describe('calendar-utils', () => {
     });
 
     it('should have no restrictions if only day after is restricted', () => {
+      const now = Date.now();
       const today = new Date(now);
       const nextDay = new Date(now + 3600 * 1000 * 24);
 
@@ -298,8 +298,8 @@ describe('calendar-utils', () => {
     });
 
     it('should return restricted day if today is after resticted days', () => {
-      const today = new Date(now);
-      const prevDay = new Date(now - 3600 * 1000 * 24);
+      const today = new Date(Date.now());
+      const prevDay = new Date(Date.now() - 3600 * 1000 * 24);
 
       const result = getCalendarRestrictions({
         calendarDay: today,
@@ -316,8 +316,8 @@ describe('calendar-utils', () => {
     });
 
     it('should return restricted day if all days before next day is restricted', () => {
-      const today = new Date(now);
-      const nextDay = new Date(now + 3600 * 1000 * 24);
+      const today = new Date(Date.now());
+      const nextDay = new Date(Date.now() + 3600 * 1000 * 24);
 
       const result = getCalendarRestrictions({
         calendarDay: today,
@@ -333,8 +333,8 @@ describe('calendar-utils', () => {
     });
 
     it('should return no restricted days if only days before previos days are restricted', () => {
-      const today = new Date(now);
-      const prevDay = new Date(now - 3600 * 1000 * 24);
+      const today = new Date(Date.now());
+      const prevDay = new Date(Date.now() - 3600 * 1000 * 24);
 
       const result = getCalendarRestrictions({
         calendarDay: today,
@@ -350,8 +350,8 @@ describe('calendar-utils', () => {
     });
 
     it('should return restricted day if all days before next day are restricted', () => {
-      const today = new Date(now);
-      const nextDay = new Date(now + 3600 * 1000 * 24);
+      const today = new Date(Date.now());
+      const nextDay = new Date(Date.now() + 3600 * 1000 * 24);
 
       const result = getCalendarRestrictions({
         calendarDay: today,
@@ -368,8 +368,8 @@ describe('calendar-utils', () => {
     });
 
     it('should return restricted day if all days after previous day are restricted', () => {
-      const today = new Date(now);
-      const prevDay = new Date(now - 3600 * 1000 * 24);
+      const today = new Date(Date.now());
+      const prevDay = new Date(Date.now() - 3600 * 1000 * 24);
 
       const result = getCalendarRestrictions({
         calendarDay: today,
@@ -386,7 +386,7 @@ describe('calendar-utils', () => {
     });
 
     it('should return not restricted not day if only days before and after today are restricted', () => {
-      const today = new Date(now);
+      const today = new Date(Date.now());
 
       const result = getCalendarRestrictions({
         calendarDay: today,

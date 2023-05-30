@@ -2,7 +2,7 @@ import { URI_SUMMARY } from '@client/constants';
 import { summaryFetcher } from '@client/fetchers';
 import useSWRImmutable from 'swr/immutable';
 import { useUserContext } from '@store/user-context';
-import { setDateMidnightISOString } from '@utils/date-utils';
+import { setServerDateString } from '@utils/date-utils';
 import { ISummaryResponseBody } from '@client/interfaces/user-summary-data';
 
 export const useRequestSummary = (
@@ -13,11 +13,11 @@ export const useRequestSummary = (
   const { userLoggedIn } = useUserContext();
 
   const shouldFetch = mounted && userLoggedIn;
-  const dateFromISO = setDateMidnightISOString(dateFrom);
-  const dateToISO = setDateMidnightISOString(dateTo);
+  const dateFromServer = setServerDateString(dateFrom);
+  const dateToServer = setServerDateString(dateTo);
 
   const { data, error } = useSWRImmutable(
-    shouldFetch ? [URI_SUMMARY, dateFromISO, dateToISO] : null,
+    shouldFetch ? [URI_SUMMARY, dateFromServer, dateToServer] : null,
     summaryFetcher<ISummaryResponseBody>,
     {},
   );

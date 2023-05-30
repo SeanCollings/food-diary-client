@@ -7,7 +7,7 @@ import {
   formatFullDate,
   getIsDateSelectedToday,
   getNewDay,
-  setDateMidnightISOString,
+  setServerDateString,
 } from '@utils/date-utils';
 import { useDateSelectedContext } from '@store/date-selected-context';
 import { useAllEntriesPerMonthContext } from '@store/all-entries-per-month-context';
@@ -145,10 +145,10 @@ const DateDisplay: FC = () => {
     setShowCalendar(false);
   };
   const onClickPreviousMonth = (month: Date) => {
-    setCalendarDate(setDateMidnightISOString(month));
+    setCalendarDate(setServerDateString(month));
   };
   const onClickNextMonth = (month: Date) => {
-    setCalendarDate(setDateMidnightISOString(month));
+    setCalendarDate(setServerDateString(month));
   };
 
   return (

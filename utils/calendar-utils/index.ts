@@ -43,7 +43,7 @@ const monthMatrix = () => {
         } else if (row > 1) {
           matrix[row][col] = { day: nextMonthCounter++, otherMonthDay: true };
         } else {
-          const previous = getNewMonth(selectedMonth, 'prev');
+          const previous = new Date(getNewMonth(selectedMonth, 'prev'));
           const previousMonth = previous.getMonth();
 
           const daysInPreviousMonth =
@@ -81,7 +81,7 @@ export const getCalendarDayProperties = ({
   entriesPerMonth,
 }: ICalendarDayProperties) => {
   const calendarDay = getCurrentDayInDate(selectedDay, day);
-  const isToday = getIsDateSelectedToday(calendarDay);
+  const isToday = getIsDateSelectedToday(calendarDay) && !otherMonthDay;
 
   const isDayInTheFuture = getIsDayInTheFuture(selectedDay, day);
   const isPeripheralMonth = otherMonthDay || isDayInTheFuture;
@@ -100,7 +100,7 @@ export const getCalendarDayProperties = ({
 };
 
 interface ICalendarRestrictions {
-  calendarDay: Date;
+  calendarDay: TDate;
   restrictDaysBefore?: TDate;
   restricDaysAfter?: TDate;
 }

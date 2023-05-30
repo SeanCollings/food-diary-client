@@ -1,7 +1,7 @@
 import { diaryService } from '@client/services/diary.service';
 import { TDrink, WellnessEntriesContextProvider, initialState } from '.';
-import { act, render, waitFor } from '@testing-library/react';
-import { FC, useEffect } from 'react';
+import { act, render } from '@testing-library/react';
+import { FC, useEffect, useRef } from 'react';
 import { IWellnessEntries } from '@lib/interfaces/wellness.interface';
 import { useUserContext } from '@store/user-context';
 import { useWellnessEntriesContext } from '.';
@@ -50,26 +50,29 @@ const MockInitialEntries: FC<{ setEntries?: boolean }> = ({ setEntries }) => {
 const MockUpdateEntry: FC<{ runBothUpdates?: boolean }> = ({
   runBothUpdates = false,
 }) => {
+  const runRef = useRef(false);
   const { wellnessEntries, updateEntryByKey } = useWellnessEntriesContext();
 
   useEffect(() => {
-    act(() => {
+    if (runRef.current) {
+      return;
+    }
+
+    runRef.current = true;
+
+    updateEntryByKey<TDrink>({
+      date: '01-02-2023',
+      type: 'water',
+      content: { value: 4 },
+    });
+    if (runBothUpdates) {
       updateEntryByKey<TDrink>({
         date: '01-02-2023',
-        type: 'water',
-        content: { value: 4 },
+        type: 'alcohol',
+        content: { value: 7 },
       });
-      if (runBothUpdates) {
-        updateEntryByKey<TDrink>({
-          date: '01-02-2023',
-          type: 'alcohol',
-          content: { value: 7 },
-        });
-      }
-    });
+    }
   }, [runBothUpdates, updateEntryByKey]);
-
-  jest.runAllTimers();
 
   return <DisplayEntry entries={wellnessEntries} />;
 };
@@ -84,7 +87,7 @@ describe('store - wellness-entries-context', () => {
   });
 
   beforeEach(() => {
-    mockDiaryService.updateWellnessEntries.mockResolvedValue({} as any);
+    mockDiaryService.updateWellnessEntries.mockResolvedValue({});
     mockUseUserContext.mockReturnValue({ userLoggedIn: false } as any);
   });
 
@@ -176,10 +179,11 @@ describe('store - wellness-entries-context', () => {
       </WellnessEntriesContextProvider>,
     );
 
-    await waitFor(() => {
-      expect(mockDiaryService.updateWellnessEntries).toHaveBeenCalledWith({
-        body: { '01-02-2023': { date: '01-02-2023', water: { value: 4 } } },
-      });
+    await act(() => Promise.resolve());
+    jest.advanceTimersByTime(1000);
+
+    expect(mockDiaryService.updateWellnessEntries).toHaveBeenCalledWith({
+      body: { '01-02-2023': { date: '01-02-2023', water: { value: 4 } } },
     });
     expect(asFragment()).toMatchSnapshot();
   });
@@ -193,10 +197,11 @@ describe('store - wellness-entries-context', () => {
       </WellnessEntriesContextProvider>,
     );
 
-    await waitFor(() => {
-      expect(mockDiaryService.updateWellnessEntries).toHaveBeenCalledWith({
-        body: { '01-02-2023': { alcohol: { value: 7 }, date: '01-02-2023' } },
-      });
+    await act(() => Promise.resolve());
+    jest.advanceTimersByTime(1000);
+
+    expect(mockDiaryService.updateWellnessEntries).toHaveBeenCalledWith({
+      body: { '01-02-2023': { alcohol: { value: 7 }, date: '01-02-2023' } },
     });
   });
 
@@ -212,10 +217,11 @@ describe('store - wellness-entries-context', () => {
       </WellnessEntriesContextProvider>,
     );
 
-    await waitFor(async () => {
-      expect(mockDiaryService.updateWellnessEntries).toHaveBeenCalled();
-    });
+    await act(() => Promise.resolve());
+    jest.advanceTimersByTime(1000);
+    await act(() => Promise.resolve());
 
+    expect(mockDiaryService.updateWellnessEntries).toHaveBeenCalled();
     expect(mockError).toHaveBeenCalledWith(
       'Error updating wellness entries:',
       'mock error occurred',

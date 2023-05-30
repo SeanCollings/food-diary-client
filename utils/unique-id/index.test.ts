@@ -8,7 +8,7 @@ describe('unique-id util', () => {
   describe('getUniqueId', () => {
     it('should return unique id', () => {
       const result = getUniqueId();
-      expect(result).toMatchInlineSnapshot(`"lgzo4hs04fzzzxjylrx"`);
+      expect(result).toMatchInlineSnapshot(`"lgzsetc04fzzzxjylrx"`);
     });
   });
 });

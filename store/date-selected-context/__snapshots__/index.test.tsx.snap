@@ -11,7 +11,7 @@ exports[`store - dates-selected-context should render provider with children 1`]
 exports[`store - dates-selected-context should return default date 1`] = `
 <DocumentFragment>
   <div>
-    2023-04-27T22:00:00.000Z
+    2023-04-28
   </div>
 </DocumentFragment>
 `;
@@ -19,7 +19,7 @@ exports[`store - dates-selected-context should return default date 1`] = `
 exports[`store - dates-selected-context should update state date 1`] = `
 <DocumentFragment>
   <div>
-    2022-12-31T22:00:00.000Z
+    2023-01-01
   </div>
 </DocumentFragment>
 `;

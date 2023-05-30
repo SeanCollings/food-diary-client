@@ -403,12 +403,12 @@ const Calendar: FC<ICalendarProps> = ({
     onClickNewDate(newDate);
   };
   const previousMonthHandler = () => {
-    const month = getNewMonth(selectedMonthDate, 'prev');
+    const month = new Date(getNewMonth(selectedMonthDate, 'prev'));
     setSelectedMonthDate(month);
     onClickPreviousMonth?.(month);
   };
   const nextMonthHandler = () => {
-    const month = getNewMonth(selectedMonthDate, 'next');
+    const month = new Date(getNewMonth(selectedMonthDate, 'next'));
     setSelectedMonthDate(month);
     onClickNextMonth?.(month);
   };

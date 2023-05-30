@@ -19,6 +19,8 @@ import {
   useState,
 } from 'react';
 
+export const BOUNCE_TIME = 1000;
+
 export type TDrink = { value: number };
 export type TExcercise = { time?: string; details?: string };
 
@@ -78,7 +80,7 @@ export const WellnessEntriesContextProvider: FC<{
       if (error) {
         console.error('Error updating wellness entries:', error);
       }
-    }, 0);
+    }, BOUNCE_TIME);
 
     return () => {
       clearTimeout(timer);
@@ -98,22 +100,25 @@ export const WellnessEntriesContextProvider: FC<{
       type,
       content,
     }: IUpdateEntryByTypeProps<K>) => {
-      setWellnessEntries((curr) => {
-        const updatedCurr: IWellnessEntries = getStructuredClone(curr);
-        updatedCurr[date] = { [type]: content };
-        return updatedCurr;
-      });
+      const updatedEntries = getStructuredClone(wellnessEntries);
+      const dates = [...updatedDates];
+
+      if (!updatedEntries[date]) {
+        updatedEntries[date] = {};
+      }
+      updatedEntries[date][type] = content;
+
+      if (!updatedDates.includes(date)) {
+        dates.push(date);
+      }
+
+      setWellnessEntries(updatedEntries);
 
       if (userLoggedIn) {
-        setUpdatedDates((curr) => {
-          if (curr.includes(date)) {
-            return [...curr];
-          }
-          return [...curr, date];
-        });
+        setUpdatedDates(dates);
       }
     },
-    [userLoggedIn],
+    [updatedDates, userLoggedIn, wellnessEntries],
   );
 
   const context = useMemo(

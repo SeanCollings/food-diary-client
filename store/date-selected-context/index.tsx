@@ -1,4 +1,4 @@
-import { setDateMidnightISOString } from '@utils/date-utils';
+import { setServerDateString } from '@utils/date-utils';
 import {
   createContext,
   FC,
@@ -23,12 +23,10 @@ const DateSelectedContext = createContext(initialState);
 export const DateSelectedContextProvider: FC<{ children: ReactNode }> = ({
   children,
 }) => {
-  const [dateSelectedISO, setDateSelectedISO] = useState(
-    setDateMidnightISOString(),
-  );
+  const [dateSelectedISO, setDateSelectedISO] = useState(setServerDateString());
 
   const updateSelectedDateISO = (newDate: string | Date) => {
-    const newMidnightDateISO = setDateMidnightISOString(newDate);
+    const newMidnightDateISO = setServerDateString(newDate);
     setDateSelectedISO(newMidnightDateISO);
   };
 
