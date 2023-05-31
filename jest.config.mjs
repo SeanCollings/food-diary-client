@@ -22,6 +22,7 @@ const customJestConfig = {
     '!pages/**/*nextauth*.ts',
     '!utils/**/food-emojis.ts',
     '!**/*constants*.ts',
+    '!tests/**/*',
   ],
   moduleNameMapper: {
     '^@components/(.*)$': '<rootDir>/components/$1',
@@ -34,6 +35,7 @@ const customJestConfig = {
     '^@server/(.*)$': '<rootDir>/server/$1',
   },
   globalSetup: './global-setup.ts',
+  modulePathIgnorePatterns: ['<rootDir>/tests/'],
 };
 
 export default createJestConfig(customJestConfig);
