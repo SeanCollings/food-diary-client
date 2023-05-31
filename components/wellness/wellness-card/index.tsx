@@ -9,6 +9,7 @@ import {
   useWellnessEntriesContext,
 } from '@store/wellness-entries-context';
 import { COLOURS } from '@utils/constants';
+import { TBeverageEntry } from '@lib/interfaces/wellness.interface';
 
 const SContainer = styled.div`
   padding: 20px;
@@ -45,6 +46,13 @@ const SCount = styled.div`
     opacity: 0.4;
   }
 `;
+const SButton = styled.button`
+  background: none;
+  color: inherit;
+  border: none;
+  padding: 0;
+  display: flex;
+`;
 const SIconRemove = styled(MdRemoveCircle)`
   cursor: pointer;
   :hover {
@@ -75,7 +83,7 @@ const WellnessCard: FC<IProps> = ({ id, title, imageSrc, color }) => {
   const [hasUpdated, setHasUpdated] = useState(false);
 
   useEffect(() => {
-    const currentEntry = wellnessEntries[dateSelectedISO];
+    const currentEntry = wellnessEntries[dateSelectedISO] as TBeverageEntry;
     setCounter((currentEntry?.[id] as TDrink)?.value || 0);
   }, [dateSelectedISO, wellnessEntries, id]);
 
@@ -117,9 +125,13 @@ const WellnessCard: FC<IProps> = ({ id, title, imageSrc, color }) => {
         />
       </SImageContainer>
       <SCounterContainer>
-        <SIconRemove size={24} color={color} onClick={onClickRemove} />
+        <SButton data-testid={`${id}-remove`}>
+          <SIconRemove size={24} color={color} onClick={onClickRemove} />
+        </SButton>
         <SCount className={counter === 0 ? 'no-value' : ''}>{counter}</SCount>
-        <SIconAdd size={24} color={color} onClick={onClickAdd} />
+        <SButton data-testid={`${id}-add`}>
+          <SIconAdd size={24} color={color} onClick={onClickAdd} />
+        </SButton>
       </SCounterContainer>
     </SContainer>
   );
