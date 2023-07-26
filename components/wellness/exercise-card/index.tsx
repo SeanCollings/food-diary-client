@@ -12,6 +12,7 @@ import TimeInputCustom from '@components/ui/input/time-input-custom';
 import { runValidations } from '@utils/validation';
 import { excerciseValidators } from '@utils/validation/validators/collections';
 import { trim } from '@utils/string-utils';
+import { TExcerciseEntry } from '@lib/interfaces/wellness.interface';
 
 const SContainer = styled.div`
   padding: 20px;
@@ -91,11 +92,12 @@ const ExcerciseCard: FC<IProps> = ({ title, imageSrc }) => {
   const [errors, setErrors] = useState<Partial<IRunFormValidations>>({});
 
   useEffect(() => {
-    const currentDayEntry = wellnessEntries[dateSelectedISO];
-    setTime((currentDayEntry?.excercise as TExcercise)?.time || '00:00');
-    setExcerciseDetails(
-      (currentDayEntry?.excercise as TExcercise)?.details || ''
-    );
+    const currentDayExcerciseEntry = (
+      wellnessEntries[dateSelectedISO] as TExcerciseEntry
+    )?.excercise;
+
+    setTime(currentDayExcerciseEntry?.time || '00:00');
+    setExcerciseDetails(currentDayExcerciseEntry?.details || '');
   }, [dateSelectedISO, wellnessEntries]);
 
   useEffect(() => {

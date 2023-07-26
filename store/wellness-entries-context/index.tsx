@@ -106,7 +106,11 @@ export const WellnessEntriesContextProvider: FC<{
       if (!updatedEntries[date]) {
         updatedEntries[date] = {};
       }
-      updatedEntries[date][type] = content;
+
+      updatedEntries[date] = {
+        ...updatedEntries[date],
+        [type]: content,
+      };
 
       if (!updatedDates.includes(date)) {
         dates.push(date);

@@ -15,8 +15,9 @@ export type TWellnessEntry<K> = {
 export type TBeverageEntry = {
   [key in TWellnessTypes]?: TDrink;
 };
+export type TExcerciseEntry = { excercise?: TExcercise };
 
-export type TWellnessEntries = TBeverageEntry | { excercise?: TExcercise };
+export type TWellnessEntries = TBeverageEntry | TExcerciseEntry;
 
 export interface IWellnessEntries {
   [date: string]: TWellnessEntries;
