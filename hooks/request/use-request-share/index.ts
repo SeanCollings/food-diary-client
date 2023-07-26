@@ -7,8 +7,8 @@ import { IShareResponseBody } from '@client/interfaces/user-summary-data';
 export const useRequestShare = (
   mounted: boolean,
   guid: string,
-  dateFrom: Date,
-  dateTo: Date,
+  dateFrom: Date | string,
+  dateTo: Date | string,
 ) => {
   const shouldFetch = mounted;
   const dateFromServer = setServerDateString(dateFrom);

@@ -193,17 +193,17 @@ const SBottomPaginationContainer = styled.div`
   margin-bottom: 20px;
 `;
 
+type TDate = Date | string;
 interface ISummaryProps {
   isLoading: boolean;
   userData: ISummaryResponseData;
-  fromDate: Date;
-  toDate: Date;
+  fromDate: TDate;
+  toDate: TDate;
   defaultShowDays: number;
-  onApplyNewDateRange: (dateFrom: Date, dateTo: Date) => void;
+  onApplyNewDateRange: (dateFrom: TDate, dateTo: TDate) => void;
 }
 
 const Summary: FC<ISummaryProps> = ({
-  isLoading,
   userData,
   fromDate,
   toDate,
@@ -222,7 +222,7 @@ const Summary: FC<ISummaryProps> = ({
     const allNestedDates = getPaddedNestedArray(
       userData.dates,
       userData.totalDays,
-      MAX_DAYS_PER_ROW
+      MAX_DAYS_PER_ROW,
     );
 
     const getCurrentViewKeys = allNestedDates.slice(0, MAX_ROWS_PER_PAGE);
@@ -241,7 +241,7 @@ const Summary: FC<ISummaryProps> = ({
         setCurrentViewKeys(getCurrentViewKeys);
       }
     },
-    [allViewKeys, currentPage, userData]
+    [allViewKeys, currentPage, userData],
   );
 
   const onClickStartDate = () => {
@@ -275,9 +275,9 @@ const Summary: FC<ISummaryProps> = ({
   const gridTemplateArea = useMemo(
     () =>
       `'date' '${ALL_MEAL_CARDS.map((meal) => meal.id).join(
-        `' '`
+        `' '`,
       )}' '${ALL_WELLNESS_CARDS.map((meal) => meal.id).join(`' '`)}'`,
-    []
+    [],
   );
 
   return (

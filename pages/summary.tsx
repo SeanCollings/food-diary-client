@@ -16,6 +16,7 @@ const SContainer = styled.section`
   justify-content: center;
 `;
 
+type TDate = Date | string;
 interface ISummaryPageProps {
   session: Session;
 }
@@ -23,14 +24,14 @@ interface ISummaryPageProps {
 const SummaryPage: NextPage<ISummaryPageProps> = ({ session }) => {
   const [mounted, setMounted] = useState(false);
   const [userData, setUserData] = useState<ISummaryResponseData | null>(null);
-  const [fromDate, setFromDate] = useState(
-    getDaysAwayFromDate(-(DEFAULT_DAYS_SHOW - 1))
+  const [fromDate, setFromDate] = useState<TDate>(
+    getDaysAwayFromDate(-(DEFAULT_DAYS_SHOW - 1)),
   );
-  const [toDate, setToDate] = useState(new Date(dateNow()));
+  const [toDate, setToDate] = useState<TDate>(new Date(dateNow()));
   const { data, isLoading, isError } = useRequestSummary(
     mounted,
     fromDate,
-    toDate
+    toDate,
   );
 
   useEffect(() => {
@@ -43,7 +44,7 @@ const SummaryPage: NextPage<ISummaryPageProps> = ({ session }) => {
     }
   }, [data]);
 
-  const onApplyNewDateRange = (fromDate: Date, toDate: Date) => {
+  const onApplyNewDateRange = (fromDate: TDate, toDate: TDate) => {
     setFromDate(fromDate);
     setToDate(toDate);
   };

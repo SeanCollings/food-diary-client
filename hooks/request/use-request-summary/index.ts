@@ -7,8 +7,8 @@ import { ISummaryResponseBody } from '@client/interfaces/user-summary-data';
 
 export const useRequestSummary = (
   mounted: boolean,
-  dateFrom: Date,
-  dateTo: Date,
+  dateFrom: Date | string,
+  dateTo: Date | string,
 ) => {
   const { userLoggedIn } = useUserContext();
 

@@ -27,6 +27,7 @@ const SUsername = styled.span`
   font-weight: 600;
 `;
 
+type TDate = Date | string;
 interface ISharePageProps {
   guid: string;
 }
@@ -34,15 +35,15 @@ interface ISharePageProps {
 const SharePage: NextPage<ISharePageProps> = ({ guid }) => {
   const [mounted, setMounted] = useState(false);
   const [userData, setUserData] = useState<IShareResponseData | undefined>();
-  const [fromDate, setFromDate] = useState(
-    getDaysAwayFromDate(-(DEFAULT_DAYS_SHOW - 1))
+  const [fromDate, setFromDate] = useState<TDate>(
+    getDaysAwayFromDate(-(DEFAULT_DAYS_SHOW - 1)),
   );
-  const [toDate, setToDate] = useState(new Date(dateNow()));
+  const [toDate, setToDate] = useState<TDate>(new Date(dateNow()));
   const { data, isLoading, isError } = useRequestShare(
     mounted,
     guid,
     fromDate,
-    toDate
+    toDate,
   );
 
   useEffect(() => {
@@ -55,7 +56,7 @@ const SharePage: NextPage<ISharePageProps> = ({ guid }) => {
     }
   }, [data]);
 
-  const onApplyNewDateRange = (fromDate: Date, toDate: Date) => {
+  const onApplyNewDateRange = (fromDate: TDate, toDate: TDate) => {
     setFromDate(fromDate);
     setToDate(toDate);
   };
@@ -101,7 +102,7 @@ const SharePage: NextPage<ISharePageProps> = ({ guid }) => {
 type TParams = { guid: string };
 
 export const getServerSideProps: GetServerSideProps<ISharePageProps> = async (
-  context
+  context,
 ) => {
   const { guid } = context.params as TParams;
 
