@@ -318,8 +318,9 @@ const LoginForm: FC = () => {
             {showNameInput && (
               <FormInput<TInputTypes>
                 id="name"
-                name="Name"
+                label="Name"
                 type="text"
+                autoComplete="name"
                 value={state.formValues.name}
                 required
                 isError={state.formErrors['name']}
@@ -329,8 +330,10 @@ const LoginForm: FC = () => {
             )}
             <FormInput<TInputTypes>
               id="email"
-              name="Email address"
+              label="Email address"
+              name="email"
               type="email"
+              autoComplete="email"
               value={state.formValues.email}
               required
               isError={state.formErrors['email']}
@@ -340,8 +343,14 @@ const LoginForm: FC = () => {
             {showPasswordInput && (
               <FormInput<TInputTypes>
                 id="password"
-                name="Password"
+                name="password"
+                label="Password"
                 type="password"
+                autoComplete={
+                  state.formType === 'create'
+                    ? 'new-password'
+                    : 'current-password'
+                }
                 value={state.formValues.password}
                 required
                 title={`Minimum of ${PASSWORD_MIN_LENGTH} characters.`}

@@ -73,7 +73,7 @@ interface IFormInputProps<T extends string>
   id: T;
   value: string;
   type: TInputType;
-  name: string;
+  label: string;
   required?: boolean;
   placeholder?: string;
   isError?: string;
@@ -86,7 +86,7 @@ const FormInput = <T extends string>({
   id,
   value,
   type,
-  name,
+  label,
   placeholder,
   title,
   required,
@@ -136,7 +136,7 @@ const FormInput = <T extends string>({
         <SRequired className={!!isError ? 'error' : ''}>*</SRequired>
       )}
       <SLabel htmlFor={`${id}_form_input`} positionTop={labelTop}>
-        {name}
+        {label}
       </SLabel>
       <SInput
         ref={inputRef}
