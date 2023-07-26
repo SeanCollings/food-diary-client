@@ -1,6 +1,7 @@
 import '../styles/globals.css';
 import GlobalStyle from '../components/global-styles';
 import type { AppProps } from 'next/app';
+import { Analytics } from '@vercel/analytics/react';
 import Head from 'next/head';
 import SideMenuDisplay from '@components/menu/side-menu-display';
 import { DateSelectedContextProvider } from '@store/date-selected-context';
@@ -25,42 +26,45 @@ function MyApp(props: AppProps) {
   }, [mounted]);
 
   return (
-    <SessionProvider session={props.pageProps.session}>
-      <UserContextProvider>
-        <DateSelectedContextProvider>
-          <MealEntriesContextProvider>
-            <WellnessEntriesContextProvider>
-              <AllEntriesPerMonthContextProvider>
-                <MenuContextProvider>
-                  <ThemeProvider
-                    enableSystem
-                    themes={ALL_THEME_NAMES}
-                    defaultTheme={'system'}
-                  >
-                    <GlobalStyle />
-                    {mounted && (
-                      <>
-                        <Head>
-                          <title>{'Food & Wellness Diary'}</title>
-                          <meta
-                            name="description"
-                            content={'Food & Wellness Diary'}
-                          />
-                          <link rel="icon" href="/diary.ico" />
-                        </Head>
+    <>
+      <SessionProvider session={props.pageProps.session}>
+        <UserContextProvider>
+          <DateSelectedContextProvider>
+            <MealEntriesContextProvider>
+              <WellnessEntriesContextProvider>
+                <AllEntriesPerMonthContextProvider>
+                  <MenuContextProvider>
+                    <ThemeProvider
+                      enableSystem
+                      themes={ALL_THEME_NAMES}
+                      defaultTheme={'system'}
+                    >
+                      <GlobalStyle />
+                      {mounted && (
+                        <>
+                          <Head>
+                            <title>{'Food & Wellness Diary'}</title>
+                            <meta
+                              name="description"
+                              content={'Food & Wellness Diary'}
+                            />
+                            <link rel="icon" href="/diary.ico" />
+                          </Head>
 
-                        <SideMenuDisplay />
-                        <AppMain {...props} />
-                      </>
-                    )}
-                  </ThemeProvider>
-                </MenuContextProvider>
-              </AllEntriesPerMonthContextProvider>
-            </WellnessEntriesContextProvider>
-          </MealEntriesContextProvider>
-        </DateSelectedContextProvider>
-      </UserContextProvider>
-    </SessionProvider>
+                          <SideMenuDisplay />
+                          <AppMain {...props} />
+                        </>
+                      )}
+                    </ThemeProvider>
+                  </MenuContextProvider>
+                </AllEntriesPerMonthContextProvider>
+              </WellnessEntriesContextProvider>
+            </MealEntriesContextProvider>
+          </DateSelectedContextProvider>
+        </UserContextProvider>
+      </SessionProvider>
+      <Analytics />
+    </>
   );
 }
 
