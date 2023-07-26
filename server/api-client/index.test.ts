@@ -34,7 +34,7 @@ describe('server', () => {
       expect(mockAxios.create).toHaveBeenNthCalledWith(1, {
         baseURL: undefined,
         headers: { Authorization: '' },
-        timeout: 5000,
+        timeout: 10000,
       });
     });
   });
@@ -49,7 +49,7 @@ describe('server', () => {
       expect(mockAxios.create).toHaveBeenLastCalledWith({
         baseURL: undefined,
         headers: { Authorization: 'Bearer mock_access_token' },
-        timeout: 5000,
+        timeout: 10000,
       });
     });
   });

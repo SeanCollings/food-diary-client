@@ -20,7 +20,7 @@ export const createInstance = (
 
   return axios.create({
     baseURL: process.env.SERVER_HOST,
-    timeout: 5000,
+    timeout: 10000,
     headers,
   });
 };
