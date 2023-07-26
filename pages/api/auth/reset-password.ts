@@ -21,10 +21,11 @@ const handler = async (req: IRequest, res: NextApiResponse) => {
     return res.status(202).json({ ok: true, message: 'Email sent' });
   } catch (err) {
     const typedError = err as CustomAxiosError;
+    console.error('[reset-password error] ::', typedError.message);
 
     return res.status(typedError.status || 500).json({
       ok: false,
-      message: typedError.response?.data.message,
+      message: typedError.message,
     });
   }
 };

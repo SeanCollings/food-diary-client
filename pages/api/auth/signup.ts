@@ -23,10 +23,11 @@ const handler = async (req: IRequest, res: NextApiResponse) => {
     return res.status(201).json({ ok: true, message: 'User created' });
   } catch (err) {
     const typedError = err as CustomAxiosError;
+    console.error('[signup error] ::', typedError.message);
 
     return res.status(typedError.status || 500).json({
       ok: false,
-      message: typedError.response?.data.message,
+      message: typedError.message,
     });
   }
 };

@@ -7,9 +7,14 @@ describe('/api - auth/signup', () => {
   const mockJson = jest.fn();
   const mockStatus = jest.fn().mockReturnValue({ json: mockJson });
   const mockRes = { status: mockStatus };
+  const mockError = jest.fn();
 
   const mockApiClient = jest.mocked(apiClient);
   const mockPost = jest.fn();
+
+  beforeAll(() => {
+    jest.spyOn(console, 'error').mockImplementation(mockError);
+  });
 
   beforeEach(() => {
     mockPost.mockResolvedValue({});
@@ -51,9 +56,7 @@ describe('/api - auth/signup', () => {
     });
 
     it('should handle errors', async () => {
-      mockPost.mockRejectedValue({
-        response: { data: { message: 'mock error occurred' } },
-      });
+      mockPost.mockRejectedValue({ message: 'mock error occurred' });
 
       await handler(
         {
