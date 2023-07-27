@@ -31,21 +31,29 @@ export default class MyDocument extends Document {
 
   render() {
     return (
-      <Html>
+      <Html prefix="og: https://ogp.me/ns#">
         <Head />
         <title>{'Food & Wellness Diary'}</title>
-        <meta name="og:title" content={'Food & Wellness Diary'} />
+        <link rel="icon" href="/diary.ico" />
+
+        <meta property="og:title" content={'Food and Wellness Diary'} />
         <meta
-          name="og:description"
+          property="og:description"
           content="One step at a time. Towards wellness."
         />
         <meta
           property="og:image"
           content={`${process.env.VERCEL_DOMAIN || ''}/api/static`}
         />
-        <meta name="og:site_name" content={'Food & Wellness Diary'}></meta>
-        <meta name="og:url" content={`${process.env.VERCEL_DOMAIN || ''}`} />
-        <link rel="icon" href="/diary.ico" />
+        <meta
+          property="og:site_name"
+          content={'Food and Wellness Diary'}
+        ></meta>
+        <meta
+          property="og:url"
+          content={`${process.env.VERCEL_DOMAIN || ''}/`}
+        />
+        <meta property="og:type" content="website" />
         <body>
           <Main />
           <NextScript />

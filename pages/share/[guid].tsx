@@ -88,9 +88,9 @@ const SharePage: NextPage<ISharePageProps> = ({ guid }) => {
           property="og:image"
           content={`${process.env.VERCEL_DOMAIN || ''}/api/static?path=share`}
         />
-        <meta name="og:title" content={'Shared Diary'} />
+        <meta property="og:title" content={'Shared Diary'} />
         <meta
-          name="og:url"
+          property="og:url"
           content={`${process.env.VERCEL_DOMAIN || ''}/share`}
         />
       </Head>
