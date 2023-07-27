@@ -22,10 +22,12 @@ const SHeader = styled.div`
   text-align: center;
 `;
 const SImageContainer = styled.div`
+  position: relative;
   height: 50px;
   width: 50px;
   user-select: none;
   cursor: pointer;
+  text-align: center;
 
   :hover {
     filter: drop-shadow(0px 0px 1px ${COLOURS.gray_dark});
@@ -67,15 +69,29 @@ const SIconAdd = styled(MdAddCircle)`
     opacity: 0.7;
   }
 `;
+const SImage = styled(Image)`
+  width: auto;
+  height: 100%;
+  max-width: 100%;
+`;
 
 interface IProps {
   id: TWellnessTypes;
   title: string;
   imageSrc: string;
   color: string;
+  width: number;
+  height: number;
 }
 
-const WellnessCard: FC<IProps> = ({ id, title, imageSrc, color }) => {
+const WellnessCard: FC<IProps> = ({
+  id,
+  title,
+  imageSrc,
+  color,
+  width,
+  height,
+}) => {
   const { dateSelectedISO } = useDateSelectedContext();
   const { wellnessEntries, updateEntryByKey } = useWellnessEntriesContext();
 
@@ -115,12 +131,11 @@ const WellnessCard: FC<IProps> = ({ id, title, imageSrc, color }) => {
     <SContainer>
       <SHeader>{title}</SHeader>
       <SImageContainer onClick={onClickAdd}>
-        <Image
+        <SImage
           src={imageSrc}
           alt={title}
-          width="100%"
-          height="100%"
-          objectFit="contain"
+          width={width}
+          height={height}
           draggable={false}
         />
       </SImageContainer>

@@ -105,7 +105,7 @@ const SContents = styled.div`
     top: 0px;
   }
 `;
-const SLink = styled.a`
+const SLink = styled(Link)`
   white-space: nowrap;
   cursor: pointer;
   font-size: 24px;
@@ -128,7 +128,7 @@ const SideMenuDisplay: FC = () => {
 
   useOnClickOutsideElementsArray(
     [sideMenuRef],
-    animateStyle === 'open' ? toggleMenu : () => null
+    animateStyle === 'open' ? toggleMenu : () => null,
   );
 
   useEffect(() => {
@@ -184,17 +184,22 @@ const SideMenuDisplay: FC = () => {
           }
 
           return (
-            <Link key={id} href={href} passHref>
-              <SLink
-                className={pathname === href ? 'current-path' : ''}
-                onClick={handleMenuClick}
-              >
-                {title}
-              </SLink>
-            </Link>
+            <SLink
+              key={id}
+              href={href}
+              passHref
+              className={pathname === href ? 'current-path' : ''}
+              onClick={handleMenuClick}
+            >
+              {title}
+            </SLink>
           );
         })}
-        {session && <SLink onClick={onLogoutClick}>{'Logout'}</SLink>}
+        {session && (
+          <SLink href="#" onClick={onLogoutClick}>
+            Logout
+          </SLink>
+        )}
       </SContents>
     </SContainer>
   );

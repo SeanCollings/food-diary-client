@@ -15,7 +15,7 @@ const SContainer = styled.div`
     display: flex;
   }
 `;
-const SLink = styled.a`
+const SLink = styled(Link)`
   font-size: 20px;
   cursor: pointer;
   padding-bottom: 4px;
@@ -48,14 +48,21 @@ const FlatMenu: FC = () => {
         }
 
         return (
-          <Link key={id} href={href} passHref>
-            <SLink className={router.pathname === href ? 'current-path' : ''}>
-              {title}
-            </SLink>
+          <Link
+            key={id}
+            href={href}
+            passHref
+            className={router.pathname === href ? 'current-path' : ''}
+          >
+            {title}
           </Link>
         );
       })}
-      {session && <SLink onClick={onLogoutClick}>{'Logout'}</SLink>}
+      {session && (
+        <SLink href="#" onClick={onLogoutClick}>
+          Logout
+        </SLink>
+      )}
     </SContainer>
   );
 };

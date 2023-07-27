@@ -58,6 +58,13 @@ const SImageContainer = styled.div`
   width: 80px;
   user-select: none;
   margin-bottom: 8px;
+  position: relative;
+  text-align: center;
+`;
+const SImage = styled(Image)`
+  width: auto;
+  height: 100%;
+  max-width: 100%;
 `;
 
 interface IRunFormValidations {
@@ -151,13 +158,12 @@ const ExcerciseCard: FC<IProps> = ({ title, imageSrc }) => {
       <STitleContainer>
         <SHeader>{title}</SHeader>
         <SImageContainer>
-          <Image
+          <SImage
             src={imageSrc}
             alt={title}
-            width="100%"
-            height="100%"
-            objectFit="contain"
-            draggable={false}
+            width={128}
+            height={180}
+            priority={false}
           />
         </SImageContainer>
       </STitleContainer>
