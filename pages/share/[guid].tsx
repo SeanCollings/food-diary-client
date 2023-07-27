@@ -5,6 +5,7 @@ import { dateNow, getDaysAwayFromDate } from '@utils/date-utils';
 import Summary from '@components/summary';
 import { IShareResponseData } from '@client/interfaces/user-summary-data';
 import { useRequestShare } from '@hooks/request/use-request-share';
+import Head from 'next/head';
 
 const DEFAULT_DAYS_SHOW = 7;
 
@@ -80,22 +81,33 @@ const SharePage: NextPage<ISharePageProps> = ({ guid }) => {
   }
 
   return (
-    <SContainer>
-      {userData.user && (
-        <SUsernameContainer>
-          This profile belongs to:<SUsername>{userData.user}</SUsername>
-        </SUsernameContainer>
-      )}
+    <>
+      <Head>
+        <title>Shared Diary</title>
+        <meta
+          property="og:image"
+          content={`${process.env.VERCEL_URL || ''}/api/static?path=share`}
+        />
+        <meta name="og:title" content={'Shared Diary'} />
+        <meta name="og:url" content={`${process.env.VERCEL_URL || ''}/share`} />
+      </Head>
+      <SContainer>
+        {userData.user && (
+          <SUsernameContainer>
+            This profile belongs to:<SUsername>{userData.user}</SUsername>
+          </SUsernameContainer>
+        )}
 
-      <Summary
-        isLoading={isLoading}
-        userData={userData}
-        fromDate={fromDate}
-        toDate={toDate}
-        defaultShowDays={DEFAULT_DAYS_SHOW}
-        onApplyNewDateRange={onApplyNewDateRange}
-      />
-    </SContainer>
+        <Summary
+          isLoading={isLoading}
+          userData={userData}
+          fromDate={fromDate}
+          toDate={toDate}
+          defaultShowDays={DEFAULT_DAYS_SHOW}
+          onApplyNewDateRange={onApplyNewDateRange}
+        />
+      </SContainer>
+    </>
   );
 };
 

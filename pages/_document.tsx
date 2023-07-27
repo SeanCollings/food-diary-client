@@ -33,6 +33,19 @@ export default class MyDocument extends Document {
     return (
       <Html>
         <Head />
+        <title>{'Food & Wellness Diary'}</title>
+        <meta name="og:title" content={'Food & Wellness Diary'} />
+        <meta
+          name="og:description"
+          content="One step at a time. Towards wellness."
+        />
+        <meta
+          property="og:image"
+          content={`${process.env.VERCEL_URL || ''}/api/static`}
+        />
+        <meta name="og:site_name" content={'Food & Wellness Diary'}></meta>
+        <meta name="og:url" content={`${process.env.VERCEL_URL || ''}`} />
+        <link rel="icon" href="/diary.ico" />
         <body>
           <Main />
           <NextScript />
