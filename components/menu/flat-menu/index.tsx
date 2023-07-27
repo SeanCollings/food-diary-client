@@ -48,14 +48,14 @@ const FlatMenu: FC = () => {
         }
 
         return (
-          <Link
+          <SLink
             key={id}
             href={href}
             passHref
             className={router.pathname === href ? 'current-path' : ''}
           >
             {title}
-          </Link>
+          </SLink>
         );
       })}
       {session && (

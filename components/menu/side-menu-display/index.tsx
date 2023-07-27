@@ -196,7 +196,7 @@ const SideMenuDisplay: FC = () => {
           );
         })}
         {session && (
-          <SLink href="#" onClick={onLogoutClick}>
+          <SLink href={'#'} onClick={onLogoutClick}>
             Logout
           </SLink>
         )}
