@@ -33,27 +33,6 @@ export default class MyDocument extends Document {
     return (
       <Html prefix="og: https://ogp.me/ns#">
         <Head />
-        <title>{'Food & Wellness Diary'}</title>
-        <link rel="icon" href="/diary.ico" />
-
-        <meta property="og:title" content={'Food and Wellness Diary'} />
-        <meta
-          property="og:description"
-          content="One step at a time. Towards wellness."
-        />
-        <meta
-          property="og:image"
-          content={`${process.env.VERCEL_DOMAIN || ''}/api/og`}
-        />
-        <meta
-          property="og:site_name"
-          content={'Food and Wellness Diary'}
-        ></meta>
-        <meta
-          property="og:url"
-          content={`${process.env.VERCEL_DOMAIN || ''}/`}
-        />
-        <meta property="og:type" content="website" />
         <body>
           <Main />
           <NextScript />

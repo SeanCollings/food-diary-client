@@ -26,33 +26,60 @@ function MyApp(props: AppProps) {
   }, [mounted]);
 
   return (
-    <SessionProvider session={props.pageProps.session}>
-      <UserContextProvider>
-        <DateSelectedContextProvider>
-          <MealEntriesContextProvider>
-            <WellnessEntriesContextProvider>
-              <AllEntriesPerMonthContextProvider>
-                <MenuContextProvider>
-                  <ThemeProvider
-                    enableSystem
-                    themes={ALL_THEME_NAMES}
-                    defaultTheme={'system'}
-                  >
-                    <GlobalStyle />
-                    {mounted && (
-                      <>
-                        <SideMenuDisplay />
-                        <AppMain {...props} />
-                      </>
-                    )}
-                  </ThemeProvider>
-                </MenuContextProvider>
-              </AllEntriesPerMonthContextProvider>
-            </WellnessEntriesContextProvider>
-          </MealEntriesContextProvider>
-        </DateSelectedContextProvider>
-      </UserContextProvider>
-    </SessionProvider>
+    <>
+      <Head>
+        <title>{'Food & Wellness Diary'}</title>
+        <link rel="icon" href="/diary.ico" />
+
+        <meta property="og:title" content={'Food and Wellness Diary'} />
+        <meta
+          name="description"
+          property="og:description"
+          content="One step at a time. Towards wellness."
+        />
+        <meta
+          name="image"
+          property="og:image"
+          content={`${process.env.VERCEL_DOMAIN || ''}/api/og`}
+        />
+        <meta
+          property="og:site_name"
+          content={'Food and Wellness Diary'}
+        ></meta>
+        <meta
+          property="og:url"
+          content={`${process.env.VERCEL_DOMAIN || ''}/`}
+        />
+        <meta property="og:type" content="website" />
+      </Head>
+      <SessionProvider session={props.pageProps.session}>
+        <UserContextProvider>
+          <DateSelectedContextProvider>
+            <MealEntriesContextProvider>
+              <WellnessEntriesContextProvider>
+                <AllEntriesPerMonthContextProvider>
+                  <MenuContextProvider>
+                    <ThemeProvider
+                      enableSystem
+                      themes={ALL_THEME_NAMES}
+                      defaultTheme={'system'}
+                    >
+                      <GlobalStyle />
+                      {mounted && (
+                        <>
+                          <SideMenuDisplay />
+                          <AppMain {...props} />
+                        </>
+                      )}
+                    </ThemeProvider>
+                  </MenuContextProvider>
+                </AllEntriesPerMonthContextProvider>
+              </WellnessEntriesContextProvider>
+            </MealEntriesContextProvider>
+          </DateSelectedContextProvider>
+        </UserContextProvider>
+      </SessionProvider>
+    </>
   );
 }
 
