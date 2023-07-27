@@ -43,7 +43,7 @@ export default class MyDocument extends Document {
         />
         <meta
           property="og:image"
-          content={`${process.env.VERCEL_DOMAIN || ''}/api/static`}
+          content={`${process.env.VERCEL_DOMAIN || ''}/api/og`}
         />
         <meta
           property="og:site_name"

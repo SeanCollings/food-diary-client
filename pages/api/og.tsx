@@ -44,7 +44,6 @@ export default function handler(request: NextRequest) {
                 height: 24,
                 borderRadius: '50%',
                 backgroundImage: 'linear-gradient(to right,#55A630,#2B9348)',
-                // backgroundImage: 'linear-gradient(to right,#FA0644,#FA5300)',
               }}
             />
             <span
