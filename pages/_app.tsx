@@ -35,7 +35,9 @@ function MyApp(props: AppProps) {
         <meta
           name="description"
           property="og:description"
-          content="One step at a time. Towards wellness."
+          content={`One step at a time. Towards wellness.
+          Designed to help you track your daily food intake without the pressure of calorie counting.
+          Log meals, snacks, beverages and exercise routine to gain insights into your nutritional habits.`}
         />
         <meta
           name="image"
@@ -51,6 +53,11 @@ function MyApp(props: AppProps) {
           content={`${process.env.VERCEL_DOMAIN || ''}/`}
         />
         <meta property="og:type" content="website" />
+        <meta content="summary" name="twitter:card" />
+        <meta
+          content={`${process.env.VERCEL_DOMAIN || ''}/api/og`}
+          name="twitter:image"
+        />
       </Head>
       <SessionProvider session={props.pageProps.session}>
         <UserContextProvider>

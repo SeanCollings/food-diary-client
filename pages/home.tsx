@@ -85,7 +85,7 @@ const HomePage: NextPage = () => {
         <SParagraphBackGround />
         <SParagraphWrapper>
           <SParagraphHeader>
-            One step at a time towards wellness.
+            One step at a time. Towards wellness.
           </SParagraphHeader>
           <SParagraphContent>
             {`Designed to help you track your daily food intake without the pressure of calorie counting.
