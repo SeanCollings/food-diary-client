@@ -41,10 +41,13 @@ export default class MyDocument extends Document {
         />
         <meta
           property="og:image"
-          content={`${process.env.VERCEL_URL || ''}/api/static`}
+          content={`${process.env.NEXT_PUBLIC_VERCEL_URL || ''}/api/static`}
         />
         <meta name="og:site_name" content={'Food & Wellness Diary'}></meta>
-        <meta name="og:url" content={`${process.env.VERCEL_URL || ''}`} />
+        <meta
+          name="og:url"
+          content={`${process.env.NEXT_PUBLIC_VERCEL_URL || ''}`}
+        />
         <link rel="icon" href="/diary.ico" />
         <body>
           <Main />
