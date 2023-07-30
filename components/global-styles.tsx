@@ -1,5 +1,5 @@
 import { createGlobalStyle } from 'styled-components';
-import { DARK_THEMES, LIGHT_THEMES } from '@utils/constants/theme.constant';
+import { DARK_THEMES, LIGHT_THEMES } from '@utils/constants/theme.constants';
 
 const GlobalStyle = createGlobalStyle`
   [data-theme="light"] {

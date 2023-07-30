@@ -1,4 +1,4 @@
-import { THEME_LIGHT_1 } from '@utils/constants/theme.constant';
+import { THEME_LIGHT_1 } from '@utils/constants/theme.constants';
 import { getThemeColoursFromMealId } from '.';
 
 describe('theme-utils', () => {

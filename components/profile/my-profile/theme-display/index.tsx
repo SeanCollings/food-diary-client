@@ -6,7 +6,7 @@ import {
   LIGHT_THEMES,
   THEME_DARK_1,
   THEME_LIGHT_1,
-} from '@utils/constants/theme.constant';
+} from '@utils/constants/theme.constants';
 import {
   TApplicationTheme,
   TDarkThemeIds,
