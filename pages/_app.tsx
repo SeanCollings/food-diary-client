@@ -52,12 +52,14 @@ function MyApp(props: AppProps) {
           property="og:url"
           content={`${process.env.VERCEL_DOMAIN || ''}/`}
         />
+
         <meta property="og:type" content="website" />
         <meta content="summary" name="twitter:card" />
         <meta
           content={`${process.env.VERCEL_DOMAIN || ''}/api/og`}
           name="twitter:image"
         />
+        <meta property="twitter:title" content="Food and Wellness Diary"></meta>
       </Head>
       <SessionProvider session={props.pageProps.session}>
         <UserContextProvider>

@@ -77,7 +77,7 @@ export default function handler(request: NextRequest) {
           </div>
         </div>
       ),
-      { width: 1040, height: 540 },
+      { width: 1200, height: 675 },
     );
   } catch (e: any) {
     console.log(`${e.message}`);
