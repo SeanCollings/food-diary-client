@@ -1,7 +1,7 @@
 import { TTimePeriod } from '@client/interfaces/meal-trend-data';
 import { IRequestTrendData } from '@hooks/request/trends/use-request-meal-trends';
 import { useTheme } from '@hooks/use-theme';
-import { ALL_MEAL_CARDS } from '@utils/constants';
+import { ALL_MEAL_CARDS } from '@utils/app.constants';
 import { EMealType } from '@utils/interfaces';
 import { getUniqueId } from '@utils/unique-id';
 import styled from 'styled-components';

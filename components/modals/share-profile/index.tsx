@@ -1,7 +1,7 @@
 import { userService } from '@client/services/user.service';
 import Toggle from '@components/ui/toggle';
 import { useUserContext } from '@store/user-context';
-import { COLOURS, MEDIA_MOBILE, OPACITY_40 } from '@utils/constants';
+import { COLOURS, MEDIA_MOBILE, OPACITY_40 } from '@utils/app.constants';
 import {
   SHARE_INFORMATION,
   SHARE_PRE_GENERATE,

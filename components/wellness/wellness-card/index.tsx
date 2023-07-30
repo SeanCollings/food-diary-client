@@ -8,7 +8,7 @@ import {
   TDrink,
   useWellnessEntriesContext,
 } from '@store/wellness-entries-context';
-import { COLOURS } from '@utils/constants';
+import { COLOURS } from '@utils/app.constants';
 import { TBeverageEntry } from '@lib/interfaces/wellness.interface';
 
 const SContainer = styled.div`

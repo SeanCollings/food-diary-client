@@ -1,4 +1,4 @@
-import { DAYS, WEEK_DAYS } from '@utils/constants';
+import { DAYS, WEEK_DAYS } from '@utils/constants/date.constants';
 import {
   getBothDatesEqual,
   getCurrentDayInDate,

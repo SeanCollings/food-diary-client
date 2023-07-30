@@ -1,4 +1,4 @@
-import { COLOURS } from '@utils/constants';
+import { COLOURS } from '@utils/app.constants';
 import { FC } from 'react';
 import { MdCheck, MdWest } from 'react-icons/md';
 import styled from 'styled-components';

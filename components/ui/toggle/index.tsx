@@ -1,5 +1,5 @@
 import { useTheme } from '@hooks/use-theme';
-import { COLOURS, OPACITY_50, OPACITY_70 } from '@utils/constants';
+import { COLOURS, OPACITY_50, OPACITY_70 } from '@utils/app.constants';
 import { FC } from 'react';
 import styled from 'styled-components';
 

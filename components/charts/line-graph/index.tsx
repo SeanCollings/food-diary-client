@@ -1,6 +1,6 @@
 import { TTimePeriod } from '@client/interfaces/meal-trend-data';
 import { IRequestExcerciseTendData } from '@hooks/request/trends/use-request-wellness-trends';
-import { COLOURS, OPACITY_40 } from '@utils/constants';
+import { COLOURS, OPACITY_40 } from '@utils/app.constants';
 import { formatMinutesToHoursMinutes } from '@utils/time-utils';
 import { getUniqueId } from '@utils/unique-id';
 import styled from 'styled-components';
@@ -154,7 +154,7 @@ const LineGraph: React.FC<ILineGraphProps> = ({ height, data }) => {
   const maxBound = getMaxBound(excerciseData?.highestValue ?? 0);
   const maxValue = Math.max(
     Math.ceil((excerciseData?.highestValue ?? 0) / maxBound) * maxBound,
-    maxBound
+    maxBound,
   );
 
   return (
@@ -166,7 +166,7 @@ const LineGraph: React.FC<ILineGraphProps> = ({ height, data }) => {
             .map((_, index) => (
               <SVAxisKey key={getUniqueId()}>
                 {formatMinutesToHoursMinutes(
-                  maxValue - index * (maxValue / TOTAL_LINES)
+                  maxValue - index * (maxValue / TOTAL_LINES),
                 )}
               </SVAxisKey>
             ))}
@@ -196,17 +196,17 @@ const LineGraph: React.FC<ILineGraphProps> = ({ height, data }) => {
                 100 -
                 percentage(
                   excerciseData?.excercisePerDay![index + 1] ?? 0,
-                  maxValue
+                  maxValue,
                 );
               const percentageNextHeight = percentage(nextPosition, 100) / 100;
               const actualNextHeight = graphHeight * percentageNextHeight;
               const differenceHeight = Math.abs(
-                actualCurrentHeight - actualNextHeight
+                actualCurrentHeight - actualNextHeight,
               );
               const direction = currentPosition > nextPosition ? 1 : -1;
 
               const lineLength = Math.sqrt(
-                Math.pow(differenceHeight, 2) + Math.pow(ptpLength, 2)
+                Math.pow(differenceHeight, 2) + Math.pow(ptpLength, 2),
               );
 
               const rads = Math.asin(differenceHeight / lineLength);

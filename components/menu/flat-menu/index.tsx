@@ -2,7 +2,7 @@ import { FC } from 'react';
 import styled from 'styled-components';
 import { MENU_ITEMS } from '@utils/constants/menu.constants';
 import { useRouter } from 'next/router';
-import { MEDIA_MAX_DESKTOP } from '@utils/constants';
+import { MEDIA_MAX_DESKTOP } from '@utils/app.constants';
 import Link from 'next/link';
 import { signOut, useSession } from 'next-auth/react';
 

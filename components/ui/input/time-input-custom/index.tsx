@@ -1,4 +1,4 @@
-import { COLOURS } from '@utils/constants';
+import { COLOURS } from '@utils/app.constants';
 import {
   formatFinalTime,
   getFormatMinutesWithHours,
@@ -107,7 +107,7 @@ const TimeInputCustom: FC<IComponentProps> = ({
   const handleOnBlur = () => {
     const [updatedHours, updatedMinutes] = getFormatMinutesWithHours(
       hours,
-      minutes
+      minutes,
     );
 
     setHours(updatedHours);

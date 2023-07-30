@@ -5,7 +5,7 @@ import {
   APP_THEME_DEFAULT,
   MEDIA_DESKTOP,
   MEDIA_MOBILE,
-} from '@utils/constants';
+} from '@utils/app.constants';
 import { FC } from 'react';
 import styled from 'styled-components';
 

@@ -2,7 +2,7 @@ import { ChangeEvent, FC } from 'react';
 import styled from 'styled-components';
 import Input, { IInputProps } from '@components/ui/input';
 import TextArea from '@components/ui/text-area';
-import { MEDIA_MOBILE } from '@utils/constants';
+import { MEDIA_MOBILE } from '@utils/app.constants';
 
 const SInputContainer = styled.div`
   display: flex;
@@ -28,7 +28,7 @@ interface IInputContainerProps extends IInputProps {
   popup?: string;
   required?: boolean;
   onChange: (
-    event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+    event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ) => void;
 }
 

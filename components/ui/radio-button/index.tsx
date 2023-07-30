@@ -1,4 +1,4 @@
-import { COLOURS } from '@utils/constants';
+import { COLOURS } from '@utils/app.constants';
 import { ChangeEvent, FC } from 'react';
 import styled from 'styled-components';
 

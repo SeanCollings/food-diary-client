@@ -3,7 +3,7 @@ import { TMealType, TWellnessTypes } from '@utils/interfaces';
 import { getUniqueId } from '@utils/unique-id';
 import { formatFullDate } from '@utils/date-utils';
 import styled from 'styled-components';
-import { MEDIA_MOBILE_TABLET } from '@utils/constants';
+import { MEDIA_MOBILE_TABLET } from '@utils/app.constants';
 import { getClassNames } from '@utils/string-utils';
 import { TMealWellnessContents } from '@client/interfaces/user-summary-data';
 

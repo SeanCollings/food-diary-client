@@ -5,7 +5,7 @@ import {
   MEDIA_MOBILE,
   OPACITY_30,
   OPACITY_70,
-} from '@utils/constants';
+} from '@utils/app.constants';
 import { FC, useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import { MENU_ITEMS } from '@utils/constants/menu.constants';

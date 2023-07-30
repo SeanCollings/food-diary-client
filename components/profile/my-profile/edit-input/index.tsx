@@ -1,4 +1,4 @@
-import { COLOURS } from '@utils/constants';
+import { COLOURS } from '@utils/app.constants';
 import { runSingleValidation } from '@utils/validation';
 import {
   ERROR_EMPTY_INPUT,

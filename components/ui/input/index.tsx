@@ -1,4 +1,4 @@
-import { COLOURS, MEDIA_MOBILE, OPACITY_30 } from '@utils/constants';
+import { COLOURS, MEDIA_MOBILE, OPACITY_30 } from '@utils/app.constants';
 import { INPUT_MAX_LENGTH } from '@utils/validation/validation.constants';
 import { ChangeEvent, FC, KeyboardEvent, ReactNode } from 'react';
 import styled from 'styled-components';

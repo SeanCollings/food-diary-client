@@ -3,7 +3,7 @@ import {
   MEDIA_MOBILE,
   MEDIA_TABLET,
   OPACITY_70,
-} from '@utils/constants';
+} from '@utils/app.constants';
 import { FC, MouseEvent, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { MdEditNote } from 'react-icons/md';
@@ -172,7 +172,7 @@ const Card: FC<IProps> = ({ id, title }) => {
 
   const [contents, setContents] = useState<IMealContent[]>([]);
   const [editMealContent, setEditMealContent] = useState<IMealContent | null>(
-    null
+    null,
   );
   const [showAddModal, setShowAddModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
@@ -225,7 +225,7 @@ const Card: FC<IProps> = ({ id, title }) => {
   };
   const confirmContentEditHandler = (
     updatedMealId: TMealType,
-    updatedContent: IMealContent
+    updatedContent: IMealContent,
   ) => {
     updateMealEntry({
       date: dateSelectedISO,

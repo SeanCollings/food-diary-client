@@ -1,6 +1,6 @@
 import { TTimePeriod } from '@client/interfaces/meal-trend-data';
 import { IRequestBevarageTendData } from '@hooks/request/trends/use-request-wellness-trends';
-import { COLOURS, OPACITY_40 } from '@utils/constants';
+import { COLOURS, OPACITY_40 } from '@utils/app.constants';
 import { EWellnessTypes } from '@utils/interfaces';
 import { getUniqueId } from '@utils/unique-id';
 import { FC } from 'react';
@@ -165,7 +165,7 @@ const BarGraph: React.FC<IBarGraphProps> = ({ height, data, timePeriod }) => {
   const maxValue = Math.max(
     Math.ceil((beverageData?.highestValue ?? 0) / MIN_TICK_VALUE) *
       MIN_TICK_VALUE,
-    MIN_TICK_VALUE
+    MIN_TICK_VALUE,
   );
 
   const BEVERAGE_COLOUR: { [key in EWellnessTypes]: string } = {
@@ -230,7 +230,7 @@ const BarGraph: React.FC<IBarGraphProps> = ({ height, data, timePeriod }) => {
                     />
                   </SBarGroup>
                 );
-              }
+              },
             )}
           </SBarGroupContainer>
           <SHAxisContainer>

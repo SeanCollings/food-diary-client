@@ -1,5 +1,5 @@
 import Input from '@components/ui/input';
-import { COLOURS, MEDIA_MOBILE, OPACITY_40 } from '@utils/constants';
+import { COLOURS, MEDIA_MOBILE, OPACITY_40 } from '@utils/app.constants';
 import { foodEmojis, IEmoji } from '@utils/food-emojis';
 import { ChangeEvent, FC, KeyboardEvent, useRef, useState } from 'react';
 import styled from 'styled-components';
@@ -100,7 +100,7 @@ const findEmojiBySearchTerm = (searchTerm: string) => {
   }
 
   const specificEmojis = foodEmojis.foods.filter((food) =>
-    food.includes(value)
+    food.includes(value),
   );
   const keywordEmojis: IEmoji[] = [];
 
@@ -117,7 +117,7 @@ const findEmojiBySearchTerm = (searchTerm: string) => {
   });
 
   const foundEmojis: IEmoji[] = specificEmojis.map(
-    (food) => foodEmojis.emojis[food]
+    (food) => foodEmojis.emojis[food],
   );
 
   const allEmojis = [...foundEmojis, ...keywordEmojis];
@@ -142,7 +142,7 @@ const EmojiPicker: FC<IEmojiPickerProps> = ({
   const [selectedEmoji, setSelectedEmoji] = useState<TSelectedEmoji>(value);
   const [availableEmojis, setAvailableEmojis] = useState<IEmoji[]>([]);
   useOnClickOutsideElementsArray([inputRef, emojiBoxRef], () =>
-    setAvailableEmojis([])
+    setAvailableEmojis([]),
   );
 
   const handleOnChange = (event: ChangeEvent<HTMLInputElement>) => {

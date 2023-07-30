@@ -1,5 +1,5 @@
 import TextArea from '@components/ui/text-area';
-import { MEDIA_DESKTOP, MEDIA_MOBILE } from '@utils/constants';
+import { MEDIA_DESKTOP, MEDIA_MOBILE } from '@utils/app.constants';
 import Image from 'next/image';
 import { ChangeEvent, FC, useEffect, useState } from 'react';
 import { useDateSelectedContext } from '@store/date-selected-context';

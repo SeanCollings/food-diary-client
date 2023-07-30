@@ -1,5 +1,5 @@
 import { pathnameMapper } from '@utils/constants/menu.constants';
-import { MEDIA_MAX_DESKTOP, MEDIA_MOBILE } from '@utils/constants';
+import { MEDIA_MAX_DESKTOP, MEDIA_MOBILE } from '@utils/app.constants';
 import { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import styled from 'styled-components';

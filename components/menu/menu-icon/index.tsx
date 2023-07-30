@@ -1,6 +1,6 @@
 import { useTheme } from '@hooks/use-theme';
 import { useMenuContext } from '@store/menu-context';
-import { MEDIA_MAX_DESKTOP, MEDIA_MOBILE } from '@utils/constants';
+import { MEDIA_MAX_DESKTOP, MEDIA_MOBILE } from '@utils/app.constants';
 import { FC } from 'react';
 import styled from 'styled-components';
 

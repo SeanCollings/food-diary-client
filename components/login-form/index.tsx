@@ -1,5 +1,5 @@
 import FormInput from '@components/ui/input/form-input';
-import { MEDIA_MOBILE } from '@utils/constants';
+import { MEDIA_MOBILE } from '@utils/app.constants';
 import { runValidations } from '@utils/validation';
 import { FC, FormEvent, useCallback, useEffect, useReducer } from 'react';
 import styled from 'styled-components';

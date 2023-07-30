@@ -9,7 +9,7 @@ import {
   MEDIA_MAX_DESKTOP,
   MEDIA_MOBILE,
   MEDIA_TABLET,
-} from '@utils/constants';
+} from '@utils/app.constants';
 import { useRouter } from 'next/router';
 import { FC } from 'react';
 import styled from 'styled-components';

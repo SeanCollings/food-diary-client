@@ -3,7 +3,7 @@ import {
   MEDIA_MOBILE,
   MEDIA_TABLET,
   OPACITY_40,
-} from '@utils/constants';
+} from '@utils/app.constants';
 import { FC, ReactNode, useEffect, useRef, useState } from 'react';
 import ReactDOM from 'react-dom';
 import styled from 'styled-components';
@@ -100,7 +100,7 @@ const Modal: FC<IModalProps> = ({ show, ...rest }) => {
         <ModalContent {...rest} />
       </SBackgroundContainer>
     ) : null,
-    document.getElementById('modal-root')!
+    document.getElementById('modal-root')!,
   );
 };
 

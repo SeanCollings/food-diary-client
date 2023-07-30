@@ -1,7 +1,7 @@
 import Modal from '@components/modals';
 import ModalShareProfile from '@components/modals/share-profile';
 import { useUserContext } from '@store/user-context';
-import { COLOURS, OPACITY_40 } from '@utils/constants';
+import { COLOURS, OPACITY_40 } from '@utils/app.constants';
 import { formatMinutesToHoursMinutes } from '@utils/time-utils';
 import { FC, useState } from 'react';
 import { MdAccountCircle, MdPhotoCamera, MdSettings } from 'react-icons/md';

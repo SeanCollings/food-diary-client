@@ -1,4 +1,4 @@
-import { ALL_MEAL_CARDS } from '@utils/constants';
+import { ALL_MEAL_CARDS } from '@utils/app.constants';
 import { ChangeEvent, FC, useReducer, useEffect, useCallback } from 'react';
 import styled from 'styled-components';
 import InputContainer from '@components/ui/input-container';
@@ -60,7 +60,7 @@ const ModalAddToMealCard: FC<IModalAddMealProps> = ({
 }) => {
   const [state, dispatch] = useReducer(
     addToMealReducer,
-    getIntialState({ mealId, content })
+    getIntialState({ mealId, content }),
   );
 
   const isEditing = !!content;
@@ -131,7 +131,7 @@ const ModalAddToMealCard: FC<IModalAddMealProps> = ({
     });
   };
   const updateInputValues = (
-    event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+    event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ) => {
     dispatch({
       type: EAddToMealType.UPDATE_INPUT_VALUES,

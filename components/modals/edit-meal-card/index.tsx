@@ -1,7 +1,7 @@
 import { FC, useState } from 'react';
 import styled from 'styled-components';
 import { ModalHeader } from '@components/modals/styled';
-import { ALL_MEAL_CARDS, COLOURS, MEDIA_MOBILE } from '@utils/constants';
+import { ALL_MEAL_CARDS, COLOURS, MEDIA_MOBILE } from '@utils/app.constants';
 import { getThemeColoursFromMealId } from '@utils/theme-utils';
 import { IMealContent, TMealType } from '@utils/interfaces';
 import { MdDeleteForever, MdEdit } from 'react-icons/md';

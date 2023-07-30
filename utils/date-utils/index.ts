@@ -1,4 +1,4 @@
-import { MONTHS, ONE_DAY } from '@utils/constants';
+import { MONTHS, ONE_DAY } from '@utils/constants/date.constants';
 
 type TDate = string | Date;
 

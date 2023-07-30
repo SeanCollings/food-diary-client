@@ -6,7 +6,7 @@ import {
   MEDIA_MAX_DESKTOP,
   MEDIA_MOBILE,
   MEDIA_TABLET,
-} from '@utils/constants';
+} from '@utils/app.constants';
 import styled from 'styled-components';
 import Header from '@components/header';
 import Footer from '@components/footer';

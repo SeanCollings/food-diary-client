@@ -1,6 +1,6 @@
 import { useOnClickOutsideElementsArray } from '@hooks/use-onclick-outside-element';
 import { useTheme } from '@hooks/use-theme';
-import { COLOURS } from '@utils/constants';
+import { COLOURS } from '@utils/app.constants';
 import {
   DARK_THEMES,
   LIGHT_THEMES,

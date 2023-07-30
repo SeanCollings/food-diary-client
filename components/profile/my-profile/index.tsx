@@ -1,4 +1,4 @@
-import { MEDIA_MOBILE } from '@utils/constants';
+import { MEDIA_MOBILE } from '@utils/app.constants';
 import { FC, useState } from 'react';
 import styled from 'styled-components';
 import SettingsProfile from '@components/profile/my-profile/settings-profile';

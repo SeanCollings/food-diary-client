@@ -4,7 +4,7 @@ import {
   OPACITY_50,
   OPACITY_60,
   OPACITY_80,
-} from '@utils/constants';
+} from '@utils/app.constants';
 import {
   EThemeDark,
   EThemeLight,

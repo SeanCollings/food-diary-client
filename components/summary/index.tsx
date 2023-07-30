@@ -6,7 +6,7 @@ import {
   MEDIA_MOBILE,
   MEDIA_MOBILE_TABLET,
   MEDIA_TABLET,
-} from '@utils/constants';
+} from '@utils/app.constants';
 import {
   formatFullDateNoDay,
   getBothDatesEqual,

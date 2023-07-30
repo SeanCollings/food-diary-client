@@ -1,4 +1,4 @@
-import { COLOURS } from '@utils/constants';
+import { COLOURS } from '@utils/app.constants';
 import { detectAutofill } from '@utils/document-utils';
 import { INPUT_MAX_LENGTH } from '@utils/validation/validation.constants';
 import {

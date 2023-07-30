@@ -1,6 +1,6 @@
 import Toggle from '@components/ui/toggle';
 import { useUserContext } from '@store/user-context';
-import { COLOURS, OPACITY_40 } from '@utils/constants';
+import { COLOURS, OPACITY_40 } from '@utils/app.constants';
 import { FC } from 'react';
 import { MdClose } from 'react-icons/md';
 import styled from 'styled-components';

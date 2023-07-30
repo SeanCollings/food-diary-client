@@ -110,23 +110,5 @@ export const MEDIA_DESKTOP = '@media (min-width: 769px)';
 export const MEDIA_MAX_DESKTOP = '@media (min-width: 1420px)';
 export const MAX_PAGE_WIDTH = 1440;
 
-export const MONTHS = [
-  'January',
-  'Febuary',
-  'March',
-  'April',
-  'May',
-  'June',
-  'July',
-  'August',
-  'September',
-  'October',
-  'November',
-  'December',
-];
-export const WEEK_DAYS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-export const DAYS = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
-export const ONE_DAY = 1000 * 60 * 60 * 24;
-
 // https://foodandwellnessdiary.my.canva.site/
 // https://react-icons.github.io/react-icons/icons?name=md

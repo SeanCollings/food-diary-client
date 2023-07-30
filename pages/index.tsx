@@ -7,7 +7,7 @@ import { getSession } from 'next-auth/react';
 import { useEffect, useState } from 'react';
 import { useRequestDiaryEntry } from '@hooks/request/use-request-diary-entry';
 import { IUserModel, useUserContext } from '@store/user-context';
-import { MEDIA_MOBILE } from '@utils/constants';
+import { MEDIA_MOBILE } from '@utils/app.constants';
 
 const SDiaryContainer = styled.section`
   display: flex;

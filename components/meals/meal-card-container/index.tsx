@@ -1,5 +1,5 @@
 import Card from '@components/meals/meal-card';
-import { ALL_MEAL_CARDS } from '@utils/constants';
+import { ALL_MEAL_CARDS } from '@utils/app.constants';
 import { FC } from 'react';
 import styled from 'styled-components';
 

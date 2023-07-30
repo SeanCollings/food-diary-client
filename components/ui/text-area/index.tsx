@@ -1,4 +1,4 @@
-import { MEDIA_MOBILE } from '@utils/constants';
+import { MEDIA_MOBILE } from '@utils/app.constants';
 import { TEXTAREA_MAX_LENGTH } from '@utils/validation/validation.constants';
 import { ChangeEvent, FC } from 'react';
 import styled from 'styled-components';

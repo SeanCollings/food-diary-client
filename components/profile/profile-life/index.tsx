@@ -17,7 +17,7 @@ import {
   MEDIA_MOBILE,
   OPACITY_30,
   OPACITY_50,
-} from '@utils/constants';
+} from '@utils/app.constants';
 import {
   INFO_BEVERAGE_TREND,
   INFO_EXCERCISE_TREND,
@@ -257,10 +257,10 @@ const ProfileLife: FC = () => {
   const scrollRef = useRef<HTMLDivElement>(null);
   const [mounted, setMounted] = useState(false);
   const [timePeriod, setTimePeriod] = useState<ITimePeriodOptions>(
-    TIME_PERIOD_OPTIONS[0]
+    TIME_PERIOD_OPTIONS[0],
   );
   const [wellnessOption, setWellnessOption] = useState<IWellnessOption>(
-    WELLNESS_OPTIONS[0]
+    WELLNESS_OPTIONS[0],
   );
   const [scrollVisible, setScrollVisible] = useState(false);
   const [scrollStart, setScrollStart] = useState(true);
@@ -347,10 +347,10 @@ const ProfileLife: FC = () => {
   };
 
   const handleWellnessDropdownChange = (
-    event: ChangeEvent<HTMLSelectElement>
+    event: ChangeEvent<HTMLSelectElement>,
   ) => {
     const selectedOption = WELLNESS_OPTIONS.find(
-      (option) => option.id === event.target.value
+      (option) => option.id === event.target.value,
     );
 
     if (selectedOption) {
@@ -359,7 +359,7 @@ const ProfileLife: FC = () => {
   };
   const handleTimeDropdownChange = (event: ChangeEvent<HTMLSelectElement>) => {
     const selectedOption = TIME_PERIOD_OPTIONS.find(
-      (option) => option.id === event.target.value
+      (option) => option.id === event.target.value,
     );
 
     if (selectedOption) {
@@ -375,15 +375,15 @@ const ProfileLife: FC = () => {
 
   const { data: mealTrendData } = useRequestMealTrends(
     showFoodTrend,
-    timePeriod.id
+    timePeriod.id,
   );
   const { data: beverageTrendData } = useRequestBeverageTrends(
     showBeverageTrend,
-    timePeriod.id
+    timePeriod.id,
   );
   const { data: excerciseTrendData } = useRequestExcerciseTrends(
     showExcerciseTrend,
-    timePeriod.id
+    timePeriod.id,
   );
 
   return (

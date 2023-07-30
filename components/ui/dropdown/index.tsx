@@ -1,4 +1,4 @@
-import { COLOURS, MEDIA_MOBILE, OPACITY_30 } from '@utils/constants';
+import { COLOURS, MEDIA_MOBILE, OPACITY_30 } from '@utils/app.constants';
 import { ChangeEvent } from 'react';
 import styled from 'styled-components';
 
