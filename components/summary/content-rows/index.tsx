@@ -111,7 +111,7 @@ export const DateHeaderRow: FC<IDateHeaderRowProps> = memo(
         })}
       </>
     );
-  }
+  },
 );
 DateHeaderRow.displayName = 'DateHeaderRow';
 
@@ -149,7 +149,7 @@ export const MealDataRow: FC<IMealDataRowProps> = memo(
         })}
       </>
     );
-  }
+  },
 );
 MealDataRow.displayName = 'MealDataRow';
 
@@ -170,7 +170,9 @@ export const WellnessDataRow: FC<IWellnessDataRowProps> = memo(
     return (
       <>
         {dates.map((date, index) => {
+          const totalEntries = Object.keys(data[date] || {}).length;
           const value = data[date]?.[id] ?? '';
+          const fallbackValue = totalEntries ? '0' : '';
 
           if (!date) {
             return <SEmptyDiv key={`${getUniqueId()}-wellness`} />;
@@ -186,15 +188,16 @@ export const WellnessDataRow: FC<IWellnessDataRowProps> = memo(
               hideBorderBottom={hideBorderBottom}
               padBottom={lastIndex}
               gridArea={gridArea}
-              className={!Object.keys(data[date] || {}).length ? 'empty' : ''}
+              className={!totalEntries ? 'empty' : ''}
             >
               <SContentTypeHeader>{title}</SContentTypeHeader>
-              <SWellnessValue>{value || '-'}</SWellnessValue>
+              <SWellnessValue>{value || fallbackValue}</SWellnessValue>
             </SContentRow>
           );
         })}
       </>
     );
-  }
+  },
 );
+
 WellnessDataRow.displayName = 'WellnessDataRow';

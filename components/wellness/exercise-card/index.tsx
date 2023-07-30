@@ -141,6 +141,10 @@ const ExcerciseCard: FC<IProps> = ({ title, imageSrc }) => {
     if (!hasUpdated) setHasUpdated(true);
   };
   const handleTimeChange = (value: string) => {
+    if (!value) {
+      return;
+    }
+
     if (time !== value) {
       setTime(value);
       setHasUpdated(true);
