@@ -13,7 +13,7 @@ import AppMain from '@components/app-main';
 import { SessionProvider } from 'next-auth/react';
 import { useState, useEffect } from 'react';
 import { ThemeProvider } from 'next-themes';
-import { ALL_THEME_NAMES } from '@utils/constants/theme.constants';
+import { ALL_THEME_NAMES } from '@utils/constants/theme.constant';
 import { AllEntriesPerMonthContextProvider } from '@store/all-entries-per-month-context';
 
 function MyApp(props: AppProps) {

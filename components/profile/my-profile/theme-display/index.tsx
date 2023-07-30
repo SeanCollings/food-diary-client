@@ -6,7 +6,7 @@ import {
   LIGHT_THEMES,
   THEME_DARK_1,
   THEME_LIGHT_1,
-} from '@utils/constants/theme.constants';
+} from '@utils/constants/theme.constant';
 import {
   TApplicationTheme,
   TDarkThemeIds,
@@ -107,7 +107,7 @@ const ThemeDisplay: React.FC = () => {
   const [themeOpened, setThemeOpened] = useState(false);
 
   useOnClickOutsideElementsArray([currentThemeRef, themePickerRef], () =>
-    setThemeOpened(false)
+    setThemeOpened(false),
   );
 
   const currentTheme: TApplicationTheme = darkMode
