@@ -88,6 +88,7 @@ function MyApp(props: AppProps) {
           </DateSelectedContextProvider>
         </UserContextProvider>
       </SessionProvider>
+      <Analytics />
     </>
   );
 }
