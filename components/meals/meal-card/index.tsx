@@ -146,22 +146,22 @@ interface IProps {
 }
 
 const buildContent = (content: IMealContent, index: number) => {
-  const { food, emoji, serving, measurement } = content;
+  const { food, emoji, serving, quantity } = content;
+
   if (!food) {
     return '';
   }
 
   const thisServing = serving ? `${serving} ` : '';
-  const thisMeasurement = measurement ? `${measurement} - ` : '';
-  const preEmoji = emoji?.nativeSkin ? `${emoji.nativeSkin} ` : '';
-  const postEmoji = emoji?.nativeSkin ? ` ${emoji.nativeSkin}` : '';
-  const constructedString = `${thisServing}${thisMeasurement}${food}`;
+  const thisQuantity = quantity ? `${quantity} - ` : '';
+  const thisEmoji = emoji?.nativeSkin ? `${emoji.nativeSkin}` : '';
+  const constructedString = `${thisServing}${thisQuantity}${food}`;
 
   if (index % 2 === 0) {
-    return `${preEmoji}${constructedString}`;
+    return `${thisEmoji} ${constructedString}`;
   }
 
-  return `${constructedString}${postEmoji}`;
+  return `${constructedString} ${thisEmoji}`;
 };
 
 const Card: FC<IProps> = ({ id, title }) => {

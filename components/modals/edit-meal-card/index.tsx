@@ -175,13 +175,17 @@ interface IContentDisplayProps {
 }
 
 const ContentDisplay: FC<IContentDisplayProps> = ({
-  content: { food, id, serving, measurement, emoji },
+  content: { food, id, quantity, emoji },
   mealColour,
   onRadioSelected,
 }) => {
   const onChangeHandler = (value: string) => {
     onRadioSelected(value);
   };
+
+  const emojiLabel = emoji?.nativeSkin ? `${emoji?.nativeSkin} ` : '';
+  const quantityLabel = quantity ? `${quantity} - ` : '';
+  const label = `${emojiLabel}${quantityLabel}${food}`;
 
   return (
     <SContentDisplayContainer>
@@ -192,9 +196,7 @@ const ContentDisplay: FC<IContentDisplayProps> = ({
         name={'edit-meal-card'}
         colour={mealColour}
       />
-      <SRadioLabel htmlFor={`${id}-radio`}>
-        {emoji?.nativeSkin || ''} {serving} {measurement} - {food}
-      </SRadioLabel>
+      <SRadioLabel htmlFor={`${id}-radio`}>{label}</SRadioLabel>
     </SContentDisplayContainer>
   );
 };

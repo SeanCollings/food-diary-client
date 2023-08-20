@@ -14,7 +14,7 @@ export interface IModalAddMealProps {
   onSubmit: (mealId: TMealType, values: IMealContent) => void;
   onEditConfirm: (
     updatedMealId: TMealType,
-    updatedContent: IMealContent
+    updatedContent: IMealContent,
   ) => void;
 }
 
@@ -39,7 +39,7 @@ export interface IAddToMealState {
 export interface IRunFormValidations {
   emojiPicker: TSelectedEmoji;
   servingSize: string;
-  unitOfMeasurement: string;
+  quantity: string;
   food: string;
   description: string;
 }

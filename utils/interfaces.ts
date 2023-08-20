@@ -31,7 +31,7 @@ export interface IMealContent {
   id: string;
   emoji?: TSelectedEmoji;
   serving?: string;
-  measurement?: string;
+  quantity?: string;
   food: string;
   description?: string;
 }
@@ -76,7 +76,7 @@ export interface IWellnessProps {
 export enum EAddMealOptions {
   EMOJI_PICKER = 'emojiPicker',
   SERVING_SIZE = 'servingSize',
-  UNIT_OF_MEASUREMENT = 'unitOfMeasurement',
+  QUANTITY = 'quantity',
   FOOD = 'food',
   DESCRIPTION = 'description',
   MEAL_TYPE = 'mealType',

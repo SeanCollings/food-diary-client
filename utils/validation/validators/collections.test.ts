@@ -65,8 +65,8 @@ describe('validators - collections', () => {
           "description": [Function],
           "emojiPicker": [Function],
           "food": [Function],
+          "quantity": [Function],
           "servingSize": [Function],
-          "unitOfMeasurement": [Function],
         }
       `);
     });
@@ -103,11 +103,11 @@ describe('validators - collections', () => {
       expect(result.validators.length).toEqual(1);
     });
 
-    it('should return unitOfMeasurement validator', () => {
-      const result = addMealOptionsValidators.unitOfMeasurement({
-        value: 'Mock unit of measurement',
+    it('should return quantity validator', () => {
+      const result = addMealOptionsValidators.quantity({
+        value: 'Mock quantity',
       });
-      expect(result.id).toEqual('unitOfMeasurement');
+      expect(result.id).toEqual('quantity');
       expect(result.validators.length).toEqual(1);
     });
   });

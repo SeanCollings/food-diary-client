@@ -16,7 +16,7 @@ export const getIntialState = ({
     hasSubmitted: false,
     inputValues: {
       servingSize: content?.serving ?? '',
-      unitOfMeasurement: content?.measurement ?? '',
+      quantity: content?.quantity ?? '',
       food: content?.food ?? '',
       description: content?.description ?? '',
     },
@@ -28,7 +28,7 @@ export const getIntialState = ({
 
 export const addToMealReducer = (
   state: IAddToMealState,
-  action: IAddToMealAction
+  action: IAddToMealAction,
 ): IAddToMealState => {
   switch (action.type) {
     case EAddToMealType.UPDATE_INPUT_VALUES:

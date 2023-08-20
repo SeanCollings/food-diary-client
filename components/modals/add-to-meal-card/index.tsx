@@ -40,8 +40,8 @@ const runFormValidations = (values: IRunFormValidations) =>
     addMealOptionsValidators['servingSize']({
       value: values.servingSize,
     }),
-    addMealOptionsValidators['unitOfMeasurement']({
-      value: values.unitOfMeasurement,
+    addMealOptionsValidators['quantity']({
+      value: values.quantity,
     }),
     addMealOptionsValidators['food']({
       value: values.food,
@@ -84,7 +84,7 @@ const ModalAddToMealCard: FC<IModalAddMealProps> = ({
       id: isEditing ? content.id : Date.now().toString(),
       emoji: state.emojiPicker,
       serving: trim(state.inputValues.servingSize),
-      measurement: trim(state.inputValues.unitOfMeasurement),
+      quantity: trim(state.inputValues.quantity),
       food: trim(state.inputValues.food),
       description: trim(state.inputValues.description),
     };
@@ -190,13 +190,13 @@ const ModalAddToMealCard: FC<IModalAddMealProps> = ({
           {...commonInputProps}
         />
         <InputContainer
-          id={EAddMealOptions.UNIT_OF_MEASUREMENT}
-          value={state.inputValues.unitOfMeasurement}
-          isError={state.formErrors.unitOfMeasurement}
+          id={EAddMealOptions.QUANTITY}
+          value={state.inputValues.quantity}
+          isError={state.formErrors.quantity}
           tabIndex={3}
-          inputWidth={180}
-          title="Unit of measurement"
-          popup="Select a unit of measurement"
+          inputWidth={350}
+          title="Quantity"
+          popup="Select a quantity"
           onChange={updateInputValues}
           {...commonInputProps}
         />

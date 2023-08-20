@@ -36,6 +36,14 @@ const customJestConfig = {
   },
   globalSetup: './global-setup.ts',
   modulePathIgnorePatterns: ['<rootDir>/tests/'],
+  coverageThreshold: {
+    global: {
+      lines: 39,
+      statements: 42,
+      branches: 37,
+      functions: 40,
+    },
+  },
 };
 
 export default createJestConfig(customJestConfig);
