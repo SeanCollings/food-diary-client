@@ -1,6 +1,6 @@
 import { URI_SUMMARY } from '@client/constants';
 import { summaryFetcher } from '@client/fetchers';
-import useSWRImmutable from 'swr/immutable';
+import useSWR from 'swr';
 import { useUserContext } from '@store/user-context';
 import { setServerDateString } from '@utils/date-utils';
 import { ISummaryResponseBody } from '@client/interfaces/user-summary-data';
@@ -16,7 +16,7 @@ export const useRequestSummary = (
   const dateFromServer = setServerDateString(dateFrom);
   const dateToServer = setServerDateString(dateTo);
 
-  const { data, error } = useSWRImmutable(
+  const { data, error } = useSWR(
     shouldFetch ? [URI_SUMMARY, dateFromServer, dateToServer] : null,
     summaryFetcher<ISummaryResponseBody>,
     {},

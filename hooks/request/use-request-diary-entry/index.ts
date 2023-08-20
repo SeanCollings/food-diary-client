@@ -25,25 +25,22 @@ export const useRequestDiaryEntry = (mounted: boolean) => {
   const monthRequestedData = hasRequested[monthAndYear];
   const shouldFetch = mounted && userLoggedIn && !monthRequestedData;
 
-  const { data, error } = useSWR(
+  const { data, error, isValidating } = useSWR(
     shouldFetch ? [URI_DIARY, dateSelectedISO] : null,
     diaryEntryFetcher<IDiaryReponseData>,
     {},
   );
 
   useEffect(() => {
-    if (!monthRequestedData && data?.entry) {
+    if (!isValidating && data?.entry) {
       requestSetMealEntries({ meals: data.entry.meals });
       requestSetWellnessEntries({ wellness: data.entry.wellness });
       setHasRequested((curr) => ({ ...curr, [monthAndYear]: true }));
     }
-
-    return () => {};
   }, [
-    data,
     monthAndYear,
-    dateSelectedISO,
-    monthRequestedData,
+    isValidating,
+    data?.entry,
     requestSetMealEntries,
     requestSetWellnessEntries,
   ]);

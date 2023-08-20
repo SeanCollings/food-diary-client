@@ -5,7 +5,7 @@ import {
   IMealTrendResponseBody,
   TTimePeriod,
 } from '@client/interfaces/meal-trend-data';
-import useSWRImmutable from 'swr/immutable';
+import useSWR from 'swr';
 import { useMemo, useState, useEffect } from 'react';
 
 export interface IRequestTrendData {
@@ -32,7 +32,7 @@ export const useRequestMealTrends = (
     return mounted && (getWeek || getMonth);
   }, [mounted, timePeriod, hasRequested]);
 
-  const { data, error } = useSWRImmutable(
+  const { data, error } = useSWR(
     shouldFetch ? [URI_MEAL_TRENDS, timePeriod] : null,
     trendFetcher<IMealTrendResponseBody>,
   );

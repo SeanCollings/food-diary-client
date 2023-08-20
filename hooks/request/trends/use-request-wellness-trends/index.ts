@@ -6,7 +6,7 @@ import {
   IExcerciseTrendData,
 } from '@client/interfaces/wellness-trend-data';
 import { useState, useMemo, useEffect } from 'react';
-import useSWRImmutable from 'swr';
+import useSWR from 'swr';
 
 export interface IRequestBevarageTendData {
   week?: IBeverageTrendData;
@@ -29,7 +29,7 @@ export const useRequestBeverageTrends = (
     return mounted && getWeek;
   }, [mounted, timePeriod, hasRequested]);
 
-  const { data, error } = useSWRImmutable(
+  const { data, error } = useSWR(
     shouldFetch ? [URI_BEVERAGE_TRENDS, timePeriod] : null,
     trendFetcher<IBeverageTrendData>,
   );
@@ -69,7 +69,7 @@ export const useRequestExcerciseTrends = (
     return mounted && getWeek;
   }, [mounted, timePeriod, hasRequested]);
 
-  const { data, error } = useSWRImmutable(
+  const { data, error } = useSWR(
     shouldFetch ? [URI_EXCERCISE_TRENDS, timePeriod] : null,
     trendFetcher<IExcerciseTrendData>,
   );

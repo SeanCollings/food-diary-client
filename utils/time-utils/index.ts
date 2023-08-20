@@ -1,6 +1,7 @@
 const MAX_HOURS = 23;
 const MAX_MINUTES = 59;
 const MAX_NUMBER = 99;
+const DEFAULT_EMPTY_TIME = '00:00';
 
 /**
  * Converts time format from `12:15` to `[12,15]`
@@ -131,7 +132,7 @@ export const getNewMinuteValue = (minuteValue: string) => {
  */
 export const formatMinutesToHoursMinutes = (time?: number) => {
   if (!time) {
-    return '00:00';
+    return DEFAULT_EMPTY_TIME;
   }
 
   const minutes = time % 60;
