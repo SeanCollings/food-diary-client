@@ -35,7 +35,8 @@ export const ALL_THEME_NAMES: TThemeIds[] = [
 const THEMES_LIGHT_STATIC: IThemesStatic = {
   '--text': '#232323',
   '--text__40': `#232323${OPACITY_40}`,
-  '--error': '#ff1507',
+  '--success': '#007e50',
+  '--error': '#bb0202',
   '--bg-primary': '#f4f4f4',
   '--bg-secondary': '#FFFFFF',
   '--bg-secondary__60': `#FFFFFF${OPACITY_60}`,
@@ -49,7 +50,8 @@ const THEMES_LIGHT_STATIC: IThemesStatic = {
 const THEMES_DARK_STATIC: IThemesStatic = {
   '--text': '#ffffffe6',
   '--text__40': `#ffffff${OPACITY_40}`,
-  '--error': '#CF6679',
+  '--success': '#007e50',
+  '--error': '#e74c3c',
   '--bg-primary': '#121212',
   '--bg-secondary': '#222222',
   '--bg-secondary__60': `#222222${OPACITY_60}`,

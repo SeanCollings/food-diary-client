@@ -15,6 +15,8 @@ import { useState, useEffect } from 'react';
 import { ThemeProvider } from 'next-themes';
 import { ALL_THEME_NAMES } from '@utils/constants/theme.constants';
 import { AllEntriesPerMonthContextProvider } from '@store/all-entries-per-month-context';
+import { ToastContextProvider } from '@store/toast-context/toast-context';
+import { DisplayToasts } from '@components/toasts';
 
 function MyApp(props: AppProps) {
   const [mounted, setMounted] = useState(false);
@@ -62,31 +64,34 @@ function MyApp(props: AppProps) {
         <meta property="twitter:title" content="Food and Wellness Diary"></meta>
       </Head>
       <SessionProvider session={props.pageProps.session}>
-        <UserContextProvider>
-          <DateSelectedContextProvider>
-            <MealEntriesContextProvider>
-              <WellnessEntriesContextProvider>
-                <AllEntriesPerMonthContextProvider>
-                  <MenuContextProvider>
-                    <ThemeProvider
-                      enableSystem
-                      themes={ALL_THEME_NAMES}
-                      defaultTheme={'system'}
-                    >
-                      <GlobalStyle />
-                      {mounted && (
-                        <>
-                          <SideMenuDisplay />
-                          <AppMain {...props} />
-                        </>
-                      )}
-                    </ThemeProvider>
-                  </MenuContextProvider>
-                </AllEntriesPerMonthContextProvider>
-              </WellnessEntriesContextProvider>
-            </MealEntriesContextProvider>
-          </DateSelectedContextProvider>
-        </UserContextProvider>
+        <ToastContextProvider>
+          <UserContextProvider>
+            <DateSelectedContextProvider>
+              <MealEntriesContextProvider>
+                <WellnessEntriesContextProvider>
+                  <AllEntriesPerMonthContextProvider>
+                    <MenuContextProvider>
+                      <ThemeProvider
+                        enableSystem
+                        themes={ALL_THEME_NAMES}
+                        defaultTheme={'system'}
+                      >
+                        <GlobalStyle />
+                        {mounted && (
+                          <>
+                            <SideMenuDisplay />
+                            <AppMain {...props} />
+                          </>
+                        )}
+                        <DisplayToasts />
+                      </ThemeProvider>
+                    </MenuContextProvider>
+                  </AllEntriesPerMonthContextProvider>
+                </WellnessEntriesContextProvider>
+              </MealEntriesContextProvider>
+            </DateSelectedContextProvider>
+          </UserContextProvider>
+        </ToastContextProvider>
       </SessionProvider>
       <Analytics />
     </>

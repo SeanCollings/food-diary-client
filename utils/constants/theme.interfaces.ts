@@ -31,6 +31,7 @@ export type TThemeIds = TLightThemeIds | TDarkThemeIds;
 export interface IThemesStatic {
   '--text': string;
   '--text__40': string;
+  '--success': string;
   '--error': string;
   '--bg-primary': string;
   '--bg-secondary': string;
