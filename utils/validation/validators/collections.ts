@@ -67,7 +67,6 @@ type TAddMealValidatorCommon<T> = (
 
 type TAddMealValidators = {
   [EAddMealOptions.EMOJI_PICKER]: TAddMealValidatorCommon<string>;
-  [EAddMealOptions.SERVING_SIZE]: TAddMealValidatorCommon<string>;
   [EAddMealOptions.QUANTITY]: TAddMealValidatorCommon<string>;
   [EAddMealOptions.FOOD]: TAddMealValidatorCommon<string>;
   [EAddMealOptions.DESCRIPTION]: TAddMealValidatorCommon<string>;
@@ -77,11 +76,6 @@ export const addMealOptionsValidators: TAddMealValidators = {
   emojiPicker: (args: TDynamicArgs<string>) => ({
     id: 'emojiPicker',
     validators: emojiValidators,
-    ...args,
-  }),
-  servingSize: (args: TDynamicArgs<string>) => ({
-    id: 'servingSize',
-    validators: maxLengthInputValidators,
     ...args,
   }),
   quantity: (args: TDynamicArgs<string>) => ({

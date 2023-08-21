@@ -61,7 +61,7 @@ exports[`store - meal-entries-context should render with initial-state 1`] = `
   <div>
     Key: 02-02-2023
     <div>
-      {"breakfast":{"contents":[{"id":"b_1","food":"b_food","description":"b_description"}]},"lunch":{"contents":[{"id":"l_1","food":"l_food","serving":"l_serving","quantity":"l_quantity"}]}}
+      {"breakfast":{"contents":[{"id":"b_1","food":"b_food","description":"b_description"}]},"lunch":{"contents":[{"id":"l_1","food":"l_food","quantity":"l_quantity"}]}}
     </div>
   </div>
 </DocumentFragment>

@@ -155,7 +155,6 @@ describe('store - meal-entries-context', () => {
                 {
                   id: 'l_1',
                   food: 'l_food',
-                  serving: 'l_serving',
                   quantity: 'l_quantity',
                 },
               ],

@@ -38,7 +38,6 @@ export interface IAddToMealState {
 
 export interface IRunFormValidations {
   emojiPicker: TSelectedEmoji;
-  servingSize: string;
   quantity: string;
   food: string;
   description: string;

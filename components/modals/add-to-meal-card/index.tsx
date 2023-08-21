@@ -37,9 +37,6 @@ const runFormValidations = (values: IRunFormValidations) =>
     addMealOptionsValidators['emojiPicker']({
       value: values.emojiPicker?.nativeSkin || '',
     }),
-    addMealOptionsValidators['servingSize']({
-      value: values.servingSize,
-    }),
     addMealOptionsValidators['quantity']({
       value: values.quantity,
     }),
@@ -83,7 +80,6 @@ const ModalAddToMealCard: FC<IModalAddMealProps> = ({
     const mealContent: IMealContent = {
       id: isEditing ? content.id : Date.now().toString(),
       emoji: state.emojiPicker,
-      serving: trim(state.inputValues.servingSize),
       quantity: trim(state.inputValues.quantity),
       food: trim(state.inputValues.food),
       description: trim(state.inputValues.description),
@@ -177,17 +173,6 @@ const ModalAddToMealCard: FC<IModalAddMealProps> = ({
           value={state.emojiPicker}
           borderColour={mealColour}
           onChange={updateSelecteedEmoji}
-        />
-        <InputContainer
-          id={EAddMealOptions.SERVING_SIZE}
-          value={state.inputValues.servingSize}
-          isError={state.formErrors.servingSize}
-          tabIndex={2}
-          inputWidth={180}
-          title="Serving size"
-          popup="Select a serving size"
-          onChange={updateInputValues}
-          {...commonInputProps}
         />
         <InputContainer
           id={EAddMealOptions.QUANTITY}

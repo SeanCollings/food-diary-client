@@ -146,16 +146,15 @@ interface IProps {
 }
 
 const buildContent = (content: IMealContent, index: number) => {
-  const { food, emoji, serving, quantity } = content;
+  const { food, emoji, quantity } = content;
 
   if (!food) {
     return '';
   }
 
-  const thisServing = serving ? `${serving} ` : '';
   const thisQuantity = quantity ? `${quantity} - ` : '';
   const thisEmoji = emoji?.nativeSkin ? `${emoji.nativeSkin}` : '';
-  const constructedString = `${thisServing}${thisQuantity}${food}`;
+  const constructedString = `${thisQuantity}${food}`;
 
   if (index % 2 === 0) {
     return `${thisEmoji} ${constructedString}`;

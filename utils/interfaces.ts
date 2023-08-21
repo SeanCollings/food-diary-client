@@ -30,7 +30,6 @@ export interface IAppTheme {
 export interface IMealContent {
   id: string;
   emoji?: TSelectedEmoji;
-  serving?: string;
   quantity?: string;
   food: string;
   description?: string;
@@ -75,7 +74,6 @@ export interface IWellnessProps {
 
 export enum EAddMealOptions {
   EMOJI_PICKER = 'emojiPicker',
-  SERVING_SIZE = 'servingSize',
   QUANTITY = 'quantity',
   FOOD = 'food',
   DESCRIPTION = 'description',

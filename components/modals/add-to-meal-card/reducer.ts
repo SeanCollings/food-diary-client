@@ -15,7 +15,6 @@ export const getIntialState = ({
   return {
     hasSubmitted: false,
     inputValues: {
-      servingSize: content?.serving ?? '',
       quantity: content?.quantity ?? '',
       food: content?.food ?? '',
       description: content?.description ?? '',

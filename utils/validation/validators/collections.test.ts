@@ -66,7 +66,6 @@ describe('validators - collections', () => {
           "emojiPicker": [Function],
           "food": [Function],
           "quantity": [Function],
-          "servingSize": [Function],
         }
       `);
     });
@@ -93,14 +92,6 @@ describe('validators - collections', () => {
       });
       expect(result.id).toEqual('food');
       expect(result.validators.length).toEqual(2);
-    });
-
-    it('should return servingSize validator', () => {
-      const result = addMealOptionsValidators.servingSize({
-        value: 'Mock serving size',
-      });
-      expect(result.id).toEqual('servingSize');
-      expect(result.validators.length).toEqual(1);
     });
 
     it('should return quantity validator', () => {
