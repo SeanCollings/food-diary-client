@@ -3,14 +3,14 @@ import { URI_USER_PROFILE } from '@client/constants';
 import { userProfileFetcher } from '@client/fetchers';
 import { IUserResponse } from '@client/interfaces/user-data.type';
 import { useUserContext } from '@store/user-context';
-import useSWRImmutable from 'swr/immutable';
+import useSWR from 'swr';
 
 export const useRequestUser = (mounted: boolean) => {
   const { user, setInitialUser } = useUserContext();
 
   const shouldFetch = mounted && !user;
 
-  const { data, error } = useSWRImmutable(
+  const { data, error } = useSWR(
     shouldFetch ? [URI_USER_PROFILE] : null,
     userProfileFetcher<IUserResponse>,
     {},

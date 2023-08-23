@@ -15,7 +15,7 @@ import { pathnameMapper } from '@utils/constants/menu.constants';
 import { AppProps } from 'next/app';
 import { getClassNames } from '@utils/string-utils';
 import { useTheme } from '@hooks/use-theme';
-import { useRequestUser } from '@hooks/request/use-request-user';
+import { useRequestUser } from '@hooks/request/user/use-request-user';
 
 const SAppContainer = styled.div`
   display: flex;

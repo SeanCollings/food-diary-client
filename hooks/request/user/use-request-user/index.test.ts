@@ -19,7 +19,9 @@ describe('hooks - use-request-user', () => {
     } as any);
   });
 
-  afterEach(() => jest.clearAllMocks());
+  afterEach(() => {
+    jest.clearAllMocks();
+  });
 
   it('should return non-mounted hook state', async () => {
     const { result } = renderHook(() => useRequestUser(false));
@@ -31,7 +33,7 @@ describe('hooks - use-request-user', () => {
         "isError": undefined,
         "isLoading": false,
       }
-    `);
+      `);
   });
 
   it('should not get user if user already exists', async () => {
@@ -66,11 +68,11 @@ describe('hooks - use-request-user', () => {
     expect(mockAxios.get).toHaveBeenCalledWith('/api/user');
     expect(mockSetInitialUser).toHaveBeenCalledWith('mock_user');
     expect(result.current).toMatchInlineSnapshot(`
-      {
-        "data": "mock_user",
-        "isError": undefined,
-        "isLoading": false,
-      }
+    {
+      "data": "mock_user",
+      "isError": undefined,
+      "isLoading": false,
+    }
     `);
   });
 });

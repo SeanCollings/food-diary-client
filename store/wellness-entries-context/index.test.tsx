@@ -1,6 +1,6 @@
 import { diaryService } from '@client/services/diary.service';
 import { TDrink, WellnessEntriesContextProvider, initialState } from '.';
-import { act, render } from '@testing-library/react';
+import { act, render, waitFor } from '@testing-library/react';
 import { FC, useEffect, useRef } from 'react';
 import { IWellnessEntries } from '@lib/interfaces/wellness.interface';
 import { useUserContext } from '@store/user-context';
@@ -12,7 +12,8 @@ jest.mock('@store/user-context');
 
 const DisplayEntry: FC<{
   entries: IWellnessEntries;
-}> = ({ entries }) => (
+  wellnessUpdated: boolean;
+}> = ({ entries, wellnessUpdated }) => (
   <>
     {Object.keys(entries).map((key) => (
       <div key={key}>
@@ -20,13 +21,14 @@ const DisplayEntry: FC<{
         <div>{JSON.stringify(entries[key])}</div>
       </div>
     ))}
+    <div>wellnessUpdated: {wellnessUpdated.toString()}</div>
   </>
 );
 
 const TestComponent = () => <div>Test component</div>;
 
 const MockInitialEntries: FC<{ setEntries?: boolean }> = ({ setEntries }) => {
-  const { wellnessEntries, requestSetWellnessEntries } =
+  const { wellnessEntries, wellnessUpdated, requestSetWellnessEntries } =
     useWellnessEntriesContext();
 
   useEffect(() => {
@@ -44,14 +46,22 @@ const MockInitialEntries: FC<{ setEntries?: boolean }> = ({ setEntries }) => {
     }
   }, [requestSetWellnessEntries, setEntries]);
 
-  return <DisplayEntry entries={wellnessEntries} />;
+  return (
+    <DisplayEntry entries={wellnessEntries} wellnessUpdated={wellnessUpdated} />
+  );
 };
 
-const MockUpdateEntry: FC<{ runBothUpdates?: boolean }> = ({
-  runBothUpdates = false,
-}) => {
+const MockUpdateEntry: FC<{
+  runBothUpdates?: boolean;
+  runResetWellnessUpdated?: boolean;
+}> = ({ runBothUpdates = false, runResetWellnessUpdated = false }) => {
   const runRef = useRef(false);
-  const { wellnessEntries, updateEntryByKey } = useWellnessEntriesContext();
+  const {
+    wellnessEntries,
+    wellnessUpdated,
+    updateEntryByKey,
+    resetWellnessUpdated,
+  } = useWellnessEntriesContext();
 
   useEffect(() => {
     if (runRef.current) {
@@ -74,7 +84,15 @@ const MockUpdateEntry: FC<{ runBothUpdates?: boolean }> = ({
     }
   }, [runBothUpdates, updateEntryByKey]);
 
-  return <DisplayEntry entries={wellnessEntries} />;
+  useEffect(() => {
+    if (Object.entries(wellnessEntries).length && runResetWellnessUpdated) {
+      resetWellnessUpdated();
+    }
+  }, [wellnessEntries, runResetWellnessUpdated, resetWellnessUpdated]);
+
+  return (
+    <DisplayEntry entries={wellnessEntries} wellnessUpdated={wellnessUpdated} />
+  );
 };
 
 describe('store - wellness-entries-context', () => {
@@ -96,12 +114,19 @@ describe('store - wellness-entries-context', () => {
   });
 
   it('should return initial state', () => {
-    const { wellnessEntries, requestSetWellnessEntries, updateEntryByKey } =
-      initialState;
+    const {
+      wellnessEntries,
+      wellnessUpdated,
+      requestSetWellnessEntries,
+      updateEntryByKey,
+      resetWellnessUpdated,
+    } = initialState;
 
     expect(wellnessEntries).toEqual({});
+    expect(wellnessUpdated).toEqual(false);
     expect(requestSetWellnessEntries({} as any)).toBeNull();
     expect(updateEntryByKey({} as any)).toBeNull();
+    expect(resetWellnessUpdated()).toBeNull();
   });
 
   it('should render provider with children', () => {
@@ -188,12 +213,12 @@ describe('store - wellness-entries-context', () => {
     expect(asFragment()).toMatchSnapshot();
   });
 
-  it('should handle entry added to same date and not re-add date', async () => {
+  it('should handle entry added to same date and not re-add date and allow for reset entries', async () => {
     mockUseUserContext.mockReturnValue({ userLoggedIn: true } as any);
 
     render(
       <WellnessEntriesContextProvider>
-        <MockUpdateEntry runBothUpdates />
+        <MockUpdateEntry runBothUpdates runResetWellnessUpdated />
       </WellnessEntriesContextProvider>,
     );
 

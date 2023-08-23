@@ -1,8 +1,20 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`store - wellness-entries-context should handle null initial state 1`] = `<DocumentFragment />`;
+exports[`store - wellness-entries-context should handle null initial state 1`] = `
+<DocumentFragment>
+  <div>
+    wellnessUpdated: false
+  </div>
+</DocumentFragment>
+`;
 
-exports[`store - wellness-entries-context should render initial entries 1`] = `<DocumentFragment />`;
+exports[`store - wellness-entries-context should render initial entries 1`] = `
+<DocumentFragment>
+  <div>
+    wellnessUpdated: false
+  </div>
+</DocumentFragment>
+`;
 
 exports[`store - wellness-entries-context should render provider with children 1`] = `
 <DocumentFragment>
@@ -20,6 +32,9 @@ exports[`store - wellness-entries-context should render with initial-state 1`] =
       {"water":{"value":5},"excercise":{"time":"00:35"}}
     </div>
   </div>
+  <div>
+    wellnessUpdated: false
+  </div>
 </DocumentFragment>
 `;
 
@@ -30,6 +45,9 @@ exports[`store - wellness-entries-context should set entries 1`] = `
     <div>
       {"water":{"value":5},"tea_coffee":{"value":2},"alcohol":{"value":1},"excercise":{"time":"00:15","details":"Run and walk"}}
     </div>
+  </div>
+  <div>
+    wellnessUpdated: false
   </div>
 </DocumentFragment>
 `;
@@ -42,6 +60,9 @@ exports[`store - wellness-entries-context should update entry for logged in user
       {"water":{"value":4}}
     </div>
   </div>
+  <div>
+    wellnessUpdated: false
+  </div>
 </DocumentFragment>
 `;
 
@@ -52,6 +73,9 @@ exports[`store - wellness-entries-context should update entry for non-logged in 
     <div>
       {"water":{"value":4}}
     </div>
+  </div>
+  <div>
+    wellnessUpdated: false
   </div>
 </DocumentFragment>
 `;

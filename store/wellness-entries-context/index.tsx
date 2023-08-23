@@ -36,16 +36,20 @@ interface IRequestSetWellnessEntries {
 
 export interface IWellnessEntriesContext {
   wellnessEntries: IWellnessEntries;
+  wellnessUpdated: boolean;
   requestSetWellnessEntries: (args: IRequestSetWellnessEntries) => void;
   updateEntryByKey: <K extends TWellnessValueTypes>(
     args: IUpdateEntryByTypeProps<K>,
   ) => void;
+  resetWellnessUpdated: () => void;
 }
 
 export const initialState: IWellnessEntriesContext = {
   wellnessEntries: {},
+  wellnessUpdated: false,
   requestSetWellnessEntries: () => null,
   updateEntryByKey: () => null,
+  resetWellnessUpdated: () => null,
 };
 
 const WellnessEntriesContext = createContext(initialState);
@@ -59,6 +63,7 @@ export const WellnessEntriesContextProvider: FC<{
   const [wellnessEntries, setWellnessEntries] = useState<IWellnessEntries>(
     initialState || {},
   );
+  const [wellnessUpdated, setWellnessUpdated] = useState(false);
 
   useEffect(() => {
     if (!updatedDates.length) {
@@ -79,13 +84,20 @@ export const WellnessEntriesContextProvider: FC<{
 
       if (error) {
         console.error('Error updating wellness entries:', error);
+        return;
       }
+
+      setWellnessUpdated(true);
     }, BOUNCE_TIME);
 
     return () => {
       clearTimeout(timer);
     };
   }, [wellnessEntries, updatedDates, userLoggedIn]);
+
+  const resetWellnessUpdated = useCallback(() => {
+    setWellnessUpdated(false);
+  }, []);
 
   const requestSetWellnessEntries = useCallback(
     ({ wellness }: IRequestSetWellnessEntries) => {
@@ -126,8 +138,20 @@ export const WellnessEntriesContextProvider: FC<{
   );
 
   const context = useMemo(
-    () => ({ wellnessEntries, requestSetWellnessEntries, updateEntryByKey }),
-    [wellnessEntries, requestSetWellnessEntries, updateEntryByKey],
+    () => ({
+      wellnessEntries,
+      wellnessUpdated,
+      requestSetWellnessEntries,
+      updateEntryByKey,
+      resetWellnessUpdated,
+    }),
+    [
+      wellnessEntries,
+      wellnessUpdated,
+      requestSetWellnessEntries,
+      updateEntryByKey,
+      resetWellnessUpdated,
+    ],
   );
 
   return (
