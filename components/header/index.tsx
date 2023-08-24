@@ -62,7 +62,6 @@ const SHeaderWrapper = styled.div`
   display: flex;
   align-items: center;
   position: relative;
-  padding: 0 2rem;
   max-width: ${MAX_PAGE_WIDTH}px;
   line-height: 1;
   width: 100%;

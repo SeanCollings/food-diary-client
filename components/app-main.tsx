@@ -23,6 +23,11 @@ const SAppContainer = styled.div`
   justify-content: space-between;
   outline-style: none;
   min-height: calc(100vh + 5rem);
+  padding: 0 2rem;
+
+  ${MEDIA_MOBILE} {
+    padding: 0;
+  }
 
   &.bg-image-light-full {
     background-image: url('/static/images/background.webp');
@@ -48,7 +53,6 @@ const SAppContainer = styled.div`
 const SMain = styled.main`
   position: relative;
   display: flex;
-  padding: 0 2rem;
 
   ${MEDIA_MOBILE} {
     padding: 0 1rem;
