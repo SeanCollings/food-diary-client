@@ -2,6 +2,7 @@ import {
   DOTS,
   getPaginationRange,
 } from '@utils/pagination-utils/get-pagination-range';
+import { getClassNames } from '@utils/string-utils';
 import { memo } from 'react';
 import { MdNavigateBefore, MdNavigateNext } from 'react-icons/md';
 import styled from 'styled-components';
@@ -26,7 +27,7 @@ const SButton = styled.button`
   height: ${WIDTH}px;
   border-radius: 4px;
   border: 1px solid transparent;
-  transition: 0.1s;
+  transition: 0.05s;
   background-color: var(--bg-secondary);
   color: var(--text);
 
@@ -82,16 +83,16 @@ const Pagination: React.FC<IPaginationProps> = memo(
       onChange(value);
     };
 
-    if (paginationRange.length < 2) {
-      return null;
-    }
+    const singlePage = paginationRange.length < 2;
 
     return (
       <SContainer>
         <SButton
           onClick={onPreviousHandler}
-          disabled={currentPage < 2}
-          className={currentPage < 2 ? 'disabled' : ''}
+          disabled={singlePage || currentPage < 2}
+          className={getClassNames({
+            disabled: singlePage || currentPage < 2,
+          })}
         >
           <MdNavigateBefore size={24} />
         </SButton>
@@ -104,7 +105,10 @@ const Pagination: React.FC<IPaginationProps> = memo(
             <SButton
               key={`paginate-${value}-${index}`}
               onClick={() => onChangeHandler(value)}
-              className={currentPage === value ? 'active' : ''}
+              className={getClassNames({
+                active: !singlePage && currentPage === value,
+                disabled: singlePage,
+              })}
             >
               {value}
             </SButton>
@@ -113,7 +117,9 @@ const Pagination: React.FC<IPaginationProps> = memo(
         <SButton
           onClick={onNextHandler}
           disabled={currentPage >= lastPage}
-          className={currentPage >= lastPage ? 'disabled' : ''}
+          className={getClassNames({
+            disabled: singlePage || currentPage >= lastPage,
+          })}
         >
           <MdNavigateNext size={24} />
         </SButton>

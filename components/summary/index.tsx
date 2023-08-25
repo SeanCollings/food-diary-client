@@ -269,6 +269,7 @@ const Summary: FC<ISummaryProps> = ({
   const onClickApplyDateRange = () => {
     onApplyNewDateRange(dateFrom, dateTo);
     setDateRangeChanged(false);
+    setcurrentPage(1);
   };
 
   const restricDateRange = getDateMonthsAgo(dateTo, MAX_SUMMARY_MONTH_RANGE);
