@@ -9,8 +9,15 @@ import {
 import { diaryService } from '@client/services/diary.service';
 import { useUserContext } from '@store/user-context';
 
+const mockShowToast = jest.fn();
+
 jest.mock('@client/services/diary.service');
 jest.mock('@store/user-context');
+jest.mock('@store/toast-context', () => ({
+  useToast: () => ({
+    showToast: mockShowToast,
+  }),
+}));
 
 const mockDate = '03-03-2023';
 
@@ -447,6 +454,12 @@ describe('store - meal-entries-context', () => {
         'Error removing entry:',
         'mock error occurred',
       );
+      expect(mockShowToast).toHaveBeenCalledWith({
+        message:
+          'Something went wrong when removing your meal. Please try again later.',
+        status: 'error',
+        title: 'Error!',
+      });
     });
 
     it('should remove entry for non-logged in user', () => {

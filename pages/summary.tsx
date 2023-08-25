@@ -7,6 +7,7 @@ import { protectedSeverSideProps } from '@lib/server-props';
 import { Session } from 'next-auth';
 import { useRequestSummary } from '@hooks/request/use-request-summary';
 import { ISummaryResponseData } from '@client/interfaces/user-summary-data';
+import { useErrorToast } from '@hooks/use-error-toast';
 
 const DEFAULT_DAYS_SHOW = 7;
 
@@ -34,6 +35,12 @@ const SummaryPage: NextPage<ISummaryPageProps> = ({ session }) => {
     toDate,
   );
 
+  useErrorToast({
+    isError,
+    title: 'Error!',
+    message: 'An error occurred. Please try again later.',
+  });
+
   useEffect(() => {
     setMounted(true);
   }, []);
@@ -50,9 +57,7 @@ const SummaryPage: NextPage<ISummaryPageProps> = ({ session }) => {
   };
 
   if (isError) {
-    return (
-      <SContainer>An error occurred. Please try again later...</SContainer>
-    );
+    return <SContainer>Something went wrong.</SContainer>;
   }
 
   if (isLoading && !userData) {

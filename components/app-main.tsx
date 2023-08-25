@@ -16,6 +16,7 @@ import { AppProps } from 'next/app';
 import { getClassNames } from '@utils/string-utils';
 import { useTheme } from '@hooks/use-theme';
 import { useRequestUser } from '@hooks/request/user/use-request-user';
+import { useErrorToast } from '@hooks/use-error-toast';
 
 const SAppContainer = styled.div`
   display: flex;
@@ -80,7 +81,13 @@ const AppMain: React.FC<AppProps> = ({ Component, pageProps }) => {
   const [fetchUser, setFetchUser] = useState(false);
   const { darkMode } = useTheme();
   const { pathname } = useRouter();
-  useRequestUser(fetchUser);
+  const { isError } = useRequestUser(fetchUser);
+
+  useErrorToast({
+    isError,
+    title: 'Error!',
+    message: 'There was an issue getting your account details.',
+  });
 
   useEffect(() => {
     if (!!pageProps.session && !fetchUser) {

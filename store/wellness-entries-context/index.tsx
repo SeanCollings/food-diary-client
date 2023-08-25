@@ -6,6 +6,7 @@ import {
   TWellnessEntries,
   TWellnessValueTypes,
 } from '@lib/interfaces/wellness.interface';
+import { useToast } from '@store/toast-context';
 import { useUserContext } from '@store/user-context';
 import { getStructuredClone } from '@utils/get-structured-clone';
 import {
@@ -58,6 +59,7 @@ export const WellnessEntriesContextProvider: FC<{
   children: ReactNode;
   initialState?: IWellnessEntries;
 }> = ({ initialState, children }) => {
+  const { showToast } = useToast();
   const { userLoggedIn } = useUserContext();
   const [updatedDates, setUpdatedDates] = useState<string[]>([]);
   const [wellnessEntries, setWellnessEntries] = useState<IWellnessEntries>(
@@ -83,8 +85,13 @@ export const WellnessEntriesContextProvider: FC<{
       });
 
       if (error) {
-        console.error('Error updating wellness entries:', error);
-        return;
+        showToast({
+          status: 'error',
+          title: 'Error!',
+          message:
+            'Something went wrong updating your entry. Please try again later.',
+        });
+        return console.error('Error updating wellness entries:', error);
       }
 
       setWellnessUpdated(true);
@@ -93,7 +100,7 @@ export const WellnessEntriesContextProvider: FC<{
     return () => {
       clearTimeout(timer);
     };
-  }, [wellnessEntries, updatedDates, userLoggedIn]);
+  }, [wellnessEntries, updatedDates, userLoggedIn, showToast]);
 
   const resetWellnessUpdated = useCallback(() => {
     setWellnessUpdated(false);

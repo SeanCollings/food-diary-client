@@ -52,9 +52,7 @@ const createService = () => {
   const updateSharePreference = async (update: IShareLinkPreference) => {
     try {
       await axios.put<IResponse>(`${URI_SHARE_LINK_SHAREABLE}`, {
-        body: {
-          isShared: update['isProfileShared'],
-        },
+        isShared: update['isProfileShared'],
       });
 
       return { ok: true };

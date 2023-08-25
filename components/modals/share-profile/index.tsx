@@ -1,5 +1,6 @@
 import { userService } from '@client/services/user.service';
 import Toggle from '@components/ui/toggle';
+import { useToast } from '@store/toast-context';
 import { useUserContext } from '@store/user-context';
 import { COLOURS, MEDIA_MOBILE, OPACITY_40 } from '@utils/app.constants';
 import {
@@ -159,6 +160,7 @@ const getShareLink = (shareLink?: string) => {
 };
 
 const ModalShareProfile: React.FC<IModalShareProfileProps> = ({ onClose }) => {
+  const { showToast } = useToast();
   const linkRef = useRef<HTMLInputElement>(null);
   const { user, updateShareLinkPreference, updateShareLink } = useUserContext();
   const [isFetching, setIsFetching] = useState(false);
@@ -166,6 +168,15 @@ const ModalShareProfile: React.FC<IModalShareProfileProps> = ({ onClose }) => {
   useEffect(() => {
     const generateLink = async () => {
       const { shareLink, error } = await userService.generateLink();
+
+      if (error) {
+        showToast({
+          status: 'error',
+          title: 'Error!',
+          message:
+            'Something went wrong when generating a new link. Please refresh and try again.',
+        });
+      }
 
       const toggleShare = !user?.shareLink;
 
@@ -179,7 +190,7 @@ const ModalShareProfile: React.FC<IModalShareProfileProps> = ({ onClose }) => {
     if (isFetching) {
       generateLink();
     }
-  }, [isFetching, updateShareLink, user?.shareLink]);
+  }, [isFetching, updateShareLink, user?.shareLink, showToast]);
 
   const onToggleChange = () => {
     updateShareLinkPreference({

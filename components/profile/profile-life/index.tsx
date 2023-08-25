@@ -2,6 +2,7 @@ import { TTimePeriod } from '@client/interfaces/meal-trend-data';
 import BarGraph, { BarGraphLegend } from '@components/charts/bar-graph';
 import BinaryHeatMap from '@components/charts/binary-heat-map';
 import LineGraph from '@components/charts/line-graph';
+import { useErrorToast } from '@hooks/use-error-toast';
 import DropdownProfile from '@components/ui/dropdown-profile';
 import {
   ThemeBorderBottom,
@@ -373,18 +374,20 @@ const ProfileLife: FC = () => {
   const showExcerciseTrend =
     selectedMenu === 'wellness_trends' && wellnessOption.id === 'excercise';
 
-  const { data: mealTrendData } = useRequestMealTrends(
+  const { data: mealTrendData, isError: mealTrendError } = useRequestMealTrends(
     showFoodTrend,
     timePeriod.id,
   );
-  const { data: beverageTrendData } = useRequestBeverageTrends(
-    showBeverageTrend,
-    timePeriod.id,
-  );
-  const { data: excerciseTrendData } = useRequestExcerciseTrends(
-    showExcerciseTrend,
-    timePeriod.id,
-  );
+  const { data: beverageTrendData, isError: beverageTrendError } =
+    useRequestBeverageTrends(showBeverageTrend, timePeriod.id);
+  const { data: excerciseTrendData, isError: excerciseTrendError } =
+    useRequestExcerciseTrends(showExcerciseTrend, timePeriod.id);
+
+  useErrorToast({
+    isError: mealTrendError || beverageTrendError || excerciseTrendError,
+    title: 'Error!',
+    message: 'Something went wrong getting trend data. Please try again later.',
+  });
 
   return (
     <SContainer ref={containerRef}>

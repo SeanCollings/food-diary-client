@@ -73,9 +73,7 @@ describe('user-service', () => {
 
       expect(result).toEqual({ ok: true });
       expect(mockAxios.put).toHaveBeenCalledWith('/api/share/link-shareable', {
-        body: {
-          isShared: true,
-        },
+        isShared: true,
       });
     });
 

@@ -8,8 +8,15 @@ import {
   useUserContext,
 } from '.';
 
+const mockShowToast = jest.fn();
+
 jest.useFakeTimers();
 jest.mock('@client/services/user.service');
+jest.mock('@store/toast-context', () => ({
+  useToast: () => ({
+    showToast: mockShowToast,
+  }),
+}));
 
 const TestComponent = () => <div>Test component</div>;
 
@@ -235,6 +242,12 @@ describe('store - user-context', () => {
       'Error updating user:',
       'mock error occurred',
     );
+    expect(mockShowToast).toHaveBeenCalledWith({
+      message:
+        'Something went wrong when updating your details. Please try again later.',
+      status: 'error',
+      title: 'Error!',
+    });
   });
 
   it('should catch error when updatePreferences fails', async () => {
@@ -261,6 +274,12 @@ describe('store - user-context', () => {
       'Error updating preferences:',
       'mock error occurred',
     );
+    expect(mockShowToast).toHaveBeenCalledWith({
+      message:
+        'Something went wrong when updating your preferences. Please try again later.',
+      status: 'error',
+      title: 'Error!',
+    });
   });
 
   it('should catch error when updateSharePreference fails', async () => {
@@ -287,6 +306,12 @@ describe('store - user-context', () => {
       'Error updating preferences:',
       'mock error occurred',
     );
+    expect(mockShowToast).toHaveBeenCalledWith({
+      message:
+        'Something went wrong when updating your preferences. Please try again later.',
+      status: 'error',
+      title: 'Error!',
+    });
   });
 
   it('should update share-link with toggleShare true and set isProfileShared true', async () => {

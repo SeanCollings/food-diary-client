@@ -6,6 +6,7 @@ import Summary from '@components/summary';
 import { IShareResponseData } from '@client/interfaces/user-summary-data';
 import { useRequestShare } from '@hooks/request/use-request-share';
 import Head from 'next/head';
+import { useErrorToast } from '@hooks/use-error-toast';
 
 const DEFAULT_DAYS_SHOW = 7;
 
@@ -47,6 +48,13 @@ const SharePage: NextPage<ISharePageProps> = ({ guid }) => {
     toDate,
   );
 
+  useErrorToast({
+    isError,
+    title: 'Error!',
+    message:
+      'Something went wrong getting this shared profile. Please try again later.',
+  });
+
   useEffect(() => {
     setMounted(true);
   }, []);
@@ -64,7 +72,12 @@ const SharePage: NextPage<ISharePageProps> = ({ guid }) => {
 
   if (isError) {
     return (
-      <SContainer>An error occurred. Please try again later...</SContainer>
+      <SContainer>
+        <SUsernameContainer>
+          We are unable to display the shared profile at this time. Please try
+          again later...
+        </SUsernameContainer>
+      </SContainer>
     );
   }
 

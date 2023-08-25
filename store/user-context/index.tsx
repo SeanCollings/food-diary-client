@@ -1,4 +1,5 @@
 import { userService } from '@client/services/user.service';
+import { useToast } from '@store/toast-context';
 import { getStructuredClone } from '@utils/get-structured-clone';
 import {
   createContext,
@@ -89,6 +90,7 @@ export const UserContextProvider: FC<{
   children: ReactNode;
   initialState?: Partial<IUserContext>;
 }> = ({ children, initialState }) => {
+  const { showToast } = useToast();
   const [user, setUser] = useState<IUserModel | null>(
     initialState?.user || null,
   );
@@ -119,14 +121,20 @@ export const UserContextProvider: FC<{
       });
 
       if (error) {
-        console.error('Error updating user:', error);
+        showToast({
+          status: 'error',
+          title: 'Error!',
+          message:
+            'Something went wrong when updating your details. Please try again later.',
+        });
+        return console.error('Error updating user:', error);
       }
     }, 500);
 
     return () => {
       clearTimeout(timer);
     };
-  }, [updatedUserFields]);
+  }, [updatedUserFields, showToast]);
 
   useEffect(() => {
     if (!updatedPreferences.length) {
@@ -145,14 +153,20 @@ export const UserContextProvider: FC<{
       });
 
       if (error) {
-        console.error('Error updating preferences:', error);
+        showToast({
+          status: 'error',
+          title: 'Error!',
+          message:
+            'Something went wrong when updating your preferences. Please try again later.',
+        });
+        return console.error('Error updating preferences:', error);
       }
     }, 500);
 
     return () => {
       clearTimeout(timer);
     };
-  }, [updatedPreferences]);
+  }, [updatedPreferences, showToast]);
 
   useEffect(() => {
     if (!updatedSharePreference.length) {
@@ -164,21 +178,27 @@ export const UserContextProvider: FC<{
         return { ...curr, ...preference };
       }, {} as IShareLinkPreference);
 
-      setUpdatedPreferences([]);
+      setUpdatedSharePreferences([]);
 
       const { error } = await userService.updateSharePreference({
         ...payload,
       });
 
       if (error) {
-        console.error('Error updating preferences:', error);
+        showToast({
+          status: 'error',
+          title: 'Error!',
+          message:
+            'Something went wrong when updating your preferences. Please try again later.',
+        });
+        return console.error('Error updating preferences:', error);
       }
     }, 500);
 
     return () => {
       clearTimeout(timer);
     };
-  }, [updatedSharePreference]);
+  }, [updatedSharePreference, showToast]);
 
   const setInitialUser = useCallback((initialUser: IUserModel) => {
     setUser(initialUser);

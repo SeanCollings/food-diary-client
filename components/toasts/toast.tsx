@@ -8,7 +8,7 @@ import { FC, useEffect, useRef } from 'react';
 import styled from 'styled-components';
 import { MdErrorOutline, MdOutlineCheck, MdClose } from 'react-icons/md';
 import { getClassNames } from '@utils/string-utils';
-import { APP_THEME_DEFAULT } from '@utils/app.constants';
+import { APP_THEME_DEFAULT, MEDIA_MOBILE } from '@utils/app.constants';
 
 const TOAST_HEIGHT = 78;
 const MAX_WIDTH = 416;
@@ -22,7 +22,6 @@ interface ISToastContainer {
 
 const SToastContainer = styled.div<ISToastContainer>`
   position: fixed;
-  right: 20px;
   min-height: ${TOAST_HEIGHT}px;
   display: table;
   width: 90%;
@@ -32,12 +31,17 @@ const SToastContainer = styled.div<ISToastContainer>`
   color: ${APP_THEME_DEFAULT.textLight};
 
   ${({ toastPosition }) => `top: ${toastPosition + TOP_PADDING}px`};
-  z-index: 100;
+  z-index: 1000;
 
   animation-name: ${({ animateStyle }) => animateStyle.type};
   animation-duration: 0.1s;
   animation-timing-function: ease-out;
   animation-fill-mode: forwards;
+
+  right: 2rem;
+  ${MEDIA_MOBILE} {
+    right: 1rem;
+  }
 
   @keyframes enter {
     from {

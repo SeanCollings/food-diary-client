@@ -25,6 +25,7 @@ import {
   resetPassword,
   signInUser,
 } from '@client/utils/login-utils';
+import { useToast } from '@store/toast-context';
 
 const SForm = styled.form`
   background: var(--bg-secondary);
@@ -174,6 +175,7 @@ const GoogleLink: FC<IGoogleLinkProps> = ({ link, label }) => (
 );
 
 const LoginForm: FC = () => {
+  const { showToast } = useToast();
   const router = useRouter();
   const [state, dispatch] = useReducer(loginFormReducer, INITIAL_STATE);
 
@@ -196,6 +198,12 @@ const LoginForm: FC = () => {
     });
 
     if (!result || result?.error) {
+      showToast({
+        status: 'error',
+        title: 'Error!',
+        message: 'Something went wrong logging you in. Please try again later.',
+      });
+
       return dispatch({
         type: ELoginFormType.LOGIN_ERROR,
         payload: result?.error || 'Something went wrong',
@@ -248,14 +256,33 @@ const LoginForm: FC = () => {
           await signIn();
           break;
         case 'create':
-          const { error } = await createUser(state.formValues);
+          const { error: loginError } = await createUser(state.formValues);
 
-          if (!error) {
-            await signIn();
+          if (loginError) {
+            return showToast({
+              status: 'error',
+              title: 'Error!',
+              message:
+                'Something went wrong creating your account. Please try again later.',
+            });
           }
+
+          await signIn();
           break;
         case 'reset':
-          await resetPassword({ email: state.formValues.email });
+          const { error: resetError } = await resetPassword({
+            email: state.formValues.email,
+          });
+
+          if (resetError) {
+            return showToast({
+              status: 'error',
+              title: 'Error!',
+              message:
+                'Something went wrong resetting your password. Please try again later.',
+            });
+          }
+
           break;
       }
     } catch (err) {

@@ -123,9 +123,7 @@ describe('hooks - use-request-calendar-entries', () => {
       expect(mockRequestSetAllEntriesPerMonth).not.toHaveBeenCalled();
       expect(result.current).toMatchInlineSnapshot(`
         {
-          "isError": {
-            "message": "mock error occurred",
-          },
+          "isError": "mock error occurred",
           "isLoading": false,
         }
       `);

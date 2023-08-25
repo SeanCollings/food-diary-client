@@ -1,4 +1,5 @@
 import { diaryService } from '@client/services/diary.service';
+import { useToast } from '@store/toast-context';
 import { useUserContext } from '@store/user-context';
 import { getStructuredClone } from '@utils/get-structured-clone';
 import { IMealContent, TMealCard, TMealType } from '@utils/interfaces';
@@ -57,6 +58,7 @@ export const MealEntriesContextProvider: FC<{
   children: ReactNode;
   initialState?: IMealEntries;
 }> = ({ children, initialState }) => {
+  const { showToast } = useToast();
   const { userLoggedIn } = useUserContext();
   const [mealEntries, setMealEntries] = useState<IMealEntries>(
     initialState || {},
@@ -90,13 +92,19 @@ export const MealEntriesContextProvider: FC<{
         });
 
         if (error) {
+          showToast({
+            status: 'error',
+            title: 'Error!',
+            message:
+              'Something went wrong when adding your meal. Please try again later.',
+          });
           return console.error('Error creating entry:', error);
         }
       }
 
       setMealEntries(updatedEntries);
     },
-    [mealEntries, userLoggedIn],
+    [mealEntries, userLoggedIn, showToast],
   );
 
   const updateMealEntry = useCallback(
@@ -152,12 +160,18 @@ export const MealEntriesContextProvider: FC<{
         });
 
         if (error) {
+          showToast({
+            status: 'error',
+            title: 'Error!',
+            message:
+              'Something went wrong when updating your meal. Please try again later.',
+          });
           return console.error('Error updating entry:', error);
         }
       }
       setMealEntries(updatedEntries);
     },
-    [mealEntries, userLoggedIn],
+    [mealEntries, userLoggedIn, showToast],
   );
 
   const removeMealEntryById = useCallback(
@@ -185,6 +199,12 @@ export const MealEntriesContextProvider: FC<{
           });
 
           if (error) {
+            showToast({
+              status: 'error',
+              title: 'Error!',
+              message:
+                'Something went wrong when removing your meal. Please try again later.',
+            });
             return console.error('Error removing entry:', error);
           }
         }
@@ -192,7 +212,7 @@ export const MealEntriesContextProvider: FC<{
         setMealEntries(updatedEntries);
       }
     },
-    [mealEntries, userLoggedIn],
+    [mealEntries, userLoggedIn, showToast],
   );
 
   const context = useMemo(

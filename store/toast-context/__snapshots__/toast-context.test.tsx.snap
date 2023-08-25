@@ -4,12 +4,12 @@ exports[`store - toast-context should hide Toast 1`] = `
 <DocumentFragment>
   <div>
     <div
-      class="sc-a0fb510-0 gQdzmX"
+      class="sc-c2b481e2-0 dGESEi"
       data-testid="toast-randomId"
       id="toast-randomId"
     >
       <div
-        class="sc-a0fb510-1 gaMJpj success"
+        class="sc-c2b481e2-1 haSkKn success"
       >
         <svg
           color="#ffffff"
@@ -31,29 +31,29 @@ exports[`store - toast-context should hide Toast 1`] = `
           />
         </svg>
         <div
-          class="sc-a0fb510-2 jlanIb"
+          class="sc-c2b481e2-2 cOpAYz"
         >
           <div
-            class="sc-a0fb510-3 sc-a0fb510-4 bFjKjA cvlaCB"
+            class="sc-c2b481e2-3 sc-c2b481e2-4 lhRooE kxINyd"
           >
             <div
-              class="sc-a0fb510-3 bFjKjA"
+              class="sc-c2b481e2-3 lhRooE"
             >
               <h5
-                class="sc-a0fb510-5 iUztqs"
+                class="sc-c2b481e2-5 dlbyEI"
               >
                 mock Title
               </h5>
             </div>
           </div>
           <p
-            class="sc-a0fb510-6 kKZgfV"
+            class="sc-c2b481e2-6 estfx"
           >
             Mock message.
           </p>
         </div>
         <svg
-          class="sc-a0fb510-7 NtYFe"
+          class="sc-c2b481e2-7 qfhLu"
           color="#ffffff"
           data-testid="toast-dismiss"
           fill="currentColor"
@@ -93,12 +93,12 @@ exports[`store - toast-context should show Toast 2`] = `
 <DocumentFragment>
   <div>
     <div
-      class="sc-a0fb510-0 bZdNrv"
+      class="sc-c2b481e2-0 cjZdCO"
       data-testid="toast-randomId"
       id="toast-randomId"
     >
       <div
-        class="sc-a0fb510-1 gaMJpj success"
+        class="sc-c2b481e2-1 haSkKn success"
       >
         <svg
           color="#ffffff"
@@ -120,29 +120,29 @@ exports[`store - toast-context should show Toast 2`] = `
           />
         </svg>
         <div
-          class="sc-a0fb510-2 jlanIb"
+          class="sc-c2b481e2-2 cOpAYz"
         >
           <div
-            class="sc-a0fb510-3 sc-a0fb510-4 bFjKjA cvlaCB"
+            class="sc-c2b481e2-3 sc-c2b481e2-4 lhRooE kxINyd"
           >
             <div
-              class="sc-a0fb510-3 bFjKjA"
+              class="sc-c2b481e2-3 lhRooE"
             >
               <h5
-                class="sc-a0fb510-5 iUztqs"
+                class="sc-c2b481e2-5 dlbyEI"
               >
                 Mock Title
               </h5>
             </div>
           </div>
           <p
-            class="sc-a0fb510-6 kKZgfV"
+            class="sc-c2b481e2-6 estfx"
           >
             Mock message.
           </p>
         </div>
         <svg
-          class="sc-a0fb510-7 NtYFe"
+          class="sc-c2b481e2-7 qfhLu"
           color="#ffffff"
           data-testid="toast-dismiss"
           fill="currentColor"

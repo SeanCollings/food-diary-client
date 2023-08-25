@@ -1,14 +1,21 @@
 import { diaryService } from '@client/services/diary.service';
 import { TDrink, WellnessEntriesContextProvider, initialState } from '.';
-import { act, render, waitFor } from '@testing-library/react';
+import { act, render } from '@testing-library/react';
 import { FC, useEffect, useRef } from 'react';
 import { IWellnessEntries } from '@lib/interfaces/wellness.interface';
 import { useUserContext } from '@store/user-context';
 import { useWellnessEntriesContext } from '.';
 
+const mockShowToast = jest.fn();
+
 jest.useFakeTimers();
 jest.mock('@client/services/diary.service');
 jest.mock('@store/user-context');
+jest.mock('@store/toast-context', () => ({
+  useToast: () => ({
+    showToast: mockShowToast,
+  }),
+}));
 
 const DisplayEntry: FC<{
   entries: IWellnessEntries;
@@ -251,5 +258,11 @@ describe('store - wellness-entries-context', () => {
       'Error updating wellness entries:',
       'mock error occurred',
     );
+    expect(mockShowToast).toHaveBeenCalledWith({
+      message:
+        'Something went wrong updating your entry. Please try again later.',
+      status: 'error',
+      title: 'Error!',
+    });
   });
 });

@@ -12,6 +12,7 @@ import {
 import { useDateSelectedContext } from '@store/date-selected-context';
 import { useAllEntriesPerMonthContext } from '@store/all-entries-per-month-context';
 import { useRequestCalendarEntries } from '@hooks/request/use-request-calendar-entires';
+import { useErrorToast } from '@hooks/use-error-toast';
 
 interface ISButtonCommon {
   calendarVisible: boolean;
@@ -118,7 +119,13 @@ const DateDisplay: FC = () => {
   const { dateSelectedISO, updateSelectedDateISO } = useDateSelectedContext();
   const [showCalendar, setShowCalendar] = useState(false);
   const [calendarDate, setCalendarDate] = useState<string | null>(null);
-  const {} = useRequestCalendarEntries(calendarDate);
+  const { isError } = useRequestCalendarEntries(calendarDate);
+
+  useErrorToast({
+    isError,
+    title: 'Error!',
+    message: 'There was an issue getting your calendar entries.',
+  });
 
   const isDateSelectedToday = getIsDateSelectedToday(dateSelectedISO);
 
