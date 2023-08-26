@@ -18,11 +18,12 @@ const MockComponentShowToast = () => {
     stateUpdateRef.current += 1;
 
     if (!Object.keys(toasts).length) {
-      showToast({
+      const id = showToast({
         message: 'Mock message.',
         title: 'Mock Title',
         status: 'success',
       });
+      expect(id).toBeDefined();
     }
 
     if (stateUpdateRef.current === 2) {

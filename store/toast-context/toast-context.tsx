@@ -53,6 +53,7 @@ const useToastContext = () => {
       };
       return updatedToast;
     });
+    return id;
   }, []);
 
   const removeToast = useCallback(
