@@ -166,6 +166,19 @@ export const isDayInMonthInFuture = (compareDay: number) => {
 };
 
 /**
+ * Checks if a date is in the past
+ * @param givenDate string | Date
+ * @returns boolean
+ */
+export const getIsDateInPast = (givenDate?: TDate) => {
+  if (!givenDate) {
+    return false;
+  }
+
+  return new Date(givenDate).getTime() < new Date().getTime();
+};
+
+/**
  * Checks if day in month or month in future
  * @param compareDate Date
  * @param compareDay number

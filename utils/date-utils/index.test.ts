@@ -31,6 +31,7 @@ import {
   setServerDateString,
   setDateToMidnight,
   sortDateArray,
+  getIsDateInPast,
 } from '.';
 
 describe('date-utils', () => {
@@ -184,6 +185,23 @@ describe('date-utils', () => {
     });
   });
 
+  describe('getIsDateInPast', () => {
+    it('should be true if a date is in the past', () => {
+      const result = getIsDateInPast('2023-01-01');
+      expect(result).toEqual(true);
+    });
+
+    it('should be false if date in the future', () => {
+      const result = getIsDateInPast('2024-01-01');
+      expect(result).toEqual(false);
+    });
+
+    it('should be false if no date supplied', () => {
+      const result = getIsDateInPast();
+      expect(result).toEqual(false);
+    });
+  });
+
   describe('getIsDayInTheFuture', () => {
     it('should truthy if day in future', () => {
       const today = new Date(Date.now());
@@ -334,6 +352,11 @@ describe('date-utils', () => {
     it('should set a date to server date format at midnight', () => {
       const result = setServerDateString(new Date('2020-12-31'));
       expect(result).toMatchInlineSnapshot(`"2020-12-31"`);
+    });
+
+    it('should set todays date to server date format at midnight if no date supplied', () => {
+      const result = setServerDateString();
+      expect(result).toMatchInlineSnapshot(`"2023-04-28"`);
     });
   });
 
