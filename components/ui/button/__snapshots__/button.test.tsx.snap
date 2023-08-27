@@ -1,0 +1,84 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<Button/> should render 1`] = `
+<DocumentFragment>
+  <div
+    class="sc-c94b41de-0 fQHxSU"
+  >
+    <button
+      class="sc-c94b41de-1 zJBvk"
+      color="var(--text)"
+      font-size="24"
+      height="50"
+      width="150"
+    >
+      <div
+        class="sc-c94b41de-2 fisLxU"
+      >
+        <div
+          class="sc-c94b41de-4 fkNrgJ"
+        >
+          Test
+        </div>
+      </div>
+    </button>
+  </div>
+</DocumentFragment>
+`;
+
+exports[`<Button/> should render in loading state 1`] = `
+<DocumentFragment>
+  <div
+    class="sc-c94b41de-0 fQHxSU loading"
+  >
+    <button
+      class="sc-c94b41de-1 buUNVZ loading"
+      color="var(--text)"
+      disabled=""
+      font-size="24"
+    >
+      <div
+        class="sc-c94b41de-2 fisLxU"
+      >
+        <div
+          class="sc-c94b41de-3 bnyDnk loading"
+        >
+          <div
+            class="sc-4731ba6b-0 cnZVOU loader"
+            color="var(--text)"
+          />
+        </div>
+        <div
+          class="sc-c94b41de-4 fkNrgJ loading"
+        >
+          Test
+        </div>
+      </div>
+    </button>
+  </div>
+</DocumentFragment>
+`;
+
+exports[`<Button/> should render with custom props 1`] = `
+<DocumentFragment>
+  <div
+    class="sc-c94b41de-0 jXOSga"
+  >
+    <button
+      class="sc-c94b41de-1 iIOPBq"
+      color="red"
+      font-size="12"
+    >
+      <div
+        class="sc-c94b41de-2 fisLxU"
+      >
+        <div
+          class="sc-c94b41de-4 fkNrgJ"
+        >
+          Test
+        </div>
+      </div>
+    </button>
+  </div>
+</DocumentFragment>
+`;
