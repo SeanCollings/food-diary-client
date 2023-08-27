@@ -8,6 +8,8 @@ import { useEffect, useState } from 'react';
 import { useRequestDiaryEntry } from '@hooks/request/use-request-diary-entry';
 import { IUserModel, useUserContext } from '@store/user-context';
 import { MEDIA_MOBILE } from '@utils/app.constants';
+import { Ellipsis, SpinnerDots } from '@components/ui/loaders';
+import { useErrorToast } from '@hooks/use-error-toast';
 
 const SDiaryContainer = styled.section`
   display: flex;
@@ -23,6 +25,8 @@ const SNameContainer = styled.div`
   column-gap: 4px;
   width: 100%;
   flex-wrap: wrap;
+  align-items: center;
+  line-height: 1.8;
 
   ${MEDIA_MOBILE} {
     display: none;
@@ -31,8 +35,23 @@ const SNameContainer = styled.div`
 const SName = styled.span`
   font-weight: 600;
 `;
+const SCardContainer = styled.div`
+  position: relative;
 
-// https://swr.vercel.app/
+  &.loading {
+    opacity: 0.8;
+  }
+`;
+const SSpinnerContainer = styled.div`
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1;
+  pointer-events: none;
+`;
 
 interface IDiaryPageProps {
   session: { user: IUserModel | null };
@@ -43,9 +62,19 @@ const Home: NextPage<IDiaryPageProps> = ({ session }) => {
   const [mounted, setMounted] = useState(false);
   const { isError, isLoading } = useRequestDiaryEntry(!!session && mounted);
 
+  useErrorToast({
+    error: !!isError,
+    title: 'Error!',
+    message:
+      'There was an issue getting your diary entries. Please try again later.',
+    clear: !!user,
+  });
+
   useEffect(() => {
     setMounted(true);
   }, []);
+
+  const loading = (!!session && !user) || isLoading;
 
   return (
     <SDiaryContainer>
@@ -54,12 +83,20 @@ const Home: NextPage<IDiaryPageProps> = ({ session }) => {
           <SNameContainer>
             <span>Welcome:</span>
             <SName>{user?.name}</SName>
+            {!user && <Ellipsis spacing={6} size={8} />}
           </SNameContainer>
         )}
         <DateDisplay />
       </STopContainer>
       <WellnessContainer />
-      <CardContainer />
+      <SCardContainer className={loading ? 'loading' : ''}>
+        {loading && (
+          <SSpinnerContainer>
+            <SpinnerDots size={30} />
+          </SSpinnerContainer>
+        )}
+        <CardContainer />
+      </SCardContainer>
     </SDiaryContainer>
   );
 };
