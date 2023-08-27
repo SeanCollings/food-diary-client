@@ -1,0 +1,11 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<SpinnerFade> should render 1`] = `
+<DocumentFragment>
+  <div
+    class="sc-4731ba6b-0 dzCbyo loader"
+    color="var(--text)"
+    size="45"
+  />
+</DocumentFragment>
+`;

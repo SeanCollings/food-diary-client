@@ -1,0 +1,21 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<SpinnerLine> should render 1`] = `
+<DocumentFragment>
+  <div
+    class="sc-b37157e9-0 hyBKQb"
+  >
+    <div
+      class="sc-b37157e9-1 hTsLLc lds-ring"
+      color="#ffffff"
+      height="60"
+      opacity="1"
+    >
+      <div />
+      <div />
+      <div />
+      <div />
+    </div>
+  </div>
+</DocumentFragment>
+`;

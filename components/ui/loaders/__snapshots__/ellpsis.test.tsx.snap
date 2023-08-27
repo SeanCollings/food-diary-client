@@ -1,0 +1,17 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<Ellipsis> should render 1`] = `
+<DocumentFragment>
+  <div
+    class="sc-9e136426-0 extUxe lds-ellipsis"
+    height="30"
+    size="12"
+    spacing="8"
+  >
+    <div />
+    <div />
+    <div />
+    <div />
+  </div>
+</DocumentFragment>
+`;

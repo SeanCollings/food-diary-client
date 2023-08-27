@@ -1,0 +1,10 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<Eyes> should render 1`] = `
+<DocumentFragment>
+  <span
+    class="sc-66881844-0 bgOKGT loader"
+    size="48"
+  />
+</DocumentFragment>
+`;

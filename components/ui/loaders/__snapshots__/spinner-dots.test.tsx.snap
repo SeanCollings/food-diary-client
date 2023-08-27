@@ -1,0 +1,11 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<SpinnerDots> should render 1`] = `
+<DocumentFragment>
+  <span
+    class="sc-ceb7627d-0 wSPCm loader"
+    color="#ffffff"
+    size="45"
+  />
+</DocumentFragment>
+`;
