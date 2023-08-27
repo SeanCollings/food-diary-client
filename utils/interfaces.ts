@@ -80,3 +80,5 @@ export enum EAddMealOptions {
   MEAL_TYPE = 'mealType',
 }
 export type TAddMealOptions = `${EAddMealOptions}`;
+
+export type ThemeColor = 'primary' | 'secondary' | 'tertiary' | 'quaternary';
