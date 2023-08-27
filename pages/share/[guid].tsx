@@ -49,7 +49,7 @@ const SharePage: NextPage<ISharePageProps> = ({ guid }) => {
   );
 
   useErrorToast({
-    isError,
+    error: !!isError,
     title: 'Error!',
     message:
       'Something went wrong getting this shared profile. Please try again later.',

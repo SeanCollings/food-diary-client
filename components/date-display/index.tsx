@@ -122,7 +122,7 @@ const DateDisplay: FC = () => {
   const { isError } = useRequestCalendarEntries(calendarDate);
 
   useErrorToast({
-    isError,
+    error: !!isError,
     title: 'Error!',
     message: 'There was an issue getting your calendar entries.',
   });

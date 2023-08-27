@@ -384,7 +384,7 @@ const ProfileLife: FC = () => {
     useRequestExcerciseTrends(showExcerciseTrend, timePeriod.id);
 
   useErrorToast({
-    isError: mealTrendError || beverageTrendError || excerciseTrendError,
+    error: !!(mealTrendError || beverageTrendError || excerciseTrendError),
     title: 'Error!',
     message: 'Something went wrong getting trend data. Please try again later.',
   });

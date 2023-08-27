@@ -36,7 +36,7 @@ const SummaryPage: NextPage<ISummaryPageProps> = ({ session }) => {
   );
 
   useErrorToast({
-    isError,
+    error: !!isError,
     title: 'Error!',
     message: 'An error occurred. Please try again later.',
   });

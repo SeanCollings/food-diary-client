@@ -2,23 +2,35 @@ import { useToast } from '@store/toast-context';
 import { useState, useEffect } from 'react';
 
 interface ErrorToastProps {
-  isError?: string;
+  error?: boolean;
   title: string;
   message: string;
+  clear?: boolean;
 }
 
-export const useErrorToast = ({ isError, title, message }: ErrorToastProps) => {
-  const { showToast } = useToast();
-  const [toastShown, setToastShown] = useState(false);
+export const useErrorToast = ({
+  error,
+  title,
+  message,
+  clear,
+}: ErrorToastProps) => {
+  const { showToast, removeToast } = useToast();
+  const [toastId, setToastId] = useState<string | null>(null);
 
   useEffect(() => {
-    if (!!isError && !toastShown) {
-      setToastShown(true);
-      showToast({
+    if (!!error && !toastId) {
+      const id = showToast({
         status: 'error',
         title,
         message,
       });
+      setToastId(id);
     }
-  }, [isError, message, title, toastShown, showToast]);
+  }, [error, message, title, toastId, showToast]);
+
+  useEffect(() => {
+    if (toastId && clear) {
+      removeToast(toastId);
+    }
+  }, [clear, toastId, removeToast]);
 };
