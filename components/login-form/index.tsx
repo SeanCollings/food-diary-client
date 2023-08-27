@@ -1,7 +1,14 @@
 import FormInput from '@components/ui/input/form-input';
 import { MEDIA_MOBILE } from '@utils/app.constants';
 import { runValidations } from '@utils/validation';
-import { FC, FormEvent, useCallback, useEffect, useReducer } from 'react';
+import {
+  FC,
+  FormEvent,
+  useCallback,
+  useEffect,
+  useReducer,
+  useState,
+} from 'react';
 import styled from 'styled-components';
 import { PASSWORD_MIN_LENGTH } from '@utils/validation/validation.constants';
 import {
@@ -26,6 +33,7 @@ import {
   signInUser,
 } from '@client/utils/login-utils';
 import { useToast } from '@store/toast-context';
+import { Button } from '@components/ui/button';
 
 const SForm = styled.form`
   background: var(--bg-secondary);
@@ -80,24 +88,6 @@ const SInputsContainer = styled.div`
 const SLoginButtonContainer = styled.div`
   display: flex;
   justify-content: center;
-`;
-const SLoginButton = styled.button`
-  background: var(--th-primary);
-  border: transparent;
-  font-size: 24px;
-  color: var(--text);
-  padding: 10px;
-  width: 150px;
-  border-radius: 8px;
-  cursor: pointer;
-
-  :hover {
-    width: 152px;
-  }
-  :active {
-    opacity: 0.7;
-    width: 152px;
-  }
 `;
 const SRecaptchaContainer = styled.span`
   margin-top: 12px;
@@ -178,6 +168,7 @@ const LoginForm: FC = () => {
   const { showToast } = useToast();
   const router = useRouter();
   const [state, dispatch] = useReducer(loginFormReducer, INITIAL_STATE);
+  const [isLoading, setIsloading] = useState(false);
 
   const isLogin = state.formType === 'login';
   const isCreate = state.formType === 'create';
@@ -198,6 +189,7 @@ const LoginForm: FC = () => {
     });
 
     if (!result || result?.error) {
+      setIsloading(false);
       showToast({
         status: 'error',
         title: 'Error!',
@@ -250,6 +242,8 @@ const LoginForm: FC = () => {
       return;
     }
 
+    setIsloading(true);
+
     try {
       switch (state.formType) {
         case 'login':
@@ -259,6 +253,7 @@ const LoginForm: FC = () => {
           const { error: loginError } = await createUser(state.formValues);
 
           if (loginError) {
+            setIsloading(false);
             return showToast({
               status: 'error',
               title: 'Error!',
@@ -275,6 +270,7 @@ const LoginForm: FC = () => {
           });
 
           if (resetError) {
+            setIsloading(false);
             return showToast({
               status: 'error',
               title: 'Error!',
@@ -286,6 +282,7 @@ const LoginForm: FC = () => {
           break;
       }
     } catch (err) {
+      setIsloading(false);
       console.error(err);
     }
   };
@@ -399,7 +396,9 @@ const LoginForm: FC = () => {
           )}
         </SContentContainer>
         <SLoginButtonContainer>
-          <SLoginButton type="submit">{formText.loginButtonText}</SLoginButton>
+          <Button type="submit" width={150} height={50} loading={isLoading}>
+            {formText.loginButtonText}
+          </Button>
         </SLoginButtonContainer>
       </SForm>
       <SRecaptchaContainer>
