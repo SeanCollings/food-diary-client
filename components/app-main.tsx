@@ -17,6 +17,8 @@ import { getClassNames } from '@utils/string-utils';
 import { useTheme } from '@hooks/use-theme';
 import { useRequestUser } from '@hooks/request/user/use-request-user';
 import { useErrorToast } from '@hooks/use-error-toast';
+import { getIsDateInPast } from '@utils/date-utils';
+import { signOut } from 'next-auth/react';
 
 const SAppContainer = styled.div`
   display: flex;
@@ -77,23 +79,36 @@ const SInnerMain = styled.div`
   margin: 0 auto;
 `;
 
-const AppMain: React.FC<AppProps> = ({ Component, pageProps }) => {
+interface PageProps {
+  session: { accessToken: string; expires: string } | null;
+}
+
+const AppMain: React.FC<AppProps<PageProps>> = ({ Component, pageProps }) => {
   const [fetchUser, setFetchUser] = useState(false);
   const { darkMode } = useTheme();
   const { pathname } = useRouter();
-  const { isError } = useRequestUser(fetchUser);
+  const { data, isError } = useRequestUser(fetchUser);
+
+  const loginExpired = getIsDateInPast(pageProps?.session?.expires);
+
+  useEffect(() => {
+    if (loginExpired && pathname !== '/login') {
+      signOut({ redirect: true, callbackUrl: '/login' });
+    }
+  }, [loginExpired, pathname]);
 
   useErrorToast({
-    isError,
+    error: !!isError,
     title: 'Error!',
     message: 'There was an issue getting your account details.',
+    clear: !!data,
   });
 
   useEffect(() => {
-    if (!!pageProps.session && !fetchUser) {
+    if (!!pageProps.session && !fetchUser && !loginExpired) {
       setFetchUser(true);
     }
-  }, [fetchUser, pageProps]);
+  }, [fetchUser, pageProps, loginExpired]);
 
   const showBackgroundImage =
     pathname === pathnameMapper.login || pathname === pathnameMapper.home;
