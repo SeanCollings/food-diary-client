@@ -27,6 +27,8 @@ function MyApp(props: AppProps) {
     }
   }, [mounted]);
 
+  const isProduction = process.env.NODE_ENV === 'production';
+
   return (
     <>
       <Head>
@@ -93,7 +95,7 @@ function MyApp(props: AppProps) {
           </UserContextProvider>
         </ToastContextProvider>
       </SessionProvider>
-      <Analytics />
+      {isProduction && <Analytics />}
     </>
   );
 }
