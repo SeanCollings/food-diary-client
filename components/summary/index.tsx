@@ -20,6 +20,7 @@ import { MdCalendarToday } from 'react-icons/md';
 import { DateHeaderRow, MealDataRow, WellnessDataRow } from './content-rows';
 import { ISummaryResponseData } from '@client/interfaces/user-summary-data';
 import { MAX_SUMMARY_MONTH_RANGE } from '@utils/validation/validation.constants';
+import { Button } from '@components/ui/button';
 
 const CALENDAR_HEIGHT = 280;
 const MAX_DAYS_PER_ROW = 2;
@@ -129,32 +130,6 @@ const SCalendarContainer = styled.div`
 
   ${MEDIA_MOBILE} {
     max-width: 100%;
-  }
-`;
-const SApplyButton = styled.button`
-  padding: 4px 8px;
-  width: 80px;
-  right: 0;
-  border: 1px solid transparent;
-  border-radius: 4px;
-  font-size: 16px;
-  height: 32px;
-  background-color: var(--th-primary);
-  color: var(--text);
-
-  &.apply-disabled {
-    opacity: 0.4;
-    cursor: default;
-  }
-  &.apply-enabled {
-    cursor: pointer;
-
-    :hover {
-      border: 1px solid;
-    }
-    :active {
-      opacity: 0.6;
-    }
   }
 `;
 const SUserDataContainer = styled.div`
@@ -331,13 +306,15 @@ const Summary: FC<ISummaryProps> = ({
             <MdCalendarToday />
           </SRange>
         </SRangeContainer>
-        <SApplyButton
-          disabled={!dateRangeChanged}
-          className={dateRangeChanged ? 'apply-enabled' : 'apply-disabled'}
+        <Button
+          fontSize={18}
+          width={80}
+          height={40}
+          isDisabled={!dateRangeChanged}
           onClick={onClickApplyDateRange}
         >
           Apply
-        </SApplyButton>
+        </Button>
       </STopContainer>
 
       <STopPaginationContainer>

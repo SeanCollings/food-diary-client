@@ -1,5 +1,6 @@
 import Modal from '@components/modals';
 import ModalShareProfile from '@components/modals/share-profile';
+import { Button } from '@components/ui/button';
 import { useUserContext } from '@store/user-context';
 import { COLOURS, OPACITY_40 } from '@utils/app.constants';
 import { formatMinutesToHoursMinutes } from '@utils/time-utils';
@@ -99,25 +100,6 @@ const SButtonContainer = styled.div`
   align-items: center;
   height: 100px;
 `;
-const SShareButton = styled.button`
-  outline: none;
-  cursor: pointer;
-  font-size: 22px;
-  padding: 8px 12px;
-  border: 1px solid;
-  border-radius: 8px;
-  height: 50px;
-  transition: 0.2s;
-  color: var(--text);
-  background-color: var(--th-primary);
-
-  :hover {
-    opacity: 0.6;
-  }
-  :active {
-    opacity: 0.4;
-  }
-`;
 
 interface IUserProfile {
   settingsClick: () => void;
@@ -180,7 +162,9 @@ const UserProfile: FC<IUserProfile> = ({ settingsClick }) => {
         </SStatsContainer>
       )}
       <SButtonContainer>
-        <SShareButton onClick={shareProfileHandler}>Share Profile</SShareButton>
+        <Button onClick={shareProfileHandler} fontSize={22} height={50}>
+          Share Profile
+        </Button>
       </SButtonContainer>
       <Modal show={profileShared} modalWidth={600}>
         <ModalShareProfile onClose={() => setProfileShared(false)} />

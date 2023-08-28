@@ -3,20 +3,21 @@
 exports[`<Button/> should render 1`] = `
 <DocumentFragment>
   <div
-    class="sc-c94b41de-0 fQHxSU"
+    class="sc-8aef3792-0 hEnGAh"
+    width="150"
   >
     <button
-      class="sc-c94b41de-1 zJBvk"
+      class="sc-8aef3792-1 clusxS"
       color="var(--text)"
       font-size="24"
       height="50"
       width="150"
     >
       <div
-        class="sc-c94b41de-2 fisLxU"
+        class="sc-8aef3792-2 eHSqWx"
       >
         <div
-          class="sc-c94b41de-4 fkNrgJ"
+          class="sc-8aef3792-4 joyQLY"
         >
           Test
         </div>
@@ -29,19 +30,19 @@ exports[`<Button/> should render 1`] = `
 exports[`<Button/> should render in loading state 1`] = `
 <DocumentFragment>
   <div
-    class="sc-c94b41de-0 fQHxSU loading"
+    class="sc-8aef3792-0 earFKh loading"
   >
     <button
-      class="sc-c94b41de-1 buUNVZ loading"
+      class="sc-8aef3792-1 jtJyrv loading"
       color="var(--text)"
       disabled=""
       font-size="24"
     >
       <div
-        class="sc-c94b41de-2 fisLxU"
+        class="sc-8aef3792-2 eHSqWx"
       >
         <div
-          class="sc-c94b41de-3 bnyDnk loading"
+          class="sc-8aef3792-3 cynJoB loading"
         >
           <div
             class="sc-4731ba6b-0 cnZVOU loader"
@@ -49,7 +50,7 @@ exports[`<Button/> should render in loading state 1`] = `
           />
         </div>
         <div
-          class="sc-c94b41de-4 fkNrgJ loading"
+          class="sc-8aef3792-4 joyQLY loading"
         >
           Test
         </div>
@@ -62,18 +63,18 @@ exports[`<Button/> should render in loading state 1`] = `
 exports[`<Button/> should render with custom props 1`] = `
 <DocumentFragment>
   <div
-    class="sc-c94b41de-0 jXOSga"
+    class="sc-8aef3792-0 dQsYlv"
   >
     <button
-      class="sc-c94b41de-1 iIOPBq"
+      class="sc-8aef3792-1 kgyigc"
       color="red"
       font-size="12"
     >
       <div
-        class="sc-c94b41de-2 fisLxU"
+        class="sc-8aef3792-2 eHSqWx"
       >
         <div
-          class="sc-c94b41de-4 fkNrgJ"
+          class="sc-8aef3792-4 joyQLY"
         >
           Test
         </div>

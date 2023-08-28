@@ -3,26 +3,30 @@ import styled from 'styled-components';
 import { SpinnerFade } from '@components/ui/loaders';
 import { getThemeVarColor } from '@utils/theme-utils';
 import { ThemeColor } from '@utils/interfaces';
+import { getClassNames } from '@utils/string-utils';
 
-interface ISButton {
-  background: string;
+interface ISCommon {
   width?: number;
+  background: string;
+}
+interface ISButton extends ISCommon {
   height?: number;
   borderWidth?: number;
   fontSize?: number;
   color: string;
 }
 
-const SContainer = styled.div<any>`
+const SContainer = styled.div<ISCommon>`
   position: relative;
   :before {
     content: '';
     position: absolute;
     height: 100%;
-    width: 100%;
+    width: ${({ width }) => (width ? `${width}px` : '100%')};
     border-radius: 8px;
     background: ${({ background }) =>
       `color-mix(in srgb, ${background}, transparent 70%)`};
+    transition: background-color 250ms;
   }
 `;
 const SButton = styled.button<ISButton>`
@@ -45,11 +49,14 @@ const SButton = styled.button<ISButton>`
   &.loading {
     background-color: ${({ background }) => background};
   }
-  :hover {
-    background-color: ${({ background }) => background};
+  &.disabled {
+    opacity: 0.4;
+    transition: background-color 0ms;
+    border-color: transparent;
+    cursor: default;
   }
-  :active:not(&.loading) {
-    opacity: 0.8;
+  :hover:not(&.disabled) {
+    background-color: ${({ background }) => background};
   }
 `;
 const SInnerContainer = styled.div`
@@ -87,6 +94,7 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   fontSize?: number;
   loading?: boolean;
   color?: string;
+  isDisabled?: boolean;
   onClick?: () => void;
 }
 
@@ -100,13 +108,14 @@ export const Button: FC<ButtonProps> = ({
   loading = false,
   color = 'var(--text)',
   onClick,
+  isDisabled,
   ...rest
 }) => {
   const themeColour = getThemeVarColor(background);
-  const loadingClass = loading ? 'loading' : '';
+  const classNames = getClassNames({ loading, disabled: isDisabled });
 
   return (
-    <SContainer background={themeColour} className={loadingClass}>
+    <SContainer className={classNames} background={themeColour} width={width}>
       <SButton
         background={themeColour}
         height={height}
@@ -114,18 +123,18 @@ export const Button: FC<ButtonProps> = ({
         borderWidth={borderWidth}
         {...rest}
         color={color}
-        disabled={loading}
+        disabled={isDisabled || loading}
         onClick={onClick}
-        className={loadingClass}
+        className={classNames}
         fontSize={fontSize}
       >
         <SInnerContainer>
           {loading && (
-            <SLoaderContainer className={loadingClass}>
+            <SLoaderContainer className={classNames}>
               <SpinnerFade size={0} background={background} />
             </SLoaderContainer>
           )}
-          <SChildContainer className={loadingClass}>{children}</SChildContainer>
+          <SChildContainer className={classNames}>{children}</SChildContainer>
         </SInnerContainer>
       </SButton>
     </SContainer>

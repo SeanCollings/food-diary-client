@@ -1,4 +1,5 @@
 import { userService } from '@client/services/user.service';
+import { Button } from '@components/ui/button';
 import Toggle from '@components/ui/toggle';
 import { useToast } from '@store/toast-context';
 import { useUserContext } from '@store/user-context';
@@ -7,14 +8,10 @@ import {
   SHARE_INFORMATION,
   SHARE_PRE_GENERATE,
 } from '@utils/constants/profile.constants';
-import { getClassNames } from '@utils/string-utils';
 import { useEffect, useRef, useState } from 'react';
 import { MdClose } from 'react-icons/md';
 import styled from 'styled-components';
 
-interface ISButton {
-  isDisabled?: boolean;
-}
 const SContainer = styled.div`
   display: flex;
   flex-direction: column;
@@ -86,7 +83,7 @@ const SLink = styled.input`
   color: var(--text);
 
   &.copied {
-    animation: 0.5s copied ease-in none;
+    animation: 1s copied ease-in none;
   }
 
   @keyframes copied {
@@ -96,7 +93,6 @@ const SLink = styled.input`
       box-shadow: inset 0px 0px 4px 2px var(--th-primary);
     }
     100% {
-      opacity: 0.8;
       border-color: ${COLOURS.gray}${OPACITY_40};
       box-shadow: inset 0px 0px 0px 0px transparent;
     }
@@ -112,39 +108,7 @@ const SInformationContainer = styled.div`
   font-size: 15px;
 `;
 const SGenerateButtonContainer = styled.div`
-  width: 100%;
   text-align: right;
-`;
-const SButton = styled.button<ISButton>`
-  cursor: pointer;
-  transition: 0.2s;
-  min-width: 120px;
-  max-width: 200px;
-  padding: 4px 8px;
-  font-size: 18px;
-  border: 1px solid;
-  border-radius: 4px;
-  color: var(--text);
-
-  background-color: var(--th-primary);
-
-  &.subtle {
-    border: 0;
-    background-color: transparent;
-    color: var(--th-primary);
-  }
-
-  :hover {
-    opacity: 0.6;
-  }
-  :active {
-    opacity: 0.4;
-  }
-
-  &.disabled {
-    opacity: 0.4;
-    cursor: default;
-  }
 `;
 
 interface IModalShareProfileProps {
@@ -226,11 +190,6 @@ const ModalShareProfile: React.FC<IModalShareProfileProps> = ({ onClose }) => {
     ? 'Generate link'
     : 'Generate new link';
 
-  const generateButtonClassNames = getClassNames({
-    subtle: !!user?.shareLink,
-    disabled: isFetching,
-  });
-
   return (
     <SContainer>
       <STopContainer>
@@ -261,15 +220,14 @@ const ModalShareProfile: React.FC<IModalShareProfileProps> = ({ onClose }) => {
               readOnly
               onClick={onInputClick}
             />
-            <SButton
+            <Button
               disabled={!user.shareLink || !navigator.clipboard}
-              className={
-                !user.shareLink || !navigator.clipboard ? 'disabled' : ''
-              }
+              fontSize={18}
+              width={120}
               onClick={copyLinkClicked}
             >
-              Copy link
-            </SButton>
+              Copy Link
+            </Button>
           </SLinkContainer>
         </>
       )}
@@ -277,13 +235,16 @@ const ModalShareProfile: React.FC<IModalShareProfileProps> = ({ onClose }) => {
         {user?.shareLink ? SHARE_INFORMATION : SHARE_PRE_GENERATE}
       </SInformationContainer>
       <SGenerateButtonContainer>
-        <SButton
-          onClick={onCreateLinkHandler}
-          className={generateButtonClassNames}
+        <Button
+          loading={isFetching}
           disabled={isFetching}
+          fontSize={18}
+          width={180}
+          borderWidth={0}
+          onClick={onCreateLinkHandler}
         >
           {generateButtonText}
-        </SButton>
+        </Button>
       </SGenerateButtonContainer>
     </SContainer>
   );
