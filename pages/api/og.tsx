@@ -53,7 +53,7 @@ export default function handler(request: NextRequest) {
                 color: '#ffffffe6',
               }}
             >
-              {`foodandwellnessdiary.vercel.com${path}`}
+              {`foodandwellnessdiary.vercel.app/${path}`}
             </span>
           </div>
           <div
