@@ -80,7 +80,7 @@ export default function handler(request: NextRequest) {
       { width: 1200, height: 675 },
     );
   } catch (e: any) {
-    console.log(`${e.message}`);
+    console.error(`${e.message}`);
     return new Response(`Failed to generate the image`, {
       status: 500,
     });

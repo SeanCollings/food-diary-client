@@ -1,0 +1,149 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`/api - og should return og image-response with custom params 1`] = `
+<div
+  style={
+    {
+      "alignItems": "center",
+      "background": "#121212",
+      "borderLeft": "2px solid #2B9348",
+      "borderRight": "2px solid #2B9348",
+      "display": "flex",
+      "fontWeight": 400,
+      "height": "100%",
+      "justifyContent": "center",
+      "letterSpacing": "-.02em",
+      "width": "100%",
+    }
+  }
+>
+  <div
+    style={
+      {
+        "alignItems": "center",
+        "display": "flex",
+        "left": 42,
+        "position": "absolute",
+        "top": 42,
+      }
+    }
+  >
+    <span
+      style={
+        {
+          "backgroundImage": "linear-gradient(to right,#55A630,#2B9348)",
+          "borderRadius": "50%",
+          "height": 24,
+          "width": 24,
+        }
+      }
+    />
+    <span
+      style={
+        {
+          "color": "#ffffffe6",
+          "fontSize": 20,
+          "marginLeft": 8,
+        }
+      }
+    >
+      foodandwellnessdiary.vercel.app//a_new_path
+    </span>
+  </div>
+  <div
+    style={
+      {
+        "backgroundColor": "#55A630",
+        "borderRadius": "8px",
+        "color": "#ffffffe6",
+        "display": "flex",
+        "flexWrap": "wrap",
+        "fontSize": 40,
+        "justifyContent": "center",
+        "lineHeight": 1.4,
+        "margin": "0 42px",
+        "maxWidth": 550,
+        "padding": "100px 50px",
+        "textAlign": "center",
+        "width": "auto",
+      }
+    }
+  >
+    a_new_title
+  </div>
+</div>
+`;
+
+exports[`/api - og should return og image-response with no search-params 1`] = `
+<div
+  style={
+    {
+      "alignItems": "center",
+      "background": "#121212",
+      "borderLeft": "2px solid #2B9348",
+      "borderRight": "2px solid #2B9348",
+      "display": "flex",
+      "fontWeight": 400,
+      "height": "100%",
+      "justifyContent": "center",
+      "letterSpacing": "-.02em",
+      "width": "100%",
+    }
+  }
+>
+  <div
+    style={
+      {
+        "alignItems": "center",
+        "display": "flex",
+        "left": 42,
+        "position": "absolute",
+        "top": 42,
+      }
+    }
+  >
+    <span
+      style={
+        {
+          "backgroundImage": "linear-gradient(to right,#55A630,#2B9348)",
+          "borderRadius": "50%",
+          "height": 24,
+          "width": 24,
+        }
+      }
+    />
+    <span
+      style={
+        {
+          "color": "#ffffffe6",
+          "fontSize": 20,
+          "marginLeft": 8,
+        }
+      }
+    >
+      foodandwellnessdiary.vercel.app/
+    </span>
+  </div>
+  <div
+    style={
+      {
+        "backgroundColor": "#55A630",
+        "borderRadius": "8px",
+        "color": "#ffffffe6",
+        "display": "flex",
+        "flexWrap": "wrap",
+        "fontSize": 40,
+        "justifyContent": "center",
+        "lineHeight": 1.4,
+        "margin": "0 42px",
+        "maxWidth": 550,
+        "padding": "100px 50px",
+        "textAlign": "center",
+        "width": "auto",
+      }
+    }
+  >
+    One step at a time. Towards wellness.
+  </div>
+</div>
+`;

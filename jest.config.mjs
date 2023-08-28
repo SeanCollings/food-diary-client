@@ -38,8 +38,8 @@ const customJestConfig = {
   modulePathIgnorePatterns: ['<rootDir>/tests/'],
   coverageThreshold: {
     global: {
-      statements: 45,
-      branches: 39,
+      statements: 46,
+      branches: 40,
       functions: 47,
       lines: 43,
     },
