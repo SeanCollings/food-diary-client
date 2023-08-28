@@ -103,7 +103,7 @@ export const Button: FC<ButtonProps> = ({
   background,
   height,
   width,
-  borderWidth = 2,
+  borderWidth = 1,
   fontSize = 24,
   loading = false,
   color = 'var(--text)',
