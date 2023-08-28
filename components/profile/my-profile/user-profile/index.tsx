@@ -2,10 +2,16 @@ import Modal from '@components/modals';
 import ModalShareProfile from '@components/modals/share-profile';
 import { Button } from '@components/ui/button';
 import { useUserContext } from '@store/user-context';
-import { COLOURS, OPACITY_40 } from '@utils/app.constants';
+import { COLOURS, MEDIA_MOBILE, OPACITY_40 } from '@utils/app.constants';
 import { formatMinutesToHoursMinutes } from '@utils/time-utils';
 import { FC, useState } from 'react';
-import { MdAccountCircle, MdPhotoCamera, MdSettings } from 'react-icons/md';
+import {
+  MdAccountCircle,
+  MdInfo,
+  MdInfoOutline,
+  MdPhotoCamera,
+  MdSettings,
+} from 'react-icons/md';
 import styled from 'styled-components';
 
 const SLine = styled.div`
@@ -77,22 +83,57 @@ const SName = styled.div`
 const SStatsContainer = styled.div`
   display: flex;
   justify-content: space-around;
+  flex-basis: 33%;
+  gap: 4px;
 `;
 const SStatWrapper = styled.div`
   width: fit-content;
   display: flex;
   flex-direction: column;
   align-items: center;
+  min-width: fit-content;
 `;
 const SStatValue = styled.div`
   font-size: 28px;
   line-height: 1.1;
   color: var(--th-primary);
 `;
+const SStatLabelWrapper = styled.div`
+  position: relative;
+  display: block;
+
+  :hover {
+    .info {
+      opacity: 1;
+    }
+    .info-outline {
+      opacity: 0;
+    }
+  }
+`;
 const SStatLabel = styled.label`
   text-transform: uppercase;
   font-size: 12px;
   color: ${COLOURS.gray};
+`;
+const SInfoIconOutline = styled(MdInfoOutline)`
+  transition: 250ms;
+
+  ${MEDIA_MOBILE} {
+    display: none;
+  }
+`;
+const SInfoIcon = styled(MdInfo)`
+  position: absolute;
+  right: 0;
+  bottom: 4px;
+  opacity: 0;
+
+  transition: 250ms;
+
+  ${MEDIA_MOBILE} {
+    display: none;
+  }
 `;
 const SButtonContainer = styled.div`
   display: flex;
@@ -104,6 +145,30 @@ const SButtonContainer = styled.div`
 interface IUserProfile {
   settingsClick: () => void;
 }
+
+interface UserStatProps {
+  show: boolean | undefined;
+  stat: number | string | undefined;
+  title: string;
+  name: string;
+}
+
+const UserStat: FC<UserStatProps> = ({ show, stat, title, name }) => {
+  if (!show) {
+    return null;
+  }
+
+  return (
+    <SStatWrapper>
+      <SStatValue>{stat}</SStatValue>
+      <SStatLabelWrapper title={title}>
+        <SInfoIcon className="info" />
+        <SStatLabel>{name}</SStatLabel>
+        <SInfoIconOutline className="info-outline" />
+      </SStatLabelWrapper>
+    </SStatWrapper>
+  );
+};
 
 const UserProfile: FC<IUserProfile> = ({ settingsClick }) => {
   const { user } = useUserContext();
@@ -139,26 +204,24 @@ const UserProfile: FC<IUserProfile> = ({ settingsClick }) => {
       <SLine />
       {!!user?.stats && (
         <SStatsContainer>
-          {user.preferences?.showDayStreak && (
-            <SStatWrapper title="Latest streak where each day in a row an entry has been added">
-              <SStatValue>{user.stats.dayStreak}</SStatValue>
-              <SStatLabel>day streak</SStatLabel>
-            </SStatWrapper>
-          )}
-          {user?.preferences?.showWeeklyExcercise && (
-            <SStatWrapper title="Shows total excercise for the past 7 days">
-              <SStatValue>
-                {formatMinutesToHoursMinutes(user.stats.weeklyExercise)}
-              </SStatValue>
-              <SStatLabel>weekly excercise</SStatLabel>
-            </SStatWrapper>
-          )}
-          {user?.preferences?.showWeeklyWater && (
-            <SStatWrapper title="Shows total water for the past 7 days">
-              <SStatValue>{user.stats.weeklyWater}</SStatValue>
-              <SStatLabel>weekly water</SStatLabel>
-            </SStatWrapper>
-          )}
+          <UserStat
+            show={user.preferences?.showDayStreak}
+            stat={user.stats.dayStreak}
+            name="day streak"
+            title="Each day in a row an entry has been added"
+          />
+          <UserStat
+            show={user.preferences?.showWeeklyExcercise}
+            stat={formatMinutesToHoursMinutes(user.stats.weeklyExercise)}
+            name="weekly excercise"
+            title="Shows total excercise time for the past 7 days"
+          />
+          <UserStat
+            show={user.preferences?.showWeeklyWater}
+            stat={user.stats.weeklyWater}
+            name="weekly water"
+            title="Shows total water for the past 7 days"
+          />
         </SStatsContainer>
       )}
       <SButtonContainer>
