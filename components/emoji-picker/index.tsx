@@ -27,8 +27,8 @@ const SSelectedontainer = styled.div`
   font-size: 40px;
   cursor: pointer;
 
-  span:active {
-    opacity: 0.3;
+  span:hover {
+    opacity: 0.6;
   }
 `;
 const SEmojisContainer = styled.div`
@@ -190,10 +190,14 @@ const EmojiPicker: FC<IEmojiPickerProps> = ({
     }
   };
 
+  const emojiContainerTitle = selectedEmoji?.name
+    ? `${selectedEmoji?.name} (click to remove)`
+    : '';
+
   return (
     <SContainer>
       <SSelectedontainer
-        title={selectedEmoji?.name || ''}
+        title={emojiContainerTitle}
         onClick={removeEmojiHandler}
       >
         <span>{selectedEmoji?.nativeSkin || ''}</span>

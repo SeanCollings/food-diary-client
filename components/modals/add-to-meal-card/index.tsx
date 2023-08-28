@@ -181,7 +181,7 @@ const ModalAddToMealCard: FC<IModalAddMealProps> = ({
           tabIndex={3}
           inputWidth={350}
           title="Quantity"
-          popup="Select a quantity"
+          popup="Add any descriptive quantity for your food or drink"
           spellCheck
           onChange={updateInputValues}
           {...commonInputProps}
@@ -193,7 +193,7 @@ const ModalAddToMealCard: FC<IModalAddMealProps> = ({
           tabIndex={4}
           inputWidth={350}
           title="Food"
-          popup="Input your food/drink"
+          popup="Input your food or drink *Required"
           required
           spellCheck
           onBlur={onBlurHandler}
@@ -208,7 +208,7 @@ const ModalAddToMealCard: FC<IModalAddMealProps> = ({
           inputWidth={350}
           backgroundColour={mealColour}
           title="Description"
-          popup="Add some extra descriptions to your food"
+          popup="Add some extra descriptions to your food or drink"
           inputType="textarea"
           spellCheck
           onChange={updateInputValues}
@@ -221,7 +221,7 @@ const ModalAddToMealCard: FC<IModalAddMealProps> = ({
           backgroundColour={mealColour}
           options={ALL_MEAL_CARDS}
           title="Meal"
-          popup="Change meal to another"
+          popup="Change this meal to another meal"
           onChange={updateMealType}
         />
       </SContentContainer>
