@@ -34,6 +34,12 @@ export const getThemeVarColor = (type?: ThemeColor) => {
       return 'var(--th-tertiary)';
     case 'quaternary':
       return 'var(--th-quaternary)';
+    case 'background_primary':
+      return 'var(--bg-primary)';
+    case 'background_secondary':
+      return 'var(--bg-secondary)';
+    case 'background_tertiary':
+      return 'var(--bg-tertiary)';
     default:
       return 'var(--th-primary)';
   }

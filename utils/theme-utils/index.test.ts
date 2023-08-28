@@ -1,4 +1,5 @@
 import { THEME_LIGHT_1 } from '@utils/constants/theme.constants';
+import { ThemeColor } from '@utils/interfaces';
 import { getThemeColoursFromMealId, getThemeVarColor } from '.';
 
 describe('theme-utils', () => {
@@ -41,26 +42,17 @@ describe('theme-utils', () => {
   });
 
   describe('getThemeVarColor', () => {
-    it('should return primary colour', () => {
-      const actual1 = getThemeVarColor();
-      const actual2 = getThemeVarColor('primary');
-      expect(actual1).toEqual('var(--th-primary)');
-      expect(actual2).toEqual('var(--th-primary)');
-    });
-
-    it('should return secondary colour', () => {
-      const actual1 = getThemeVarColor('secondary');
-      expect(actual1).toEqual('var(--th-secondary)');
-    });
-
-    it('should return tertiary colour', () => {
-      const actual1 = getThemeVarColor('tertiary');
-      expect(actual1).toEqual('var(--th-tertiary)');
-    });
-
-    it('should return quaternary colour', () => {
-      const actual1 = getThemeVarColor('quaternary');
-      expect(actual1).toEqual('var(--th-quaternary)');
+    it.each<ThemeColor | undefined>([
+      'primary',
+      'secondary',
+      'tertiary',
+      'quaternary',
+      'background_primary',
+      'background_secondary',
+      'background_tertiary',
+      undefined,
+    ])('should return theme for type %s', (type) => {
+      expect(getThemeVarColor(type)).toMatchSnapshot();
     });
   });
 });
