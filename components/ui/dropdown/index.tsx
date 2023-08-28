@@ -1,5 +1,6 @@
 import { COLOURS, MEDIA_MOBILE, OPACITY_30 } from '@utils/app.constants';
-import { ChangeEvent } from 'react';
+import { ChangeEvent, FocusEvent, useState } from 'react';
+import { MdExpandMore } from 'react-icons/md';
 import styled from 'styled-components';
 
 interface ISContainer {
@@ -10,6 +11,7 @@ interface ISSelect {
 }
 
 const SContainer = styled.div<ISContainer>`
+  position: relative;
   width: ${({ inputWidth }) => inputWidth}px;
 
   ${MEDIA_MOBILE} {
@@ -46,6 +48,18 @@ const SOption = styled.option<ISSelect>`
   background: var(--bg-secondary);
   color: var(--text);
 `;
+const SIcon = styled(MdExpandMore)`
+  position: absolute;
+  right: 8px;
+  top: 50%;
+  transform: translateY(-50%) rotateX(0deg);
+  pointer-events: none;
+  transition: 200ms;
+
+  &.open {
+    transform: translateY(-50%) rotateX(180deg);
+  }
+`;
 
 export type TDefaultOption = { id: string; title: string };
 
@@ -68,8 +82,16 @@ const Dropdown = <T extends string, K extends TDefaultOption>({
   tabIndex,
   onChange,
 }: IDropdownProps<T, K>) => {
+  const [opened, setOpened] = useState(false);
+
+  const handleOnBlur = (e: FocusEvent<HTMLSelectElement, Element>) => {
+    e.preventDefault();
+    setOpened(false);
+  };
+
   return (
     <SContainer inputWidth={inputWidth}>
+      <SIcon size={22} className={opened ? 'open' : ''} />
       <SSelect
         id={id}
         name={id}
@@ -77,7 +99,8 @@ const Dropdown = <T extends string, K extends TDefaultOption>({
         backgroundColour={backgroundColour}
         tabIndex={tabIndex}
         onChange={onChange}
-        onBlur={(e) => e.preventDefault()}
+        onBlur={handleOnBlur}
+        onClick={() => setOpened((curr) => !curr)}
       >
         {options?.map((option) => (
           <SOption
