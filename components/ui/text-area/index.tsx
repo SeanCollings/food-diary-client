@@ -1,6 +1,6 @@
 import { MEDIA_MOBILE } from '@utils/app.constants';
 import { TEXTAREA_MAX_LENGTH } from '@utils/validation/validation.constants';
-import { ChangeEvent, FC } from 'react';
+import { ChangeEvent, FC, TextareaHTMLAttributes } from 'react';
 import styled from 'styled-components';
 
 interface ISContainer {
@@ -81,7 +81,8 @@ const SError = styled.div`
 
 type TBorderStylePropery = 'solid' | 'dashed' | 'dotted' | 'none';
 
-export interface ITextAreaProps {
+export interface ITextAreaProps
+  extends TextareaHTMLAttributes<HTMLTextAreaElement> {
   id: string;
   backgroundColour?: string;
   inputWidth?: number;
@@ -94,6 +95,7 @@ export interface ITextAreaProps {
   placeholder?: string;
   title?: string;
   isError?: string;
+  spellCheck?: boolean;
   onChange: (event: ChangeEvent<HTMLTextAreaElement>) => void;
   onBlur?: () => void;
 }
@@ -111,8 +113,10 @@ export const TextArea: FC<ITextAreaProps> = ({
   borderWidth = 2,
   placeholder,
   title,
+  spellCheck,
   onChange,
   onBlur,
+  ...rest
 }) => {
   const onBlurHandler = () => {
     onBlur?.();
@@ -121,6 +125,7 @@ export const TextArea: FC<ITextAreaProps> = ({
   return (
     <SContainer inputWidth={inputWidth} minWidth={minWidth}>
       <STextArea
+        {...rest}
         id={id}
         name={id}
         rows={totalRows}
@@ -133,6 +138,7 @@ export const TextArea: FC<ITextAreaProps> = ({
         borderWidth={borderWidth}
         placeholder={placeholder}
         maxLength={TEXTAREA_MAX_LENGTH}
+        spellCheck={spellCheck}
         onChange={onChange}
         onBlur={onBlurHandler}
       />

@@ -82,6 +82,7 @@ export interface IInputProps {
   tabIndex?: number;
   type?: TInputType;
   borderWidth?: number;
+  spellCheck?: boolean;
   onBlur?: () => void;
   onTabPressed?: () => void;
   onChange: (event: ChangeEvent<HTMLInputElement>) => void;
@@ -100,6 +101,7 @@ export const Input: FC<IInputProps> = ({
   isError,
   children,
   tabIndex,
+  spellCheck,
   borderWidth = 2,
   type = 'text',
   onBlur,
@@ -133,7 +135,7 @@ export const Input: FC<IInputProps> = ({
         isError={!!isError}
         hasIcon={!!children}
         autoComplete={'off'}
-        spellCheck={false}
+        spellCheck={spellCheck}
         maxLength={INPUT_MAX_LENGTH}
         onBlur={onBlurHandler}
         onKeyDown={onKeyDownHandler}

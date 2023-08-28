@@ -94,6 +94,7 @@ const ExcerciseCard: FC<IProps> = ({ title, imageSrc }) => {
 
   const [hasUpdated, setHasUpdated] = useState(false);
   const [hasBlurred, setHasBlurred] = useState(false);
+  const [hasFocus, setHasFocus] = useState(false);
   const [time, setTime] = useState('00:00');
   const [excerciseDetails, setExcerciseDetails] = useState('');
   const [errors, setErrors] = useState<Partial<IRunFormValidations>>({});
@@ -152,6 +153,7 @@ const ExcerciseCard: FC<IProps> = ({ title, imageSrc }) => {
   };
   const handleOnBlur = () => {
     if (!hasBlurred) setHasBlurred(true);
+    if (hasFocus) setHasFocus(false);
 
     const errors = runFormValidations({ details: excerciseDetails, time });
     setErrors(errors);
@@ -183,8 +185,10 @@ const ExcerciseCard: FC<IProps> = ({ title, imageSrc }) => {
             totalRows={3}
             placeholder="..."
             title="add excercise notes"
+            spellCheck={hasFocus}
             onChange={handleDetailsChange}
             onBlur={handleOnBlur}
+            onFocus={() => setHasFocus(true)}
           />
         </STextAreaContainer>
         <STimeInputContainer>
