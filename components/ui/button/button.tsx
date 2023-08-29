@@ -8,6 +8,7 @@ import { getClassNames } from '@utils/string-utils';
 interface ISCommon {
   width?: number;
   background: string;
+  inverted?: boolean;
 }
 interface ISButton extends ISCommon {
   height?: number;
@@ -24,8 +25,8 @@ const SContainer = styled.div<ISCommon>`
     height: 100%;
     width: ${({ width }) => (width ? `${width}px` : '100%')};
     border-radius: 8px;
-    background: ${({ background }) =>
-      `color-mix(in srgb, ${background}, transparent 70%)`};
+    background: ${({ background, inverted }) =>
+      !inverted && `color-mix(in srgb, var(${background}), transparent 70%)`};
     transition: background-color 250ms;
   }
 `;
@@ -35,7 +36,7 @@ const SButton = styled.button<ISButton>`
   background-color: transparent;
   width: ${({ width }) => (width ? `${width}px` : 'auto')};
   height: ${({ height }) => (height ? `${height}px` : 'auto')};
-  border-color: ${({ background }) => background};
+  border-color: var(${({ background }) => background});
   border-width: ${({ borderWidth }) => borderWidth}px;
   border-style: solid;
 
@@ -47,7 +48,7 @@ const SButton = styled.button<ISButton>`
   transition: background-color 250ms;
 
   &.loading {
-    background-color: ${({ background }) => background};
+    background-color: var(${({ background }) => background});
   }
   &.disabled {
     opacity: 0.4;
@@ -56,7 +57,7 @@ const SButton = styled.button<ISButton>`
     cursor: default;
   }
   :hover:not(&.disabled) {
-    background-color: ${({ background }) => background};
+    background-color: var(${({ background }) => background});
   }
 `;
 const SInnerContainer = styled.div`
@@ -95,6 +96,7 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   loading?: boolean;
   color?: string;
   isDisabled?: boolean;
+  inverted?: boolean;
   onClick?: () => void;
 }
 
@@ -109,13 +111,19 @@ export const Button: FC<ButtonProps> = ({
   color = 'var(--text)',
   onClick,
   isDisabled,
+  inverted = false,
   ...rest
 }) => {
   const themeColour = getThemeVarColor(background);
   const classNames = getClassNames({ loading, disabled: isDisabled });
 
   return (
-    <SContainer className={classNames} background={themeColour} width={width}>
+    <SContainer
+      className={classNames}
+      background={themeColour}
+      width={width}
+      inverted={inverted}
+    >
       <SButton
         background={themeColour}
         height={height}

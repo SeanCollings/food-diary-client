@@ -3,7 +3,7 @@
 exports[`<SpinnerFade> should render 1`] = `
 <DocumentFragment>
   <div
-    class="sc-4731ba6b-0 dzCbyo loader"
+    class="sc-b46874d8-0 dsUvGF loader"
     color="var(--text)"
     size="45"
   />

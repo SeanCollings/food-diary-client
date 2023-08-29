@@ -3,21 +3,21 @@
 exports[`<Button/> should render 1`] = `
 <DocumentFragment>
   <div
-    class="sc-c8087764-0 eiHINF"
+    class="sc-c51f9af1-0 bTgVNy"
     width="150"
   >
     <button
-      class="sc-c8087764-1 hpCTkN"
+      class="sc-c51f9af1-1 EJzDm"
       color="var(--text)"
       font-size="24"
       height="50"
       width="150"
     >
       <div
-        class="sc-c8087764-2 hwgIAl"
+        class="sc-c51f9af1-2 buYHhW"
       >
         <div
-          class="sc-c8087764-4 btSOSc"
+          class="sc-c51f9af1-4 cRCUqn"
         >
           Test
         </div>
@@ -30,27 +30,27 @@ exports[`<Button/> should render 1`] = `
 exports[`<Button/> should render in loading state 1`] = `
 <DocumentFragment>
   <div
-    class="sc-c8087764-0 eHJkMl loading"
+    class="sc-c51f9af1-0 jASMSm loading"
   >
     <button
-      class="sc-c8087764-1 eYFVmU loading"
+      class="sc-c51f9af1-1 tUIuH loading"
       color="var(--text)"
       disabled=""
       font-size="24"
     >
       <div
-        class="sc-c8087764-2 hwgIAl"
+        class="sc-c51f9af1-2 buYHhW"
       >
         <div
-          class="sc-c8087764-3 gpmtlB loading"
+          class="sc-c51f9af1-3 gGFHqO loading"
         >
           <div
-            class="sc-4731ba6b-0 cnZVOU loader"
+            class="sc-b46874d8-0 iNvNpZ loader"
             color="var(--text)"
           />
         </div>
         <div
-          class="sc-c8087764-4 btSOSc loading"
+          class="sc-c51f9af1-4 cRCUqn loading"
         >
           Test
         </div>
@@ -63,18 +63,18 @@ exports[`<Button/> should render in loading state 1`] = `
 exports[`<Button/> should render with custom props 1`] = `
 <DocumentFragment>
   <div
-    class="sc-c8087764-0 jNTqvr"
+    class="sc-c51f9af1-0 cjUOos"
   >
     <button
-      class="sc-c8087764-1 loRlQM"
+      class="sc-c51f9af1-1 lbbzdv"
       color="red"
       font-size="12"
     >
       <div
-        class="sc-c8087764-2 hwgIAl"
+        class="sc-c51f9af1-2 buYHhW"
       >
         <div
-          class="sc-c8087764-4 btSOSc"
+          class="sc-c51f9af1-4 cRCUqn"
         >
           Test
         </div>

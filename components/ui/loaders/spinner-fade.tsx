@@ -24,27 +24,27 @@ const SContainer = styled.div<ISContainer>`
     background: -moz-linear-gradient(
       left,
       ${({ color }) => color} 10%,
-      ${({ background }) => background} 42%
+      var(${({ background }) => background}) 42%
     );
     background: -webkit-linear-gradient(
       left,
       ${({ color }) => color} 10%,
-      ${({ background }) => background} 42%
+      var(${({ background }) => background}) 42%
     );
     background: -o-linear-gradient(
       left,
       ${({ color }) => color} 10%,
-      ${({ background }) => background} 42%
+      var(${({ background }) => background}) 42%
     );
     background: -ms-linear-gradient(
       left,
       ${({ color }) => color} 10%,
-      ${({ background }) => background} 42%
+      var(${({ background }) => background}) 42%
     );
     background: linear-gradient(
       to right,
       ${({ color }) => color} 10%,
-      ${({ background }) => background} 42%
+      var(${({ background }) => background}) 42%
     );
     position: relative;
     -webkit-animation: load3 ${({ delay }) => delay}s infinite linear;
@@ -64,7 +64,7 @@ const SContainer = styled.div<ISContainer>`
     content: '';
   }
   &.loader:after {
-    background: ${({ background }) => background};
+    background: var(${({ background }) => background});
     width: 75%;
     height: 75%;
     border-radius: 50%;
