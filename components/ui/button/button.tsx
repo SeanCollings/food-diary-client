@@ -19,19 +19,6 @@ interface ISButton extends ISCommon {
 const SContainer = styled.div`
   position: relative;
 `;
-const SButtonBackground = styled.div<ISCommon>`
-  position: absolute;
-  height: 100%;
-  width: ${({ width }) => (width ? `${width}px` : '100%')};
-  border-radius: 8px;
-  transition: background-color 250ms;
-  background-color: ${({ background }) =>
-    `color-mix(in srgb, var(${background}), transparent 70%)`};
-
-  &.inverted {
-    background-color: var(--bg-secondary);
-  }
-`;
 const SButton = styled.button<ISButton>`
   position: relative;
   color: ${({ color }) => color};
@@ -59,18 +46,40 @@ const SButton = styled.button<ISButton>`
   &.loading:not(&.inverted) {
     background-color: var(${({ background }) => background});
   }
+
   &.disabled {
     opacity: 0.4;
     transition: background-color 0ms;
     border-color: transparent;
     cursor: default;
   }
+
   :hover:not(&.disabled):not(&.inverted) {
     background-color: var(${({ background }) => background});
   }
-  :hover:not(&.disabled).inverted {
+  :hover&.inverted:not(&.disabled) {
     color: var(--bg-secondary);
     background-color: var(--text);
+
+    .background {
+      background-color: transparent;
+    }
+  }
+`;
+const SButtonBackground = styled.div<ISCommon>`
+  position: absolute;
+  height: 100%;
+  top: 0;
+  left: 0;
+  width: 100%;
+  border-radius: 8px;
+  transition: 250ms;
+
+  background-color: ${({ background }) =>
+    `color-mix(in srgb, var(${background}), transparent 70%)`};
+
+  &.inverted {
+    background-color: var(--bg-secondary);
   }
 `;
 const SInnerContainer = styled.div`
@@ -119,7 +128,7 @@ export const Button: FC<ButtonProps> = ({
   loading = false,
   color = 'var(--text)',
   onClick,
-  isDisabled,
+  isDisabled = false,
   inverted = false,
   ...rest
 }) => {
@@ -128,11 +137,6 @@ export const Button: FC<ButtonProps> = ({
 
   return (
     <SContainer>
-      <SButtonBackground
-        className={classNames}
-        width={width}
-        background={themeColour}
-      />
       <SButton
         background={themeColour}
         height={height}
@@ -145,6 +149,11 @@ export const Button: FC<ButtonProps> = ({
         className={classNames}
         fontSize={fontSize}
       >
+        <SButtonBackground
+          className={`${classNames} background`}
+          width={width}
+          background={themeColour}
+        />
         <SInnerContainer>
           {loading && !inverted && (
             <SLoaderContainer className={classNames}>

@@ -3,24 +3,24 @@
 exports[`<Button/> should render 1`] = `
 <DocumentFragment>
   <div
-    class="sc-542484ec-0 gIBsHZ"
+    class="sc-b2b79924-0 fauUln"
   >
-    <div
-      class="sc-542484ec-1 bYjvwR"
-      width="150"
-    />
     <button
-      class="sc-542484ec-2 bVowdC"
+      class="sc-b2b79924-1 cHWrQu"
       color="var(--text)"
       font-size="24"
       height="50"
       width="150"
     >
       <div
-        class="sc-542484ec-3 lkLZog"
+        class="sc-b2b79924-2 bUhZOL  background"
+        width="150"
+      />
+      <div
+        class="sc-b2b79924-3 cwYEoO"
       >
         <div
-          class="sc-542484ec-5 emPCMI"
+          class="sc-b2b79924-5 cOveme"
         >
           Test
         </div>
@@ -33,22 +33,22 @@ exports[`<Button/> should render 1`] = `
 exports[`<Button/> should render in loading state 1`] = `
 <DocumentFragment>
   <div
-    class="sc-542484ec-0 gIBsHZ"
+    class="sc-b2b79924-0 fauUln"
   >
-    <div
-      class="sc-542484ec-1 hXtdfN loading"
-    />
     <button
-      class="sc-542484ec-2 dVEcQH loading"
+      class="sc-b2b79924-1 hDenWT loading"
       color="var(--text)"
       disabled=""
       font-size="24"
     >
       <div
-        class="sc-542484ec-3 lkLZog"
+        class="sc-b2b79924-2 bUhZOL loading background"
+      />
+      <div
+        class="sc-b2b79924-3 cwYEoO"
       >
         <div
-          class="sc-542484ec-4 dCgaOQ loading"
+          class="sc-b2b79924-4 cbggbq loading"
         >
           <div
             class="sc-b46874d8-0 iNvNpZ loader"
@@ -56,7 +56,7 @@ exports[`<Button/> should render in loading state 1`] = `
           />
         </div>
         <div
-          class="sc-542484ec-5 emPCMI loading"
+          class="sc-b2b79924-5 cOveme loading"
         >
           Test
         </div>
@@ -69,21 +69,21 @@ exports[`<Button/> should render in loading state 1`] = `
 exports[`<Button/> should render with custom props 1`] = `
 <DocumentFragment>
   <div
-    class="sc-542484ec-0 gIBsHZ"
+    class="sc-b2b79924-0 fauUln"
   >
-    <div
-      class="sc-542484ec-1 jxFbmT"
-    />
     <button
-      class="sc-542484ec-2 kOBscr"
+      class="sc-b2b79924-1 diGHBH"
       color="red"
       font-size="12"
     >
       <div
-        class="sc-542484ec-3 lkLZog"
+        class="sc-b2b79924-2 cXFcEl  background"
+      />
+      <div
+        class="sc-b2b79924-3 cwYEoO"
       >
         <div
-          class="sc-542484ec-5 emPCMI"
+          class="sc-b2b79924-5 cOveme"
         >
           Test
         </div>
