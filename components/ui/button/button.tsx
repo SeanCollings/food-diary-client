@@ -8,7 +8,6 @@ import { getClassNames } from '@utils/string-utils';
 interface ISCommon {
   width?: number;
   background: string;
-  inverted?: boolean;
 }
 interface ISButton extends ISCommon {
   height?: number;
@@ -17,17 +16,20 @@ interface ISButton extends ISCommon {
   color: string;
 }
 
-const SContainer = styled.div<ISCommon>`
+const SContainer = styled.div`
   position: relative;
-  :before {
-    content: '';
-    position: absolute;
-    height: 100%;
-    width: ${({ width }) => (width ? `${width}px` : '100%')};
-    border-radius: 8px;
-    background: ${({ background, inverted }) =>
-      !inverted && `color-mix(in srgb, var(${background}), transparent 70%)`};
-    transition: background-color 250ms;
+`;
+const SButtonBackground = styled.div<ISCommon>`
+  position: absolute;
+  height: 100%;
+  width: ${({ width }) => (width ? `${width}px` : '100%')};
+  border-radius: 8px;
+  transition: background-color 250ms;
+  background-color: ${({ background }) =>
+    `color-mix(in srgb, var(${background}), transparent 70%)`};
+
+  &.inverted {
+    background-color: var(--bg-secondary);
   }
 `;
 const SButton = styled.button<ISButton>`
@@ -36,18 +38,25 @@ const SButton = styled.button<ISButton>`
   background-color: transparent;
   width: ${({ width }) => (width ? `${width}px` : 'auto')};
   height: ${({ height }) => (height ? `${height}px` : 'auto')};
-  border-color: var(${({ background }) => background});
   border-width: ${({ borderWidth }) => borderWidth}px;
   border-style: solid;
 
   font-size: ${({ fontSize }) => fontSize}px;
   padding: 6px 12px;
   border-radius: 8px;
+  transition: 250ms;
+
   cursor: pointer;
-
-  transition: background-color 250ms;
-
   &.loading {
+    cursor: default;
+  }
+
+  border-color: var(${({ background }) => background});
+  &.inverted {
+    border-color: var(--text);
+  }
+
+  &.loading:not(&.inverted) {
     background-color: var(${({ background }) => background});
   }
   &.disabled {
@@ -56,8 +65,12 @@ const SButton = styled.button<ISButton>`
     border-color: transparent;
     cursor: default;
   }
-  :hover:not(&.disabled) {
+  :hover:not(&.disabled):not(&.inverted) {
     background-color: var(${({ background }) => background});
+  }
+  :hover:not(&.disabled).inverted {
+    color: var(--bg-secondary);
+    background-color: var(--text);
   }
 `;
 const SInnerContainer = styled.div`
@@ -73,15 +86,11 @@ const SLoaderContainer = styled.div`
   height: 100%;
   justify-content: center;
   align-items: center;
-
-  &.loading {
-    opacity: 0.8;
-  }
 `;
 const SChildContainer = styled.div`
   z-index: 1;
 
-  &.loading {
+  &.loading:not(&.inverted) {
     opacity: 0.6;
   }
 `;
@@ -115,15 +124,15 @@ export const Button: FC<ButtonProps> = ({
   ...rest
 }) => {
   const themeColour = getThemeVarColor(background);
-  const classNames = getClassNames({ loading, disabled: isDisabled });
+  const classNames = getClassNames({ loading, disabled: isDisabled, inverted });
 
   return (
-    <SContainer
-      className={classNames}
-      background={themeColour}
-      width={width}
-      inverted={inverted}
-    >
+    <SContainer>
+      <SButtonBackground
+        className={classNames}
+        width={width}
+        background={themeColour}
+      />
       <SButton
         background={themeColour}
         height={height}
@@ -137,7 +146,7 @@ export const Button: FC<ButtonProps> = ({
         fontSize={fontSize}
       >
         <SInnerContainer>
-          {loading && (
+          {loading && !inverted && (
             <SLoaderContainer className={classNames}>
               <SpinnerFade size={0} background={background} />
             </SLoaderContainer>
