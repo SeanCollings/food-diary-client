@@ -221,6 +221,8 @@ const Card: FC<IProps> = ({ id, title }) => {
   const handleConfirmRemove = () => {
     setShowConfirmModal(false);
     setShowAddModal(false);
+    setEditMealContent(null);
+
     if (editMealContent) {
       removeMealEntryById({
         date: dateSelectedISO,
