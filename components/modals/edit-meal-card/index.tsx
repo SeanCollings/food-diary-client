@@ -2,7 +2,10 @@ import { FC, useState } from 'react';
 import styled from 'styled-components';
 import { ModalHeader } from '@components/modals/styled';
 import { ALL_MEAL_CARDS, COLOURS, MEDIA_MOBILE } from '@utils/app.constants';
-import { getThemeColoursFromMealId } from '@utils/theme-utils';
+import {
+  getThemeColoursFromMealId,
+  getThemeVarColor,
+} from '@utils/theme-utils';
 import { IMealContent, TMealType } from '@utils/interfaces';
 import { MdDeleteForever, MdEdit } from 'react-icons/md';
 import RadioButton from '@components/ui/radio-button';
@@ -213,6 +216,7 @@ const ModalEditMealCard: FC<IModalEditMealCardProps> = ({
   const [selectedItem, setSelectedItem] = useState('');
 
   const mealColour = getThemeColoursFromMealId(mealId);
+  const themeColour = getThemeVarColor(mealColour);
   const mealTile =
     ALL_MEAL_CARDS.find((meal) => meal.id === mealId)?.title || '';
 
@@ -237,9 +241,8 @@ const ModalEditMealCard: FC<IModalEditMealCardProps> = ({
     <SContainer>
       <ModalHeader
         title={`Edit ${mealTile}`}
-        mealColour={mealColour}
+        mealColour={themeColour}
         onClose={handleOnClose}
-        onSubmit={handleOnSubmit}
       />
       <SContentContainer>
         {!!isRemoveItemId && (
@@ -249,7 +252,7 @@ const ModalEditMealCard: FC<IModalEditMealCardProps> = ({
               <SPromptButton
                 onClick={() => handleOnRemoveMeal()}
                 isConfirm
-                colour={mealColour}
+                colour={themeColour}
               >
                 Confirm
               </SPromptButton>
@@ -259,19 +262,19 @@ const ModalEditMealCard: FC<IModalEditMealCardProps> = ({
             </SButtonPromptContainer>
           </SConfirmPrompt>
         )}
-        <SContentWrapper colour={mealColour}>
+        <SContentWrapper colour={themeColour}>
           {!contents.length && <SEmpty>{`${mealTile} is empty`}</SEmpty>}
           {contents.map((content) => (
             <SContents key={content.id}>
               <ContentDisplay
                 content={content}
-                mealColour={mealColour}
+                mealColour={themeColour}
                 onRadioSelected={handleContentSelected}
               />
               {selectedItem === content.id.toString() && (
                 <SButtonContainer>
                   <SButton onClick={() => onEditMeal(content.id)} title="edit">
-                    <MdEdit size={28} color={`var(${mealColour})`} />
+                    <MdEdit size={28} color={`var(${themeColour})`} />
                   </SButton>
                   <SButton
                     onClick={() => setIsRemoveItemId(content.id)}

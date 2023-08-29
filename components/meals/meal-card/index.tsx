@@ -11,7 +11,10 @@ import { getUniqueId } from '@utils/unique-id';
 import ModalAddToMealCard from '@components/modals/add-to-meal-card';
 import Modal from '@components/modals';
 import { IMealContent, TMealType } from '@utils/interfaces';
-import { getThemeColoursFromMealId } from '@utils/theme-utils';
+import {
+  getThemeColoursFromMealId,
+  getThemeVarColor,
+} from '@utils/theme-utils';
 import { useDateSelectedContext } from '@store/date-selected-context';
 import ModalEditMealCard from '@components/modals/edit-meal-card';
 import { useMealEntriesContext } from '@store/meal-entries-context';
@@ -236,12 +239,13 @@ const Card: FC<IProps> = ({ id, title }) => {
     setEditMealContent(null);
   };
 
-  const colour = getThemeColoursFromMealId(id);
+  const mealColour = getThemeColoursFromMealId(id);
+  const themeColour = getThemeVarColor(mealColour);
 
   return (
     <>
       <SContainer
-        background={colour}
+        background={themeColour}
         boxShadow={darkMode}
         onClick={onClickHandler}
         id="meal-card"
@@ -253,13 +257,13 @@ const Card: FC<IProps> = ({ id, title }) => {
           {!!contents.length && (
             <SIcon
               size={34}
-              background={colour}
+              background={themeColour}
               title="Click to edit"
               onClick={handleCardEdit}
             />
           )}
         </SHeaderContainer>
-        <SContentContainer background={colour}>
+        <SContentContainer background={themeColour}>
           {contents?.map((content, index) => (
             <SContentWrapper key={getUniqueId()}>
               <SContent>{buildContent(content, index)}</SContent>

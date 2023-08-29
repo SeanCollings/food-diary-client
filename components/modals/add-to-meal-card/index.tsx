@@ -5,7 +5,10 @@ import InputContainer from '@components/ui/input-container';
 import DropdownContainer from '@components/ui/dropdown-container';
 import EmojiPicker, { TSelectedEmoji } from '@components/emoji-picker';
 import { EAddMealOptions, IMealContent, TMealType } from '@utils/interfaces';
-import { getThemeColoursFromMealId } from '@utils/theme-utils';
+import {
+  getThemeColoursFromMealId,
+  getThemeVarColor,
+} from '@utils/theme-utils';
 import { ModalHeader } from '@components/modals/styled';
 import { runValidations } from '@utils/validation';
 import { addMealOptionsValidators } from '@utils/validation/validators/collections';
@@ -19,6 +22,7 @@ import {
   IRunFormValidations,
 } from '@components/modals/add-to-meal-card/types';
 import { trim } from '@utils/string-utils';
+import { ModalFooter } from '@components/modals/styled/modal-footer';
 
 const SContainer = styled.div`
   margin: auto;
@@ -62,6 +66,7 @@ const ModalAddToMealCard: FC<IModalAddMealProps> = ({
 
   const isEditing = !!content;
   const mealColour = getThemeColoursFromMealId(state.mealType);
+  const themeColour = getThemeVarColor(mealColour);
   const mealTile =
     ALL_MEAL_CARDS.find((meal) => meal.id === state.mealType)?.title || '';
 
@@ -152,9 +157,9 @@ const ModalAddToMealCard: FC<IModalAddMealProps> = ({
   };
 
   const commonInputProps = {
-    backgroundColour: mealColour,
+    backgroundColour: themeColour,
     hideInitialBorder: true,
-    borderColour: mealColour,
+    borderColour: themeColour,
   };
 
   const modalTitle = isEditing ? `Edit Item` : `Add to ${mealTile}`;
@@ -163,15 +168,14 @@ const ModalAddToMealCard: FC<IModalAddMealProps> = ({
     <SContainer>
       <ModalHeader
         title={modalTitle}
-        mealColour={mealColour}
+        mealColour={themeColour}
         onClose={onClose}
-        onSubmit={onSubmitHandler}
       />
       <SContentContainer>
         <EmojiPicker
           tabIndex={1}
           value={state.emojiPicker}
-          borderColour={mealColour}
+          borderColour={themeColour}
           onChange={updateSelecteedEmoji}
         />
         <InputContainer
@@ -206,7 +210,7 @@ const ModalAddToMealCard: FC<IModalAddMealProps> = ({
           isError={state.formErrors.description}
           tabIndex={5}
           inputWidth={350}
-          backgroundColour={mealColour}
+          backgroundColour={themeColour}
           title="Description"
           popup="Add some extra descriptions to your food or drink"
           inputType="textarea"
@@ -218,13 +222,20 @@ const ModalAddToMealCard: FC<IModalAddMealProps> = ({
           value={state.mealType}
           tabIndex={6}
           inputWidth={180}
-          backgroundColour={mealColour}
+          backgroundColour={themeColour}
           options={ALL_MEAL_CARDS}
           title="Meal"
           popup="Change this meal to another meal"
           onChange={updateMealType}
         />
       </SContentContainer>
+      <ModalFooter
+        closeText="Cancel"
+        submitText={isEditing ? 'Update' : 'Add'}
+        mealColour={mealColour}
+        onSubmit={onSubmitHandler}
+        onClose={onClose}
+      />
     </SContainer>
   );
 };
