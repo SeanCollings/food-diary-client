@@ -1,5 +1,5 @@
 import { COLOURS, MEDIA_MOBILE, OPACITY_30 } from '@utils/app.constants';
-import { ChangeEvent, FocusEvent, useState } from 'react';
+import { ChangeEvent, FocusEvent } from 'react';
 import { MdExpandMore } from 'react-icons/md';
 import styled from 'styled-components';
 
@@ -55,10 +55,6 @@ const SIcon = styled(MdExpandMore)`
   transform: translateY(-50%) rotateX(0deg);
   pointer-events: none;
   transition: 200ms;
-
-  &.open {
-    transform: translateY(-50%) rotateX(180deg);
-  }
 `;
 
 export type TDefaultOption = { id: string; title: string };
@@ -82,16 +78,13 @@ const Dropdown = <T extends string, K extends TDefaultOption>({
   tabIndex,
   onChange,
 }: IDropdownProps<T, K>) => {
-  const [opened, setOpened] = useState(false);
-
   const handleOnBlur = (e: FocusEvent<HTMLSelectElement, Element>) => {
     e.preventDefault();
-    setOpened(false);
   };
 
   return (
     <SContainer inputWidth={inputWidth}>
-      <SIcon size={22} className={opened ? 'open' : ''} />
+      <SIcon size={22} />
       <SSelect
         id={id}
         name={id}
@@ -100,7 +93,6 @@ const Dropdown = <T extends string, K extends TDefaultOption>({
         tabIndex={tabIndex}
         onChange={onChange}
         onBlur={handleOnBlur}
-        onClick={() => setOpened((curr) => !curr)}
       >
         {options?.map((option) => (
           <SOption
