@@ -192,6 +192,7 @@ const Summary: FC<ISummaryProps> = ({
   const [showFromDateCalendar, setShowFromDateCalendar] = useState(false);
   const [dateFrom, setDateFrom] = useState(fromDate);
   const [dateTo, setDateTo] = useState(toDate);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const allNestedDates = getPaddedNestedArray(
@@ -203,6 +204,8 @@ const Summary: FC<ISummaryProps> = ({
     const getCurrentViewKeys = allNestedDates.slice(0, MAX_ROWS_PER_PAGE);
     setCurrentViewKeys(getCurrentViewKeys);
     setAllViewKeys(allNestedDates);
+    setLoading(false);
+    setDateRangeChanged(false);
   }, [userData]);
 
   const onPaginationChange = useCallback(
@@ -243,7 +246,7 @@ const Summary: FC<ISummaryProps> = ({
   };
   const onClickApplyDateRange = () => {
     onApplyNewDateRange(dateFrom, dateTo);
-    setDateRangeChanged(false);
+    setLoading(true);
     setcurrentPage(1);
   };
 
@@ -311,6 +314,7 @@ const Summary: FC<ISummaryProps> = ({
           width={80}
           height={40}
           isDisabled={!dateRangeChanged}
+          loading={loading}
           onClick={onClickApplyDateRange}
         >
           Apply
