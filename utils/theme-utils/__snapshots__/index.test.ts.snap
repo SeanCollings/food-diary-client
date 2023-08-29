@@ -1,17 +1,17 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`theme-utils getThemeVarColor should return theme for type background_primary 1`] = `"var(--bg-primary)"`;
+exports[`theme-utils getThemeVarColor should return theme for type background_primary 1`] = `"--bg-primary"`;
 
-exports[`theme-utils getThemeVarColor should return theme for type background_secondary 1`] = `"var(--bg-secondary)"`;
+exports[`theme-utils getThemeVarColor should return theme for type background_secondary 1`] = `"--bg-secondary"`;
 
-exports[`theme-utils getThemeVarColor should return theme for type background_tertiary 1`] = `"var(--bg-tertiary)"`;
+exports[`theme-utils getThemeVarColor should return theme for type background_tertiary 1`] = `"--bg-tertiary"`;
 
-exports[`theme-utils getThemeVarColor should return theme for type primary 1`] = `"var(--th-primary)"`;
+exports[`theme-utils getThemeVarColor should return theme for type primary 1`] = `"--th-primary"`;
 
-exports[`theme-utils getThemeVarColor should return theme for type quaternary 1`] = `"var(--th-quaternary)"`;
+exports[`theme-utils getThemeVarColor should return theme for type quaternary 1`] = `"--th-quaternary"`;
 
-exports[`theme-utils getThemeVarColor should return theme for type secondary 1`] = `"var(--th-secondary)"`;
+exports[`theme-utils getThemeVarColor should return theme for type secondary 1`] = `"--th-secondary"`;
 
-exports[`theme-utils getThemeVarColor should return theme for type tertiary 1`] = `"var(--th-tertiary)"`;
+exports[`theme-utils getThemeVarColor should return theme for type tertiary 1`] = `"--th-tertiary"`;
 
-exports[`theme-utils getThemeVarColor should return theme for type undefined 1`] = `"var(--th-primary)"`;
+exports[`theme-utils getThemeVarColor should return theme for type undefined 1`] = `"--th-primary"`;

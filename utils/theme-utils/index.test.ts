@@ -6,29 +6,29 @@ describe('theme-utils', () => {
   describe('getThemeColoursFromMealId', () => {
     it('should get default theme', () => {
       const result = getThemeColoursFromMealId();
-      expect(result).toMatchInlineSnapshot(`"--th-primary"`);
+      expect(result).toMatchInlineSnapshot(`"primary"`);
     });
 
     it('should get breakfast theme', () => {
       const result = getThemeColoursFromMealId('breakfast');
-      expect(result).toMatchInlineSnapshot(`"--th-secondary"`);
+      expect(result).toMatchInlineSnapshot(`"secondary"`);
     });
 
     it('should get lunch theme', () => {
       const result = getThemeColoursFromMealId('lunch');
-      expect(result).toMatchInlineSnapshot(`"--th-primary"`);
+      expect(result).toMatchInlineSnapshot(`"primary"`);
     });
 
     it('should get dinner theme', () => {
       const result = getThemeColoursFromMealId('dinner');
-      expect(result).toMatchInlineSnapshot(`"--th-tertiary"`);
+      expect(result).toMatchInlineSnapshot(`"tertiary"`);
     });
 
     it('should get snack themes', () => {
       const result1 = getThemeColoursFromMealId('snack_1');
       const result2 = getThemeColoursFromMealId('snack_2');
-      expect(result1).toMatchInlineSnapshot(`"--th-quaternary"`);
-      expect(result2).toMatchInlineSnapshot(`"--th-quaternary"`);
+      expect(result1).toMatchInlineSnapshot(`"quaternary"`);
+      expect(result2).toMatchInlineSnapshot(`"quaternary"`);
     });
   });
 

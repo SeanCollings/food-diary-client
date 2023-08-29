@@ -1,19 +1,19 @@
 import { TApplicationTheme } from '@utils/constants/theme.interfaces';
 import { TMealType, ThemeColor } from '@utils/interfaces';
 
-export const getThemeColoursFromMealId = (id?: TMealType) => {
+export const getThemeColoursFromMealId = (id?: TMealType): ThemeColor => {
   switch (id) {
     case 'breakfast':
-      return '--th-secondary';
+      return 'secondary';
     case 'lunch':
-      return '--th-primary';
+      return 'primary';
     case 'dinner':
-      return '--th-tertiary';
+      return 'tertiary';
     case 'snack_1':
     case 'snack_2':
-      return '--th-quaternary';
+      return 'quaternary';
     default:
-      return '--th-primary';
+      return 'primary';
   }
 };
 
@@ -27,20 +27,20 @@ export const toThemeString = function (this: TApplicationTheme) {
 export const getThemeVarColor = (type?: ThemeColor) => {
   switch (type) {
     case 'primary':
-      return 'var(--th-primary)';
+      return '--th-primary';
     case 'secondary':
-      return 'var(--th-secondary)';
+      return '--th-secondary';
     case 'tertiary':
-      return 'var(--th-tertiary)';
+      return '--th-tertiary';
     case 'quaternary':
-      return 'var(--th-quaternary)';
+      return '--th-quaternary';
     case 'background_primary':
-      return 'var(--bg-primary)';
+      return '--bg-primary';
     case 'background_secondary':
-      return 'var(--bg-secondary)';
+      return '--bg-secondary';
     case 'background_tertiary':
-      return 'var(--bg-tertiary)';
+      return '--bg-tertiary';
     default:
-      return 'var(--th-primary)';
+      return '--th-primary';
   }
 };
