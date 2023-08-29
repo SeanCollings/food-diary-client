@@ -6,7 +6,7 @@ import {
 } from '@utils/app.constants';
 import { FC, MouseEvent, useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { MdEditNote } from 'react-icons/md';
+import { MdAdd } from 'react-icons/md';
 import { getUniqueId } from '@utils/unique-id';
 import ModalAddToMealCard from '@components/modals/add-to-meal-card';
 import Modal from '@components/modals';
@@ -16,9 +16,9 @@ import {
   getThemeVarColor,
 } from '@utils/theme-utils';
 import { useDateSelectedContext } from '@store/date-selected-context';
-import ModalEditMealCard from '@components/modals/edit-meal-card';
 import { useMealEntriesContext } from '@store/meal-entries-context';
 import { useTheme } from '@hooks/use-theme';
+import { ConfirmModal } from '@components/modals/confirm-modal';
 
 interface IScontainer {
   background: string;
@@ -81,7 +81,7 @@ const SHeaderContainer = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  height: 30px;
+  height: 25px;
   margin-bottom: 16px;
   font-family: 'Architects Daughter';
 `;
@@ -90,7 +90,7 @@ const SHeader = styled.div`
   font-size: 20px;
   letter-spacing: 2px;
 `;
-const SIcon = styled(MdEditNote)<ISIcon>`
+const SIcon = styled(MdAdd)<ISIcon>`
   transition: 0.4s;
   background: ${({ background }) => `var(${background})`};
   border-radius: 10px;
@@ -112,6 +112,7 @@ const SContentContainer = styled.div<IScroll>`
   display: flex;
   flex-direction: column;
   gap: 20px;
+  padding-top: 5px;
 
   ::-webkit-scrollbar {
     width: 6px;
@@ -131,12 +132,27 @@ const SContentContainer = styled.div<IScroll>`
   }
 `;
 const SContentWrapper = styled.div`
+  position: relative;
   display: flex;
   flex-direction: column;
-`;
-const SContent = styled.span`
   font-size: 17px;
+
+  :hover {
+    ::before {
+      position: absolute;
+      content: '';
+      width: 100%;
+      height: calc(100% + 10px);
+      background-color: var(--bg-primary);
+      opacity: 0.05;
+      border-radius: 8px;
+      top: -5px;
+      animation: pulse 2s infinite;
+      border-bottom: 1px solid black;
+    }
+  }
 `;
+const SContent = styled.span``;
 const SContentDescription = styled.span`
   font-size: 16px;
   padding-left: 6px;
@@ -177,23 +193,21 @@ const Card: FC<IProps> = ({ id, title }) => {
     null,
   );
   const [showAddModal, setShowAddModal] = useState(false);
-  const [showEditModal, setShowEditModal] = useState(false);
+  const [showConfirmModal, setShowConfirmModal] = useState(false);
 
   useEffect(() => {
     const currentEntry = mealEntries[dateSelectedISO];
     setContents(currentEntry?.[id]?.contents || []);
   }, [dateSelectedISO, mealEntries, id]);
 
-  const onClickHandler = () => {
+  const onCardClickHandler = () => {
     setShowAddModal(true);
   };
-  const onModalAddClose = () => {
-    if (!!editMealContent) {
-      setShowEditModal(true);
-    }
+  const onModalAddEditClose = () => {
+    setEditMealContent(null);
     setShowAddModal(false);
   };
-  const onModalAddSubmit = (mealId: TMealType, newValues: IMealContent) => {
+  const onModalAddEditSubmit = (mealId: TMealType, newValues: IMealContent) => {
     setShowAddModal(false);
     setEditMealContent(null);
 
@@ -201,29 +215,22 @@ const Card: FC<IProps> = ({ id, title }) => {
       addMealEntry({ date: dateSelectedISO, mealId, newValues });
     }
   };
-  const handleCardEdit = (event: MouseEvent<SVGElement>) => {
-    setShowEditModal(true);
-    event.stopPropagation();
+  const removeMealHandler = () => {
+    setShowConfirmModal(true);
   };
-  const onModalEditClose = () => {
-    setShowEditModal(false);
-    setEditMealContent(null);
-  };
-  const onModalEditSubmit = () => {
-    setShowEditModal(false);
-    setEditMealContent(null);
-  };
-  const removeMealHandler = (contentId: string) => {
-    removeMealEntryById({ date: dateSelectedISO, mealId: id, contentId });
-  };
-  const editMealHandler = (contentId: string) => {
-    const editContent = contents?.find(({ id }) => id === contentId);
-    setShowEditModal(false);
-
-    if (editContent) {
-      setEditMealContent(editContent);
-      setShowAddModal(true);
+  const handleConfirmRemove = () => {
+    setShowConfirmModal(false);
+    setShowAddModal(false);
+    if (editMealContent) {
+      removeMealEntryById({
+        date: dateSelectedISO,
+        mealId: id,
+        contentId: editMealContent.id,
+      });
     }
+  };
+  const handleCancelRemove = () => {
+    setShowConfirmModal(false);
   };
   const confirmContentEditHandler = (
     updatedMealId: TMealType,
@@ -238,6 +245,16 @@ const Card: FC<IProps> = ({ id, title }) => {
     setShowAddModal(false);
     setEditMealContent(null);
   };
+  const handleMealClick =
+    (meal: IMealContent) => (event: MouseEvent<HTMLDivElement>) => {
+      event.stopPropagation();
+      const editContent = contents?.find(({ id }) => id === meal.id);
+
+      if (editContent) {
+        setEditMealContent(editContent);
+        setShowAddModal(true);
+      }
+    };
 
   const mealColour = getThemeColoursFromMealId(id);
   const themeColour = getThemeVarColor(mealColour);
@@ -247,25 +264,27 @@ const Card: FC<IProps> = ({ id, title }) => {
       <SContainer
         background={themeColour}
         boxShadow={darkMode}
-        onClick={onClickHandler}
+        onClick={onCardClickHandler}
+        title={!contents.length ? 'Click to add' : ''}
         id="meal-card"
-        title="Click to add"
         className={!!contents.length ? 'has-content' : ''}
       >
         <SHeaderContainer>
           <SHeader>{title}</SHeader>
-          {!!contents.length && (
-            <SIcon
-              size={34}
-              background={themeColour}
-              title="Click to edit"
-              onClick={handleCardEdit}
-            />
-          )}
+          <SIcon
+            size={34}
+            background={themeColour}
+            title="Click to add"
+            onClick={onCardClickHandler}
+          />
         </SHeaderContainer>
         <SContentContainer background={themeColour}>
           {contents?.map((content, index) => (
-            <SContentWrapper key={getUniqueId()}>
+            <SContentWrapper
+              title="Click to edit"
+              key={getUniqueId()}
+              onClick={handleMealClick(content)}
+            >
               <SContent>{buildContent(content, index)}</SContent>
               {!!content.description && (
                 <SContentDescription>{`( ${content.description} )`}</SContentDescription>
@@ -274,23 +293,21 @@ const Card: FC<IProps> = ({ id, title }) => {
           ))}
         </SContentContainer>
       </SContainer>
-      <Modal show={showAddModal || showEditModal} modalWidth={600}>
-        {showAddModal ? (
+      <Modal show={showAddModal || showConfirmModal} modalWidth={600}>
+        {showConfirmModal ? (
+          <ConfirmModal
+            themeColour={mealColour}
+            onConfirm={handleConfirmRemove}
+            onCancel={handleCancelRemove}
+          />
+        ) : (
           <ModalAddToMealCard
             mealId={id}
             content={editMealContent}
-            onClose={onModalAddClose}
-            onSubmit={onModalAddSubmit}
+            onClose={onModalAddEditClose}
+            onSubmit={onModalAddEditSubmit}
             onEditConfirm={confirmContentEditHandler}
-          />
-        ) : (
-          <ModalEditMealCard
-            mealId={id}
-            contents={contents}
-            onClose={onModalEditClose}
-            onSubmit={onModalEditSubmit}
-            onRemoveMeal={removeMealHandler}
-            onEditMeal={editMealHandler}
+            onRemoveMeal={editMealContent && removeMealHandler}
           />
         )}
       </Modal>

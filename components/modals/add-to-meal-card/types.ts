@@ -16,6 +16,7 @@ export interface IModalAddMealProps {
     updatedMealId: TMealType,
     updatedContent: IMealContent,
   ) => void;
+  onRemoveMeal: (() => void) | null;
 }
 
 export type TInputValues = {

@@ -1,6 +1,6 @@
-import { COLOURS } from '@utils/app.constants';
+import { COLOURS, MEDIA_MOBILE } from '@utils/app.constants';
 import { FC } from 'react';
-import { MdWest } from 'react-icons/md';
+import { MdDeleteForever, MdWest } from 'react-icons/md';
 import styled from 'styled-components';
 
 interface ISHeader {
@@ -15,37 +15,61 @@ const SHeader = styled.div<ISHeader>`
   font-size: 22px;
   font-weight: 200;
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
   width: 100%;
   height: 54px;
   border-radius: 10px 10px 0 0;
   background: var(${({ backgroundColour }) => backgroundColour});
+
+  .right {
+    justify-content: end;
+  }
+
+  ${MEDIA_MOBILE} {
+    border-radius: 0;
+  }
+`;
+const SIconContainer = styled.div`
+  display: flex;
+  text-align-last: center;
+  width: 50px;
 `;
 const SIconClose = styled(MdWest)`
-  position: absolute;
-  left: 20px;
-
   cursor: pointer;
   :hover {
     transform: scale(1.1);
   }
 `;
+const SIconDelete = styled(MdDeleteForever)`
+  cursor: pointer;
+  :hover {
+    transform: scale(1.1);
+  }
+`;
+
 interface IModalHeaderProps {
   title: string;
   mealColour: string;
   onClose: () => void;
+  onRemoveMeal?: (() => void) | null;
 }
 
 export const ModalHeader: FC<IModalHeaderProps> = ({
   title,
   mealColour,
   onClose,
+  onRemoveMeal,
 }) => {
   return (
     <SHeader backgroundColour={mealColour}>
-      <SIconClose size={34} onClick={onClose} />
+      <SIconContainer>
+        <SIconClose size={34} onClick={onClose} />
+      </SIconContainer>
       {title}
+      <SIconContainer className="right">
+        {onRemoveMeal ? <SIconDelete size={34} onClick={onRemoveMeal} /> : null}
+      </SIconContainer>
     </SHeader>
   );
 };

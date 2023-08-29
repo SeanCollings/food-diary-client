@@ -34,7 +34,7 @@ const SBackgroundContainer = styled.div<ISBackgroundContainer>`
     padding: 2rem;
   }
   ${MEDIA_MOBILE} {
-    padding: 1rem;
+    padding: 0rem;
     max-height: 100vh;
   }
 `;
@@ -47,6 +47,10 @@ const SModalContainer = styled.div<ISModalContainer>`
   margin: auto;
 
   max-width: ${({ modalWidth }) => modalWidth}px;
+
+  ${MEDIA_MOBILE} {
+    border-radius: 0px;
+  }
 `;
 
 interface IModalCommonProps {

@@ -58,6 +58,7 @@ const ModalAddToMealCard: FC<IModalAddMealProps> = ({
   onClose,
   onSubmit,
   onEditConfirm,
+  onRemoveMeal,
 }) => {
   const [state, dispatch] = useReducer(
     addToMealReducer,
@@ -170,6 +171,7 @@ const ModalAddToMealCard: FC<IModalAddMealProps> = ({
         title={modalTitle}
         mealColour={themeColour}
         onClose={onClose}
+        onRemoveMeal={onRemoveMeal}
       />
       <SContentContainer>
         <EmojiPicker
