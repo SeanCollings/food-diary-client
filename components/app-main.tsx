@@ -5,6 +5,7 @@ import {
   MEDIA_DESKTOP,
   MEDIA_MAX_DESKTOP,
   MEDIA_MOBILE,
+  MEDIA_NON_MOBILE,
   MEDIA_TABLET,
 } from '@utils/app.constants';
 import styled from 'styled-components';
@@ -34,19 +35,39 @@ const SAppContainer = styled.div`
   }
 
   &.bg-image-light-full {
-    background-image: url('/static/images/background.webp');
+    ${MEDIA_MOBILE} {
+      background-image: url('/static/images/background-mobile.webp');
+    }
+    ${MEDIA_NON_MOBILE} {
+      background-image: url('/static/images/background.webp');
+    }
   }
   &.bg-image-light {
-    background-image: linear-gradient(
-        rgba(255, 255, 255, 0.5),
-        rgba(255, 255, 255, 0.5)
-      ),
-      url('/static/images/background.webp');
+    ${MEDIA_MOBILE} {
+      background-image: linear-gradient(
+          rgba(255, 255, 255, 0.5),
+          rgba(255, 255, 255, 0.5)
+        ),
+        url('/static/images/background-mobile.webp');
+    }
+    ${MEDIA_NON_MOBILE} {
+      background-image: linear-gradient(
+          rgba(255, 255, 255, 0.5),
+          rgba(255, 255, 255, 0.5)
+        ),
+        url('/static/images/background.webp');
+    }
   }
 
   &.bg-image-dark {
-    background-image: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)),
-      url('/static/images/background.webp');
+    ${MEDIA_MOBILE} {
+      background-image: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)),
+        url('/static/images/background-mobile.webp');
+    }
+    ${MEDIA_NON_MOBILE} {
+      background-image: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)),
+        url('/static/images/background.webp');
+    }
   }
 
   &.bg-image {
