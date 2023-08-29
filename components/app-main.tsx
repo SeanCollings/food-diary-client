@@ -27,6 +27,7 @@ const SAppContainer = styled.div`
   outline-style: none;
   min-height: calc(100vh + 5rem);
   padding: 0 2rem;
+  overflow: hidden;
 
   ${MEDIA_MOBILE} {
     padding: 0;

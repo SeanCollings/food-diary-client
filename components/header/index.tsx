@@ -38,8 +38,9 @@ const SContainer = styled.header`
 `;
 const SHeaderBanner = styled.div`
   position: absolute;
-  width: 100%;
+  width: 100vw;
   background: var(--bg-secondary__60);
+  left: -2rem;
 
   ${MEDIA_MOBILE} {
     top: ${HEADER_PROPS.tablet.padding}px;
