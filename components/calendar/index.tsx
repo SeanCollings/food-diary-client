@@ -176,14 +176,14 @@ const SDayContainer = styled.div<ISDayContainer>`
       inset 0px -1px 0px 0px var(--th-primary);
   }
 
-  &.restrict-before {
+  &.restrict-before:not(&.peripheral-month) {
     border-top-left-radius: 8px;
     border-bottom-left-radius: 8px;
     box-shadow: inset 2px 0px 0px 0px var(--th-primary),
       inset 0px 1px 0px 0px var(--th-primary),
       inset 0px -1px 0px 0px var(--th-primary);
   }
-  &.restrict-after {
+  &.restrict-after:not(&.peripheral-month) {
     border-top-right-radius: 8px;
     border-bottom-right-radius: 8px;
     box-shadow: inset -2px 0px 0px 0px var(--th-primary),
