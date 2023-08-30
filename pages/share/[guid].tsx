@@ -8,13 +8,14 @@ import { useRequestShare } from '@hooks/request/use-request-share';
 import Head from 'next/head';
 import { useErrorToast } from '@hooks/use-error-toast';
 import { SpinnerFade } from '@components/ui/loaders';
+import { MEDIA_MOBILE } from '@utils/app.constants';
 
 const DEFAULT_DAYS_SHOW = 7;
 
 const SContainer = styled.section`
   display: flex;
   flex-direction: column;
-  min-height: 100%;
+  height: 100%;
   width: 100%;
 `;
 const SUsernameContainer = styled.div`
@@ -25,6 +26,10 @@ const SUsernameContainer = styled.div`
   font-weight: 200;
   padding-bottom: 20px;
   height: 60px;
+
+  ${MEDIA_MOBILE} {
+    padding-bottom: 10px;
+  }
 `;
 const SLoaderContainer = styled.div`
   margin: auto;
@@ -35,6 +40,10 @@ const SLoaderContainer = styled.div`
 const SUsername = styled.span`
   font-size: 28px;
   font-weight: 600;
+
+  ${MEDIA_MOBILE} {
+    font-size: 18px;
+  }
 `;
 
 type TDate = Date | string;

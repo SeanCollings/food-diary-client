@@ -13,8 +13,8 @@ const DEFAULT_DAYS_SHOW = 7;
 
 const SContainer = styled.section`
   display: flex;
-  align-items: center;
-  justify-content: center;
+  align-items: flex-start;
+  height: 100%;
 `;
 
 type TDate = Date | string;

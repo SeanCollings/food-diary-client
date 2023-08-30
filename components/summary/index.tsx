@@ -16,7 +16,7 @@ import styled from 'styled-components';
 import Pagination from '@components/summary/pagination';
 import { getPaddedNestedArray } from '@utils/array-utils';
 import Calendar from '@components/calendar';
-import { MdCalendarToday } from 'react-icons/md';
+import { MdCalendarToday, MdInfo, MdInfoOutline } from 'react-icons/md';
 import { DateHeaderRow, MealDataRow, WellnessDataRow } from './content-rows';
 import { ISummaryResponseData } from '@client/interfaces/user-summary-data';
 import { MAX_SUMMARY_MONTH_RANGE } from '@utils/validation/validation.constants';
@@ -32,6 +32,9 @@ interface ISRowContainer {
 
 const SContainer = styled.div`
   width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
 `;
 const STopContainer = styled.div`
   display: flex;
@@ -43,9 +46,10 @@ const STopContainer = styled.div`
 
   ${MEDIA_MOBILE} {
     padding: 0;
+    gap: 10px;
   }
   ${MEDIA_MOBILE_TABLET} {
-    margin-top: 20px;
+    margin-top: 0px;
   }
 `;
 const SRangeContainer = styled.div`
@@ -154,24 +158,120 @@ const SRowContainer = styled.div<ISRowContainer>`
   .empty {
     opacity: 0.5;
   }
-`;
-const STopPaginationContainer = styled.div`
-  width: 100%;
-  height: 35px;
 
-  ${MEDIA_MOBILE_TABLET} {
-    margin-top: 20px;
+  ${MEDIA_MOBILE} {
+    :first-child .date-header:first-child {
+      margin-top: 10px;
+    }
   }
 `;
+const STopPaginationContainer = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 16px;
+
+  width: 100%;
+  min-height: 35px;
+
+  ${MEDIA_MOBILE} {
+    flex-direction: column;
+    justify-content: end;
+    align-items: end;
+
+    .totals {
+      align-self: center;
+    }
+
+    .pagination {
+      order: 2;
+    }
+  }
+  ${MEDIA_MOBILE_TABLET} {
+    margin-top: 10px;
+    gap: 8px;
+  }
+`;
+const STotalsContainer = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  height: 30px;
+
+  background-color: var(--bg-secondary);
+  border-radius: 4px;
+  padding: 4px 12px;
+
+  > span {
+    line-height: 1.8;
+  }
+  > div {
+    height: 100%;
+    border-right: 1px solid var(--text);
+    opacity: 0.6;
+  }
+`;
+const STotalSpan = styled.span`
+  display: flex;
+  gap: 4px;
+  position: relative;
+  cursor: default;
+
+  transition: opacity 1s;
+
+  .info {
+    position: absolute;
+    right: 0;
+    opacity: 0;
+  }
+  .info-outline {
+    top: 4px;
+    opacity: 1;
+  }
+  :hover {
+    .info {
+      opacity: 1;
+    }
+    .info-outline {
+      opacity: 0;
+    }
+  }
+`;
+const SIconContainer = styled.div`
+  position: relative;
+  display: flex;
+  top: 2px;
+
+  ${MEDIA_MOBILE} {
+    display: none;
+  }
+`;
+const SMdInfo = styled(MdInfo)`
+  transition: opacity 250ms;
+`;
+const SMdInfoOutline = styled(MdInfoOutline)`
+  transition: opacity 250ms;
+`;
 const SBottomPaginationContainer = styled.div`
-  height: 35px;
+  min-height: 35px;
   margin-bottom: 20px;
+
+  &.hide {
+    display: none;
+  }
+
+  ${MEDIA_MOBILE} {
+    margin-top: 20px;
+    display: flex;
+    justify-content: end;
+  }
 `;
 
 type TDate = Date | string;
 interface ISummaryProps {
   isLoading: boolean;
-  userData: ISummaryResponseData;
+  userData?: ISummaryResponseData;
   fromDate: TDate;
   toDate: TDate;
   defaultShowDays: number;
@@ -195,17 +295,19 @@ const Summary: FC<ISummaryProps> = ({
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    const allNestedDates = getPaddedNestedArray(
-      userData.dates,
-      userData.totalDays,
-      MAX_DAYS_PER_ROW,
-    );
+    if (userData) {
+      const allNestedDates = getPaddedNestedArray(
+        userData.dates,
+        userData.totalDays,
+        MAX_DAYS_PER_ROW,
+      );
 
-    const getCurrentViewKeys = allNestedDates.slice(0, MAX_ROWS_PER_PAGE);
-    setCurrentViewKeys(getCurrentViewKeys);
-    setAllViewKeys(allNestedDates);
-    setLoading(false);
-    setDateRangeChanged(false);
+      const getCurrentViewKeys = allNestedDates.slice(0, MAX_ROWS_PER_PAGE);
+      setCurrentViewKeys(getCurrentViewKeys);
+      setAllViewKeys(allNestedDates);
+      setLoading(false);
+      setDateRangeChanged(false);
+    }
   }, [userData]);
 
   const onPaginationChange = useCallback(
@@ -258,6 +360,20 @@ const Summary: FC<ISummaryProps> = ({
       )}' '${ALL_WELLNESS_CARDS.map((meal) => meal.id).join(`' '`)}'`,
     [],
   );
+
+  const { allFlat, currentFlat, totalData, totalVisibleData, totalItems } =
+    useMemo(() => {
+      const allFlat = allViewKeys.flat().filter((key) => !!key);
+      const currentFlat = currentViewKeys.flat().filter((key) => !!key);
+      const totalData = Object.keys(userData?.data ?? {}).length;
+      const totalVisibleData =
+        currentFlat.filter((key) => !!userData?.data[key])?.length ?? 0;
+      const totalItems = Math.ceil(
+        (userData?.totalDays ?? 0) / MAX_DAYS_PER_ROW,
+      );
+
+      return { allFlat, currentFlat, totalData, totalVisibleData, totalItems };
+    }, [allViewKeys, currentViewKeys, userData?.data, userData?.totalDays]);
 
   return (
     <SContainer>
@@ -325,9 +441,36 @@ const Summary: FC<ISummaryProps> = ({
         <Pagination
           currentPage={currentPage}
           itemsPerPage={MAX_ROWS_PER_PAGE}
-          totalItems={Math.ceil(userData.totalDays / MAX_DAYS_PER_ROW)}
+          totalItems={totalItems}
           onChange={onPaginationChange}
         />
+        {allFlat.length && currentFlat.length && (
+          <STotalsContainer className="totals">
+            {allFlat.length > MAX_DAYS_PER_ROW * MAX_ROWS_PER_PAGE && (
+              <>
+                <STotalSpan
+                  title={`${totalData} out of all ${allFlat.length} days returned have entries`}
+                >
+                  All: {totalData} / {allFlat.length}
+                  <SIconContainer>
+                    <SMdInfoOutline className="info-outline" />
+                    <SMdInfo className="info" />
+                  </SIconContainer>
+                </STotalSpan>
+                <div />
+              </>
+            )}
+            <STotalSpan
+              title={`${totalVisibleData} out of ${currentFlat.length} days for the current page have entries`}
+            >
+              Current: {totalVisibleData} / {currentFlat.length}
+              <SIconContainer>
+                <SMdInfoOutline className="info-outline" />
+                <SMdInfo className="info" />
+              </SIconContainer>
+            </STotalSpan>
+          </STotalsContainer>
+        )}
       </STopPaginationContainer>
 
       <SUserDataContainer>
@@ -337,13 +480,13 @@ const Summary: FC<ISummaryProps> = ({
               key={`date-row-${keyIndex}`}
               gridTemplateArea={gridTemplateArea}
             >
-              <DateHeaderRow dates={dates} data={userData.data} />
+              <DateHeaderRow dates={dates} data={userData?.data ?? {}} />
               {ALL_MEAL_CARDS.map(({ id, title }) => (
                 <MealDataRow
                   key={`meal-${id}-${keyIndex}}`}
                   id={id}
                   title={title}
-                  data={userData.data}
+                  data={userData?.data ?? {}}
                   dates={dates}
                 />
               ))}
@@ -352,7 +495,7 @@ const Summary: FC<ISummaryProps> = ({
                   key={`wellness-${id}-${keyIndex}`}
                   id={id}
                   title={title}
-                  data={userData.data}
+                  data={userData?.data ?? {}}
                   dates={dates}
                   firstIndex={index === 0}
                   lastIndex={index === ALL_WELLNESS_CARDS.length - 1}
@@ -363,11 +506,13 @@ const Summary: FC<ISummaryProps> = ({
         })}
       </SUserDataContainer>
 
-      <SBottomPaginationContainer>
+      <SBottomPaginationContainer
+        className={!currentViewKeys.length ? 'hide' : ''}
+      >
         <Pagination
           currentPage={currentPage}
           itemsPerPage={MAX_ROWS_PER_PAGE}
-          totalItems={Math.ceil(userData.totalDays / MAX_DAYS_PER_ROW)}
+          totalItems={totalItems}
           onChange={onPaginationChange}
         />
       </SBottomPaginationContainer>

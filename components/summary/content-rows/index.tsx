@@ -3,7 +3,7 @@ import { TMealType, TWellnessTypes } from '@utils/interfaces';
 import { getUniqueId } from '@utils/unique-id';
 import { formatFullDate } from '@utils/date-utils';
 import styled from 'styled-components';
-import { MEDIA_MOBILE_TABLET } from '@utils/app.constants';
+import { MEDIA_MOBILE_TABLET, MEDIA_NON_MOBILE } from '@utils/app.constants';
 import { getClassNames } from '@utils/string-utils';
 import { TMealWellnessContents } from '@client/interfaces/user-summary-data';
 
@@ -48,11 +48,13 @@ const SContentRow = styled.div<ISContentRow>`
     ${({ hideBorderBottom }) =>
       `${hideBorderBottom ? '0' : '1'}px var(--th-primary)`};
 
-  ${({ padBottom }) => padBottom && `margin-bottom: ${MARGIN}px`};
-  ${({ bottomRadius }) =>
-    bottomRadius &&
-    `border-bottom-right-radius: 8px;
+  ${MEDIA_NON_MOBILE} {
+    ${({ padBottom }) => padBottom && `margin-bottom: ${MARGIN}px`};
+    ${({ bottomRadius }) =>
+      bottomRadius &&
+      `border-bottom-right-radius: 8px;
     border-bottom-left-radius: 8px;`}
+  }
 
   ${MEDIA_MOBILE_TABLET} {
     ${({ gridArea }) => gridArea && `grid-area: ${gridArea};`}
@@ -96,6 +98,7 @@ export const DateHeaderRow: FC<IDateHeaderRowProps> = memo(
             return <SEmptyDiv key={`${getUniqueId()}-header`} />;
           }
           const classNames = getClassNames({
+            'date-header': true,
             'grid-area': index === 0,
             empty: !Object.keys(data[date] || {}).length,
           });

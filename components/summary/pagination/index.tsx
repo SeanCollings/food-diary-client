@@ -1,3 +1,4 @@
+import { MEDIA_MOBILE } from '@utils/app.constants';
 import {
   DOTS,
   getPaginationRange,
@@ -14,6 +15,10 @@ const SContainer = styled.div`
   align-items: center;
   gap: 4px;
   flex-wrap: wrap;
+
+  ${MEDIA_MOBILE} {
+    justify-content: end;
+  }
 `;
 const SButton = styled.button`
   display: flex;
@@ -86,7 +91,7 @@ const Pagination: React.FC<IPaginationProps> = memo(
     const singlePage = paginationRange.length < 2;
 
     return (
-      <SContainer>
+      <SContainer className="pagination">
         <SButton
           onClick={onPreviousHandler}
           disabled={singlePage || currentPage < 2}
