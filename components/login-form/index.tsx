@@ -254,11 +254,14 @@ const LoginForm: FC = () => {
 
           if (loginError) {
             setIsloading(false);
+            const emailInUse = loginError.status === 409;
+
             return showToast({
               status: 'error',
-              title: 'Error!',
-              message:
-                'Something went wrong creating your account. Please try again later.',
+              title: emailInUse ? 'Email in use!' : 'Error',
+              message: emailInUse
+                ? 'This email address is already in use. Please try another'
+                : 'Something went wrong creating your account. Please try again later.',
             });
           }
 

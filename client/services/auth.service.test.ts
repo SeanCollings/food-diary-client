@@ -37,6 +37,7 @@ describe('auth-service', () => {
       expect(result).toMatchInlineSnapshot(`
         {
           "error": "Something went wrong",
+          "status": 500,
         }
       `);
     });

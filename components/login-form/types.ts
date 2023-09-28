@@ -63,7 +63,7 @@ export type ILoginFormAction =
     };
 
 export interface ICreateUserResponse {
-  error?: string;
+  error?: { message: string; status?: number };
   message?: string;
 }
 

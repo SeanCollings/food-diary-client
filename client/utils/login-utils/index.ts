@@ -17,7 +17,7 @@ export const createUser = async ({
 }: TFormValues): Promise<ICreateUserResponse> => {
   try {
     const token = await getRecaptchaToken('create');
-    const { error, message } = await authService.signup({
+    const { error, message, status } = await authService.signup({
       email,
       password,
       name,
@@ -25,13 +25,17 @@ export const createUser = async ({
     });
 
     if (error) {
-      return { error };
+      return { error: { message: error, status } };
     }
 
     return { message };
   } catch (err) {
+    const error = err as CustomAxiosError;
     return {
-      error: (err as CustomAxiosError)?.message || DEFAULT_AXIOS_ERROR_MSG,
+      error: {
+        message: error?.message || DEFAULT_AXIOS_ERROR_MSG,
+        status: error.status || 500,
+      },
     };
   }
 };

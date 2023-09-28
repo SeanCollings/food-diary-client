@@ -25,9 +25,9 @@ const handler = async (req: IRequest, res: NextApiResponse) => {
     const typedError = err as CustomAxiosError;
     console.error('[signup error] ::', typedError.message);
 
-    return res.status(typedError.status || 500).json({
+    return res.status(typedError.response?.status || 500).json({
       ok: false,
-      message: typedError.message,
+      ...(typedError.response?.data || {}),
     });
   }
 };

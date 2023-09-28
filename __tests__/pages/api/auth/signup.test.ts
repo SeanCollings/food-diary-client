@@ -56,7 +56,10 @@ describe('/api - auth/signup', () => {
     });
 
     it('should handle errors', async () => {
-      mockPost.mockRejectedValue({ message: 'mock error occurred' });
+      mockPost.mockRejectedValue({
+        message: 'mock error occurred',
+        response: { data: { status: 500, message: 'mock error occurred' } },
+      });
 
       await handler(
         {
@@ -70,6 +73,7 @@ describe('/api - auth/signup', () => {
       expect(mockStatus).toHaveBeenCalledWith(500);
       expect(mockJson).toHaveBeenCalledWith({
         message: 'mock error occurred',
+        status: 500,
         ok: false,
       });
     });

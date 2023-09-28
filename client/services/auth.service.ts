@@ -10,6 +10,7 @@ import { signIn } from 'next-auth/react';
 interface IResponse {
   ok?: boolean;
   error?: string;
+  status?: number;
   message?: string;
 }
 interface ISignupArgs {
@@ -35,8 +36,11 @@ const createService = () => {
 
       return { ok: true, message: data.message };
     } catch (err) {
+      const error = err as CustomAxiosError;
+
       return {
-        error: (err as CustomAxiosError).message || DEFAULT_AXIOS_ERROR_MSG,
+        error: error.message || DEFAULT_AXIOS_ERROR_MSG,
+        status: error.response?.status || 500,
       };
     }
   };

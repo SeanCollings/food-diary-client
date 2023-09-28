@@ -36,22 +36,28 @@ describe('login-utils', () => {
     it('should return error from signup', async () => {
       jest
         .spyOn(authService, 'signup')
-        .mockResolvedValue({ error: 'An error occurred' });
+        .mockResolvedValue({ error: 'An error occurred', status: 500 });
 
       const result = await createUser(mockUser);
       expect(result).toEqual({
-        error: 'An error occurred',
+        error: {
+          message: 'An error occurred',
+          status: 500,
+        },
       });
     });
 
     it('should catch errors', async () => {
       jest
         .spyOn(authService, 'signup')
-        .mockRejectedValue({ message: 'An error occurred' });
+        .mockRejectedValue({ message: 'An error occurred', status: 409 });
 
       const result = await createUser(mockUser);
       expect(result).toEqual({
-        error: 'An error occurred',
+        error: {
+          message: 'An error occurred',
+          status: 409,
+        },
       });
     });
 
@@ -60,7 +66,10 @@ describe('login-utils', () => {
 
       const result = await createUser(mockUser);
       expect(result).toEqual({
-        error: 'Something went wrong',
+        error: {
+          message: 'Something went wrong',
+          status: 500,
+        },
       });
     });
   });
